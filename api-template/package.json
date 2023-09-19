@@ -1,0 +1,26 @@
+{
+  "devDependencies": {
+    "@types/cors": "^2.8.14",
+    "@types/express": "^4.17.17",
+    "@types/node": "20.4.6",
+    "gts": "^5.0.1",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint",
+    "start": "tsc && node build/src/index.js",
+    "dev": "nodemon -L -w src -e ts --exec \"npm run start\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  }
+}

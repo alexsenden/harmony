@@ -1,0 +1,26 @@
+{
+  "devDependencies": {
+    "@types/node": "20.4.6",
+    "@types/react": "^18.2.21",
+    "gts": "^5.0.1",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint",
+    "start": "next dev -p 8080",
+    "dev": "nodemon -L -w src -e ts,tsx --exec \"npm run start\""
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "next": "^13.4.19",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
