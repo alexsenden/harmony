@@ -15,3 +15,8 @@
 
 Run the command `npm run dev`.
 `harmony-api` is available at `localhost:8081`.
+
+### `harmony-api` Production Build
+
+1. Build the docker image using the command `docker build . -t harmony-api`
+2. Run the docker container using the command `docker run -p 8081:8081 harmony-api`

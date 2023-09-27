@@ -10,10 +10,7 @@
   "scripts": {
     "lint": "gts lint",
     "clean": "gts clean",
-    "compile": "tsc",
     "fix": "gts fix",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile",
     "posttest": "npm run lint",
     "start": "tsc && node build/src/index.js",
     "dev": "nodemon -L -w src -e ts --exec \"npm run start\""
