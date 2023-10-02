@@ -21,7 +21,7 @@
     "posttest": "npm run lint",
     "start": "next dev -p 8080",
     "dev": "nodemon -L -w src -e ts,tsx --exec \"npm run start\"",
-    "test": "jest --maxWorkers=4"
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

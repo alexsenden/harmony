@@ -2,7 +2,8 @@ import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import HomePage from '.'
+
+import HomePage from '../../../src/pages/home'
 
 const server = setupServer(
   rest.get(
