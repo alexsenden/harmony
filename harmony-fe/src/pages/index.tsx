@@ -1,11 +1,11 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+//import { useEffect } from 'react'
 
 const LandingPage = () => {
   const router = useRouter()
 
-  useEffect(() => {
+  useEffet(() => {
     router.push('/home')
   }, [])
 }
