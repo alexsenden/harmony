@@ -3,4 +3,5 @@ module.exports = {
   "semi": false,
   "bracketSpacing": true,
   "printWidth": 80,
+  "endOfLine": "auto"
 }

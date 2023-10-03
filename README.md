@@ -11,3 +11,11 @@
 ### Project Proposal
 
 [Project Proposal.pdf](documentation/Project%20Proposal.pdf)
+
+### Project Documentation
+
+[Documentation Folder](documentation)
+
+[Front-end README.md](harmony-fe/README.md)
+
+[API README.md](harmony-api/README.md)

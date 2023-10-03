@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState } from 'react'
 import axios from 'axios'
 
-axios.defaults.baseURL = `http://${process.env.NEXT_PUBLIC_API_BASE_ENDPOINT}`
+axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_BASE_ENDPOINT}`
 
 export enum HttpMethod {
   GET = 'get',
@@ -29,23 +31,18 @@ const useHttpRequest = ({
   const [loading, setloading] = useState(true)
 
   const sendHttpRequest = async () => {
-    const requestBody = { accept: '*/*', ...headers }
-
-    console.log(axios.defaults.baseURL)
+    const requestHeaders = { accept: '*/*', ...headers }
 
     new Promise(() =>
-      axios[method](url, headers, requestBody)
+      axios[method](url, requestHeaders, body)
         .then(res => {
           setResponse(res.data)
-          console.log('response')
         })
         .catch(err => {
           setError(err)
-          console.log('error')
         })
         .finally(() => {
           setloading(false)
-          console.log('finally')
         })
     )
   }

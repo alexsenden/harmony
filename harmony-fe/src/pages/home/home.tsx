@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-
+import React, { useEffect } from 'react'
+import { Card } from '@mui/material'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 
 const HomePage = () => {
@@ -13,14 +13,14 @@ const HomePage = () => {
   }, [])
 
   return (
-    <>
+    <Card variant="outlined">
       <p>This is the homepage. Hello World!</p>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <p>{response?.echo || JSON.stringify(error)}</p>
       )}
-    </>
+    </Card>
   )
 }
 
