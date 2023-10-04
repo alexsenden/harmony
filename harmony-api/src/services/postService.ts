@@ -10,10 +10,12 @@ export const createPost = async (postData?: Post): Promise<Post> => {
 
 const validatePost = (postData?: Post): Post => {
   validateTopicId(postData?.topicId)
+  validateCommonPostData(postData)
 
   switch (postData?.postType) {
     case PostType.DISCUSSION:
-      validateDiscussion(postData)
+      // Discussion only has common post data,
+      // no further validation required
       return postData
     case PostType.POLL:
       //validatePoll(postData)
@@ -26,7 +28,7 @@ const validatePost = (postData?: Post): Post => {
   throw new Error(`Unsupported postType: ${postData?.postType}`)
 }
 
-const validateDiscussion = (postData?: Post) => {
+const validateCommonPostData = (postData?: Post) => {
   const errorMessages = []
 
   if (!postData?.userId) {

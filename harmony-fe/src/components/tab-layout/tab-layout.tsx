@@ -9,11 +9,11 @@ export interface TabItem {
   disabled?: boolean
 }
 
-interface TabLayoutProps {
+interface TabLayoutProps extends React.ComponentProps<typeof Tabs> {
   tabs: Array<TabItem>
 }
 
-export const TabLayout = ({ tabs }: TabLayoutProps) => {
+export const TabLayout = ({ tabs, ...props }: TabLayoutProps) => {
   const [value, setValue] = React.useState(0)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -23,7 +23,7 @@ export const TabLayout = ({ tabs }: TabLayoutProps) => {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange}>
+        <Tabs {...props} value={value} onChange={handleChange}>
           {tabs.map(tab => {
             return <Tab label={tab.label} disabled={tab.disabled} />
           })}

@@ -1,20 +1,37 @@
-import TabLayout, { TabItem } from '../tab-layout'
+import { useState } from 'react'
+import { Autocomplete, Dialog, DialogTitle } from '@mui/material'
 
-export const PostModal = () => {
+import TabLayout, { TabItem } from '../tab-layout'
+import { Post } from '../../models/post'
+import { CommonPostData } from './common-post-data'
+
+interface PostModalProps {
+  open: boolean
+  onClose: () => void
+}
+
+export const PostModal = ({ open, onClose }: PostModalProps) => {
+  const [postData, setPostData] = useState<Post>({} as Post)
+
   const tabs: Array<TabItem> = [
     {
       label: 'Discussion',
-      tab: <p>Create a discussion post here!</p>,
+      tab: <CommonPostData />,
     },
     {
       label: 'Poll',
-      tab: <p>Create a poll post here!</p>,
+      tab: <CommonPostData />,
     },
     {
       label: 'Review',
-      tab: <p>Create a review post here!</p>,
+      tab: <CommonPostData />,
     },
   ]
 
-  return <TabLayout tabs={tabs} />
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>New Post</DialogTitle>
+      <TabLayout tabs={tabs} variant="fullWidth" />
+    </Dialog>
+  )
 }

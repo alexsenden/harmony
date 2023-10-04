@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Card } from '@mui/material'
+import { Button, Card } from '@mui/material'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { PostModal } from '../../components/post-modal/post-modal'
 
@@ -13,6 +13,16 @@ const HomePage = () => {
     sendRequest()
   }, [])
 
+  const [open, setOpen] = React.useState(false)
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   return (
     <>
       <Card variant="outlined">
@@ -23,7 +33,10 @@ const HomePage = () => {
           <p>{response?.echo || JSON.stringify(error)}</p>
         )}
       </Card>
-      <PostModal />
+      <Button variant="outlined" onClick={handleOpen}>
+        + New Post
+      </Button>
+      <PostModal open={open} onClose={handleClose} />
     </>
   )
 }
