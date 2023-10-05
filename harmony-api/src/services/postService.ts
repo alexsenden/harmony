@@ -25,7 +25,7 @@ const validatePost = (postData?: Post): Post => {
       return postData
   }
 
-  throw new Error(`Unsupported postType: ${postData?.postType}`)
+  throw new HttpError(`Unsupported postType: ${postData?.postType}`, 400)
 }
 
 const validateCommonPostData = (postData?: Post) => {
