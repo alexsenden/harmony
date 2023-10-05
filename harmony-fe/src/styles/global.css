@@ -14,3 +14,13 @@
     font-family: 'Oswald', sans-serif;
     font-size: x-large;
 }
+
+.followButton {
+    color: orangered;
+    font-size: x-large;   
+
+}
+
+.followButton:hover {
+    font-size: x-large;   
+}

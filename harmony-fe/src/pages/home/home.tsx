@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Card } from '@mui/material'
+import { Card, Container } from '@mui/material'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import HarmonyAppBar from '../../components/appbar'
 
@@ -16,14 +16,14 @@ const HomePage = () => {
   return (
     <>
       <HarmonyAppBar />
-      <Card variant="outlined">
-      <h1>This is the homepage. Hello World!</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <p>{response?.echo || JSON.stringify(error)}</p>
-      )}
-    </Card>
+      <Container maxWidth="xl">
+        <h1>This is the homepage. Hello World!</h1>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <p>{response?.echo || JSON.stringify(error)}</p>
+        )}
+    </Container>
     </>
   )
 }
