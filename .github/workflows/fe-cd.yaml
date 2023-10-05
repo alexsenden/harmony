@@ -1,0 +1,5 @@
+name: harmony-fe-cd
+
+on:
+  push:
+    branches: ["andrii-dev"]
