@@ -1,7 +1,5 @@
-import React from 'react'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
-import Box from '@mui/material/Box'
+import React, { useState } from 'react'
+import { Tabs, Tab, Box } from '@mui/material'
 
 export interface TabItem {
   label: string
@@ -14,7 +12,7 @@ interface TabLayoutProps extends React.ComponentProps<typeof Tabs> {
 }
 
 export const TabLayout = ({ tabs, ...props }: TabLayoutProps) => {
-  const [value, setValue] = React.useState(0)
+  const [value, setValue] = useState(0)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)

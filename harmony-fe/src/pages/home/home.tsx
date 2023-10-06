@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Card } from '@mui/material'
+
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
-import { PostModal } from '../../components/post-modal/post-modal'
+import PostModal from '../../components/post-modal'
 
 const HomePage = () => {
   const [sendRequest, response, error, loading] = useHttpRequest({
@@ -13,7 +14,7 @@ const HomePage = () => {
     sendRequest()
   }, [])
 
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
 
   const handleOpen = () => {
     setOpen(true)
