@@ -1,5 +1,14 @@
+import * as topicRepo from '../repos/topicRepo'
 import { HttpError } from '../models/error/httpError'
-import { TopicId } from '../models/topic'
+import { Topic, TopicId } from '../models/topic'
+
+export const getTopicByPartialName = (partialName?: string): Array<Topic> => {
+  if (!partialName) {
+    return []
+  }
+
+  return topicRepo.getTopicByPartialName(partialName)
+}
 
 export const validateTopicId = (topicId?: TopicId) => {
   let definedIds = 0
