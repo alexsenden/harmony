@@ -1,0 +1,168 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  user_id    Int       @id @default(autoincrement())
+  username   String    @unique
+  password   String
+  created_on DateTime  @default(now())
+  active     Boolean?
+  posts      Post[]
+  likes      Like[]
+  comments   Comment[]
+  Artist     Artist[]
+  Follows    Follow[]  @relation("Following")
+  Followers  Follow[]  @relation("Follower")
+}
+
+model Artist {
+  artist_id    Int            @id @map("user_id")
+  artist_name  String         @unique
+  artist_alias String?
+  user         User           @relation(fields: [artist_id], references: [user_id])
+  albums       Album[]
+  songs        Song[]
+  Publish      Publish[]
+  RelateArtist RelateArtist[]
+}
+
+model Post {
+  post_id           Int            @id @default(autoincrement())
+  user_id           Int
+  title             String
+  post_time         DateTime       @default(now())
+  user              User           @relation(fields: [user_id], references: [user_id])
+  poll              Poll?          @relation(fields: [pollPost_id], references: [post_id])
+  discussion        Discussion?    @relation(fields: [discussionPost_id], references: [post_id])
+  review            Review?        @relation(fields: [reviewPost_id], references: [post_id])
+  likes             Like[]
+  comments          Comment[]
+  pollPost_id       Int?
+  discussionPost_id Int?
+  reviewPost_id     Int?
+  RelateTo          RelateTo[]
+  RelateSong        RelateSong[]
+  RelateAlbum       RelateAlbum[]
+  RelateArtist      RelateArtist[]
+}
+
+model Poll {
+  post_id Int          @id @map("post_id")
+  options PollOption[]
+  Post    Post[]
+}
+
+model PollOption {
+  post_id Int    @id
+  option  String
+  poll    Poll   @relation(fields: [post_id], references: [post_id])
+}
+
+model Discussion {
+  post_id Int    @id @map("post_id")
+  content String
+  Post    Post[]
+}
+
+model Review {
+  post_id Int     @id @map("post_id")
+  stars   Decimal
+  content String
+  Post    Post[]
+}
+
+model Follow {
+  following_id Int
+  follower_id  Int
+  follow_time  DateTime
+  following    User     @relation("Following", fields: [following_id], references: [user_id])
+  follower     User     @relation("Follower", fields: [follower_id], references: [user_id])
+
+  @@id([following_id, follower_id])
+}
+
+model Like {
+  user_id Int
+  post_id Int
+  user    User @relation(fields: [user_id], references: [user_id])
+  post    Post @relation(fields: [post_id], references: [post_id])
+
+  @@id([user_id, post_id])
+}
+
+model Comment {
+  comment_id Int     @id @default(autoincrement())
+  user_id    Int
+  post_id    Int
+  content    String?
+  user       User    @relation(fields: [user_id], references: [user_id])
+  post       Post    @relation(fields: [post_id], references: [post_id])
+}
+
+model Album {
+  album_id          Int           @id @default(autoincrement())
+  album_name        String        @unique
+  album_description String?
+  artists           Artist[]
+  songs             Song[]
+  Publish           Publish[]
+  RelateAlbum       RelateAlbum[]
+}
+
+model Publish {
+  album_id  Int    @id
+  artist_id Int
+  album     Album  @relation(fields: [album_id], references: [album_id])
+  artist    Artist @relation(fields: [artist_id], references: [artist_id])
+}
+
+model Song {
+  song_id          Int          @id @default(autoincrement())
+  artist_id        Int
+  song_name        String
+  song_description String?
+  release_time     DateTime?
+  album_id         Int?
+  artist           Artist       @relation(fields: [artist_id], references: [artist_id])
+  album            Album?       @relation(fields: [album_id], references: [album_id])
+  RelateSong       RelateSong[]
+}
+
+// The RelateTo model is supposed to function like an abstract model
+model RelateTo {
+  post_id Int  @id @map("post_id")
+  post    Post @relation(fields: [post_id], references: [post_id])
+}
+
+model RelateSong {
+  song_id Int
+  post_id Int
+  song    Song @relation(fields: [song_id], references: [song_id])
+  post    Post @relation(fields: [post_id], references: [post_id])
+
+  @@id([post_id, song_id])
+}
+
+model RelateAlbum {
+  album_id Int
+  post_id  Int
+  album    Album @relation(fields: [album_id], references: [album_id])
+  post     Post  @relation(fields: [post_id], references: [post_id])
+
+  @@id([post_id, album_id])
+}
+
+model RelateArtist {
+  artist_id Int
+  post_id   Int
+  artist    Artist @relation(fields: [artist_id], references: [artist_id])
+  post      Post   @relation(fields: [post_id], references: [post_id])
+
+  @@id([post_id, artist_id])
+}

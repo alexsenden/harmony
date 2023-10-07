@@ -11,3 +11,9 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - ${POSTGRES_PORT}:5432
+  prisma:
+    image: prismagraphql/prisma:1.34 # Docker isnt able to find :latest. 1.34 is the current version
+    ports:
+      - ${PRISMA_PORT}:4466
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
