@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Button, Dialog, DialogTitle } from '@mui/material'
 
 import TabLayout, { TabItem } from '../tab-layout'
-import { Post, PostField } from '../../models/post'
+import { Post, PostField, PostType } from '../../models/post'
 import { CommonPostData } from './common-post-data'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 
@@ -11,17 +11,10 @@ interface PostModalProps {
   onClose: () => void
 }
 
+const DEFAULT_POST_STATE = { userId: '1' } as Post
+
 export const PostModal = ({ open, onClose }: PostModalProps) => {
-  const [postData, setPostData] = useState<Post>({} as Post)
-
-  const [createPost, createPostResponse, createPostError, createPostLoading] =
-    useHttpRequest({
-      url: '/post',
-      method: HttpMethod.POST,
-      body: postData,
-    })
-
-  const onChange = (argName: PostField, argValue: string) => {
+  const onChange = (argName: PostField, argValue: unknown) => {
     setPostData(prevPostData => {
       return {
         ...prevPostData,
@@ -30,32 +23,48 @@ export const PostModal = ({ open, onClose }: PostModalProps) => {
     })
   }
 
+  const [postData, setPostData] = useState<Post>(DEFAULT_POST_STATE)
+
+  const [tabs] = useState<Array<TabItem>>([
+    {
+      label: 'Discussion',
+      tab: (
+        <CommonPostData onChange={onChange} postType={PostType.DISCUSSION} />
+      ),
+    },
+    {
+      label: 'Poll',
+      tab: <CommonPostData onChange={onChange} postType={PostType.POLL} />,
+    },
+    {
+      label: 'Review',
+      tab: <CommonPostData onChange={onChange} postType={PostType.REVIEW} />,
+    },
+  ])
+
+  const [createPost, createPostResponse, createPostError, createPostLoading] =
+    useHttpRequest({
+      url: '/post',
+      method: HttpMethod.POST,
+      body: postData,
+    })
+
   useEffect(() => {
     if (!createPostLoading) {
       if (createPostError) {
+        // createPost returned an error
+        // Needs better error handling in the future
         console.log(createPostError)
       }
       if (createPostResponse) {
+        // createPost returned sucessfully
+        // Needs some way to show the post was successfully created in the future
         console.log(createPostResponse)
+        setPostData(DEFAULT_POST_STATE)
         onClose()
       }
     }
   }, [createPostLoading])
-
-  const tabs: Array<TabItem> = [
-    {
-      label: 'Discussion',
-      tab: <CommonPostData onChange={onChange} />,
-    },
-    {
-      label: 'Poll',
-      tab: <CommonPostData onChange={onChange} />,
-    },
-    {
-      label: 'Review',
-      tab: <CommonPostData onChange={onChange} />,
-    },
-  ]
 
   return (
     <Dialog open={open} onClose={onClose}>
