@@ -8,7 +8,7 @@ generator client {
 }
 
 model User {
-  user_id    Int       @id @default(autoincrement())
+  user_id    String    @id @default(uuid())
   username   String    @unique
   password   String
   created_on DateTime  @default(now())
@@ -22,7 +22,7 @@ model User {
 }
 
 model Artist {
-  artist_id    Int            @id @map("user_id")
+  artist_id    String         @id @map("user_id")
   artist_name  String         @unique
   artist_alias String?
   user         User           @relation(fields: [artist_id], references: [user_id])
@@ -33,8 +33,8 @@ model Artist {
 }
 
 model Post {
-  post_id           Int            @id @default(autoincrement())
-  user_id           Int
+  post_id           String         @id @default(uuid())
+  user_id           String
   title             String
   post_time         DateTime       @default(now())
   user              User           @relation(fields: [user_id], references: [user_id])
@@ -43,9 +43,9 @@ model Post {
   review            Review?        @relation(fields: [reviewPost_id], references: [post_id])
   likes             Like[]
   comments          Comment[]
-  pollPost_id       Int?
-  discussionPost_id Int?
-  reviewPost_id     Int?
+  pollPost_id       String?
+  discussionPost_id String?
+  reviewPost_id     String?
   RelateTo          RelateTo[]
   RelateSong        RelateSong[]
   RelateAlbum       RelateAlbum[]
@@ -53,34 +53,34 @@ model Post {
 }
 
 model Poll {
-  post_id Int          @id @map("post_id")
+  post_id String       @id @map("post_id")
   options PollOption[]
   Post    Post[]
 }
 
 model PollOption {
-  post_id Int    @id
+  post_id String @id
   option  String
   poll    Poll   @relation(fields: [post_id], references: [post_id])
 }
 
 model Discussion {
-  post_id Int    @id @map("post_id")
+  post_id String @id @map("post_id")
   content String
   Post    Post[]
 }
 
 model Review {
-  post_id Int     @id @map("post_id")
+  post_id String  @id @map("post_id")
   stars   Decimal
   content String
   Post    Post[]
 }
 
 model Follow {
-  following_id Int
-  follower_id  Int
-  follow_time  DateTime
+  following_id String
+  follower_id  String
+  follow_time  DateTime @default(now())
   following    User     @relation("Following", fields: [following_id], references: [user_id])
   follower     User     @relation("Follower", fields: [follower_id], references: [user_id])
 
@@ -88,25 +88,25 @@ model Follow {
 }
 
 model Like {
-  user_id Int
-  post_id Int
-  user    User @relation(fields: [user_id], references: [user_id])
-  post    Post @relation(fields: [post_id], references: [post_id])
+  user_id String
+  post_id String
+  user    User   @relation(fields: [user_id], references: [user_id])
+  post    Post   @relation(fields: [post_id], references: [post_id])
 
   @@id([user_id, post_id])
 }
 
 model Comment {
-  comment_id Int     @id @default(autoincrement())
-  user_id    Int
-  post_id    Int
+  comment_id String  @id @default(uuid())
+  user_id    String
+  post_id    String
   content    String?
   user       User    @relation(fields: [user_id], references: [user_id])
   post       Post    @relation(fields: [post_id], references: [post_id])
 }
 
 model Album {
-  album_id          Int           @id @default(autoincrement())
+  album_id          String        @id @default(uuid())
   album_name        String        @unique
   album_description String?
   artists           Artist[]
@@ -116,19 +116,19 @@ model Album {
 }
 
 model Publish {
-  album_id  Int    @id
-  artist_id Int
+  album_id  String @id
+  artist_id String
   album     Album  @relation(fields: [album_id], references: [album_id])
   artist    Artist @relation(fields: [artist_id], references: [artist_id])
 }
 
 model Song {
-  song_id          Int          @id @default(autoincrement())
-  artist_id        Int
+  song_id          String       @id @default(uuid())
+  artist_id        String
   song_name        String
   song_description String?
   release_time     DateTime?
-  album_id         Int?
+  album_id         String?
   artist           Artist       @relation(fields: [artist_id], references: [artist_id])
   album            Album?       @relation(fields: [album_id], references: [album_id])
   RelateSong       RelateSong[]
@@ -136,31 +136,31 @@ model Song {
 
 // The RelateTo model is supposed to function like an abstract model
 model RelateTo {
-  post_id Int  @id @map("post_id")
-  post    Post @relation(fields: [post_id], references: [post_id])
+  post_id String @id @map("post_id")
+  post    Post   @relation(fields: [post_id], references: [post_id])
 }
 
 model RelateSong {
-  song_id Int
-  post_id Int
-  song    Song @relation(fields: [song_id], references: [song_id])
-  post    Post @relation(fields: [post_id], references: [post_id])
+  song_id String
+  post_id String
+  song    Song   @relation(fields: [song_id], references: [song_id])
+  post    Post   @relation(fields: [post_id], references: [post_id])
 
   @@id([post_id, song_id])
 }
 
 model RelateAlbum {
-  album_id Int
-  post_id  Int
-  album    Album @relation(fields: [album_id], references: [album_id])
-  post     Post  @relation(fields: [post_id], references: [post_id])
+  album_id String
+  post_id  String
+  album    Album  @relation(fields: [album_id], references: [album_id])
+  post     Post   @relation(fields: [post_id], references: [post_id])
 
   @@id([post_id, album_id])
 }
 
 model RelateArtist {
-  artist_id Int
-  post_id   Int
+  artist_id String
+  post_id   String
   artist    Artist @relation(fields: [artist_id], references: [artist_id])
   post      Post   @relation(fields: [post_id], references: [post_id])
 
