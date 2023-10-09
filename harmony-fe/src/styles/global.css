@@ -1,26 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Gabarito&family=Oswald&display=swap');
 
-
 .MuiAppBar-root {
-    background: white;
-    color: orangered;
+  background: white;
+  color: orangered;
 }
 
 .img {
-    max-width: 160;
+  max-width: 160;
 }
 
 .navButton {
-    font-family: 'Oswald', sans-serif;
-    font-size: x-large;
+  font-family: 'Oswald', sans-serif;
+  font-size: x-large;
 }
 
 .followButton {
-    color: orangered;
-    font-size: x-large;   
-
+  color: orangered;
+  font-size: x-large;
 }
 
 .followButton:hover {
-    font-size: x-large;   
+  font-size: x-large;
 }

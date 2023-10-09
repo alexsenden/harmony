@@ -23,7 +23,7 @@ const HomePage = () => {
         ) : (
           <p>{response?.echo || JSON.stringify(error)}</p>
         )}
-    </Container>
+      </Container>
     </>
   )
 }
