@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import {AppBar, Box, Toolbar, Button, Divider} from '@mui/material'
+import React from 'react'
+import { AppBar, Box, Toolbar, Button, Divider } from '@mui/material'
 
 export default function HarmonyAppBar() {
   return (
