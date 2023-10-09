@@ -13,7 +13,7 @@ export default function HarmonyAppBar() {
                 sx={{
                   height: 64,
                 }}
-                alt="Your logo."
+                alt="Harmony Logo"
                 src={'/harmony1.png'}
               />
             </Button>
