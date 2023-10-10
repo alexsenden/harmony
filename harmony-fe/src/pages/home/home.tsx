@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Card } from '@mui/material'
-
+import React, { useEffect } from 'react'
+import { Card, Container } from '@mui/material'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
-import PostModal from '../../components/post-modal'
+import HarmonyAppBar from '../../components/appbar'
 
 const HomePage = () => {
   const [sendRequest, response, error, loading] = useHttpRequest({
@@ -26,18 +25,15 @@ const HomePage = () => {
 
   return (
     <>
-      <Card variant="outlined">
-        <p>This is the homepage. Hello World!</p>
+      <HarmonyAppBar />
+      <Container maxWidth="xl">
+        <h1>This is the homepage. Hello World!</h1>
         {loading ? (
           <p>Loading...</p>
         ) : (
           <p>{response?.echo || JSON.stringify(error)}</p>
         )}
-      </Card>
-      <Button variant="outlined" onClick={handleOpen}>
-        + New Post
-      </Button>
-      <PostModal open={open} onClose={handleClose} />
+      </Container>
     </>
   )
 }
