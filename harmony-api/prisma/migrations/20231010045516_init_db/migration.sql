@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "PostType" AS ENUM ('DISCUSSION', 'POLL', 'REVIEW');
+
 -- CreateTable
 CREATE TABLE "User" (
     "user_id" TEXT NOT NULL,
@@ -11,11 +14,11 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Artist" (
-    "user_id" TEXT NOT NULL,
+    "artist_id" TEXT NOT NULL,
     "artist_name" TEXT NOT NULL,
     "artist_alias" TEXT,
 
-    CONSTRAINT "Artist_pkey" PRIMARY KEY ("user_id")
+    CONSTRAINT "Artist_pkey" PRIMARY KEY ("artist_id")
 );
 
 -- CreateTable
@@ -23,11 +26,13 @@ CREATE TABLE "Post" (
     "post_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "post_type" "PostType" NOT NULL,
     "content" TEXT,
+    "rating" DECIMAL(65,30),
     "song_id" TEXT,
     "album_id" TEXT,
     "artist_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("post_id")
 );
@@ -38,23 +43,6 @@ CREATE TABLE "PollOption" (
     "option" TEXT NOT NULL,
 
     CONSTRAINT "PollOption_pkey" PRIMARY KEY ("post_id")
-);
-
--- CreateTable
-CREATE TABLE "Discussion" (
-    "post_id" TEXT NOT NULL,
-    "content" TEXT NOT NULL,
-
-    CONSTRAINT "Discussion_pkey" PRIMARY KEY ("post_id")
-);
-
--- CreateTable
-CREATE TABLE "Review" (
-    "post_id" TEXT NOT NULL,
-    "stars" DECIMAL(65,30) NOT NULL,
-    "content" TEXT NOT NULL,
-
-    CONSTRAINT "Review_pkey" PRIMARY KEY ("post_id")
 );
 
 -- CreateTable
@@ -137,28 +125,19 @@ CREATE UNIQUE INDEX "_AlbumToArtist_AB_unique" ON "_AlbumToArtist"("A", "B");
 CREATE INDEX "_AlbumToArtist_B_index" ON "_AlbumToArtist"("B");
 
 -- AddForeignKey
-ALTER TABLE "Artist" ADD CONSTRAINT "Artist_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Post" ADD CONSTRAINT "Post_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_song_id_fkey" FOREIGN KEY ("song_id") REFERENCES "Song"("song_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_album_id_fkey" FOREIGN KEY ("album_id") REFERENCES "Album"("album_id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Post" ADD CONSTRAINT "Post_artist_id_fkey" FOREIGN KEY ("artist_id") REFERENCES "Artist"("user_id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Post" ADD CONSTRAINT "Post_artist_id_fkey" FOREIGN KEY ("artist_id") REFERENCES "Artist"("artist_id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Post" ADD CONSTRAINT "Post_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PollOption" ADD CONSTRAINT "PollOption_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "Post"("post_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Discussion" ADD CONSTRAINT "Discussion_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "Post"("post_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Review" ADD CONSTRAINT "Review_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "Post"("post_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Follow" ADD CONSTRAINT "Follow_following_id_fkey" FOREIGN KEY ("following_id") REFERENCES "User"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -182,10 +161,10 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_post_id_fkey" FOREIGN KEY ("post_i
 ALTER TABLE "Publish" ADD CONSTRAINT "Publish_album_id_fkey" FOREIGN KEY ("album_id") REFERENCES "Album"("album_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Publish" ADD CONSTRAINT "Publish_artist_id_fkey" FOREIGN KEY ("artist_id") REFERENCES "Artist"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Publish" ADD CONSTRAINT "Publish_artist_id_fkey" FOREIGN KEY ("artist_id") REFERENCES "Artist"("artist_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Song" ADD CONSTRAINT "Song_artist_id_fkey" FOREIGN KEY ("artist_id") REFERENCES "Artist"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Song" ADD CONSTRAINT "Song_artist_id_fkey" FOREIGN KEY ("artist_id") REFERENCES "Artist"("artist_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Song" ADD CONSTRAINT "Song_album_id_fkey" FOREIGN KEY ("album_id") REFERENCES "Album"("album_id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -194,4 +173,4 @@ ALTER TABLE "Song" ADD CONSTRAINT "Song_album_id_fkey" FOREIGN KEY ("album_id") 
 ALTER TABLE "_AlbumToArtist" ADD CONSTRAINT "_AlbumToArtist_A_fkey" FOREIGN KEY ("A") REFERENCES "Album"("album_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_AlbumToArtist" ADD CONSTRAINT "_AlbumToArtist_B_fkey" FOREIGN KEY ("B") REFERENCES "Artist"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_AlbumToArtist" ADD CONSTRAINT "_AlbumToArtist_B_fkey" FOREIGN KEY ("B") REFERENCES "Artist"("artist_id") ON DELETE CASCADE ON UPDATE CASCADE;
