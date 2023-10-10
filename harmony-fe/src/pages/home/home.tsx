@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Card, Container } from '@mui/material'
+import { Container } from '@mui/material'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import HarmonyAppBar from '../../components/appbar'
 
@@ -12,16 +12,6 @@ const HomePage = () => {
   useEffect(() => {
     sendRequest()
   }, [])
-
-  const [open, setOpen] = useState(false)
-
-  const handleOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
 
   return (
     <>
