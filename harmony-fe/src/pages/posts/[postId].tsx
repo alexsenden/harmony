@@ -1,22 +1,12 @@
-import React from 'react'
 import { useRouter } from 'next/router'
-import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
-import Divider from '@mui/material/Divider'
-import Box from '@mui/material/Box'
-import List from '@mui/material/List'
-import ListItemText from '@mui/material/ListItemText'
-import ListItem from '@mui/material/ListItem'
-import Paper from '@mui/material/Paper'
-import Grid from '@mui/material/Grid'
-import Avatar from '@mui/material/Avatar'
+import { Button, Stack, Divider, Paper, Grid } from '@mui/material'
 
 export default function PostDetail() {
   const router = useRouter()
   const postID = router.query.postId
+
   return (
     <>
-      {/* <Box sx={{ p: 2 }}> */}{' '}
       <div style={{ padding: 14 }}>
         <Paper style={{ padding: '40px 20px' }}>
           <h1>Title of the post {postID}</h1>
@@ -147,7 +137,6 @@ export default function PostDetail() {
           </Grid>
         </Paper>
       </div>
-      {/* </Box> */}
     </>
   )
 }

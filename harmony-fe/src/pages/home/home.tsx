@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
-import { Button, Card, Divider } from '@mui/material'
+import { Button, Card, Divider, Stack } from '@mui/material'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import Post from '../../components/post'
-import Stack from '@mui/system/Stack'
 import Link from 'next/link'
 
 const HomePage = () => {

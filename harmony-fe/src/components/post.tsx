@@ -1,16 +1,28 @@
-import * as React from 'react'
-import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import Avatar from '@mui/material/Avatar'
-import { deepOrange, deepPurple } from '@mui/material/colors'
-import Stack from '@mui/material/Stack'
-import Box from '@mui/material/Box'
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Button,
+  Typography,
+  Avatar,
+  Stack,
+  Box,
+} from '@mui/material'
+import { deepOrange } from '@mui/material/colors'
 
-export default function Post({ title, name, comments, likes }) {
+interface PostProps {
+  title: string
+  name: string
+  numComments: number
+  numLikes: number
+}
+
+export default function Post({
+  title,
+  name,
+  numComments,
+  numLikes,
+}: PostProps) {
   return (
     <Card variant="outlined" sx={{ minWidth: 275 }}>
       <Stack direction="row">
@@ -26,8 +38,8 @@ export default function Post({ title, name, comments, likes }) {
 
           <CardActions>
             <p>By: {name} </p>
-            <Button size="small">{comments} comments</Button>
-            <Button size="small"> {likes} likes</Button>
+            <Button size="small">{numComments} comments</Button>
+            <Button size="small"> {numLikes} likes</Button>
           </CardActions>
         </Box>
       </Stack>
