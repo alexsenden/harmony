@@ -4,6 +4,19 @@ const prisma = new PrismaClient()
 
 async function main() {
   console.log(
+    await prisma.user.upsert({
+      where: { userId: 'b12c47f8-036c-4bfd-8658-230e8fa4d7cb' },
+      update: {},
+      create: {
+        userId: 'b12c47f8-036c-4bfd-8658-230e8fa4d7cb',
+        username: 'Default User',
+        password: '',
+        active: true,
+      },
+    })
+  )
+
+  console.log(
     await prisma.artist.upsert({
       where: { artistId: '99dbc8f9-135b-4ae4-8f42-e471437c87ac' },
       update: {},

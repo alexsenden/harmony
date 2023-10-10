@@ -11,7 +11,9 @@ interface PostModalProps {
   onClose: () => void
 }
 
-const DEFAULT_POST_STATE = { userId: '1' } as Post
+const DEFAULT_POST_STATE = {
+  userId: 'b12c47f8-036c-4bfd-8658-230e8fa4d7cb',
+} as Post
 
 export const PostModal = ({ open, onClose }: PostModalProps) => {
   const onChange = (argName: PostField, argValue: unknown) => {
