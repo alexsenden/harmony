@@ -23,7 +23,7 @@ const AppBar = () => {
   return (
     <React.Fragment>
       <Box sx={{ flexGrow: 1 }}>
-        <MuiAppBar className="navBar" position="sticky">
+        <MuiAppBar className="navBar-root" position="sticky">
           <Toolbar>
             <Button href="/home">
               <Box
