@@ -144,7 +144,7 @@ async function main() {
       update: {},
       create: {
         songId: '679dfec3-6fd9-4c18-89aa-48775611a336',
-        songName: `Tuesday's Gone`,
+        songName: "Tuesday's Gone",
         songDescription: '',
         artistId: '99dbc8f9-135b-4ae4-8f42-e471437c87ac',
       },
@@ -157,7 +157,7 @@ async function main() {
       update: {},
       create: {
         songId: '8e3bc354-a27c-4403-b5c9-97b6dd88f219',
-        songName: `Day 'N' Nite`,
+        songName: "Day 'N' Nite",
         songDescription: '',
         artistId: '99dbc8f9-135b-4ae4-8f42-e471437c87ac',
       },
@@ -172,5 +172,5 @@ main()
   .catch(async e => {
     console.error(e)
     await prisma.$disconnect()
-    process.exit(1)
+    throw new Error()
   })
