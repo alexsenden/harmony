@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { Button, Stack, Divider, Paper, Grid } from '@mui/material'
+
 import TextBlock from '../../components/text'
 
 export default function PostDetail() {

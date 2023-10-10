@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
   Avatar,
   Button,
-  Card,
   Container,
   Grid,
   Paper,
@@ -10,12 +9,17 @@ import {
   Tabs,
   Typography,
 } from '@mui/material'
+
 import HarmonyAppBar from '../../components/appBar/appBar'
+import TextBlock from '../../components/text'
 
 const HomePage = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0)
 
-  const handleTabChange = (e: any, tabIndex: React.SetStateAction<number>) => {
+  const handleTabChange = (
+    event: React.SyntheticEvent,
+    tabIndex: React.SetStateAction<number>
+  ) => {
     setCurrentTabIndex(tabIndex)
   }
 

@@ -1,2 +1,2 @@
-import TextBlock from './text'
+import TextBlock from './text.styled'
 export default TextBlock

@@ -1,11 +1,17 @@
 import React from 'react'
-import { AppBar, Box, Toolbar, Button, Divider } from '@mui/material'
+import {
+  AppBar as MuiAppBar,
+  Box,
+  Toolbar,
+  Button,
+  Divider,
+} from '@mui/material'
 
-export default function HarmonyAppBar() {
+const AppBar = () => {
   return (
     <React.Fragment>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar className="navBar" position="sticky">
+        <MuiAppBar className="MuiAppBar" position="sticky">
           <Toolbar>
             <Button href="/home">
               <Box
@@ -32,8 +38,10 @@ export default function HarmonyAppBar() {
               Login
             </Button>
           </Toolbar>
-        </AppBar>
+        </MuiAppBar>
       </Box>
     </React.Fragment>
   )
 }
+
+export default AppBar
