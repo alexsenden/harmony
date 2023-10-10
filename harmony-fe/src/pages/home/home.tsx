@@ -1,20 +1,10 @@
-import React, { useEffect } from 'react'
 import { Button, Container, Divider, Stack } from '@mui/material'
-import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
-import Post from '../../components/post'
+import Post from '../../components/post/post'
 import Link from 'next/link'
-import HarmonyAppBar from '../../components/appbar'
+
+import HarmonyAppBar from '../../components/appBar'
 
 const HomePage = () => {
-  const [sendRequest, response, error, loading] = useHttpRequest({
-    method: HttpMethod.GET,
-    url: '/example?echo=Echo_Me_Please!',
-  })
-
-  useEffect(() => {
-    sendRequest()
-  }, [])
-
   return (
     <>
       <HarmonyAppBar />

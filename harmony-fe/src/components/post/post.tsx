@@ -3,12 +3,12 @@ import {
   CardActions,
   CardContent,
   Button,
-  Typography,
   Avatar,
   Stack,
   Box,
 } from '@mui/material'
 import { deepOrange } from '@mui/material/colors'
+import TextBlock from '../text'
 
 interface PostProps {
   title: string
@@ -17,12 +17,7 @@ interface PostProps {
   numLikes: number
 }
 
-export default function Post({
-  title,
-  name,
-  numComments,
-  numLikes,
-}: PostProps) {
+const Post = ({ title, name, numComments, numLikes }: PostProps) => {
   return (
     <Card variant="outlined" sx={{ minWidth: 275 }}>
       <Stack direction="row">
@@ -31,13 +26,13 @@ export default function Post({
         </CardContent>
         <Box>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+            <TextBlock gutterBottom variant="h5">
               {title}
-            </Typography>
+            </TextBlock>
           </CardContent>
 
           <CardActions>
-            <p>By: {name} </p>
+            <TextBlock>By: {name} </TextBlock>
             <Button size="small">{numComments} comments</Button>
             <Button size="small"> {numLikes} likes</Button>
           </CardActions>
@@ -46,3 +41,5 @@ export default function Post({
     </Card>
   )
 }
+
+export default Post
