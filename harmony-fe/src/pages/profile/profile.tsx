@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
   Avatar,
   Button,
-  Card,
   Container,
   Grid,
   Paper,
@@ -15,7 +14,10 @@ import HarmonyAppBar from '../../components/appbar'
 const HomePage = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0)
 
-  const handleTabChange = (e: any, tabIndex: React.SetStateAction<number>) => {
+  const handleTabChange = (
+    event: React.SyntheticEvent,
+    tabIndex: React.SetStateAction<number>
+  ) => {
     setCurrentTabIndex(tabIndex)
   }
 

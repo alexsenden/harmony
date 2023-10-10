@@ -20,3 +20,8 @@ Run the command `npm run dev`.
 
 1. Build the docker image using the command `docker build . -t harmony-api`
 2. Run the docker container using the command `docker run -p 8081:8081 harmony-api`
+
+### Modifying the DB Schema (Migrations)
+
+1. Change the `schema.prisma` file to create your changes
+2. Run `npx prisma migrate dev`, and then enter a name for the migration when prompted

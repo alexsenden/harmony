@@ -31,10 +31,14 @@ const useHttpRequest = ({
   const [loading, setloading] = useState(true)
 
   const sendHttpRequest = async () => {
+    setResponse(undefined)
+    setError(undefined)
+    setloading(true)
+
     const requestHeaders = { accept: '*/*', ...headers }
 
     new Promise(() =>
-      axios[method](url, requestHeaders, body)
+      axios[method](url, body, { headers: requestHeaders })
         .then(res => {
           setResponse(res.data)
         })
@@ -46,7 +50,6 @@ const useHttpRequest = ({
         })
     )
   }
-
   return [sendHttpRequest, response, error, loading]
 }
 
