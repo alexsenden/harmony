@@ -36,9 +36,9 @@ jobs:
       - name: SSH into azure VM and recreate existing backend
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 4.206.203.130
-          username: deployment_user
-          password: 0ckYTch2ncFZfLJsnRHo
+          host: ${{ secrets.azureHost2 }}
+          username: ${{ secrets.usernameDeployment }}
+          password: ${{ secrets.passwordDeployment }}
           script_stop: true
           port: 22
           script: |
@@ -50,9 +50,9 @@ jobs:
       - name: SSH into backend VM, setup backend
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 4.206.203.131
-          username: backend_user
-          password: ZDE7QNVXUJepLq9RmxXu
+          host: ${{ secrets.azureHost1 }}
+          username: ${{ secrets.usernameBackend }}
+          password: ${{ secrets.passwordBackend }}
           script_stop: false
           port: 22
           script: |
@@ -100,9 +100,9 @@ jobs:
       - name: Redeploy services
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 4.206.203.131
-          username: backend_user
-          password: ZDE7QNVXUJepLq9RmxXu
+          host: ${{ secrets.azureHost1 }}
+          username: ${{ secrets.usernameBackend }}
+          password: ${{ secrets.passwordBackend }}
           script_stop: false
           port: 22
           script: |
