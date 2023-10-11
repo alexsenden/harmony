@@ -1,0 +1,31 @@
+name: harmony-api
+on: pull_request
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./harmony-api
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm ci
+      - name: Build project
+        run: tsc
+  test-and-lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./harmony-api
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests and linter
+        run: npm run test

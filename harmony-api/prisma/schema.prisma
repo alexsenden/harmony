@@ -1,0 +1,122 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  userId    String    @id @default(uuid()) @map("user_id")
+  username  String    @unique
+  password  String
+  createdAt DateTime  @default(now()) @map("created_at")
+  active    Boolean?
+  posts     Post[]
+  likes     Like[]
+  comments  Comment[]
+  follows   Follow[]  @relation("Following")
+  followers Follow[]  @relation("Follower")
+}
+
+model Artist {
+  artistId      String    @id @map("artist_id")
+  artistName    String    @unique @map("artist_name")
+  artistAlias   String?   @map("artist_alias")
+  albums        Album[]
+  songs         Song[]
+  publishes     Publish[]
+  postRelations Post[]
+}
+
+model Post {
+  postId       String       @id @default(uuid()) @map("post_id")
+  userId       String       @map("user_id")
+  title        String
+  postType     PostType     @map("post_type")
+  content      String?
+  rating       Decimal?
+  songId       String?      @map("song_id")
+  albumId      String?      @map("album_id")
+  artistId     String?      @map("artist_id")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  relateSong   Song?        @relation(fields: [songId], references: [songId])
+  relateAlbum  Album?       @relation(fields: [albumId], references: [albumId])
+  relateArtist Artist?      @relation(fields: [artistId], references: [artistId])
+  user         User         @relation(fields: [userId], references: [userId])
+  likes        Like[]
+  comments     Comment[]
+  pollOptions  PollOption[]
+}
+
+model PollOption {
+  postId String @id @map("post_id")
+  option String
+  poll   Post   @relation(fields: [postId], references: [postId])
+}
+
+model Follow {
+  followingId String   @map("following_id")
+  followerId  String   @map("follower_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  following   User     @relation("Following", fields: [followingId], references: [userId])
+  follower    User     @relation("Follower", fields: [followerId], references: [userId])
+
+  @@id([followingId, followerId])
+}
+
+model Like {
+  userId String @map("user_id")
+  postId String @map("post_id")
+  user   User   @relation(fields: [userId], references: [userId])
+  post   Post   @relation(fields: [postId], references: [postId])
+
+  @@id([userId, postId])
+}
+
+model Comment {
+  commentId String   @id @default(uuid()) @map("comment_id")
+  userId    String   @map("user_id")
+  postId    String   @map("post_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  content   String?
+  user      User     @relation(fields: [userId], references: [userId])
+  post      Post     @relation(fields: [postId], references: [postId])
+}
+
+model Album {
+  albumId          String    @id @default(uuid()) @map("album_id")
+  albumName        String    @unique @map("album_name")
+  albumDescription String?   @map("album_description")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  artists          Artist[]
+  songs            Song[]
+  publish          Publish[]
+  postRelations    Post[]
+}
+
+model Publish {
+  albumId  String @id @map("album_id")
+  artistId String @map("artist_id")
+  album    Album  @relation(fields: [albumId], references: [albumId])
+  artist   Artist @relation(fields: [artistId], references: [artistId])
+}
+
+model Song {
+  songId          String    @id @default(uuid()) @map("song_id")
+  artistId        String    @map("artist_id")
+  songName        String    @map("song_name")
+  songDescription String?   @map("song_description")
+  createdAt       DateTime? @map("created_at")
+  albumId         String?   @map("album_id")
+  artist          Artist    @relation(fields: [artistId], references: [artistId])
+  album           Album?    @relation(fields: [albumId], references: [albumId])
+  postRelations   Post[]
+}
+
+enum PostType {
+  DISCUSSION
+  POLL
+  REVIEW
+}

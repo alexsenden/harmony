@@ -1,4 +1,5 @@
-import express, { Express, Request, Response } from 'express'
+import express, { Express, NextFunction, Request, Response } from 'express'
+import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 import cors from 'cors'
 
@@ -8,14 +9,21 @@ dotenv.config()
 
 const app: Express = express()
 
+const jsonParser = bodyParser.json()
+
 // Allow different origins to use the API
 app.use(cors())
 
-app.use('/', router)
+app.use('/', jsonParser, router)
 
 // Error handler middleware
 app.use(
-  (err: Error & { statusCode?: number }, req: Request, res: Response): void => {
+  (
+    err: Error & { statusCode?: number },
+    req: Request,
+    res: Response,
+    next: NextFunction // eslint-disable-line @typescript-eslint/no-unused-vars
+  ): void => {
     const statusCode = err.statusCode || 500
     console.error(err.message, err.stack)
     res.status(statusCode).json({ message: err.message })
