@@ -5,7 +5,7 @@ on:
     branches: ["andrii-dev"]
 
 jobs:
-  push_to_registry:
+  deployment:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
@@ -32,13 +32,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  
-  azure_deploy_to_vm:
-    name: Azure deployment to VM
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
 
       - name: SSH into azure VM and recreate existing backend
         uses: appleboy/ssh-action@v1.0.0
@@ -52,13 +45,13 @@ jobs:
               az vm delete --name backend --resource-group all_devs --yes 
               az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username backend_user --admin-password ZDE7QNVXUJepLq9RmxXu --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1s --zone 1 --location canadacentral --nics backend-177_z1
 
-      - name: SSH into backend VM, setup backend and redeploy services
+      - name: SSH into backend VM, setup backend
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: 4.206.203.131
           username: backend_user
           password: ZDE7QNVXUJepLq9RmxXu
-          script_stop: true
+          script_stop: false
           port: 22
           script: |
               # Add Docker's official GPG key:
@@ -101,6 +94,20 @@ jobs:
 
               # Apply Nginx Settings
               sudo systemctl restart nginx
+      
+      - name: Redeploy services
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 4.206.203.131
+          username: backend_user
+          password: ZDE7QNVXUJepLq9RmxXu
+          script_stop: false
+          port: 22
+          script: |
+              cd /etc/nginx/sites-enabled
+              cat default
+
+              sudo systemctl status nginx.service
 
               sudo docker image pull aprovozin/harmony-api:v1
               sudo docker run -d -p 8081:8081 aprovozin/harmony-api:v1 -d
