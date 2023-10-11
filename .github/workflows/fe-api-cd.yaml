@@ -5,7 +5,8 @@ on:
     branches: ["andrii-dev"]
 
 jobs:
-  deployment:
+
+  build_docker_api:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
@@ -33,6 +34,19 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+  build_docker_fe:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.usernameDocker }}
+          password: ${{ secrets.apiKeyDocker }}
+      
       - name: Harmony FE - Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
@@ -47,7 +61,13 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          
+
+  deployment:
+    name: Redeploy Services
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4          
 
       - name: SSH into azure VM and recreate existing backend
         uses: appleboy/ssh-action@v1.0.0
@@ -60,8 +80,8 @@ jobs:
           script: |
               az vm delete --name backend --resource-group all_devs --yes 
               az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username backend_user --admin-password ZDE7QNVXUJepLq9RmxXu --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1s --zone 1 --location canadacentral --nics backend-177_z1
-              # To make sure that it is created and can be accessed
-              sleep 30s
+              # To make sure that it is created and can be accessed and that docker services complete building
+              sleep 60s
 
       - name: SSH into backend VM, setup backend
         uses: appleboy/ssh-action@v1.0.0
