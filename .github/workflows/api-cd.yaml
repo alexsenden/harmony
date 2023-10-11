@@ -35,73 +35,73 @@ jobs:
   
   azure_deploy_to_vm:
     name: Azure deployment to VM
-      runs-on: ubuntu-latest
-      steps:
-        - name: Check out the repo
-          uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
 
-        - name: SSH into azure VM and recreate existing backend
-          uses: appleboy/ssh-action@v1.0.0
-          with:
-            host: 4.206.203.130
-            username: deployment_user
-            password: 0ckYTch2ncFZfLJsnRHo
-            script_stop: true
-            port: 22
-            script: |
-                az vm delete --name backend --resource-group all_devs --yes 
-                az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username backend_user --admin-password ZDE7QNVXUJepLq9RmxXu --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1s --zone 1 --location canadacentral --nics backend-177_z1
+      - name: SSH into azure VM and recreate existing backend
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 4.206.203.130
+          username: deployment_user
+          password: 0ckYTch2ncFZfLJsnRHo
+          script_stop: true
+          port: 22
+          script: |
+              az vm delete --name backend --resource-group all_devs --yes 
+              az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username backend_user --admin-password ZDE7QNVXUJepLq9RmxXu --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1s --zone 1 --location canadacentral --nics backend-177_z1
 
-        - name: SSH into backend VM, setup backend and redeploy services
-          uses: appleboy/ssh-action@v1.0.0
-          with:
-            host: 4.206.203.130
-            username: backend_user
-            password: ZDE7QNVXUJepLq9RmxXu
-            script_stop: true
-            port: 22
-            script: |
-                # Add Docker's official GPG key:
-                sudo apt-get update
-                sudo apt-get install ca-certificates curl gnupg
-                sudo install -m 0755 -d /etc/apt/keyrings
-                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-                sudo chmod a+r /etc/apt/keyrings/docker.gpg
+      - name: SSH into backend VM, setup backend and redeploy services
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 4.206.203.130
+          username: backend_user
+          password: ZDE7QNVXUJepLq9RmxXu
+          script_stop: true
+          port: 22
+          script: |
+              # Add Docker's official GPG key:
+              sudo apt-get update
+              sudo apt-get install ca-certificates curl gnupg
+              sudo install -m 0755 -d /etc/apt/keyrings
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+              sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
-                # Add the repository to Apt sources:
-                echo \
-                  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-                  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-                  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-                sudo apt-get update
+              # Add the repository to Apt sources:
+              echo \
+                "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+                sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+              sudo apt-get update
                 
-                # Install Docker
-                sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin --yes
+              # Install Docker
+              sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin --yes
 
-                sudo apt install nginx --yes
+              sudo apt install nginx --yes
 
-                # Set Nginx settings 
-                cd /etc/nginx/sites-enabled
-                sudo rm default
+              # Set Nginx settings 
+              cd /etc/nginx/sites-enabled
+              sudo rm default
 
-                sudo echo "    	
-                  server {
-                    listen 80 default_server;
-                    listen [::]:80 default_server;
+              sudo echo "    	
+                server {
+                  listen 80 default_server;
+                  listen [::]:80 default_server;
 
-                    server_name _;
+                  server_name _;
 
-                    location / {
+                  location / {
                             proxy_http_version 1.1;
                             proxy_set_header X-Forwarded-For \$remote_addr;
                             proxy_set_header Host \$host;
                             proxy_pass http://localhost:8081; 
-                    }
-                  }" | sudo tee -a default
+                  }
+                }" | sudo tee -a default
 
-                # Apply Nginx Settings
-                sudo systemctl restart nginx
+              # Apply Nginx Settings
+              sudo systemctl restart nginx
 
-                sudo docker image pull aprovozin/harmony-api:v1
-                sudo docker run -d -p 8081:8081 aprovozin/harmony-api:v1 -d
+              sudo docker image pull aprovozin/harmony-api:v1
+              sudo docker run -d -p 8081:8081 aprovozin/harmony-api:v1 -d
 
