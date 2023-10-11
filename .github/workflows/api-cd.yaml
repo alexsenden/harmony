@@ -55,7 +55,7 @@ jobs:
       - name: SSH into backend VM, setup backend and redeploy services
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 4.206.203.130
+          host: 4.206.203.131
           username: backend_user
           password: ZDE7QNVXUJepLq9RmxXu
           script_stop: true
