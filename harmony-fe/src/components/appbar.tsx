@@ -51,7 +51,7 @@ const AppBar = () => {
               New Post
             </Button>
             <Divider orientation="vertical" flexItem />
-            <Button href="/home" className="navButton" color="inherit">
+            <Button href="/login" className="navButton" color="inherit">
               Login
             </Button>
             <Divider orientation="vertical" flexItem />
