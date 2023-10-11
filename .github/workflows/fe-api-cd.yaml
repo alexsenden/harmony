@@ -81,7 +81,7 @@ jobs:
               az vm delete --name backend --resource-group all_devs --yes 
               az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username backend_user --admin-password ZDE7QNVXUJepLq9RmxXu --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1s --zone 1 --location canadacentral --nics backend-177_z1
               # To make sure that it is created and can be accessed and that docker services complete building
-              sleep 60s
+              sleep 30s
 
       - name: SSH into backend VM, setup backend
         uses: appleboy/ssh-action@v1.0.0
@@ -133,7 +133,7 @@ jobs:
               # Apply Nginx Settings
               sudo systemctl restart nginx
       
-      - name: Redeploy services
+      - name: Redeploy docker containers
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.azureHost1 }}
@@ -148,9 +148,9 @@ jobs:
               # testing that nginx works in CD
               sudo systemctl status nginx.service
 
-              sudo docker image pull aprovozin/harmony-api:latest
-              sudo docker run -d -p 8081:8081 aprovozin/harmony-api:latest
+              sudo docker image pull aprovozin/harmony-api:andrii-dev	
+              sudo docker run -d -p 8081:8081 aprovozin/harmony-api:andrii-dev	
 
-              sudo docker image pull aprovozin/harmony-fe:latest
-              sudo docker run -d -p 8080:8080 aprovozin/harmony-fe:latest
+              sudo docker image pull aprovozin/harmony-fe:andrii-dev	
+              sudo docker run -d -p 8080:8080 aprovozin/harmony-fe:andrii-dev	
 
