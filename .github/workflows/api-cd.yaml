@@ -32,6 +32,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  
   azure_deploy_to_vm:
     name: Azure deployment to VM
       runs-on: ubuntu-latest
