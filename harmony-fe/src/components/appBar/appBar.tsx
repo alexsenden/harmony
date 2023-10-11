@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   AppBar as MuiAppBar,
   Box,
@@ -7,11 +7,23 @@ import {
   Divider,
 } from '@mui/material'
 
+import PostModal from './post-modal'
+
 const AppBar = () => {
+  const [open, setOpen] = useState(false)
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   return (
     <React.Fragment>
       <Box sx={{ flexGrow: 1 }}>
-        <MuiAppBar className="MuiAppBar" position="sticky">
+        <MuiAppBar className="navBar-root" position="sticky">
           <Toolbar>
             <Button href="/home">
               <Box
@@ -32,14 +44,21 @@ const AppBar = () => {
             <Button href="/home" className="navButton" color="inherit">
               Search
             </Button>
+
             <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
 
+            <Button className="navButton" color="inherit" onClick={handleOpen}>
+              New Post
+            </Button>
+            <Divider orientation="vertical" flexItem />
             <Button href="/home" className="navButton" color="inherit">
               Login
             </Button>
+            <Divider orientation="vertical" flexItem />
           </Toolbar>
         </MuiAppBar>
       </Box>
+      <PostModal open={open} onClose={handleClose} />
     </React.Fragment>
   )
 }

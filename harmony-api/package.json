@@ -19,13 +19,17 @@
     "clean": "gts clean",
     "fix": "gts fix",
     "posttest": "npm run lint",
-    "connectprisma": "npx prisma db push || exit 0",
+    "connectprisma": "npx prisma db push && npx prisma db seed || exit 0",
     "start": "tsc && npm run connectprisma && node build/src/index.js ",
     "dev": "nodemon -L -w src -e ts --exec \"npm run start\"",
     "test": "jest --runInBand"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed/seedData.ts"
+  },
   "dependencies": {
     "@prisma/client": "^5.4.1",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2"
