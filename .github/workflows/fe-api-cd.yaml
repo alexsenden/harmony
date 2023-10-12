@@ -79,7 +79,7 @@ jobs:
           port: 22
           script: |
               az vm delete --name backend --resource-group all_devs --yes 
-              az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username backend_user --admin-password ZDE7QNVXUJepLq9RmxXu --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1s --zone 1 --location canadacentral --nics backend-177_z1
+              az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username backend_user --admin-password ZDE7QNVXUJepLq9RmxXu --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1ms --zone 1 --location canadacentral --nics backend-177_z1
               # To make sure that it is created and can be accessed and that docker services complete building
               sleep 30s
 
