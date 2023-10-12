@@ -1,0 +1,158 @@
+name: harmony-api-fe-cd
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+
+  build_docker_api:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.usernameDocker }}
+          password: ${{ secrets.apiKeyDocker }}
+      
+      - name: Harmony API - Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: aprovozin/harmony-api-cd
+      
+      - name: Harmony API - Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: ./harmony-api
+          file: ./harmony-api/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  build_docker_fe:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.usernameDocker }}
+          password: ${{ secrets.apiKeyDocker }}
+      
+      - name: Harmony FE - Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: aprovozin/harmony-fe-cd
+      
+      - name:  Harmony FE - Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: ./harmony-fe
+          file: ./harmony-fe/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deployment:
+    name: Redeploy Services
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4    
+        
+      - name: SSH into azure VM and recreate existing backend
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.azureHost2 }}
+          username: ${{ secrets.usernameDeployment }}
+          password: ${{ secrets.passwordDeployment }}
+          script_stop: true
+          port: 22
+          script: |
+              az vm delete --name backend --resource-group all_devs --yes 
+              az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username backend_user --admin-password ZDE7QNVXUJepLq9RmxXu --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1ms --zone 1 --location canadacentral --nics backend-177_z1
+              # To make sure that it is created and can be accessed and that docker services complete building
+              sleep 30s
+
+      - name: SSH into backend VM, setup backend
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.azureHost1 }}
+          username: ${{ secrets.usernameBackend }}
+          password: ${{ secrets.passwordBackend }}
+          script_stop: false
+          port: 22
+          script: |
+              # Add Docker's official GPG key:
+              sudo apt-get update
+              sudo apt-get install ca-certificates curl gnupg
+              sudo install -m 0755 -d /etc/apt/keyrings
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+              sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+              # Add the repository to Apt sources:
+              echo \
+                "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+                sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+              sudo apt-get update
+                
+              # Install Docker
+              sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin --yes
+
+              sudo apt install nginx --yes
+
+              # Set Nginx settings 
+              cd /etc/nginx/sites-enabled
+              sudo rm default
+
+              sudo echo "    	
+                server {
+                  listen 80 default_server;
+                  listen [::]:80 default_server;
+
+                  server_name _;
+
+                  location / {
+                            proxy_http_version 1.1;
+                            proxy_set_header X-Forwarded-For \$remote_addr;
+                            proxy_set_header Host \$host;
+                            proxy_pass http://localhost:8080; 
+                  }
+                }" | sudo tee -a default
+
+              # Apply Nginx Settings
+              sudo systemctl restart nginx
+      
+      - name: Redeploy docker containers
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.azureHost1 }}
+          username: ${{ secrets.usernameBackend }}
+          password: ${{ secrets.passwordBackend }}
+          script_stop: false
+          port: 22
+          script: |
+              cd /etc/nginx/sites-enabled
+              cat default
+
+              sudo docker image pull aprovozin/harmony-api-cd:main
+              sudo docker run -d -p 8081:8081 aprovozin/harmony-api-cd:main
+
+              # let container api start
+              sleep 15s	
+
+              sudo docker image pull aprovozin/harmony-fe-cd:main	
+              sudo docker run -d -p 8080:8080 aprovozin/harmony-fe-cd:main	
+
+              # let container fe start
+              sleep 15s	
