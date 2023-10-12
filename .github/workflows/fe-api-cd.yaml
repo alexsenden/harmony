@@ -146,8 +146,13 @@ jobs:
               cat default
 
               sudo docker image pull aprovozin/harmony-api-cd:andrii-dev	
-              sudo docker run -d -p 8081:8081 aprovozin/harmony-api-cd:andrii-dev	
+              sudo docker run -d -p 8081:8081 aprovozin/harmony-api-cd:andrii-dev
+
+              # let container api start
+              sleep 15s	
 
               sudo docker image pull aprovozin/harmony-fe-cd:andrii-dev	
               sudo docker run -d -p 8080:8080 aprovozin/harmony-fe-cd:andrii-dev	
 
+              # let container fe start
+              sleep 15s	
