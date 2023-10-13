@@ -12,7 +12,7 @@ const LoginPage = () => {
 
   const [userLogin,userLoginResponse,userLoginError,userLoginLoading] =
     useHttpRequest({
-      url: '/post',
+      url: '/login',
       method: HttpMethod.POST,
       body: {username,password}
     })
