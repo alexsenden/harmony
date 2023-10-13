@@ -33,6 +33,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: ENV=prod
 
   build_docker_fe:
     name: Push Docker image to Docker Hub
@@ -61,6 +62,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: ENV=prod
 
   deployment:
     name: Redeploy Services
