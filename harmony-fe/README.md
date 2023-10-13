@@ -18,6 +18,8 @@ Run the command `npm run dev`
 
 ### `harmony-fe` Production Build
 
+Production .env files can be found in the `environment` directory.
+
 1. Build the docker image using the command `docker build . -t harmony-fe --build-arg="ENV=prod"`
 
    NOTE: If you are building the image for use locally (not for the actual server), omit `--build-arg="ENV=prod"`
