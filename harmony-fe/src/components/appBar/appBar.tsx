@@ -7,7 +7,7 @@ import {
   Divider,
 } from '@mui/material'
 
-import PostModal from './post-modal'
+import PostModal from '../post-modal'
 
 const AppBar = () => {
   const [open, setOpen] = useState(false)

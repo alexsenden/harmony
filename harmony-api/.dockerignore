@@ -1,2 +1,12 @@
 node_modules
 npm-debug.log
+__test__
+.editorconfig
+.env
+.env.example
+.eslintignore
+.eslintrc.json
+.nvmrc
+.prettierrc.js
+jest.config.js
+README.md

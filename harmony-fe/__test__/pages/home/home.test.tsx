@@ -1,3 +1,11 @@
+/*
+--------------------------------------------------
+  These tests now fail since we removed the example
+  API call from the homepage, but this code is still
+  a valuable example of how we can write FE tests and
+  use `msw` to mock API calls.
+--------------------------------------------------
+
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import { render, screen } from '@testing-library/react'
@@ -33,4 +41,9 @@ describe('HomePage', () => {
     // findBy will wait for the text to appear, then return it
     expect(screen.findByText('Echo_Me_Please!')).toBeDefined()
   })
+})
+*/
+
+describe('example test', () => {
+  it('runs a test', () => {})
 })

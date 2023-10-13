@@ -9,7 +9,9 @@ import {
   Tabs,
   Typography,
 } from '@mui/material'
-import HarmonyAppBar from '../../components/appbar'
+
+import HarmonyAppBar from '../../components/appBar/appBar'
+import TextBlock from '../../components/text'
 
 const HomePage = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0)
@@ -96,13 +98,13 @@ const HomePage = () => {
                   <Tab label="Posts" />
                   <Tab label="Comments" />
                 </Tabs>
-                {currentTabIndex === 0 && <p>All content</p>}
-                {currentTabIndex === 1 && <p>Posts</p>}
-                {currentTabIndex === 2 && <p>Comments</p>}
+                {currentTabIndex === 0 && <TextBlock>All content</TextBlock>}
+                {currentTabIndex === 1 && <TextBlock>Posts</TextBlock>}
+                {currentTabIndex === 2 && <TextBlock>Comments</TextBlock>}
               </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <p>Profile Information</p>
+              <TextBlock>Profile Information</TextBlock>
             </Grid>
           </Grid>
         </Paper>

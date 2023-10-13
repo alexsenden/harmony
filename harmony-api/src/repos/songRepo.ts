@@ -16,7 +16,7 @@ export const getSongTopicByPartialName = async (
   return songs.map(song => {
     return {
       topicId: {
-        albumId: song.songId,
+        songId: song.songId,
       },
       name: song.songName,
     }

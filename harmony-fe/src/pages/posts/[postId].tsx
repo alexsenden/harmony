@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router'
 import { Button, Stack, Divider, Paper, Grid } from '@mui/material'
 
+import TextBlock from '../../components/text'
+
 export default function PostDetail() {
   const router = useRouter()
   const postID = router.query.postId
@@ -9,9 +11,9 @@ export default function PostDetail() {
     <>
       <div style={{ padding: 14 }}>
         <Paper style={{ padding: '40px 20px' }}>
-          <h1>Title of the post {postID}</h1>
-          <p>By: Username</p>
-          <p>
+          <TextBlock variant="h1">Title of the post {postID}</TextBlock>
+          <TextBlock>By: Username</TextBlock>
+          <TextBlock>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem
             impedit optio expedita quia sint esse quo deserunt ea fuga quod?
             Ducimus quasi veritatis tempora. Labore quos quod quae molestiae
@@ -22,7 +24,7 @@ export default function PostDetail() {
             adipisicing elit. Autem impedit optio expedita quia sint esse quo
             deserunt ea fuga quod? Ducimus quasi veritatis tempora. Labore quos
             quod quae molestiae eligendi?
-          </p>
+          </TextBlock>
 
           <Stack direction="row" spacing={2}>
             <Button variant="outlined" size="small">
@@ -34,12 +36,14 @@ export default function PostDetail() {
           </Stack>
         </Paper>
 
-        <h2>Comments</h2>
+        <TextBlock variant="h2">Comments</TextBlock>
         <Paper style={{ padding: '40px 20px' }}>
           <Grid container wrap="nowrap" spacing={2}>
             <Grid justifyContent="left" item xs zeroMinWidth>
-              <h4 style={{ margin: 0, textAlign: 'left' }}>Michel Michel</h4>
-              <p style={{ textAlign: 'left' }}>
+              <TextBlock variant="h4" style={{ margin: 0, textAlign: 'left' }}>
+                Michel Michel
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left' }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
                 luctus ut est sed faucibus. Duis bibendum ac ex vehicula
                 laoreet. Suspendisse congue vulputate lobortis. Pellentesque at
@@ -49,17 +53,19 @@ export default function PostDetail() {
                 metus. Pellentesque et neque risus. Aliquam vulputate, mauris
                 vitae tincidunt interdum, mauris mi vehicula urna, nec feugiat
                 quam lectus vitae ex.{' '}
-              </p>
-              <p style={{ textAlign: 'left', color: 'gray' }}>
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left', color: 'gray' }}>
                 posted 1 minute ago
-              </p>
+              </TextBlock>
             </Grid>
           </Grid>
           <Divider variant="fullWidth" style={{ margin: '30px 0' }} />
           <Grid container wrap="nowrap" spacing={2}>
             <Grid justifyContent="left" item xs zeroMinWidth>
-              <h4 style={{ margin: 0, textAlign: 'left' }}>Michel Michel</h4>
-              <p style={{ textAlign: 'left' }}>
+              <TextBlock variant="h4" style={{ margin: 0, textAlign: 'left' }}>
+                Michel Michel
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left' }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
                 luctus ut est sed faucibus. Duis bibendum ac ex vehicula
                 laoreet. Suspendisse congue vulputate lobortis. Pellentesque at
@@ -69,17 +75,19 @@ export default function PostDetail() {
                 metus. Pellentesque et neque risus. Aliquam vulputate, mauris
                 vitae tincidunt interdum, mauris mi vehicula urna, nec feugiat
                 quam lectus vitae ex.{' '}
-              </p>
-              <p style={{ textAlign: 'left', color: 'gray' }}>
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left', color: 'gray' }}>
                 posted 1 minute ago
-              </p>
+              </TextBlock>
             </Grid>
           </Grid>
           <Divider variant="fullWidth" style={{ margin: '30px 0' }} />
           <Grid container wrap="nowrap" spacing={2}>
             <Grid justifyContent="left" item xs zeroMinWidth>
-              <h4 style={{ margin: 0, textAlign: 'left' }}>Michel Michel</h4>
-              <p style={{ textAlign: 'left' }}>
+              <TextBlock variant="h4" style={{ margin: 0, textAlign: 'left' }}>
+                Michel Michel
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left' }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
                 luctus ut est sed faucibus. Duis bibendum ac ex vehicula
                 laoreet. Suspendisse congue vulputate lobortis. Pellentesque at
@@ -89,17 +97,19 @@ export default function PostDetail() {
                 metus. Pellentesque et neque risus. Aliquam vulputate, mauris
                 vitae tincidunt interdum, mauris mi vehicula urna, nec feugiat
                 quam lectus vitae ex.{' '}
-              </p>
-              <p style={{ textAlign: 'left', color: 'gray' }}>
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left', color: 'gray' }}>
                 posted 1 minute ago
-              </p>
+              </TextBlock>
             </Grid>
           </Grid>
           <Divider variant="fullWidth" style={{ margin: '30px 0' }} />
           <Grid container wrap="nowrap" spacing={2}>
             <Grid justifyContent="left" item xs zeroMinWidth>
-              <h4 style={{ margin: 0, textAlign: 'left' }}>Michel Michel</h4>
-              <p style={{ textAlign: 'left' }}>
+              <TextBlock variant="h4" style={{ margin: 0, textAlign: 'left' }}>
+                Michel Michel
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left' }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
                 luctus ut est sed faucibus. Duis bibendum ac ex vehicula
                 laoreet. Suspendisse congue vulputate lobortis. Pellentesque at
@@ -109,17 +119,19 @@ export default function PostDetail() {
                 metus. Pellentesque et neque risus. Aliquam vulputate, mauris
                 vitae tincidunt interdum, mauris mi vehicula urna, nec feugiat
                 quam lectus vitae ex.{' '}
-              </p>
-              <p style={{ textAlign: 'left', color: 'gray' }}>
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left', color: 'gray' }}>
                 posted 1 minute ago
-              </p>
+              </TextBlock>
             </Grid>
           </Grid>
           <Divider variant="fullWidth" style={{ margin: '30px 0' }} />
           <Grid container wrap="nowrap" spacing={2}>
             <Grid justifyContent="left" item xs zeroMinWidth>
-              <h4 style={{ margin: 0, textAlign: 'left' }}>Michel Michel</h4>
-              <p style={{ textAlign: 'left' }}>
+              <TextBlock variant="h4" style={{ margin: 0, textAlign: 'left' }}>
+                Michel Michel
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left' }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
                 luctus ut est sed faucibus. Duis bibendum ac ex vehicula
                 laoreet. Suspendisse congue vulputate lobortis. Pellentesque at
@@ -129,10 +141,10 @@ export default function PostDetail() {
                 metus. Pellentesque et neque risus. Aliquam vulputate, mauris
                 vitae tincidunt interdum, mauris mi vehicula urna, nec feugiat
                 quam lectus vitae ex.{' '}
-              </p>
-              <p style={{ textAlign: 'left', color: 'gray' }}>
+              </TextBlock>
+              <TextBlock style={{ textAlign: 'left', color: 'gray' }}>
                 posted 1 minute ago
-              </p>
+              </TextBlock>
             </Grid>
           </Grid>
         </Paper>
