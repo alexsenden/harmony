@@ -7,14 +7,16 @@ import useHttpRequest, {HttpMethod} from "../../hooks/httpRequest";
 
 const LoginPage = () => {
 
-  let username = ""
-  let password = ""
+  const loginData = {
+    username: "",
+    password: "",
+  }
 
   const [userLogin,userLoginResponse,userLoginError,userLoginLoading] =
     useHttpRequest({
       url: '/login',
       method: HttpMethod.POST,
-      body: {username,password}
+      body: loginData
     })
 
   useEffect(() => {
@@ -66,7 +68,7 @@ const LoginPage = () => {
               Log in to Harmony
             </TextBlock>
             <TextField
-              onChange = {event => username=event.target.value}
+              onChange = {event => loginData.username= event.target.value}
               label="username"
               variant="outlined"
               sx={{
@@ -75,7 +77,7 @@ const LoginPage = () => {
               }}
             />
             <TextField
-              onChange = {event => password=event.target.value}
+              onChange = {event => loginData.password = event.target.value}
               label="password"
               type="password"
               variant="outlined"

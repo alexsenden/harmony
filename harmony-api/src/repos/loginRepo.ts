@@ -13,8 +13,9 @@ export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
       },
     },
   })
-  if (userData === null)
+  if (userData === null) {
     return Promise.reject('Invalid username or password')
+  }
   return {
     userId: userData.userId,
     username: userData.username,

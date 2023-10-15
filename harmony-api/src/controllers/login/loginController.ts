@@ -4,7 +4,6 @@ import {Login} from "../../models/login";
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   const loginData = req.body as Login
-  console.log(loginData)
 
   try {
     res.json(await loginService.loginUser(loginData))
