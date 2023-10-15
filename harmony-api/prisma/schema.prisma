@@ -18,6 +18,8 @@ model User {
   comments  Comment[]
   follows   Follow[]  @relation("Following")
   followers Follow[]  @relation("Follower")
+  firstName String
+  lastName  String
 }
 
 model Artist {
