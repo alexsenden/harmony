@@ -2,6 +2,6 @@
 export type User = {
   userId: string
   username: string
-  password: string
+  password?: string
   active?: boolean
 }

@@ -19,6 +19,5 @@ export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
   return {
     userId: userData.userId,
     username: userData.username,
-    password: userData.password,
   }
 }

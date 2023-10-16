@@ -6,7 +6,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   const loginData = req.body as Login
 
   try {
-    res.json(await loginService.loginUser(loginData))
+    res.json({userData: await loginService.loginUser(loginData)})
   } catch (error) {
     next(error)
   }

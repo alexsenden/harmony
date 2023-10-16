@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react'
 import {Box, Button, Container, Grid, Paper, TextField,} from '@mui/material'
 import HarmonyAppBar from '../../components/appBar/index'
-import TextBlock from "../../components/text/index";
-import useHttpRequest, {HttpMethod} from "../../hooks/httpRequest";
+import TextBlock from '../../components/text/index';
+import useHttpRequest, {HttpMethod} from '../../hooks/httpRequest';
+
+
 
 
 const LoginPage = () => {
@@ -11,6 +13,7 @@ const LoginPage = () => {
     username: "",
     password: "",
   }
+
 
   const [userLogin,userLoginResponse,userLoginError,userLoginLoading] =
     useHttpRequest({
@@ -29,7 +32,8 @@ const LoginPage = () => {
       if (userLoginResponse) {
         // userLoginPost returned sucessfully
         // Needs some way to show the post was successfully created in the future
-        console.log(userLoginResponse)
+          console.log(userLoginResponse)
+          window.location.href = "../home"
       }
     }
   }, [userLoginLoading])
