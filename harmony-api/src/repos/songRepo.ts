@@ -1,5 +1,4 @@
 import prisma from '../../prisma/prisma'
-import { Song } from '@prisma/client'
 
 import { Topic } from '../models/topic'
 
