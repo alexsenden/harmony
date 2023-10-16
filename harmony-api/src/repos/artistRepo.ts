@@ -1,24 +1,29 @@
 import prisma from '../../prisma/prisma'
+import { Artist } from '@prisma/client'
+
 import { Topic } from '../models/topic'
+
+type TPartialNameArtist = {
+  artist_name: string
+  artist_id: number
+}
 
 export const getArtistTopicByPartialName = async (
   partialName: string
 ): Promise<Array<Topic>> => {
-  const artists = await prisma.artist.findMany({
-    where: {
-      artistName: {
-        contains: partialName,
-        mode: 'insensitive',
-      },
-    },
-  })
+  const artists = await prisma.$queryRaw<Array<TPartialNameArtist>>`
+    select artist_name, artist_id 
+    from artist 
+    where artist_name like ${`${partialName}%`}
+    limit 5;
+  `
 
   return artists.map(artist => {
     return {
       topicId: {
-        artistId: artist.artistId,
+        artistId: artist.artist_id,
       },
-      name: artist.artistName,
+      name: artist.artist_name,
     }
   })
 }
