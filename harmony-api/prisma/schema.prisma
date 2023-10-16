@@ -8,16 +8,17 @@ generator client {
 }
 
 model User {
-  userId    String    @id @default(uuid()) @map("user_id")
-  username  String    @unique
+  userId    String       @id @default(uuid()) @map("user_id")
+  username  String       @unique
   password  String
-  createdAt DateTime  @default(now()) @map("created_at")
+  createdAt DateTime     @default(now()) @map("created_at")
   active    Boolean?
   posts     Post[]
   likes     Like[]
   comments  Comment[]
-  follows   Follow[]  @relation("Following")
-  followers Follow[]  @relation("Follower")
+  follows   Follow[]     @relation("Following")
+  followers Follow[]     @relation("Follower")
+  cookies   UserCookie[]
 }
 
 model Artist {
@@ -113,6 +114,13 @@ model Song {
   artist          Artist    @relation(fields: [artistId], references: [artistId])
   album           Album?    @relation(fields: [albumId], references: [albumId])
   postRelations   Post[]
+}
+
+model UserCookie {
+  cookie String    @id @default(uuid())
+  userId String    @map("user_id")
+  expiry DateTime?
+  user   User      @relation(fields: [userId], references: [userId])
 }
 
 enum PostType {

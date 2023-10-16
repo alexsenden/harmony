@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Box, Button, Container, Grid, Paper, TextField,} from '@mui/material'
 import HarmonyAppBar from '../../components/appBar/index'
 import TextBlock from '../../components/text/index';
@@ -13,8 +13,7 @@ const LoginPage = () => {
     username: "",
     password: "",
   }
-
-
+  const [loginError, setLoginError] = useState(false); // Initialize error state
   const [userLogin,userLoginResponse,userLoginError,userLoginLoading] =
     useHttpRequest({
       url: '/login',
@@ -28,11 +27,13 @@ const LoginPage = () => {
         // userLoginPost returned an error
         // Needs better error handling in the future
         console.log(userLoginError)
+        setLoginError(true)
       }
       if (userLoginResponse) {
         // userLoginPost returned sucessfully
         // Needs some way to show the post was successfully created in the future
           console.log(userLoginResponse)
+          document.cookie = userLoginResponse['Set-Cookie']
           window.location.href = "../home"
       }
     }
@@ -79,6 +80,7 @@ const LoginPage = () => {
                 mt: 3,
                 width: 8/12,
               }}
+              error={loginError}
             />
             <TextField
               onChange = {event => loginData.password = event.target.value}
@@ -89,6 +91,8 @@ const LoginPage = () => {
                 mt: 3,
                 width: 8/12,
               }}
+              error={loginError}
+              helperText={loginError ? 'Invalid username or password' : ''}
             />
               <Button
                 onClick={userLogin}
