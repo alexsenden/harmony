@@ -1,7 +1,6 @@
 import * as artistRepo from '../repos/artistRepo'
 import * as albumRepo from '../repos/albumRepo'
 import * as songRepo from '../repos/songRepo'
-import { HttpError } from '../models/error/httpError'
 import { Topic, TopicId } from '../models/topic'
 
 export const getTopicByPartialName = async (

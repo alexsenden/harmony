@@ -27,25 +27,25 @@ export const createPost = async (postData?: Post): Promise<Post> => {
   return postResult
 }
 
-const validatePost = (postData?: Post): Post => {
+export const validatePost = (postData?: Post): Post => {
   if (!postData) {
     throw new HttpError('Post data is required to create new post', 400)
   }
 
-  const errorMessages = validateTopicId(postData?.topicId)
-  errorMessages.concat(validateUserId(postData))
-  errorMessages.concat(validateTitle(postData))
+  let errorMessages = validateTopicId(postData?.topicId)
+  errorMessages = errorMessages.concat(validateUserId(postData))
+  errorMessages = errorMessages.concat(validateTitle(postData))
 
   switch (postData?.postType) {
     case PostType.DISCUSSION:
-      errorMessages.concat(validateBody(postData))
+      errorMessages = errorMessages.concat(validateBody(postData))
       break
     case PostType.POLL:
-      errorMessages.concat(validatePollOptions(postData))
+      errorMessages = errorMessages.concat(validatePollOptions(postData))
       break
     case PostType.REVIEW:
-      errorMessages.concat(validateBody(postData))
-      errorMessages.concat(validateRating(postData))
+      errorMessages = errorMessages.concat(validateBody(postData))
+      errorMessages = errorMessages.concat(validateRating(postData))
       break
     default:
       errorMessages.push(`Unsupported postType: ${postData?.postType}`)
@@ -58,7 +58,7 @@ const validatePost = (postData?: Post): Post => {
   return postData
 }
 
-const validateUserId = (postData?: Post): Array<string> => {
+export const validateUserId = (postData?: Post): Array<string> => {
   if (!postData?.userId) {
     return ['userId field is required to create a new post']
   }
@@ -66,7 +66,7 @@ const validateUserId = (postData?: Post): Array<string> => {
   return []
 }
 
-const validateTitle = (postData?: Post): Array<string> => {
+export const validateTitle = (postData?: Post): Array<string> => {
   if (!postData?.title) {
     return ['title field is required to create a new post']
   }
@@ -74,7 +74,7 @@ const validateTitle = (postData?: Post): Array<string> => {
   return []
 }
 
-const validateBody = (postData: Post): Array<string> => {
+export const validateBody = (postData: Post): Array<string> => {
   if (!postData.body) {
     return ['body field is required to create a new discussion or review post']
   }
@@ -82,10 +82,10 @@ const validateBody = (postData: Post): Array<string> => {
   return []
 }
 
-const validateRating = (postData: Post): Array<string> => {
+export const validateRating = (postData: Post): Array<string> => {
   const errorMessages = []
 
-  if (!postData.rating) {
+  if (!postData.rating && postData.rating !== 0) {
     errorMessages.push('rating field is required to create a new review post')
   } else if (postData.rating < 0 || postData.rating > 5) {
     errorMessages.push('rating field must be in the domain [0, 5]')
@@ -94,7 +94,7 @@ const validateRating = (postData: Post): Array<string> => {
   return errorMessages
 }
 
-const validatePollOptions = (postData: Post): Array<string> => {
+export const validatePollOptions = (postData: Post): Array<string> => {
   const errorMessages = []
 
   if (!postData.pollOptions) {
