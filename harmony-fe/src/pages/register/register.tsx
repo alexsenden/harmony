@@ -181,6 +181,14 @@ const RegisterPage = () => {
                 onClose={() => setHasError(false)}
               >
                 An error occurred. Please check your input and try again.
+                
+                <br/><br/> 
+                
+                Error: 
+                
+                <br/><br/> 
+                
+                { error && error.response.data.message ? error.response.data.message : "incorrect input for one of the fields"}
               </Alert>
             ) : null}
           </Grid>
