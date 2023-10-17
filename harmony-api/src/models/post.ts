@@ -1,3 +1,4 @@
+import { PollOption } from './pollOption'
 import { TopicId } from './topic'
 
 export type Post = {
@@ -8,7 +9,7 @@ export type Post = {
   title: string
   body?: string
   rating?: number
-  pollOptions?: Array<Object>
+  pollOptions?: Array<PollOption>
 }
 
 export enum PostType {

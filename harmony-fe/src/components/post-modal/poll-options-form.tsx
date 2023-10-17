@@ -59,6 +59,7 @@ export const PollOptionsForm = ({ onChange }: PollOptionsFormProps) => {
               variant="outlined"
               fullWidth
               size="small"
+              onChange={event => (option.option = event.target.value)}
             />
           </Box>
         )

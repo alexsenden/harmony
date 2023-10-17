@@ -18,7 +18,7 @@ export const getTopicByPartialName = async (
   return [...(await artists), ...(await albums), ...(await songs)]
 }
 
-export const validateTopicId = (topicId?: TopicId) => {
+export const validateTopicId = (topicId?: TopicId): Array<string> => {
   let definedIds = 0
 
   if (topicId?.albumId) {
@@ -32,6 +32,8 @@ export const validateTopicId = (topicId?: TopicId) => {
   }
 
   if (definedIds !== 1) {
-    throw new HttpError('Exactly one topicId must be defined', 400)
+    return ['Exactly one topicId must be defined']
   }
+
+  return []
 }
