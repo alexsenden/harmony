@@ -13,7 +13,7 @@ async function main() {
         password: '',
         active: true,
         firstName: 'John',
-        lastName: 'Doe'
+        lastName: 'Doe',
       },
     })
   )
