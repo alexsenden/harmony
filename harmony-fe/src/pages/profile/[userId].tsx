@@ -1,27 +1,73 @@
-import React, { useState } from 'react'
+import { useRouter } from 'next/router'
+import React, { useEffect,useState } from 'react'
 import {
   Avatar,
   Button,
   Container,
   Grid,
   Paper,
-  Tab,
-  Tabs,
   Typography,
 } from '@mui/material'
 
 import HarmonyAppBar from '../../components/appBar/appBar'
-import TextBlock from '../../components/text'
+import TabLayout, { TabItem } from '../../components/tab-layout'
+import PostFeed from '../../components/postFeed'
+import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { Post } from '../../models/post'
 
-const HomePage = () => {
-  const [currentTabIndex, setCurrentTabIndex] = useState(0)
+const Profile = () => {
+  const router = useRouter()
+  const userID = router.query.userId
 
-  const handleTabChange = (
-    event: React.SyntheticEvent,
-    tabIndex: React.SetStateAction<number>
-  ) => {
-    setCurrentTabIndex(tabIndex)
-  }
+  //Retrieve user name from cookie
+
+  //Retrieve posts
+  const [postsFromUser, getPosts] = useState<Array<Post>>([])
+
+  const [getPostsByUserId, postsReceived] = useHttpRequest({
+    url: `/post/?userId=${userID}`,
+    method: HttpMethod.GET,
+  })
+
+  useEffect(() => {
+    getPostsByUserId()
+  }, [userID])
+
+  useEffect(() => {
+    if (postsReceived) {
+      getPosts(postsReceived)
+      console.log(postsFromUser)
+      updateTabs([
+        {
+          label: 'All Content',
+          tab: <>{PostFeed(postsFromUser)}</>,
+        },
+        {
+          label: 'Posts',
+          tab: <>{PostFeed(postsFromUser)}</>,
+        },
+        {
+          label: 'Comments',
+          tab: <p>No Comments Available</p>,
+        },
+      ])
+    }
+  }, [postsReceived, postsFromUser])
+
+  const [tabs, updateTabs] = useState<Array<TabItem>>([
+    {
+      label: 'All Content',
+      tab: <p>No Content Available</p>,
+    },
+    {
+      label: 'Posts',
+      tab: <p>No Posts Available</p>,
+    },
+    {
+      label: 'Comments',
+      tab: <p>No Comments Available</p>,
+    },
+  ])
 
   return (
     <>
@@ -52,10 +98,7 @@ const HomePage = () => {
               <Grid item xs container direction="column" spacing={2}>
                 <Grid item xs>
                   <Typography gutterBottom variant="h4" component="div">
-                    Screen Name
-                  </Typography>
-                  <Typography variant="h5" gutterBottom>
-                    User Name
+                    {userID}
                   </Typography>
                 </Grid>
               </Grid>
@@ -76,15 +119,9 @@ const HomePage = () => {
             flexGrow: 1,
           }}
         >
-          <Grid
-            container
-            spacing={2}
-            direction="row"
-            justifyContent="flex-end"
-            alignItems="center"
-          >
+          <Grid container spacing={2} direction="row" justifyContent="flex-end">
             <Grid item xs={8} container direction="column">
-              <Grid item xs>
+              <Grid item xs zeroMinWidth>
                 <h1>Content</h1>
               </Grid>
             </Grid>
@@ -92,19 +129,12 @@ const HomePage = () => {
               <h1>Info</h1>
             </Grid>
             <Grid item xs={8} container direction="column">
-              <Grid item xs>
-                <Tabs value={currentTabIndex} onChange={handleTabChange}>
-                  <Tab label="All Content" />
-                  <Tab label="Posts" />
-                  <Tab label="Comments" />
-                </Tabs>
-                {currentTabIndex === 0 && <TextBlock>All content</TextBlock>}
-                {currentTabIndex === 1 && <TextBlock>Posts</TextBlock>}
-                {currentTabIndex === 2 && <TextBlock>Comments</TextBlock>}
+              <Grid item xs zeroMinWidth>
+                <TabLayout tabs={tabs} variant="fullWidth" />
               </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <TextBlock>Profile Information</TextBlock>
+              <p>Profile Information</p>
             </Grid>
           </Grid>
         </Paper>
@@ -113,4 +143,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default Profile

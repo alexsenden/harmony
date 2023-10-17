@@ -8,6 +8,18 @@ export const createPost = async (postData?: Post): Promise<Post> => {
   return postRepo.createPost(validatedPost)
 }
 
+export const getPostByUserId = async (
+  userId?: string
+): Promise<Array<Post>> => {
+  if (!userId) {
+    return []
+  }
+
+  const posts = postRepo.getPostByUserId(userId)
+
+  return [...(await posts)]
+}
+
 const validatePost = (postData?: Post): Post => {
   validateTopicId(postData?.topicId)
   validateCommonPostData(postData)
