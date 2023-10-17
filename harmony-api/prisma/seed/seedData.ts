@@ -12,6 +12,8 @@ async function main() {
         username: 'Default User',
         password: '',
         active: true,
+        firstName: 'John',
+        lastName: 'Doe'
       },
     })
   )

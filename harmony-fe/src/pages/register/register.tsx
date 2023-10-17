@@ -1,35 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-    Avatar,
     Button,
     Container,
     Grid,
     Paper,
-    Tab,
-    Tabs,
-    Typography,
-    Input,
     TextField,
-    Link,
-    Checkbox,
-    Box
+    Box,
+    Alert
 } from '@mui/material'
 
 import HarmonyAppBar from '../../components/appBar/appBar'
-import TextBlock from '../../components/text'
 
-import registerUser from '../../hooks/registerUser'
 import { HttpMethod } from '../../hooks/httpRequest'
+
+import { NewUser } from '../../models/user'
+import useHttpRequest from '../../hooks/httpRequest'
 
 const RegisterPage = () => {
     const [currentTabIndex, setCurrentTabIndex] = useState(0)
-
-    const [httpRequestInput, setHttpRequestInput] = useState({
-        url: "register",
-        method: HttpMethod.POST,
-        body: {},
-        headers: {}
-    })
+    const [hasError, setHasError] = useState(false); 
 
     const [newUser, setNewUser] = useState({
         firstName: "",
@@ -38,8 +27,31 @@ const RegisterPage = () => {
         password: ""
     })
 
-    const onChangeUserData = (firstName: string, lastName: string, username: string, password: string) =>
-        {setNewUser({firstName, lastName, username, password})}
+    const [sendHttpRequest, response, error, loading] = useHttpRequest({
+        url: "/user/register",
+        method: HttpMethod.POST,
+        body: newUser,
+        headers: {}
+    });
+
+    const handleUserRegister = (newUser: NewUser) => {
+        sendHttpRequest();
+    };
+
+    const onChangeUserData = (firstName: string, lastName: string, username: string, password: string) => { setNewUser({ firstName, lastName, username, password }) }
+
+    useEffect(() => {
+        if (response) {
+            console.log('Response:', response);
+        }
+        
+        if (error) {
+            console.error('Error:', error);
+            setHasError(true);
+          } else {
+            setHasError(false);
+        }
+    }, [response, error]);
 
     return (
         <>
@@ -70,13 +82,27 @@ const RegisterPage = () => {
                             alt="Harmony Logo"
                             src={'/harmony1.png'}
                         />
-                        <TextField sx={{ margin: 1 }} onChange = {(firstName, newUser.lastName, newUser.username, newUser.password) => onChangeUserData()}
-                             label='First Name' placeholder='Enter First Name' variant="outlined" fullWidth required />
-                        <TextField sx={{ margin: 1 }} label='Last Name' placeholder='Enter Last Name' variant="outlined" fullWidth required />
-                        <TextField sx={{ margin: 1 }} label='Username' placeholder='Enter username' variant="outlined" fullWidth required />
-                        <TextField sx={{ margin: 1 }} label='Password' placeholder='Enter password' type='password' variant="outlined" fullWidth required />
-                        <Button sx={{ margin: 1 }} onClick={() => { registerUser(httpRequestInput, newUser) }}
+                        <TextField sx={{ margin: 1 }} onChange = {(firstName) => onChangeUserData(firstName.target.value, newUser.lastName, newUser.username, newUser.password)}
+                            label='First Name' placeholder='Enter First Name' variant="outlined" fullWidth required />
+                        <TextField sx={{ margin: 1 }} onChange = {(lastName) => onChangeUserData(newUser.firstName, lastName.target.value, newUser.username, newUser.password)}
+                            label='Last Name' placeholder='Enter Last Name' variant="outlined" fullWidth required />
+                        <TextField sx={{ margin: 1 }} onChange = {(username) => onChangeUserData(newUser.firstName, newUser.lastName, username.target.value, newUser.password)}
+                            label='Username' placeholder='Enter username' variant="outlined" fullWidth required />
+                        <TextField sx={{ margin: 1 }} onChange = {(password) => onChangeUserData(newUser.firstName, newUser.lastName, newUser.username, password.target.value)}
+                            label='Password' placeholder='Enter password' type='password' variant="outlined" fullWidth required />
+                        <Button sx={{ margin: 1 }} onClick={() => { handleUserRegister(newUser) }}
                             type='submit' color='primary' variant="contained" fullWidth>Sign up</Button>
+
+                        {hasError ?
+                        <Alert
+                            severity="error"
+                            sx={{ marginBottom: 2 }}
+                            variant="filled"
+                            onClose={() => setHasError(false)} 
+                        >
+                            An error occurred. Please check your input and try again.
+                        </Alert> : null
+                        }
                     </Grid>
                 </Paper>
             </Container>
