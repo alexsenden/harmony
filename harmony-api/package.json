@@ -13,7 +13,7 @@
     "clean": "gts clean",
     "fix": "gts fix",
     "posttest": "npm run lint",
-    "connectprisma": "npx prisma migrate deploy && npx prisma db seed || exit 0",
+    "connectprisma": "npx prisma generate && npx prisma migrate deploy && npx prisma db seed || exit 0",
     "start": "npm run connectprisma && node build/src/index.js",
     "buildAndStart": "tsc && npm run start",
     "dev": "nodemon -L -w src -e ts --exec \"npm run buildAndStart\"",
