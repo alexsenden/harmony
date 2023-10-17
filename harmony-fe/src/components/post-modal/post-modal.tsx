@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { Button, Dialog, DialogTitle } from '@mui/material'
 
 import TabLayout, { TabItem } from '../tab-layout'
-import { Post, PostField, PostType } from '../../models/post'
-import { CommonPostData } from './common-post-data'
+import { Post, PostField } from '../../models/post'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { DiscussionPostForm } from './discussion-post-form'
+import { PollPostForm } from './poll-post-form'
+import { ReviewPostForm } from './review-post-form'
 
 interface PostModalProps {
   open: boolean
@@ -30,17 +32,15 @@ export const PostModal = ({ open, onClose }: PostModalProps) => {
   const [tabs] = useState<Array<TabItem>>([
     {
       label: 'Discussion',
-      tab: (
-        <CommonPostData onChange={onChange} postType={PostType.DISCUSSION} />
-      ),
+      tab: <DiscussionPostForm onChange={onChange} />,
     },
     {
       label: 'Poll',
-      tab: <CommonPostData onChange={onChange} postType={PostType.POLL} />,
+      tab: <PollPostForm onChange={onChange} />,
     },
     {
       label: 'Review',
-      tab: <CommonPostData onChange={onChange} postType={PostType.REVIEW} />,
+      tab: <ReviewPostForm onChange={onChange} />,
     },
   ])
 
