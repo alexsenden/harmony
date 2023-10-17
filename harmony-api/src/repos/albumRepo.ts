@@ -17,8 +17,6 @@ export const getAlbumTopicByPartialName = async (
     limit 5;
   `
 
-  console.log(albums)
-
   return albums.map(album => {
     return {
       topicId: {

@@ -18,9 +18,9 @@ describe('POST /post', () => {
       title: FAKE_POST.title,
       content: FAKE_POST.body || '',
       rating: new Decimal(FAKE_POST.rating || 0),
-      artistId: FAKE_POST.topicId.artistId || '',
-      albumId: FAKE_POST.topicId.albumId || '',
-      songId: FAKE_POST.topicId.songId || '',
+      artistId: FAKE_POST.topicId.artistId || null,
+      albumId: FAKE_POST.topicId.albumId || null,
+      songId: FAKE_POST.topicId.songId || null,
       postId: FAKE_POST.postId,
       createdAt: new Date(),
     })

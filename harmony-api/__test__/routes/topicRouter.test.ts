@@ -2,7 +2,6 @@ import request from 'supertest'
 import { Express } from 'express'
 import { FakeApp } from '../testData'
 import prisma from '../../prisma/prisma'
-import { Album, Artist, Song } from '@prisma/client'
 
 let app: Express
 beforeEach(() => {
@@ -11,23 +10,23 @@ beforeEach(() => {
 
 describe('GET /topic/partialName?partialName={partialName} returns list of topics', () => {
   it('responds to /post code 200 and the new post', async () => {
-    jest.spyOn(prisma.artist, 'findMany').mockResolvedValueOnce([
+    jest.spyOn(prisma, '$queryRaw').mockResolvedValueOnce([
       {
-        artistName: 'fake artist name',
-        artistId: 'fake-artist-id',
-      } as Artist,
+        artist_name: 'fake artist name',
+        artist_id: 1000,
+      },
     ])
-    jest.spyOn(prisma.album, 'findMany').mockResolvedValueOnce([
+    jest.spyOn(prisma, '$queryRaw').mockResolvedValueOnce([
       {
-        albumName: 'fake album name',
-        albumId: 'fake-album-id',
-      } as Album,
+        album_name: 'fake album name',
+        album_id: 2000,
+      },
     ])
-    jest.spyOn(prisma.song, 'findMany').mockResolvedValueOnce([
+    jest.spyOn(prisma, '$queryRaw').mockResolvedValueOnce([
       {
-        songName: 'fake song name',
-        songId: 'fake-song-id',
-      } as Song,
+        song_name: 'fake song name',
+        song_id: 3000,
+      },
     ])
 
     const res = await request(app).get('/topic/partialName?partialName=name')
@@ -36,19 +35,19 @@ describe('GET /topic/partialName?partialName={partialName} returns list of topic
     expect(res.body).toEqual([
       {
         topicId: {
-          artistId: 'fake-artist-id',
+          artistId: 1000,
         },
         name: 'fake artist name',
       },
       {
         topicId: {
-          albumId: 'fake-album-id',
+          albumId: 2000,
         },
         name: 'fake album name',
       },
       {
         topicId: {
-          songId: 'fake-song-id',
+          songId: 3000,
         },
         name: 'fake song name',
       },

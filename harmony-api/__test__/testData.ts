@@ -25,7 +25,7 @@ export const FakeApp = () => {
 }
 
 export const FAKE_TOPIC_ID: TopicId = {
-  artistId: '1000',
+  artistId: 1000,
 }
 
 export const FAKE_POLL_OPTION: PollOption = {

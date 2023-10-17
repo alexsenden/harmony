@@ -13,24 +13,24 @@ describe('validateUserId', () => {
   })
 
   it('returns an empty array if just artistId is defined', async () => {
-    const result = validateTopicId({ artistId: 'fake-artist-id' })
+    const result = validateTopicId({ artistId: 1000 })
     expect(result).toStrictEqual([])
   })
 
   it('returns an empty array if just songId is defined', async () => {
-    const result = validateTopicId({ songId: 'fake-song-id' })
+    const result = validateTopicId({ songId: 2000 })
     expect(result).toStrictEqual([])
   })
 
   it('returns an empty array if just albumId is defined', async () => {
-    const result = validateTopicId({ albumId: 'fake-album-id' })
+    const result = validateTopicId({ albumId: 3000 })
     expect(result).toStrictEqual([])
   })
 
   it('returns an error message if multiple Ids are defined', async () => {
     const result = validateTopicId({
-      albumId: 'fake-album-id',
-      songId: 'fake-song-id',
+      albumId: 3000,
+      songId: 2000,
     })
     expect(result.length).toBeGreaterThan(0)
   })
