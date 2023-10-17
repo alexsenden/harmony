@@ -12,7 +12,9 @@ model User {
   username  String    @unique
   password  String
   createdAt DateTime  @default(now()) @map("created_at")
-  active    Boolean?
+  active    Boolean   @default(true)
+  firstName String    @map("first_name")
+  lastName  String    @map("last_name")
   posts     Post[]
   likes     Like[]
   comments  Comment[]
