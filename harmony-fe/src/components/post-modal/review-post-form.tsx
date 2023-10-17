@@ -10,7 +10,7 @@ interface IDiscussionPostFormProps {
 }
 
 export const ReviewPostForm = ({ onChange }: IDiscussionPostFormProps) => {
-  onChange(PostField.POST_TYPE, PostType.DISCUSSION)
+  onChange(PostField.POST_TYPE, PostType.REVIEW)
 
   return (
     <PostFormContainer>
