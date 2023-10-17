@@ -6,10 +6,11 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { PostField } from '../../models/post'
 
 interface ITopicFieldProps {
+  error?: boolean
   onChange: (argName: PostField, argValue: unknown) => void
 }
 
-export const TopicField = ({ onChange }: ITopicFieldProps) => {
+export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
   const [topicInput, setTopicInput] = useState('')
   const [topicOptions, setTopicOptions] = useState<Array<Topic>>([])
 
@@ -53,6 +54,7 @@ export const TopicField = ({ onChange }: ITopicFieldProps) => {
           helperText="Artist, Album, or Song"
           multiline
           fullWidth
+          error={error}
           sx={{ mt: 3 }}
         />
       )}

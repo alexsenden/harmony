@@ -1,24 +1,32 @@
 import { Box, Rating } from '@mui/material'
 
-import { PostField, PostType } from '../../models/post'
+import { Post, PostField, PostType } from '../../models/post'
 import PostFormContainer from './post-form-container'
 import { PostInputField } from './post-input-field'
 import { TopicField } from './topic-field'
 
 interface IDiscussionPostFormProps {
+  errorFields: Partial<Post>
   onChange: (argName: PostField, argValue: unknown) => void
 }
 
-export const ReviewPostForm = ({ onChange }: IDiscussionPostFormProps) => {
+export const ReviewPostForm = ({
+  errorFields,
+  onChange,
+}: IDiscussionPostFormProps) => {
   onChange(PostField.POST_TYPE, PostType.REVIEW)
 
   return (
     <PostFormContainer>
-      <TopicField onChange={onChange} />
+      <TopicField
+        onChange={onChange}
+        {...{ error: errorFields && !!errorFields[PostField.TOPIC_ID] }}
+      />
       <Box display="flex" flexDirection="row" alignItems="center" width={1}>
         <PostInputField
           label="Title"
           field={PostField.TITLE}
+          errorFields={errorFields}
           onChange={onChange}
           textFieldProps={{ sx: { mt: 1 } }}
         />
@@ -35,6 +43,7 @@ export const ReviewPostForm = ({ onChange }: IDiscussionPostFormProps) => {
       <PostInputField
         label="Review"
         field={PostField.BODY}
+        errorFields={errorFields}
         textFieldProps={{ rows: 6 }}
         onChange={onChange}
       />

@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 import { Button, Dialog, DialogTitle } from '@mui/material'
 
 import TabLayout, { TabItem } from '../tab-layout'
-import { Post, PostField } from '../../models/post'
+import { Post, PostField, PostType } from '../../models/post'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { DiscussionPostForm } from './discussion-post-form'
 import { PollPostForm } from './poll-post-form'
 import { ReviewPostForm } from './review-post-form'
+import { PollOption } from '../../models/pollOption'
 
 interface PostModalProps {
   open: boolean
@@ -18,6 +19,8 @@ const DEFAULT_POST_STATE = {
 } as Post
 
 export const PostModal = ({ open, onClose }: PostModalProps) => {
+  const [postData, setPostData] = useState<Post>(DEFAULT_POST_STATE)
+
   const onChange = (argName: PostField, argValue: unknown) => {
     setPostData(prevPostData => {
       return {
@@ -27,22 +30,24 @@ export const PostModal = ({ open, onClose }: PostModalProps) => {
     })
   }
 
-  const [postData, setPostData] = useState<Post>(DEFAULT_POST_STATE)
+  const getTabs = (errors: Partial<Post>) => {
+    return [
+      {
+        label: 'Discussion',
+        tab: <DiscussionPostForm onChange={onChange} errorFields={errors} />,
+      },
+      {
+        label: 'Poll',
+        tab: <PollPostForm onChange={onChange} errorFields={errors} />,
+      },
+      {
+        label: 'Review',
+        tab: <ReviewPostForm onChange={onChange} errorFields={errors} />,
+      },
+    ]
+  }
 
-  const [tabs] = useState<Array<TabItem>>([
-    {
-      label: 'Discussion',
-      tab: <DiscussionPostForm onChange={onChange} />,
-    },
-    {
-      label: 'Poll',
-      tab: <PollPostForm onChange={onChange} />,
-    },
-    {
-      label: 'Review',
-      tab: <ReviewPostForm onChange={onChange} />,
-    },
-  ])
+  const [tabs, setTabs] = useState<Array<TabItem>>(getTabs({}))
 
   const [createPost, createPostResponse, createPostError, createPostLoading] =
     useHttpRequest({
@@ -52,21 +57,53 @@ export const PostModal = ({ open, onClose }: PostModalProps) => {
     })
 
   useEffect(() => {
-    if (!createPostLoading) {
-      if (createPostError) {
-        // createPost returned an error
-        // Needs better error handling in the future
-        console.log(createPostError)
-      }
-      if (createPostResponse) {
-        // createPost returned sucessfully
-        // Needs some way to show the post was successfully created in the future
-        console.log(createPostResponse)
-        setPostData(DEFAULT_POST_STATE)
-        onClose()
-      }
+    if (!createPostLoading && createPostResponse) {
+      setPostData(DEFAULT_POST_STATE)
+      onClose()
     }
   }, [createPostLoading])
+
+  useEffect(() => {
+    const errors: Partial<Post> = {}
+
+    if (
+      createPostError?.response?.status === 400 &&
+      createPostError?.response?.data?.message
+    ) {
+      const message = createPostError.response.data.message as string
+
+      if (message.includes(PostField.TITLE)) {
+        errors[PostField.TITLE] = '1'
+      }
+      if (message.includes(PostField.BODY)) {
+        errors[PostField.BODY] = '1'
+      }
+      if (message.includes(PostField.POST_TYPE)) {
+        errors[PostField.POST_TYPE] = PostType.DISCUSSION
+      }
+      if (message.includes(PostField.TOPIC_ID)) {
+        errors[PostField.TOPIC_ID] = {}
+      }
+      if (message.includes(PostField.POLL_OPTIONS)) {
+        const indexes = (
+          message
+            .match(/pollOptions\[[\d]+\]/g)
+            ?.join(' ')
+            .match(/[\d]+/g) || []
+        )
+          .map(index => {
+            return Number(index)
+          })
+          .filter(index => !Number.isNaN(index))
+        errors.pollOptions = []
+        for (const index of indexes) {
+          errors.pollOptions[index] = {} as PollOption
+        }
+      }
+    }
+
+    setTabs(getTabs(errors))
+  }, [createPostError])
 
   return (
     <Dialog open={open} onClose={onClose}>

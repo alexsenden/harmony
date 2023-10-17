@@ -3,17 +3,21 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined'
 import React, { useState } from 'react'
 import { v4 as newUuid } from 'uuid'
 
-import { PostField } from '../../models/post'
+import { Post, PostField } from '../../models/post'
 import { PollOption } from '../../models/pollOption'
 
 const MAX_NUM_OPTIONS = 8
 const MIN_NUM_OPTIONS = 2
 
 interface PollOptionsFormProps {
+  errorFields?: Partial<Post>
   onChange: (argName: PostField, argValue: unknown) => void
 }
 
-export const PollOptionsForm = ({ onChange }: PollOptionsFormProps) => {
+export const PollOptionsForm = ({
+  errorFields,
+  onChange,
+}: PollOptionsFormProps) => {
   const newOption = (): PollOption => {
     return {
       pollOptionId: newUuid(),
@@ -60,6 +64,10 @@ export const PollOptionsForm = ({ onChange }: PollOptionsFormProps) => {
               fullWidth
               size="small"
               onChange={event => (option.option = event.target.value)}
+              {...{
+                error:
+                  errorFields?.pollOptions && !!errorFields.pollOptions[index],
+              }}
             />
           </Box>
         )
