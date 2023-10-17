@@ -34,7 +34,11 @@ export const CommonPostData = ({ postType, onChange }: CommonPostDataProps) => {
   }, [topicsResponse])
 
   useEffect(() => {
-    getTopicsByPartialName()
+    const debounceTimer = setTimeout(() => {
+      getTopicsByPartialName()
+    }, 1000)
+
+    return () => clearTimeout(debounceTimer)
   }, [topicInput])
 
   onChange(PostField.POST_TYPE, postType)
@@ -68,6 +72,13 @@ export const CommonPostData = ({ postType, onChange }: CommonPostDataProps) => {
             sx={{ mt: 3 }}
           />
         )}
+        renderOption={(props, option) => {
+          return (
+            <li {...props} key={JSON.stringify(option.topicId)}>
+              {option.name}
+            </li>
+          )
+        }}
       />
       <TextField
         onChange={event => onChange(PostField.TITLE, event.target.value)}
