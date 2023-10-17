@@ -31,6 +31,7 @@ export const createPost = async (postData: Post): Promise<Post> => {
   }
 }
 
+
 export const getPostByUserId = async (
   userID: string
 ): Promise<Array<Post>> => {
