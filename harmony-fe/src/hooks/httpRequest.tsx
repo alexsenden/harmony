@@ -13,7 +13,7 @@ export enum HttpMethod {
   PUT = 'put',
 }
 
-interface HttpRequestInput {
+export interface HttpRequestInput {
   url: string
   method: HttpMethod
   body?: any
