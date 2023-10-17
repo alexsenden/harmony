@@ -29,7 +29,7 @@ export const PollOptionsForm = ({ onChange }: PollOptionsFormProps) => {
 
   const addOption = () => {
     if (options.length < MAX_NUM_OPTIONS) {
-      setOptions([newOption(), ...options])
+      setOptions([...options, newOption()])
     }
   }
 
