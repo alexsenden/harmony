@@ -8,53 +8,50 @@ generator client {
 }
 
 model User {
-  userId    String       @id @default(uuid()) @map("user_id")
-  username  String       @unique
+  userId    String    @id @default(uuid()) @map("user_id")
+  username  String    @unique
   password  String
-  createdAt DateTime     @default(now()) @map("created_at")
-  active    Boolean?
+  createdAt DateTime  @default(now()) @map("created_at")
+  active    Boolean   @default(true)
+  firstName String    @map("first_name")
+  lastName  String    @map("last_name")
   posts     Post[]
   likes     Like[]
   comments  Comment[]
-  follows   Follow[]     @relation("Following")
-  followers Follow[]     @relation("Follower")
-  cookies   UserCookie[]
-}
+  follows   Follow[]  @relation("Following")
+  followers Follow[]  @relation("Follower")
 
-model Artist {
-  artistId      String    @id @map("artist_id")
-  artistName    String    @unique @map("artist_name")
-  artistAlias   String?   @map("artist_alias")
-  albums        Album[]
-  songs         Song[]
-  publishes     Publish[]
-  postRelations Post[]
+  @@map("user")
 }
 
 model Post {
-  postId       String       @id @default(uuid()) @map("post_id")
-  userId       String       @map("user_id")
-  title        String
-  postType     PostType     @map("post_type")
-  content      String?
-  rating       Decimal?
-  songId       String?      @map("song_id")
-  albumId      String?      @map("album_id")
-  artistId     String?      @map("artist_id")
-  createdAt    DateTime     @default(now()) @map("created_at")
-  relateSong   Song?        @relation(fields: [songId], references: [songId])
-  relateAlbum  Album?       @relation(fields: [albumId], references: [albumId])
-  relateArtist Artist?      @relation(fields: [artistId], references: [artistId])
-  user         User         @relation(fields: [userId], references: [userId])
-  likes        Like[]
-  comments     Comment[]
-  pollOptions  PollOption[]
+  postId      String       @id @default(uuid()) @map("post_id")
+  userId      String       @map("user_id")
+  title       String
+  postType    PostType     @map("post_type")
+  content     String?
+  rating      Decimal?
+  songId      Int?         @map("song_id")
+  albumId     Int?         @map("album_id")
+  artistId    Int?         @map("artist_id")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  song        Song?        @relation(fields: [songId], references: [songId])
+  album       Album?       @relation(fields: [albumId], references: [albumId])
+  artist      Artist?      @relation(fields: [artistId], references: [artistId])
+  user        User         @relation(fields: [userId], references: [userId])
+  likes       Like[]
+  comments    Comment[]
+  pollOptions PollOption[]
+
+  @@map("post")
 }
 
 model PollOption {
   postId String @id @map("post_id")
   option String
   poll   Post   @relation(fields: [postId], references: [postId])
+
+  @@map("poll_option")
 }
 
 model Follow {
@@ -65,6 +62,7 @@ model Follow {
   follower    User     @relation("Follower", fields: [followerId], references: [userId])
 
   @@id([followingId, followerId])
+  @@map("follow")
 }
 
 model Like {
@@ -74,6 +72,7 @@ model Like {
   post   Post   @relation(fields: [postId], references: [postId])
 
   @@id([userId, postId])
+  @@map("like")
 }
 
 model Comment {
@@ -84,43 +83,90 @@ model Comment {
   content   String?
   user      User     @relation(fields: [userId], references: [userId])
   post      Post     @relation(fields: [postId], references: [postId])
+
+  @@map("comment")
+}
+
+model Artist {
+  artistId             Int                    @id @map("artist_id")
+  artistName           String                 @map("artist_name")
+  beginYear            Int?                   @map("begin_date_year")
+  end                  Int?                   @map("end_date_year")
+  artistDescription    String?                @map("comment")
+  artistCredits        ArtistCredit[]
+  posts                Post[]
+  Alias                Alias[]
+  ArtistCreditRelation ArtistCreditRelation[]
+
+  @@map("artist")
+}
+
+model Alias {
+  artistId Int    @map("artist_id")
+  alias    String @map("artist_alias")
+  artist   Artist @relation(fields: [artistId], references: [artistId])
+
+  @@id([artistId, alias])
+  @@map("artist_alias")
+}
+
+model ArtistCreditRelation {
+  artistCreditId Int          @map("artist_credit_id")
+  artistId       Int          @map("artist_id")
+  artistCredit   ArtistCredit @relation(fields: [artistCreditId], references: [artistCreditId])
+  artist         Artist       @relation(fields: [artistId], references: [artistId])
+
+  @@id([artistCreditId, artistId])
+  @@map("artist_credit_relation")
+}
+
+model ArtistCredit {
+  artistCreditId       Int                    @id @map("artist_credit_id")
+  formattedName        String                 @map("formatted_name")
+  artistCreditRelation ArtistCreditRelation[]
+  songs                Song[]
+  albums               Album[]
+  Artist               Artist?                @relation(fields: [artistArtistId], references: [artistId])
+  artistArtistId       Int?
+
+  @@map("artist_credit")
 }
 
 model Album {
-  albumId          String    @id @default(uuid()) @map("album_id")
-  albumName        String    @unique @map("album_name")
-  albumDescription String?   @map("album_description")
-  createdAt        DateTime  @default(now()) @map("created_at")
-  artists          Artist[]
-  songs            Song[]
-  publish          Publish[]
-  postRelations    Post[]
-}
+  albumId          Int          @id @map("album_id")
+  albumName        String       @map("album_name")
+  albumDescription String?      @map("comment")
+  releaseGroupType String?      @map("release_group_type")
+  artistCreditId   Int          @map("artist_credit_id")
+  artistCredit     ArtistCredit @relation(fields: [artistCreditId], references: [artistCreditId])
+  tracks           Track[]
+  posts            Post[]
 
-model Publish {
-  albumId  String @id @map("album_id")
-  artistId String @map("artist_id")
-  album    Album  @relation(fields: [albumId], references: [albumId])
-  artist   Artist @relation(fields: [artistId], references: [artistId])
+  @@map("album")
 }
 
 model Song {
-  songId          String    @id @default(uuid()) @map("song_id")
-  artistId        String    @map("artist_id")
-  songName        String    @map("song_name")
-  songDescription String?   @map("song_description")
-  createdAt       DateTime? @map("created_at")
-  albumId         String?   @map("album_id")
-  artist          Artist    @relation(fields: [artistId], references: [artistId])
-  album           Album?    @relation(fields: [albumId], references: [albumId])
-  postRelations   Post[]
+  songId          Int          @id @map("song_id")
+  artistCreditId  Int          @map("artist_credit_id")
+  songName        String       @map("song_name")
+  length          Int?         @map("length")
+  songDescription String?      @map("comment")
+  artistCredit    ArtistCredit @relation(fields: [artistCreditId], references: [artistCreditId])
+  posts           Post[]
+  tracks          Track[]
+
+  @@map("song")
 }
 
-model UserCookie {
-  cookie String    @id @default(uuid())
-  userId String    @map("user_id")
-  expiry DateTime?
-  user   User      @relation(fields: [userId], references: [userId])
+model Track {
+  albumId  Int    @map("album_id")
+  songId   Int    @map("song_id")
+  position Int?   @map("position")
+  album    Album? @relation(fields: [albumId], references: [albumId])
+  song     Song?  @relation(fields: [songId], references: [songId])
+
+  @@id([albumId, songId])
+  @@map("track")
 }
 
 enum PostType {
