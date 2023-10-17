@@ -1,11 +1,22 @@
 import { useRouter } from 'next/router'
 import { Button, Stack, Divider, Paper, Grid } from '@mui/material'
-
+import { useState } from 'react'
 import TextBlock from '../../components/text'
 
 export default function PostDetail() {
   const router = useRouter()
   const postID = router.query.postId
+
+  const [isLiked, setIsLiked] = useState(false)
+  const [isFollowed, setIsFollowed] = useState(false)
+
+  const handleButtonClick = (buttonName: string) => {
+    if (buttonName === 'like') {
+      setIsLiked(prevIsLiked => !prevIsLiked)
+    } else if (buttonName === 'follow') {
+      setIsFollowed(prevIsFollowed => !prevIsFollowed)
+    }
+  }
 
   return (
     <>
@@ -27,10 +38,20 @@ export default function PostDetail() {
           </TextBlock>
 
           <Stack direction="row" spacing={2}>
-            <Button variant="outlined" size="small">
+            <Button
+              color={isLiked ? 'secondary' : 'primary'}
+              variant="outlined"
+              size="small"
+              onClick={() => handleButtonClick('like')}
+            >
               Like
             </Button>
-            <Button variant="outlined" size="small">
+            <Button
+              color={isFollowed ? 'secondary' : 'primary'}
+              variant="outlined"
+              size="small"
+              onClick={() => handleButtonClick('follow')}
+            >
               Follow
             </Button>
           </Stack>
