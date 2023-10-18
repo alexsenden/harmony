@@ -17,3 +17,16 @@ export const register = async (
     next(error)
   }
 }
+
+export const get = async (req: Request, res: Response, next: NextFunction) => {
+  const userId =
+    typeof req.query.userId === 'string'
+      ? req.query.userId
+      : undefined
+
+  try {
+    res.json(await userService.get(userId))
+  } catch (error) {
+    next(error)
+  }
+}

@@ -33,3 +33,40 @@ export const register = async (userData: User): Promise<User> => {
     throw new HttpError('Username already exists', 400)
   }
 }
+
+export const getUserById = async (
+  userID?: string
+): Promise<User> => {
+  const user = await prisma.user.findFirst({
+    where: {
+      userId: {
+        equals: userID,
+        mode: 'insensitive',
+      },
+    },
+    include: {posts: true, comments: true, likes: true, followers: true, follows: true}
+  })
+
+  if(user != undefined)
+  {
+    return user
+  }
+  else
+  {
+    return {
+      userId: '',
+      username: '',
+      password: '',
+      createdAt: new Date,
+      active: false,
+      posts: [],
+      likes: [],
+      comments: [],
+      follows: [],
+      followers: [],
+      firstName: '',
+      lastName: '',
+    }
+
+  }
+}

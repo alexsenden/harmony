@@ -57,5 +57,4 @@ export const getPostByUserId = async (
       postType: PostType[post.postType],
     }
   })
-
 }
