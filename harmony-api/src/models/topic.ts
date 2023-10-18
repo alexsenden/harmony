@@ -4,7 +4,7 @@ export type Topic = {
 }
 
 export type TopicId = {
-  artistId?: string
-  albumId?: string
-  songId?: string
+  artistId?: number
+  albumId?: number
+  songId?: number
 }
