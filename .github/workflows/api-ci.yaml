@@ -45,4 +45,17 @@ jobs:
           cd ../harmony-db
           docker-compose up -d
       - name: Run tests and linter
-        run: npm run test
+        env:
+          PORT: 8081
+          POSTGRES_USER_CI: ${{ secrets.POSTGRES_USER_CI }}
+          POSTGRES_PASSWORD_CI: ${{ secrets.POSTGRES_PASSWORD_CI }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT_CI }}
+          POSTGRES_DB_NAME: ${{ secrets.POSTGRES_DB_NAME_CI }}
+          POSTGRES_DB_HOST: localhost
+          POSTGRES_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"
+        run: |
+        echo "--------------"
+        printenv
+        echo "--------------"
+        
+        npm run test
