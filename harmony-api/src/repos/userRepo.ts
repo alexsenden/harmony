@@ -1,6 +1,6 @@
 import prisma from '../../prisma/prisma'
 import { User } from '../models/user'
-import {Login} from "../models/login";
+import { Login } from '../models/login'
 export const register = async (userData: User): Promise<User> => {
   const postResult = await prisma.user.create({
     data: {
@@ -49,22 +49,22 @@ export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
   }
 }
 
-export const assignUserCookie = async (userData: User) : Promise<string> => {
+export const assignUserCookie = async (userData: User): Promise<string> => {
   const cookieData = await prisma.userCookie.create({
     data: {
-      userId: userData.userId
-    }
+      userId: userData.userId,
+    },
   })
   return cookieData.cookie
 }
 
-export const getUserFromCookie = async (cookie: string) : Promise<User> => {
+export const getUserFromCookie = async (cookie: string): Promise<User> => {
   const cookieData = await prisma.userCookie.findFirst({
     where: {
       cookie: {
-        equals: cookie
-      }
-    }
+        equals: cookie,
+      },
+    },
   })
   if (cookieData === null) {
     return Promise.reject('Cookie does not exist')
@@ -72,9 +72,9 @@ export const getUserFromCookie = async (cookie: string) : Promise<User> => {
   const userData = await prisma.user.findFirst({
     where: {
       userId: {
-        equals: cookieData.userId
-      }
-    }
+        equals: cookieData.userId,
+      },
+    },
   })
 
   if (userData === null) {
@@ -84,7 +84,7 @@ export const getUserFromCookie = async (cookie: string) : Promise<User> => {
   return {
     userId: userData.userId,
     username: userData.username,
-    password: '',// It felt like a bit of a security issue to give password with the token
+    password: '', // It felt like a bit of a security issue to give password with the token
     createdAt: userData.createdAt,
     active: userData.active,
     firstName: userData.firstName,
@@ -95,7 +95,7 @@ export const getUserFromCookie = async (cookie: string) : Promise<User> => {
 export const removeUserCookie = async (cookie: string) => {
   await prisma.userCookie.delete({
     where: {
-      cookie: cookie
-    }
+      cookie: cookie,
+    },
   })
 }

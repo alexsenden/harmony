@@ -2,10 +2,10 @@ import '../styles/global.css'
 import type { ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import {UserContext} from "../contexts/user";
-import useHttpRequest, {HttpMethod} from "../hooks/httpRequest";
-import {useEffect, useState} from "react";
-import {User} from "../models/user";
+import { UserContext } from '../contexts/user'
+import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
+import { useEffect, useState } from 'react'
+import { User } from '../models/user'
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -16,12 +16,12 @@ type AppPropsWithLayout = AppProps & {
 }
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
-  const [currentUser,setCurrentUser] = useState<User|undefined>(undefined)
-  const cookieInfo = {userCookie: '' }
-  function getCookie(cookieName:string): string {
-    let name = cookieName + "="
-    let decodedCookie = decodeURIComponent(document.cookie)
-    let cookieList = decodedCookie.split(';')
+  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined)
+  const cookieInfo = { userCookie: '' }
+  function getCookie(cookieName: string): string {
+    const name = cookieName + '='
+    const decodedCookie = decodeURIComponent(document.cookie)
+    const cookieList = decodedCookie.split(';')
     let foundCookie = ''
     cookieList.forEach(val => {
       if (val.indexOf(name) === 0) {
@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     body: '',
   })
   useEffect(() => {
-    cookieInfo.userCookie= getCookie('userCookie')
+    cookieInfo.userCookie = getCookie('userCookie')
     if (cookieInfo.userCookie !== '') {
       sendHttpRequest()
     }
@@ -50,9 +50,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     if (error) {
       console.error('Error getting user: ', error)
     }
-  }, [loading]);
-
-
+  }, [loading])
 
   const getLayout = Component.getLayout ?? (page => page)
 
@@ -60,6 +58,5 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <UserContext.Provider value={currentUser}>
       <Component {...pageProps} />
     </UserContext.Provider>
-
   )
 }

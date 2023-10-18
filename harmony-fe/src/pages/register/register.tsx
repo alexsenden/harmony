@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Button,
-  Container,
-  Grid,
-  Paper,
-  TextField,
-  Box,
-} from '@mui/material'
+import { Button, Container, Grid, Paper, TextField, Box } from '@mui/material'
 
 import HarmonyAppBar from '../../components/appBar/appBar'
 
 import { HttpMethod } from '../../hooks/httpRequest'
 
 import useHttpRequest from '../../hooks/httpRequest'
-import TextBlock from "../../components/text";
+import TextBlock from '../../components/text'
 
 const RegisterPage = () => {
   const [hasError, setHasError] = useState(false)
@@ -56,7 +49,7 @@ const RegisterPage = () => {
     } else if (!loading) {
       setHasError(false)
       document.cookie = response['Set-Cookie']
-      window.location.href = "../home"
+      window.location.href = '../home'
     }
   }, [response, error])
 
@@ -78,7 +71,7 @@ const RegisterPage = () => {
             margin: 'auto',
             my: 7,
             maxWidth: 'auto',
-            width: 5/12,
+            width: 5 / 12,
             flexGrow: 1,
           }}
         >
@@ -93,21 +86,19 @@ const RegisterPage = () => {
               component="img"
               sx={{
                 maxWidth: 'auto',
-                width: 5/12,
-                xs: 6
+                width: 5 / 12,
+                xs: 6,
               }}
               alt="Harmony Logo"
               src={'/harmony1.png'}
             />
-            <TextBlock
-              my={3}
-              fontSize={40}>
+            <TextBlock my={3} fontSize={40}>
               Join Harmony
             </TextBlock>
             <TextField
               sx={{
                 mt: 3,
-                width: 8/12,
+                width: 8 / 12,
               }}
               onChange={firstName =>
                 onChangeUserData(
@@ -127,7 +118,7 @@ const RegisterPage = () => {
             <TextField
               sx={{
                 mt: 3,
-                width: 8/12,
+                width: 8 / 12,
               }}
               onChange={lastName =>
                 onChangeUserData(
@@ -147,7 +138,7 @@ const RegisterPage = () => {
             <TextField
               sx={{
                 mt: 3,
-                width: 8/12,
+                width: 8 / 12,
               }}
               onChange={username =>
                 onChangeUserData(
@@ -167,7 +158,7 @@ const RegisterPage = () => {
             <TextField
               sx={{
                 mt: 3,
-                width: 8/12,
+                width: 8 / 12,
               }}
               onChange={password =>
                 onChangeUserData(
@@ -189,7 +180,7 @@ const RegisterPage = () => {
             <Button
               sx={{
                 mt: 3,
-                width: 8/12,
+                width: 8 / 12,
               }}
               onClick={() => {
                 handleUserRegister()
@@ -198,10 +189,7 @@ const RegisterPage = () => {
               variant="outlined"
               fullWidth
             >
-              <TextBlock
-                fontSize={20}>
-                Sign up
-              </TextBlock>
+              <TextBlock fontSize={20}> Sign up </TextBlock>
             </Button>
           </Grid>
         </Paper>

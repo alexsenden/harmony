@@ -1,7 +1,7 @@
 import * as userRepo from '../repos/userRepo'
 import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
-import {Login} from "../models/login";
+import { Login } from '../models/login'
 
 export const register = async (userData?: User): Promise<User> => {
   if (userData === undefined) {
@@ -20,7 +20,7 @@ export const login = async (loginData?: Login): Promise<User> => {
   try {
     return await userRepo.getUserByLoginInfo(loginData as Login)
   } catch (error) {
-    throw new HttpError(`Incorrect Credentials`, 401)
+    throw new HttpError('Incorrect Credentials', 401)
   }
 }
 
