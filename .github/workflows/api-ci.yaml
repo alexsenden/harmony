@@ -48,10 +48,14 @@ jobs:
 
             # DB Host or IP
             DB_HOST=localhost
-
-            #Database URL for Prisma to get the DB from (Created off the previous entries)
-            POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"
           " | sudo tee -a .env
+
+          sudo echo echo 'POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"' | 
+            sudo tee -a .env
+
+          echo "--------------"
+          cat .env
+          echo "--------------"
 
           cp .env ../harmony-db
           
