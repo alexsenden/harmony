@@ -52,7 +52,7 @@ jobs:
           POSTGRES_PORT: 5432
           POSTGRES_DB_NAME: postgres_db
           POSTGRES_DB_HOST: localhost
-          POSTGRES_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"
+          POSTGRES_URL: "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME"
         run: |
           echo "--------------"
           printenv
