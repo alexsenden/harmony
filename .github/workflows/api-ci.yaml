@@ -31,10 +31,10 @@ jobs:
       - name: Run DB for testing
         env:
           PORT: 8081
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER_CI }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_CI }}
-          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT_CI }}
-          POSTGRES_DB_NAME: ${{ secrets.POSTGRES_DB_NAME_CI }}
+          POSTGRES_USER: username
+          POSTGRES_PASSWORD: password
+          POSTGRES_PORT: 5432
+          POSTGRES_DB_NAME: postgres_db
           POSTGRES_DB_HOST: localhost
           POSTGRES_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"
         run: |
@@ -47,12 +47,12 @@ jobs:
       - name: Run tests and linter
         env:
           PORT: 8081
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER_CI }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_CI }}
-          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT_CI }}
-          POSTGRES_DB_NAME: ${{ secrets.POSTGRES_DB_NAME_CI }}
+          POSTGRES_USER: username
+          POSTGRES_PASSWORD: password
+          POSTGRES_PORT: 5432
+          POSTGRES_DB_NAME: postgres_db
           POSTGRES_DB_HOST: localhost
-          POSTGRES_URL: postgresql://${{ secrets.POSTGRES_USER_CI }:${{ secrets.POSTGRES_PASSWORD_CI }}@localhost:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}
+          POSTGRES_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"
         run: |
           echo "--------------"
           printenv
