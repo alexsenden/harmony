@@ -29,32 +29,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run DB for testing
+        env:
+          PORT: 8081
+          POSTGRES_USER_CI: ${{ secrets.POSTGRES_USER_CI }}
+          POSTGRES_PASSWORD_CI: ${{ secrets.POSTGRES_PASSWORD_CI }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT_CI }}
+          POSTGRES_DB_NAME: ${{ secrets.POSTGRES_DB_NAME_CI }}
+          POSTGRES_DB_HOST: localhost
+          POSTGRES_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"
         run: |
-          sudo echo "
-            # Port that this server will be accessible on
-            PORT=8081
-
-            # Name of the user we will access with (for Prisma DB URL)
-            POSTGRES_USER=${{ secrets.POSTGRES_USER_CI }}
-
-            # Password of the user (for Prisma DB URL)
-            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD_CI }}
-
-            # Port that Prisma will access the DB From
-            POSTGRES_PORT=${{ secrets.POSTGRES_PORT_CI }}
-
-            # Name of the database
-            POSTGRES_DB_NAME=${{ secrets.POSTGRES_DB_NAME_CI }}
-
-            # DB Host or IP
-            DB_HOST=localhost
-          " | sudo tee -a .env
-
-          sudo echo 'POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"' | 
-            sudo tee -a .env
-
           echo "--------------"
-          cat .env
+          printenv
           echo "--------------"
 
           cp .env ../harmony-db
