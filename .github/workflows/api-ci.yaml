@@ -54,8 +54,8 @@ jobs:
           POSTGRES_DB_HOST: localhost
           POSTGRES_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"
         run: |
-        echo "--------------"
-        printenv
-        echo "--------------"
-        
-        npm run test
+          echo "--------------"
+          printenv
+          echo "--------------"
+          
+          npm run test
