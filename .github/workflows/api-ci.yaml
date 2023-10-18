@@ -28,23 +28,7 @@ jobs:
           node-version: "18"
       - name: Install dependencies
         run: npm ci
-      - name: Run DB for testing
-        env:
-          PORT: 8081
-          POSTGRES_USER: username
-          POSTGRES_PASSWORD: password
-          POSTGRES_PORT: 5432
-          POSTGRES_DB_NAME: postgres_db
-          POSTGRES_DB_HOST: localhost
-          POSTGRES_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"
-        run: |
-          echo "--------------"
-          printenv
-          echo "--------------"
-          
-          cd ../harmony-db
-          docker-compose up -d
-      - name: Run tests and linter
+      - name: Run DB for testing, tests and linter
         env:
           PORT: 8081
           POSTGRES_USER: username
@@ -54,17 +38,8 @@ jobs:
           POSTGRES_DB_HOST: localhost
           POSTGRES_URL: "postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_DB_HOST }}:${{ env.POSTGRES_PORT }}/${{ env.POSTGRES_DB_NAME }}"
         run: |
-          echo "--------------"
-          printenv
-          echo "--------------"
-
-          export POSTGRES_URL="postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_DB_HOST }}:${{ env.POSTGRES_PORT }}/${{ env.POSTGRES_DB_NAME }}"
-
-          echo $POSTGRES_URL
-
-          export POSTGRES_URL="postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME"
-
-          echo $POSTGRES_URL
+          cd ../harmony-db
+          docker-compose up -d
           
           export POSTGRES_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME
 
