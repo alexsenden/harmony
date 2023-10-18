@@ -1,6 +1,7 @@
 **/build
-**/coverage
 **/node_modules
 **/.next
 **/.env
 **/.swc
+/harmony-api/coverage
+/harmony-fe/coverage
