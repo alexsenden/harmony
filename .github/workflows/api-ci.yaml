@@ -31,8 +31,8 @@ jobs:
       - name: Run DB for testing
         env:
           PORT: 8081
-          POSTGRES_USER_CI: ${{ secrets.POSTGRES_USER_CI }}
-          POSTGRES_PASSWORD_CI: ${{ secrets.POSTGRES_PASSWORD_CI }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER_CI }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD_CI }}
           POSTGRES_PORT: ${{ secrets.POSTGRES_PORT_CI }}
           POSTGRES_DB_NAME: ${{ secrets.POSTGRES_DB_NAME_CI }}
           POSTGRES_DB_HOST: localhost
