@@ -58,6 +58,16 @@ jobs:
           printenv
           echo "--------------"
 
+          export POSTGRES_URL="postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_DB_HOST }}:${{ env.POSTGRES_PORT }}/${{ env.POSTGRES_DB_NAME }}"
+
+          echo $POSTGRES_URL
+
+          export POSTGRES_URL="postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME"
+
           echo $POSTGRES_URL
           
+          export POSTGRES_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME
+
+          echo $POSTGRES_URL
+
           npm run test
