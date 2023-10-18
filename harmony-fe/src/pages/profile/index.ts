@@ -1,2 +1,2 @@
-import ProfilePage from './[userId]'
+import ProfilePage from './[userName]'
 export default ProfilePage

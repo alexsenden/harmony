@@ -17,10 +17,16 @@ import { Post } from '../../models/post'
 
 const Profile = () => {
   const router = useRouter()
-  const userID = router.query.userId
+  const userName = router.query.userName
+
 
   //Retrieve user name from cookie
+  const [getUserId, receivedUser] = useHttpRequest({
+    url: `/user/?userName=${userName}`,
+    method: HttpMethod.GET,
+  })
 
+  const userID = 1
   //Retrieve posts
   const [postsFromUser, getPosts] = useState<Array<Post>>([])
 

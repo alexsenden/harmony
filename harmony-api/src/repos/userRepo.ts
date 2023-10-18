@@ -21,11 +21,6 @@ export const register = async (userData: User): Promise<User> => {
       password: postResult.password,
       createdAt: postResult.createdAt,
       active: postResult.active,
-      posts: [],
-      likes: [],
-      comments: [],
-      follows: [],
-      followers: [],
       firstName: postResult.firstName,
       lastName: postResult.lastName,
     }
@@ -34,39 +29,15 @@ export const register = async (userData: User): Promise<User> => {
   }
 }
 
-export const getUserById = async (
-  userID?: string
+export const getUserByName = async (
+  userName?: string
 ): Promise<User> => {
-  const user = await prisma.user.findFirst({
+  const user = await prisma.user.findUniqueOrThrow({
     where: {
-      userId: {
-        equals: userID,
-        mode: 'insensitive',
-      },
+      username: userName,
     },
-    include: {posts: true, comments: true, likes: true, followers: true, follows: true}
   })
 
-  if(user != undefined)
-  {
-    return user
-  }
-  else
-  {
-    return {
-      userId: '',
-      username: '',
-      password: '',
-      createdAt: new Date,
-      active: false,
-      posts: [],
-      likes: [],
-      comments: [],
-      follows: [],
-      followers: [],
-      firstName: '',
-      lastName: '',
-    }
-
-  }
+  user.password = ''
+  return user
 }

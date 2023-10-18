@@ -3,15 +3,15 @@ import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 
 export const get = async (
-  userId?: string
+  userName?: string
 ): Promise<User> => {
-  if (!userId) {
+  if (!userName) {
     //return null
   }
 
-  const user = userRepo.getUserById(userId)
+  const user = userRepo.getUserByName(userName)
 
-  return (await user)
+  return user
 }
 
 export const register = async (userData?: User): Promise<User> => {
