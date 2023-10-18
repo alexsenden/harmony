@@ -1,11 +1,30 @@
 import * as postRepo from '../repos/postRepo'
+import * as pollOptionRepo from '../repos/pollOptionRepo'
 import { Post, PostType } from '../models/post'
 import { validateTopicId } from './topicService'
 import { HttpError } from '../models/error/httpError'
+import { PollOption } from '../models/pollOption'
 
 export const createPost = async (postData?: Post): Promise<Post> => {
   const validatedPost = validatePost(postData)
-  return postRepo.createPost(validatedPost)
+  const postResult = await postRepo.createPost(validatedPost)
+
+  if (postData?.postType === PostType.POLL) {
+    const pollOptionResult: Array<Promise<PollOption>> = []
+
+    for (const pollOption of postData.pollOptions || []) {
+      pollOptionResult.push(
+        pollOptionRepo.createPollOption({
+          pollOptionData: pollOption,
+          postId: postResult.postId,
+        })
+      )
+    }
+
+    postResult.pollOptions = await Promise.all(pollOptionResult)
+  }
+
+  return postResult
 }
 
 export const getPostByUserId = async (
@@ -20,44 +39,89 @@ export const getPostByUserId = async (
   return [...(await posts)]
 }
 
-const validatePost = (postData?: Post): Post => {
-  validateTopicId(postData?.topicId)
-  validateCommonPostData(postData)
+export const validatePost = (postData?: Post): Post => {
+  if (!postData) {
+    throw new HttpError('Post data is required to create new post', 400)
+  }
+
+  let errorMessages = validateTopicId(postData?.topicId)
+  errorMessages = errorMessages.concat(validateUserId(postData))
+  errorMessages = errorMessages.concat(validateTitle(postData))
 
   switch (postData?.postType) {
     case PostType.DISCUSSION:
-      // Discussion only has common post data,
-      // no further validation required
-      return postData
+      errorMessages = errorMessages.concat(validateBody(postData))
+      break
     case PostType.POLL:
-      //validatePoll(postData)
-      return postData
+      errorMessages = errorMessages.concat(validatePollOptions(postData))
+      break
     case PostType.REVIEW:
-      //validateReview(postData)
-      return postData
+      errorMessages = errorMessages.concat(validateBody(postData))
+      errorMessages = errorMessages.concat(validateRating(postData))
+      break
+    default:
+      errorMessages.push(`Unsupported postType: ${postData?.postType}`)
   }
 
-  throw new HttpError(`Unsupported postType: ${postData?.postType}`, 400)
+  if (errorMessages.length > 0) {
+    throw new HttpError(errorMessages.join(';\n'), 400)
+  }
+
+  return postData
 }
 
-const validateCommonPostData = (postData?: Post) => {
+export const validateUserId = (postData?: Post): Array<string> => {
+  if (!postData?.userId) {
+    return ['userId field is required to create a new post']
+  }
+
+  return []
+}
+
+export const validateTitle = (postData?: Post): Array<string> => {
+  if (!postData?.title) {
+    return ['title field is required to create a new post']
+  }
+
+  return []
+}
+
+export const validateBody = (postData: Post): Array<string> => {
+  if (!postData.body) {
+    return ['body field is required to create a new discussion or review post']
+  }
+
+  return []
+}
+
+export const validateRating = (postData: Post): Array<string> => {
   const errorMessages = []
 
-  if (!postData?.userId) {
-    errorMessages.push(
-      'userId field is required to create a new discussion post'
-    )
-  }
-  if (!postData?.title) {
-    errorMessages.push(
-      'title field is required to create a new discussion post'
-    )
-  }
-  if (!postData?.body) {
-    errorMessages.push('body field is required to create a new discussion post')
+  if (!postData.rating && postData.rating !== 0) {
+    errorMessages.push('rating field is required to create a new review post')
+  } else if (postData.rating < 0 || postData.rating > 5) {
+    errorMessages.push('rating field must be in the domain [0, 5]')
   }
 
-  if (errorMessages.length !== 0) {
-    throw new HttpError(errorMessages.join('; '), 400)
+  return errorMessages
+}
+
+export const validatePollOptions = (postData: Post): Array<string> => {
+  const errorMessages = []
+
+  if (!postData.pollOptions) {
+    errorMessages.push(
+      'pollOptions field is required to create a new poll post'
+    )
+  } else {
+    for (let i = 0; i < postData.pollOptions.length; i++) {
+      if (!postData.pollOptions[i].option) {
+        errorMessages.push(
+          `pollOptions[${i}] field failed validation: field must be non-empty to create a new poll post`
+        )
+      }
+    }
   }
+
+  return errorMessages
 }

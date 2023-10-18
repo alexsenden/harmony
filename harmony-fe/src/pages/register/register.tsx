@@ -25,7 +25,7 @@ const RegisterPage = () => {
     password: '',
   })
 
-  const [sendHttpRequest, response, error, loading] = useHttpRequest({
+  const [sendHttpRequest, response, error] = useHttpRequest({
     url: '/user/register',
     method: HttpMethod.POST,
     body: newUser,
@@ -181,6 +181,14 @@ const RegisterPage = () => {
                 onClose={() => setHasError(false)}
               >
                 An error occurred. Please check your input and try again.
+                <br />
+                <br />
+                Error:
+                <br />
+                <br />
+                {error && error.response.data.message
+                  ? error.response.data.message
+                  : 'incorrect input for one of the fields'}
               </Alert>
             ) : null}
           </Grid>
