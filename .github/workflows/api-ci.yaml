@@ -38,12 +38,21 @@ jobs:
           POSTGRES_DB_HOST: localhost
           POSTGRES_URL: "postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_DB_HOST }}:${{ env.POSTGRES_PORT }}/${{ env.POSTGRES_DB_NAME }}"
         run: |
+
+          export POSTGRES_USER=username
+          export POSTGRES_PASSWORD=password
+          export POSTGRES_PORT=5432
+          export POSTGRES_DB_NAME=postgres_db
+          export POSTGRES_DB_HOST=localhost
+          export POSTGRES_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME
+
           cd ../harmony-db
+
+          cat docker-compose.yml
+
           docker-compose up -d
           
           cd ../harmony-api
-          
-          export POSTGRES_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME
 
           echo $POSTGRES_URL
 
