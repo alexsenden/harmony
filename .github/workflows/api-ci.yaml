@@ -34,6 +34,7 @@ jobs:
           POSTGRES_USER: username
           POSTGRES_PASSWORD: password
           POSTGRES_PORT: 5432
+          POSTGRES_DB: postgres_db
           POSTGRES_DB_NAME: postgres_db
           POSTGRES_DB_HOST: localhost
           POSTGRES_URL: "postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_DB_HOST }}:${{ env.POSTGRES_PORT }}/${{ env.POSTGRES_DB_NAME }}"
@@ -43,6 +44,7 @@ jobs:
           export POSTGRES_PASSWORD=password
           export POSTGRES_PORT=5432
           export POSTGRES_DB_NAME=postgres_db
+          export POSTGRES_DB=postgres_db
           export POSTGRES_DB_HOST=localhost
           export POSTGRES_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME
 
