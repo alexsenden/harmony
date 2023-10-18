@@ -25,7 +25,7 @@ const RegisterPage = () => {
     password: '',
   })
 
-  const [sendHttpRequest, response, error, loading] = useHttpRequest({
+  const [sendHttpRequest, response, error] = useHttpRequest({
     url: '/user/register',
     method: HttpMethod.POST,
     body: newUser,
