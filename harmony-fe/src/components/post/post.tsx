@@ -26,9 +26,10 @@ interface PostProps {
   name: string
   numComments: number
   numLikes: number
+  postId: string
 }
 
-const Post = ({ title, name, numComments, numLikes }: PostProps) => {
+const Post = ({ title, name, numComments, numLikes, postId }: PostProps) => {
   const [isLiked, setIsLiked] = useState(false)
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false)
 
@@ -65,7 +66,7 @@ const Post = ({ title, name, numComments, numLikes }: PostProps) => {
 
         <Box sx={{ width: '100%' }}>
           <CardContent>
-            <Link href="/posts/${[postId]}">
+            <Link href={`/posts/${postId}`}>
               <TextBlock gutterBottom variant="h5">
                 {title}
               </TextBlock>
