@@ -52,10 +52,12 @@ jobs:
           POSTGRES_PORT: ${{ secrets.POSTGRES_PORT_CI }}
           POSTGRES_DB_NAME: ${{ secrets.POSTGRES_DB_NAME_CI }}
           POSTGRES_DB_HOST: localhost
-          POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}
+          POSTGRES_URL: postgresql://${{ secrets.POSTGRES_USER_CI }:${{ secrets.POSTGRES_PASSWORD_CI }}@localhost:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}
         run: |
           echo "--------------"
           printenv
           echo "--------------"
+
+          echo $POSTGRES_URL
           
           npm run test
