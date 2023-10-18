@@ -50,7 +50,7 @@ jobs:
             DB_HOST=localhost
           " | sudo tee -a .env
 
-          sudo echo echo 'POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"' | 
+          sudo echo 'POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}"' | 
             sudo tee -a .env
 
           echo "--------------"
