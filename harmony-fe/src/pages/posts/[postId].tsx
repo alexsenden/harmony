@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { Button, Stack, Divider, Paper, Grid } from '@mui/material'
 import { useState } from 'react'
 import TextBlock from '../../components/text'
+import HarmonyAppBar from '../../components/appBar'
 
 export default function PostDetail() {
   const router = useRouter()
@@ -20,6 +21,7 @@ export default function PostDetail() {
 
   return (
     <>
+      <HarmonyAppBar />
       <div style={{ padding: 14 }}>
         <Paper style={{ padding: '40px 20px' }}>
           <TextBlock variant="h1">Title of the post {postID}</TextBlock>

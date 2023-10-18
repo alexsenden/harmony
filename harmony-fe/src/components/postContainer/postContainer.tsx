@@ -2,18 +2,25 @@ import React from 'react'
 import Post from '../post/post'
 import Link from 'next/link'
 
-export default function PostContainer() {
+interface PostContainerProps {
+  contentType: string
+}
+export default function PostContainer({ contentType }: PostContainerProps) {
   return (
     <div>
-      <Link href="./posts/[postId].tsx">
-        <Post
-          title="Is Jimmy Crazy?"
-          name="Jason"
-          numComments={100}
-          numLikes={400}
-        />
-      </Link>
-      
+      <h2>
+        These are your {contentType} Posts. For now they are static but later
+        they will be dynamic
+      </h2>
+      {/* <Link href="./posts/[postId].tsx"> */}
+      <Post
+        title="Is Jimmy Crazy?"
+        name="Jason"
+        numComments={100}
+        numLikes={400}
+      />
+      {/* </Link> */}
+
       <Post
         title="Has anyone checked out Post Malone's new track? I think this one is fire"
         name="Jason"
