@@ -41,8 +41,6 @@ jobs:
           echo "--------------"
           printenv
           echo "--------------"
-
-          cp .env ../harmony-db
           
           cd ../harmony-db
           docker-compose up -d
