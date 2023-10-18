@@ -13,10 +13,10 @@ const LoginPage = () => {
     username: "",
     password: "",
   }
-  const [loginError, setLoginError] = useState(false); // Initialize error state
+  const [loginError, setLoginError] = useState(false) // Initialize error state
   const [userLogin,userLoginResponse,userLoginError,userLoginLoading] =
     useHttpRequest({
-      url: '/login',
+      url: '/user/login',
       method: HttpMethod.POST,
       body: loginData
     })
@@ -43,7 +43,10 @@ const LoginPage = () => {
     <>
       <HarmonyAppBar />
       <Container maxWidth="xl">
-        <Paper sx={{
+        <Paper
+          elevation={3}
+          style={{ padding: 50 }}
+          sx={{
           p: 2,
           margin: 'auto',
           my: 7,
@@ -76,10 +79,12 @@ const LoginPage = () => {
               onChange = {event => loginData.username= event.target.value}
               label="username"
               variant="outlined"
+              placeholder="Enter username"
               sx={{
                 mt: 3,
                 width: 8/12,
               }}
+              required
               error={loginError}
             />
             <TextField
@@ -87,10 +92,12 @@ const LoginPage = () => {
               label="password"
               type="password"
               variant="outlined"
+              placeholder="Enter password"
               sx={{
                 mt: 3,
                 width: 8/12,
               }}
+              required
               error={loginError}
               helperText={loginError ? 'Invalid username or password' : ''}
             />
@@ -109,6 +116,7 @@ const LoginPage = () => {
               </Button>
 
             <Button
+              href = '/register'
               variant="outlined"
               sx={{
                 mt: 3,
