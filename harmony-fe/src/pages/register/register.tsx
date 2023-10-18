@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Container, Grid, Paper, TextField, Box } from '@mui/material'
+import {
+  Button,
+  Container,
+  Grid,
+  Paper,
+  TextField,
+  Box,
+  Alert,
+} from '@mui/material'
 
 import HarmonyAppBar from '../../components/appBar/appBar'
 
 import { HttpMethod } from '../../hooks/httpRequest'
 
 import useHttpRequest from '../../hooks/httpRequest'
-import TextBlock from '../../components/text'
 
 const RegisterPage = () => {
   const [hasError, setHasError] = useState(false)
@@ -18,7 +25,7 @@ const RegisterPage = () => {
     password: '',
   })
 
-  const [sendHttpRequest, response, error, loading] = useHttpRequest({
+  const [sendHttpRequest, response, error] = useHttpRequest({
     url: '/user/register',
     method: HttpMethod.POST,
     body: newUser,
@@ -46,10 +53,8 @@ const RegisterPage = () => {
     if (error) {
       console.error('Error:', error)
       setHasError(true)
-    } else if (!loading) {
+    } else {
       setHasError(false)
-      document.cookie = response['Set-Cookie']
-      window.location.href = '../home'
     }
   }, [response, error])
 
@@ -57,10 +62,12 @@ const RegisterPage = () => {
     <>
       <HarmonyAppBar />
       <Container
-        maxWidth="xl"
+        maxWidth="sm"
         sx={{
           justifyContent: 'center',
+          display: 'flex',
           alignItems: 'center',
+          minHeight: '80vh',
         }}
       >
         <Paper
@@ -69,9 +76,7 @@ const RegisterPage = () => {
           sx={{
             p: 2,
             margin: 'auto',
-            my: 7,
             maxWidth: 'auto',
-            width: 5 / 12,
             flexGrow: 1,
           }}
         >
@@ -85,21 +90,13 @@ const RegisterPage = () => {
             <Box
               component="img"
               sx={{
-                maxWidth: 'auto',
-                width: 5 / 12,
-                xs: 6,
+                height: 64,
               }}
               alt="Harmony Logo"
               src={'/harmony1.png'}
             />
-            <TextBlock my={3} fontSize={40}>
-              Join Harmony
-            </TextBlock>
             <TextField
-              sx={{
-                mt: 3,
-                width: 8 / 12,
-              }}
+              sx={{ margin: 1 }}
               onChange={firstName =>
                 onChangeUserData(
                   firstName.target.value,
@@ -113,13 +110,9 @@ const RegisterPage = () => {
               variant="outlined"
               fullWidth
               required
-              error={hasError}
             />
             <TextField
-              sx={{
-                mt: 3,
-                width: 8 / 12,
-              }}
+              sx={{ margin: 1 }}
               onChange={lastName =>
                 onChangeUserData(
                   newUser.firstName,
@@ -133,13 +126,9 @@ const RegisterPage = () => {
               variant="outlined"
               fullWidth
               required
-              error={hasError}
             />
             <TextField
-              sx={{
-                mt: 3,
-                width: 8 / 12,
-              }}
+              sx={{ margin: 1 }}
               onChange={username =>
                 onChangeUserData(
                   newUser.firstName,
@@ -148,18 +137,14 @@ const RegisterPage = () => {
                   newUser.password
                 )
               }
-              label="username"
+              label="Username"
               placeholder="Enter username"
               variant="outlined"
               fullWidth
               required
-              error={hasError}
             />
             <TextField
-              sx={{
-                mt: 3,
-                width: 8 / 12,
-              }}
+              sx={{ margin: 1 }}
               onChange={password =>
                 onChangeUserData(
                   newUser.firstName,
@@ -168,29 +153,44 @@ const RegisterPage = () => {
                   password.target.value
                 )
               }
-              label="password"
+              label="Password"
               placeholder="Enter password"
               type="password"
               variant="outlined"
               fullWidth
               required
-              error={hasError}
-              helperText={hasError ? 'username already taken' : ''}
             />
             <Button
-              sx={{
-                mt: 3,
-                width: 8 / 12,
-              }}
+              sx={{ margin: 1 }}
               onClick={() => {
                 handleUserRegister()
               }}
               type="submit"
-              variant="outlined"
+              color="primary"
+              variant="contained"
               fullWidth
             >
-              <TextBlock fontSize={20}> Sign up </TextBlock>
+              Sign up
             </Button>
+
+            {hasError ? (
+              <Alert
+                severity="error"
+                sx={{ marginBottom: 2 }}
+                variant="filled"
+                onClose={() => setHasError(false)}
+              >
+                An error occurred. Please check your input and try again.
+                <br />
+                <br />
+                Error:
+                <br />
+                <br />
+                {error && error.response.data.message
+                  ? error.response.data.message
+                  : 'incorrect input for one of the fields'}
+              </Alert>
+            ) : null}
           </Grid>
         </Paper>
       </Container>

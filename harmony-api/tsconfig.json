@@ -5,5 +5,5 @@
     "outDir": "build",
     "esModuleInterop": true
   },
-  "include": ["src/**/*.ts", "__test__/**/*.ts"]
+  "include": ["src/**/*.ts", "__test__/**/*.ts", "__test__/prisma/singleton.ts"]
 }

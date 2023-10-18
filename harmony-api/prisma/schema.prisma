@@ -48,9 +48,10 @@ model Post {
 }
 
 model PollOption {
-  postId String @id @map("post_id")
-  option String
-  poll   Post   @relation(fields: [postId], references: [postId])
+  pollOptionId String @id @default(uuid()) @map("poll_option_id")
+  postId       String @map("post_id")
+  option       String
+  poll         Post   @relation(fields: [postId], references: [postId])
 
   @@map("poll_option")
 }
@@ -94,7 +95,6 @@ model Artist {
   beginYear            Int?                   @map("begin_date_year")
   end                  Int?                   @map("end_date_year")
   artistDescription    String?                @map("comment")
-  artistCredits        ArtistCredit[]
   posts                Post[]
   Alias                Alias[]
   ArtistCreditRelation ArtistCreditRelation[]
@@ -127,8 +127,6 @@ model ArtistCredit {
   artistCreditRelation ArtistCreditRelation[]
   songs                Song[]
   albums               Album[]
-  Artist               Artist?                @relation(fields: [artistArtistId], references: [artistId])
-  artistArtistId       Int?
 
   @@map("artist_credit")
 }
