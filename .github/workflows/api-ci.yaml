@@ -28,7 +28,7 @@ jobs:
           node-version: "18"
       - name: Install dependencies
         run: npm ci
-      - name: Run DB for testing
+      - name: Run DB for testing, tests and linter
         run: |
           export POSTGRES_USER=username
           export POSTGRES_PASSWORD=password
@@ -44,6 +44,4 @@ jobs:
           cd ../harmony-api
 
           npx prisma migrate dev
-        
-      - name: Run tests and linter
-        run: npm run test
+          npm run test
