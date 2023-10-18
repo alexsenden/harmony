@@ -188,7 +188,8 @@ const RegisterPage = () => {
                 
                 <br/><br/> 
                 
-                { error && error.response.data.message ? error.response.data.message : "incorrect input for one of the fields"}
+                { error && error.response.data.message ?
+                 error.response.data.message : "incorrect input for one of the fields"}
               </Alert>
             ) : null}
           </Grid>

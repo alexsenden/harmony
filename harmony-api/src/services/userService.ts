@@ -13,8 +13,8 @@ export const register = async (userData?: User): Promise<User> => {
 }
 
 const validateUserRegistration = (userData: User) => {
-  validateUserRegistrationBasic(userData);
-  validateUserRegistrationAdvanced(userData);
+  validateUserRegistrationBasic(userData)
+  validateUserRegistrationAdvanced(userData)
 }
 
 const validateUserRegistrationBasic = (userData: User) => {
@@ -41,9 +41,10 @@ const validateUserRegistrationBasic = (userData: User) => {
 const validateUserRegistrationAdvanced = (userData: User) => {
   const errorMessages = []
 
-  const usernameRegex = /^[a-zA-Z0-9]+$/g;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&-+=()!? "]).{8,128}$/g;
-  const nameRegex = /^[a-zA-Z\-]+$/g;
+  const usernameRegex = /^[a-zA-Z0-9]+$/g
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&-+=()!? "]).{8,128}$/g
+  const nameRegex = /^[a-zA-Z-]+$/g
 
   if (!userData.username.match(usernameRegex)) {
     errorMessages.push('Username does not match rules')
@@ -62,7 +63,3 @@ const validateUserRegistrationAdvanced = (userData: User) => {
     throw new HttpError(errorMessages.join('; '), 400)
   }
 }
-
-
-
-

@@ -3,3 +3,5 @@
 **/.next
 **/.env
 **/.swc
+/harmony-api/coverage
+/harmony-fe/coverage
