@@ -58,6 +58,7 @@ describe('register function with Singleton', () => {
   it('should throw an error if username already exists', async () => {
     prismaMock.user.create.mockResolvedValue(userData)
 
+    await register(userData)
     await expect(register(userData)).rejects.toThrow(HttpError)
   })
 })

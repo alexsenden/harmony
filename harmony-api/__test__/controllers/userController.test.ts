@@ -1,15 +1,7 @@
 import { register } from '../../src/controllers/user/userController'
 import { Request, Response, NextFunction } from 'express'
 
-import { Express } from 'express'
-import { FakeApp } from '../testData'
-
 import * as userService from '../../src/services/userService'
-
-let app: Express
-beforeEach(() => {
-  app = FakeApp()
-})
 
 describe('Register Controller', () => {
   /*
@@ -74,8 +66,6 @@ describe('Register Controller', () => {
       json: jest.fn(),
     } as unknown as Response
     const next = jest.fn() as unknown as NextFunction
-
-    const errorMessage = 'Registration failed'
 
     const mockUserFaulty = mockUser
     mockUserFaulty.password = ''
