@@ -34,9 +34,7 @@ export const getPostByUserId = async (
     return []
   }
 
-  const posts = postRepo.getPostByUserId(userId)
-
-  return [...(await posts)]
+  return await postRepo.getPostByUserId(userId)
 }
 
 export const validatePost = (postData?: Post): Post => {

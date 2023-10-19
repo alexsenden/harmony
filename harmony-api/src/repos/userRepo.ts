@@ -34,7 +34,7 @@ export const getUserByName = async (userName?: string): Promise<User> => {
     where: {
       username: userName,
     },
-  })
+  }).catch(() => {throw new HttpError(`User with name ${userName} not found`, 404)})
 
   user.password = ''
   return user

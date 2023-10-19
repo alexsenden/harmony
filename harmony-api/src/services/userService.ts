@@ -2,11 +2,7 @@ import * as userRepo from '../repos/userRepo'
 import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 
-export const get = async (userName?: string): Promise<User> => {
-  if (!userName) {
-    //return null
-  }
-
+export const getUserByUsername = async (userName?: string): Promise<User> => {
   const user = userRepo.getUserByName(userName)
 
   return user

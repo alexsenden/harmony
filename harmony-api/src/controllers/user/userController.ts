@@ -23,7 +23,7 @@ export const get = async (req: Request, res: Response, next: NextFunction) => {
     typeof req.query.username === 'string' ? req.query.username : undefined
 
   try {
-    res.json(await userService.get(username))
+    res.json(await userService.getUserByUsername(username))
   } catch (error) {
     next(error)
   }

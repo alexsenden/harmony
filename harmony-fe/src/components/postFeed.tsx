@@ -1,6 +1,7 @@
 import { Post } from '../models/post'
 import React from 'react'
 import PostCard from '../components/post/postCard'
+import TextBlock from './text'
 
 export default function PostFeed(posts: Array<Post>) {
   if (posts.length > 0) {
@@ -8,6 +9,6 @@ export default function PostFeed(posts: Array<Post>) {
       return <PostCard {...each} />
     })
   } else {
-    return <>No posts here</>
+    return <TextBlock>No posts here</TextBlock>
   }
 }

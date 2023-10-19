@@ -14,10 +14,12 @@ import PostFeed from '../../components/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Post } from '../../models/post'
 import { User } from '../../models/user'
+import { notFound, redirect } from 'next/navigation'
+import TextBlock from '../../components/text'
 
 export default function Profile() {
   const router = useRouter()
-  const userName = router.query.userName
+  const { userName } = router.query
   const [postsFromUser, getPosts] = useState<Array<Post>>([])
   const [userData, getUser] = useState<User>()
 
@@ -28,13 +30,14 @@ export default function Profile() {
   })
 
   useEffect(() => {
-    getUserData()
-  }, [router])
+    if (userName) {
+      getUserData()
+    }
+  }, [userName])
 
   useEffect(() => {
     if (receivedData) {
       getUser(receivedData)
-      console.log(receivedData)
     }
   }, [receivedData, userData])
 
@@ -45,13 +48,14 @@ export default function Profile() {
   })
 
   useEffect(() => {
-    getPostsByUserId()
+    if (userData) {
+      getPostsByUserId()
+    }
   }, [userData])
 
   useEffect(() => {
     if (postsReceived) {
       getPosts(postsReceived)
-      console.log(postsReceived)
       updateTabs([
         {
           label: 'All Content',
@@ -63,7 +67,7 @@ export default function Profile() {
         },
         {
           label: 'Comments',
-          tab: <p>No Comments Available</p>,
+          tab: <TextBlock>No Comments Available</TextBlock>,
         },
       ])
     }
@@ -72,15 +76,15 @@ export default function Profile() {
   const [tabs, updateTabs] = useState<Array<TabItem>>([
     {
       label: 'All Content',
-      tab: <p>No Content Available</p>,
+      tab: <TextBlock>No Content Available</TextBlock>,
     },
     {
       label: 'Posts',
-      tab: <p>No Posts Available</p>,
+      tab: <TextBlock>No Posts Available</TextBlock>,
     },
     {
       label: 'Comments',
-      tab: <p>No Comments Available</p>,
+      tab: <TextBlock>No Comments Available</TextBlock>,
     },
   ])
 
@@ -120,7 +124,7 @@ export default function Profile() {
               <Grid item>
                 <Button className="followButton">Follow</Button>
                 <br />
-                100 Trillion Followers
+                <TextBlock>100 Trillion Followers</TextBlock>
               </Grid>
             </Grid>
           </Grid>
