@@ -30,3 +30,28 @@ export const createPost = async (postData: Post): Promise<Post> => {
     },
   }
 }
+
+export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
+  const posts = await prisma.post.findMany({
+    where: {
+      userId: {
+        contains: userID,
+        mode: 'insensitive',
+      },
+    },
+  })
+
+  return posts.map(post => {
+    return {
+      postId: post.postId,
+      userId: post.userId,
+      title: post.title,
+      topicId: {
+        artistId: post.artistId || undefined,
+        albumId: post.albumId || undefined,
+        songId: post.songId || undefined,
+      },
+      postType: PostType[post.postType],
+    }
+  })
+}

@@ -69,3 +69,14 @@ export const signOut = async (
     next(error)
   }
 }
+
+export const get = async (req: Request, res: Response, next: NextFunction) => {
+  const username =
+    typeof req.query.username === 'string' ? req.query.username : undefined
+
+  try {
+    res.json(await userService.getUserByUsername(username))
+  } catch (error) {
+    next(error)
+  }
+}

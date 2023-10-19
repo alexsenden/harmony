@@ -27,6 +27,16 @@ export const createPost = async (postData?: Post): Promise<Post> => {
   return postResult
 }
 
+export const getPostByUserId = async (
+  userId?: string
+): Promise<Array<Post>> => {
+  if (!userId) {
+    return []
+  }
+
+  return await postRepo.getPostByUserId(userId)
+}
+
 export const validatePost = (postData?: Post): Post => {
   if (!postData) {
     throw new HttpError('Post data is required to create new post', 400)

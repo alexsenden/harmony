@@ -3,6 +3,11 @@ import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 import { Login } from '../models/login'
 
+export const getUserByUsername = async (userName?: string): Promise<User> => {
+  const user = userRepo.getUserByName(userName)
+  return user
+}
+
 export const register = async (userData?: User): Promise<User> => {
   if (userData === undefined) {
     throw new HttpError('User data is required to register a new user', 400)
