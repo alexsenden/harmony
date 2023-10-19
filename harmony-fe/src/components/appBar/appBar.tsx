@@ -69,7 +69,11 @@ const AppBar = () => {
               Home
             </Button>
             {user && (
-              <Button href="/profile" className="navButton" color="inherit">
+              <Button
+                href={`/profile/${user.username}`}
+                className="navButton"
+                color="inherit"
+              >
                 Profile
               </Button>
             )}
