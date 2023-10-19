@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Avatar,
   Button,
@@ -8,7 +8,6 @@ import {
   Paper,
   Typography,
 } from '@mui/material'
-
 import HarmonyAppBar from '../../components/appBar/appBar'
 import TabLayout, { TabItem } from '../../components/tab-layout'
 import PostFeed from '../../components/postFeed'
@@ -16,7 +15,7 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Post } from '../../models/post'
 import { User } from '../../models/user'
 
-export default function Profile()  {
+export default function Profile() {
   const router = useRouter()
   const userName = router.query.userName
   const [postsFromUser, getPosts] = useState<Array<Post>>([])
@@ -38,7 +37,6 @@ export default function Profile()  {
       console.log(receivedData)
     }
   }, [receivedData, userData])
-
 
   //Retrieve posts
   const [getPostsByUserId, postsReceived] = useHttpRequest({
@@ -69,7 +67,7 @@ export default function Profile()  {
         },
       ])
     }
-  }, [postsReceived, postsFromUser,userData])
+  }, [postsReceived, postsFromUser, userData])
 
   const [tabs, updateTabs] = useState<Array<TabItem>>([
     {
