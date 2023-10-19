@@ -38,7 +38,12 @@ const useHttpRequest = ({
     const requestHeaders = { accept: '*/*', ...headers }
 
     new Promise(() =>
-      axios[method](url, body, { headers: requestHeaders })
+      axios({
+        method: method,
+        url: url,
+        data: body,
+        headers: requestHeaders,
+      })
         .then(res => {
           setResponse(res.data)
         })

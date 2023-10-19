@@ -1,6 +1,5 @@
 import React from 'react'
 import Post from '../post/post'
-import Link from 'next/link'
 
 interface PostContainerProps {
   contentType: string
