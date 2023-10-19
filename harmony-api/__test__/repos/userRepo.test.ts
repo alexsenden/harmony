@@ -1,6 +1,6 @@
 import { register } from '../../src/repos/userRepo'
 import { prismaMock } from '../prisma/singleton' // Import the prismaMock
-import { HttpError } from '../../src/models/error/httpError'
+//import { HttpError } from '../../src/models/error/httpError'
 import prisma from '../../prisma/prisma'
 
 /*
@@ -53,7 +53,7 @@ describe('register function with Singleton', () => {
 
     expect(comparisonSrc).toEqual(comparisonRes)
   })
- /*
+  /*
   it('should throw an error if username already exists', async () => {
     const userData = {
       userId: '1',
