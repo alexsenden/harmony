@@ -13,10 +13,10 @@ export const register = async (
   console.log(userData)
   try {
     const newUser = await userService.register(userData)
+    const userCookie = await userService.assignUserCookie(newUser)
     res.json({
       userData: newUser,
-      'Set-Cookie':
-        'userCookie = ' + (await userService.assignUserCookie(newUser)),
+      'Set-Cookie': 'userCookie = ' + userCookie,
     })
   } catch (error) {
     next(error)

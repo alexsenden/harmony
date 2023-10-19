@@ -50,68 +50,33 @@ const AppBar = () => {
     window.location.href = '../home'
   }
 
-  if (user === undefined) {
-    return (
-      <React.Fragment>
-        <Box sx={{ flexGrow: 1 }}>
-          <MuiAppBar className="navBar-root" position="sticky">
-            <Toolbar>
-              <Button href="/home">
-                <Box
-                  component="img"
-                  sx={{
-                    height: 64,
-                  }}
-                  alt="Harmony Logo"
-                  src={'/harmony1.png'}
-                />
-              </Button>
-              <Button href="/home" className="navButton" color="inherit">
-                Home
-              </Button>
-              <Button href="/home" className="navButton" color="inherit">
-                Search
-              </Button>
-
-              <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
-
-              <Divider orientation="vertical" flexItem />
-              <Button href="/login" className="navButton" color="inherit">
-                Login
-              </Button>
-              <Divider orientation="vertical" flexItem />
-            </Toolbar>
-          </MuiAppBar>
-        </Box>
-        <PostModal open={open} onClose={handleClose} />
-      </React.Fragment>
-    )
-  } else {
-    return (
-      <React.Fragment>
-        <Box sx={{ flexGrow: 1 }}>
-          <MuiAppBar className="navBar-root" position="sticky">
-            <Toolbar>
-              <Button href="/home">
-                <Box
-                  component="img"
-                  sx={{
-                    height: 64,
-                  }}
-                  alt="Harmony Logo"
-                  src={'/harmony1.png'}
-                />
-              </Button>
-              <Button href="/home" className="navButton" color="inherit">
-                Home
-              </Button>
+  return (
+    <React.Fragment>
+      <Box sx={{ flexGrow: 1 }}>
+        <MuiAppBar className="navBar-root" position="sticky">
+          <Toolbar>
+            <Button href="/home">
+              <Box
+                component="img"
+                sx={{
+                  height: 64,
+                }}
+                alt="Harmony Logo"
+                src={'/harmony1.png'}
+              />
+            </Button>
+            <Button href="/home" className="navButton" color="inherit">
+              Home
+            </Button>
+            {user && (
               <Button href="/profile" className="navButton" color="inherit">
                 Profile
               </Button>
-              <Button href="/home" className="navButton" color="inherit">
-                Search
-              </Button>
-
+            )}
+            <Button href="/home" className="navButton" color="inherit">
+              Search
+            </Button>
+            {user && (
               <Button
                 className="navButton"
                 color="inherit"
@@ -119,21 +84,28 @@ const AppBar = () => {
               >
                 New Post
               </Button>
+            )}
 
-              <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
+            <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
 
-              <Divider orientation="vertical" flexItem />
+            <Divider orientation="vertical" flexItem />
+            {!user && (
+              <Button href="/login" className="navButton" color="inherit">
+                Login
+              </Button>
+            )}
+            {user && (
               <Button className="navButton" color="inherit" onClick={signOut}>
                 Sign out
               </Button>
-              <Divider orientation="vertical" flexItem />
-            </Toolbar>
-          </MuiAppBar>
-        </Box>
-        <PostModal open={open} onClose={handleClose} />
-      </React.Fragment>
-    )
-  }
+            )}
+            <Divider orientation="vertical" flexItem />
+          </Toolbar>
+        </MuiAppBar>
+      </Box>
+      <PostModal open={open} onClose={handleClose} />
+    </React.Fragment>
+  )
 }
 
 export default AppBar

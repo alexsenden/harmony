@@ -24,7 +24,7 @@ export const login = async (loginData?: Login): Promise<User> => {
   }
 }
 
-export const assignUserCookie = async (userData: User): Promise<string> => {
+export const assignUserCookie = async (userData: User): Promise<String> => {
   return userRepo.assignUserCookie(userData)
 }
 

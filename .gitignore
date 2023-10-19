@@ -5,3 +5,5 @@
 **/.swc
 /harmony-api/coverage
 /harmony-fe/coverage
+/.idea
+
