@@ -4,7 +4,6 @@ import { HttpError } from '../models/error/httpError'
 
 export const getUserByUsername = async (userName?: string): Promise<User> => {
   const user = userRepo.getUserByName(userName)
-
   return user
 }
 

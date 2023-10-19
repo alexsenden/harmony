@@ -19,5 +19,5 @@
     "src/**/*.tsx",
     "__test__/**/*.ts",
     "__test__/**/*.tsx"
-  ]
+, "src/pages/app/not-found.js", "not-found.tsx", "src/pages/error/404.js"  ]
 }

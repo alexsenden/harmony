@@ -14,7 +14,6 @@ import PostFeed from '../../components/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Post } from '../../models/post'
 import { User } from '../../models/user'
-import { notFound, redirect } from 'next/navigation'
 import TextBlock from '../../components/text'
 
 export default function Profile() {
@@ -24,7 +23,7 @@ export default function Profile() {
   const [userData, getUser] = useState<User>()
 
   //Retrieve user data
-  const [getUserData, receivedData] = useHttpRequest({
+  const [getUserData, receivedData, error] = useHttpRequest({
     url: `/user/?username=${userName}`,
     method: HttpMethod.GET,
   })
@@ -32,8 +31,12 @@ export default function Profile() {
   useEffect(() => {
     if (userName) {
       getUserData()
+
+      if (error) {
+        router.replace('/error')
+      }
     }
-  }, [userName])
+  }, [userName, error])
 
   useEffect(() => {
     if (receivedData) {

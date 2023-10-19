@@ -30,11 +30,15 @@ export const register = async (userData: User): Promise<User> => {
 }
 
 export const getUserByName = async (userName?: string): Promise<User> => {
-  const user = await prisma.user.findUniqueOrThrow({
-    where: {
-      username: userName,
-    },
-  }).catch(() => {throw new HttpError(`User with name ${userName} not found`, 404)})
+  const user = await prisma.user
+    .findUniqueOrThrow({
+      where: {
+        username: userName,
+      },
+    })
+    .catch(() => {
+      throw new HttpError(`User with name ${userName} not found`, 404)
+    })
 
   user.password = ''
   return user
