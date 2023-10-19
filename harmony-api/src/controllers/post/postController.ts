@@ -15,9 +15,7 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
 
 export const get = async (req: Request, res: Response, next: NextFunction) => {
   const userId =
-    typeof req.query.userId === 'string'
-      ? req.query.userId
-      : undefined
+    typeof req.query.userId === 'string' ? req.query.userId : undefined
 
   try {
     res.json(await postService.getPostByUserId(userId))

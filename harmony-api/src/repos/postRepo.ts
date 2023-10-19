@@ -31,10 +31,7 @@ export const createPost = async (postData: Post): Promise<Post> => {
   }
 }
 
-
-export const getPostByUserId = async (
-  userID: string
-): Promise<Array<Post>> => {
+export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     where: {
       userId: {
