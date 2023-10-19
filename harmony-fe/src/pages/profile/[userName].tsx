@@ -14,35 +14,46 @@ import TabLayout, { TabItem } from '../../components/tab-layout'
 import PostFeed from '../../components/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Post } from '../../models/post'
+import { User } from '../../models/user'
 
-const Profile = () => {
+export default function Profile()  {
   const router = useRouter()
   const userName = router.query.userName
+  const [postsFromUser, getPosts] = useState<Array<Post>>([])
+  const [userData, getUser] = useState<User>()
 
-
-  //Retrieve user name from cookie
-  const [getUserId, receivedUser] = useHttpRequest({
-    url: `/user/?userName=${userName}`,
+  //Retrieve user data
+  const [getUserData, receivedData] = useHttpRequest({
+    url: `/user/?username=${userName}`,
     method: HttpMethod.GET,
   })
 
-  const userID = 1
-  //Retrieve posts
-  const [postsFromUser, getPosts] = useState<Array<Post>>([])
+  useEffect(() => {
+    getUserData()
+  }, [router])
 
+  useEffect(() => {
+    if (receivedData) {
+      getUser(receivedData)
+      console.log(receivedData)
+    }
+  }, [receivedData, userData])
+
+
+  //Retrieve posts
   const [getPostsByUserId, postsReceived] = useHttpRequest({
-    url: `/post/?userId=${userID}`,
+    url: `/post/?userId=${userData?.userId}`,
     method: HttpMethod.GET,
   })
 
   useEffect(() => {
     getPostsByUserId()
-  }, [userID])
+  }, [userData])
 
   useEffect(() => {
     if (postsReceived) {
       getPosts(postsReceived)
-      console.log(postsFromUser)
+      console.log(postsReceived)
       updateTabs([
         {
           label: 'All Content',
@@ -58,7 +69,7 @@ const Profile = () => {
         },
       ])
     }
-  }, [postsReceived, postsFromUser])
+  }, [postsReceived, postsFromUser,userData])
 
   const [tabs, updateTabs] = useState<Array<TabItem>>([
     {
@@ -104,7 +115,7 @@ const Profile = () => {
               <Grid item xs container direction="column" spacing={2}>
                 <Grid item xs>
                   <Typography gutterBottom variant="h4" component="div">
-                    {userID}
+                    {userName}
                   </Typography>
                 </Grid>
               </Grid>
@@ -148,5 +159,3 @@ const Profile = () => {
     </>
   )
 }
-
-export default Profile

@@ -34,7 +34,7 @@ export const getUserByName = async (
 ): Promise<User> => {
   const user = await prisma.user.findUniqueOrThrow({
     where: {
-      username: userName,
+      username:userName,
     },
   })
 
