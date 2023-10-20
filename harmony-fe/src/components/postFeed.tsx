@@ -1,10 +1,12 @@
-import { Post } from '../models/post'
 import React, { useEffect } from 'react'
+import { Box } from '@mui/material'
+
 import PostCard from '../components/post/postCard'
 import TextBlock from './text'
 import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
+import { Post } from '../models/post'
 
-const NO_POSTS_HERE = 'No posts here'
+const NO_POSTS_HERE = 'No Posts Available'
 
 interface PostFeedProps {
   url: string
@@ -23,12 +25,18 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
 
   const mappedPosts = (posts as Array<Post>) || []
 
-  return mappedPosts.length > 0 && url ? (
-    mappedPosts.map(post => {
-      return <PostCard {...post} />
-    })
+  const renderedPosts = mappedPosts.map(post => {
+    return <PostCard {...post} />
+  })
+
+  return renderedPosts.length > 0 ? (
+    <Box width={1} display="flex" flexDirection="column" mt={2}>
+      {renderedPosts}
+    </Box>
   ) : (
-    <TextBlock align="center">{noResultsText}</TextBlock>
+    <TextBlock align="center" sx={{ mt: 2 }}>
+      {noResultsText}
+    </TextBlock>
   )
 }
 

@@ -20,7 +20,7 @@ import { UserContext } from '../../contexts/user'
 const Profile = () => {
   const router = useRouter()
   const { userName } = router.query
-  const [userData, getUser] = useState<User>()
+  const [userData, setUser] = useState<User>()
   const user = useContext(UserContext)
 
   //Retrieve user data
@@ -41,7 +41,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (receivedData) {
-      getUser(receivedData)
+      setUser(receivedData)
     }
   }, [receivedData, userData])
 
@@ -51,6 +51,7 @@ const Profile = () => {
       tab: (
         <PostFeed
           url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
+          noResultsText="No Content Available"
         />
       ),
     },
@@ -64,14 +65,18 @@ const Profile = () => {
     },
     {
       label: 'Comments',
-      tab: <TextBlock>No Comments Available</TextBlock>,
+      tab: (
+        <TextBlock align="center" sx={{ mt: 2 }}>
+          No Comments Available
+        </TextBlock>
+      ),
     },
   ]
 
   return (
     <>
       <HarmonyAppBar />
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{ mt: 2 }}>
         <Paper
           sx={{
             p: 2,
@@ -95,10 +100,13 @@ const Profile = () => {
             </Grid>
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={2}>
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" component="div">
+                <Grid item xs sx={{ ml: 2 }}>
+                  <TextBlock gutterBottom variant="h4">
+                    {`${userData?.firstName} ${userData?.lastName}`}
+                  </TextBlock>
+                  <TextBlock gutterBottom variant="h5">
                     {userName}
-                  </Typography>
+                  </TextBlock>
                 </Grid>
               </Grid>
               <Grid item>
@@ -122,9 +130,7 @@ const Profile = () => {
         >
           <Grid container spacing={2} direction="row" justifyContent="flex-end">
             <Grid item xs={8} container direction="column">
-              <Grid item xs zeroMinWidth>
-                <h1>Content</h1>
-              </Grid>
+              <Grid item xs zeroMinWidth></Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
               <h1></h1>
