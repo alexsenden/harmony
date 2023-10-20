@@ -6,5 +6,6 @@ const router = express.Router()
 
 router.post('/', postController.post)
 router.get('/', postController.get)
+router.post('/like', postController.get)
 
 export default router

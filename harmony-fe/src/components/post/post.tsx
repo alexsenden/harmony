@@ -19,7 +19,9 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined'
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined'
 import SendRoundedIcon from '@mui/icons-material/SendRounded'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { UserContext } from '../../contexts/user'
 
 interface PostProps {
   title: string
@@ -33,7 +35,21 @@ const Post = ({ title, name, numComments, numLikes, postId }: PostProps) => {
   const [isLiked, setIsLiked] = useState(false)
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false)
 
+  const user = useContext(UserContext)
+
+  const [
+    toggleLikePost,
+    toggleLikeResponse,
+    toggleLikeError,
+    toggleLikeLoading,
+  ] = useHttpRequest({
+    url: '/post/like',
+    method: HttpMethod.POST,
+    body: { postId, userId: user?.userId },
+  })
+
   const toggleLike = () => {
+    toggleLikePost()
     setIsLiked(prevState => !prevState)
   }
 

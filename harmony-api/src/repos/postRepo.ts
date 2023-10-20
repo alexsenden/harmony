@@ -1,6 +1,7 @@
 import prisma from '../../prisma/prisma'
 import { PostType as PrismaPostType } from '@prisma/client'
 import { Post, PostType } from '../models/post'
+import { Like } from '../models/like'
 
 export const createPost = async (postData: Post): Promise<Post> => {
   const postResult = await prisma.post.create({
@@ -29,6 +30,17 @@ export const createPost = async (postData: Post): Promise<Post> => {
       songId: postResult.songId || undefined,
     },
   }
+}
+
+export const createLike = async (likeData: Like): Promise<Like> => {
+  const likeResult = await prisma.like.create({
+    data: {
+      userId: likeData.userId,
+      postId: likeData.postId,
+    },
+  })
+
+  return likeResult
 }
 
 export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {

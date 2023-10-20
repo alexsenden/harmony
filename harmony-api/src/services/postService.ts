@@ -4,6 +4,7 @@ import { Post, PostType } from '../models/post'
 import { validateTopicId } from './topicService'
 import { HttpError } from '../models/error/httpError'
 import { PollOption } from '../models/pollOption'
+import { Like } from '../models/like'
 
 export const createPost = async (postData?: Post): Promise<Post> => {
   const validatedPost = validatePost(postData)
@@ -25,6 +26,20 @@ export const createPost = async (postData?: Post): Promise<Post> => {
   }
 
   return postResult
+}
+
+
+export const createLike = async (
+  likeData: Like
+): Promise<Like> => {
+  if (!likeData.userId){
+    throw new HttpError("userId is required",400)
+  }
+  else if(!likeData.postId) {
+    throw new HttpError("postId is required",400)
+  }
+
+  return await postRepo.createLike(likeData)
 }
 
 export const getPostByUserId = async (
