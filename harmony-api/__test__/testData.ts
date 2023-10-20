@@ -45,7 +45,7 @@ export const FAKE_POST: Post = {
   pollOptions: [FAKE_POLL_OPTION],
 }
 
-export const FAKE_USER_1: User =  {
+export const FAKE_USER_1: User = {
   userId: 'fake-user-id-1',
   username: 'fake-user-1',
   password: 'fake-password-1',
@@ -55,7 +55,7 @@ export const FAKE_USER_1: User =  {
   lastName: 'fake-lastname-1',
 }
 
-export const FAKE_USER_2: User =  {
+export const FAKE_USER_2: User = {
   userId: 'fake-user-id-2',
   username: 'fake-user-2',
   password: 'fake-password-2',
