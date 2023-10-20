@@ -4,7 +4,6 @@ import { Post, PostField, PostType } from '../../models/post'
 import PostFormContainer from './post-form-container'
 import { PostInputField } from './post-input-field'
 import { TopicField } from './topic-field'
-import { useEffect } from 'react'
 
 export const DEFAULT_RATING = 2.5
 
