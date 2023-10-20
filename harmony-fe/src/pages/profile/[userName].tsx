@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   Avatar,
   Button,
@@ -15,12 +15,17 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Post } from '../../models/post'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text'
+import { UserCookieContext } from '../../contexts/user'
 
 export default function Profile() {
   const router = useRouter()
   const { userName } = router.query
   const [postsFromUser, getPosts] = useState<Array<Post>>([])
   const [userData, getUser] = useState<User>()
+  const [following, setFollowing] = useState(false)
+  const [numFollowers, setNumFollowers] = useState(0)
+
+  const userCookie = useContext(UserCookieContext)
 
   //Retrieve user data
   const [getUserData, receivedData, error] = useHttpRequest({
@@ -31,7 +36,6 @@ export default function Profile() {
   useEffect(() => {
     if (userName) {
       getUserData()
-
       if (error) {
         router.replace('/error')
       }
@@ -50,9 +54,25 @@ export default function Profile() {
     method: HttpMethod.GET,
   })
 
+  //Retrieve follow data
+  const [getFollowData, receivedFollowData] = useHttpRequest({
+    url: '/follow',
+    method: HttpMethod.GET,
+    headers: { userCookie: userCookie, followingId: userData?.userId },
+  })
+
+  //Retrieve number of followers for the user
+  const [getFollowerInfo, receivedFollowerInfo] = useHttpRequest({
+    url: '/follow/followCount',
+    method: HttpMethod.GET,
+    headers: { userId: userData?.userId },
+  })
+
   useEffect(() => {
     if (userData) {
       getPostsByUserId()
+      getFollowData()
+      getFollowerInfo()
     }
   }, [userData])
 
@@ -75,6 +95,36 @@ export default function Profile() {
       ])
     }
   }, [postsReceived, postsFromUser, userData])
+
+  useEffect(() => {
+    if (receivedFollowData) {
+      setFollowing(receivedFollowData)
+    }
+  }, [receivedFollowData, userData])
+
+  useEffect(() => {
+    if (receivedFollowerInfo) {
+      setNumFollowers(receivedFollowerInfo)
+    }
+  }, [receivedFollowerInfo, userData])
+
+  //Sending follow data
+  const [setFollowActionData] = useHttpRequest({
+    url: '/follow',
+    method: HttpMethod.POST,
+    headers: { userCookie: userCookie, followingId: userData?.userId },
+    body: { followAction: !following },
+  })
+
+  function followAction() {
+    setFollowActionData()
+    if (following) {
+      setNumFollowers(numFollowers - 1)
+    } else {
+      setNumFollowers(numFollowers + 1)
+    }
+    setFollowing(!following)
+  }
 
   const [tabs, updateTabs] = useState<Array<TabItem>>([
     {
@@ -125,9 +175,17 @@ export default function Profile() {
                 </Grid>
               </Grid>
               <Grid item>
-                <Button className="followButton">Follow</Button>
+                {userData && (
+                  <Button
+                    className="followButton"
+                    variant={following ? 'contained' : 'outlined'}
+                    onClick={followAction}
+                  >
+                    {following ? 'Un-Follow' : 'Follow'}
+                  </Button>
+                )}
                 <br />
-                <TextBlock>100 Trillion Followers</TextBlock>
+                <TextBlock> {numFollowers} Follower(s)</TextBlock>
               </Grid>
             </Grid>
           </Grid>
