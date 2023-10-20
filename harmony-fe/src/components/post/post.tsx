@@ -121,7 +121,7 @@ const Post = ({
               {topicName} {topicContext}
             </TextBlock>
             <Divider sx={{ my: 1 }} />
-            {rating && (
+            {rating && postType === PostType.REVIEW && (
               <Rating
                 size="large"
                 value={rating}
