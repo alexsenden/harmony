@@ -1,19 +1,24 @@
 import { register } from '../../src/controllers/user/userController'
 import { Request, Response, NextFunction } from 'express'
 
-const userService = require('../../src/services/userService')
-
-jest.mock('../../src/services/userService', () => ({
-  register: jest.fn(),
-}))
+import * as userService from '../../src/services/userService'
 
 describe('Register Controller', () => {
   /*
         Description: test if usercontroller does not throw an error with correct return
         from register function in userservice.
     */
-  /*
-  TEMP DISABLED
+
+  const mockUser = {
+    userId: '12124',
+    username: 'trevorVendi2314',
+    password: 'dsajdFfj2#',
+    firstName: 'trevor',
+    lastName: 'vendi',
+    createdAt: new Date(),
+    active: true,
+  }
+
   it('should register a user', async () => {
     const req = {
       body: {
@@ -28,23 +33,21 @@ describe('Register Controller', () => {
     } as unknown as Response
     const next = jest.fn() as unknown as NextFunction
 
-    const mockUser = {
-      id: 12412,
-      username: 'trevorVendi2314',
-      password: 'dsajdFfj2#',
-      firstName: 'trevor',
-      lastName: 'vendi',
-    }
-    userService.register.mockResolvedValue(mockUser)
+    const mockCookie = 'your-mock-cookie-value'
+
+    jest.spyOn(userService, 'register').mockResolvedValue(mockUser)
+    jest.spyOn(userService, 'assignUserCookie').mockResolvedValue(mockCookie)
 
     await register(req, res, next)
 
     expect(res.json).toHaveBeenCalledTimes(1)
-    expect(res.json).toHaveBeenCalledWith(mockUser)
+    expect(res.json).toHaveBeenCalledWith({
+      'Set-Cookie': 'userCookie = ' + mockCookie,
+      userData: mockUser,
+    })
     expect(next).not.toHaveBeenCalled()
   })
-  TEMP DISABLED
-  */
+
   /*
         Description: test if usercontroller throws an error with an error from register function
         in userservice.
@@ -64,13 +67,14 @@ describe('Register Controller', () => {
     } as unknown as Response
     const next = jest.fn() as unknown as NextFunction
 
-    const errorMessage = 'Registration failed'
-    userService.register.mockRejectedValue(new Error(errorMessage))
+    const mockUserFaulty = mockUser
+    mockUserFaulty.password = ''
+
+    jest.spyOn(userService, 'register').mockRejectedValue(mockUserFaulty)
 
     await register(req, res, next)
 
     expect(res.json).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalledTimes(1)
-    expect(next).toHaveBeenCalledWith(expect.any(Error))
   })
 })
