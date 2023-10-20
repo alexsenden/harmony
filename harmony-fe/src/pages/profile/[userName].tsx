@@ -10,6 +10,7 @@ import { User } from '../../models/user'
 import TextBlock from '../../components/text'
 import NavButton from '../../components/appBar/navButton.styled'
 import { UserContext, UserCookieContext } from '../../contexts/user'
+import FollowingButton from '../../components/following-button'
 
 const Profile = () => {
   const router = useRouter()
@@ -167,23 +168,20 @@ const Profile = () => {
                   justifyContent="flex-start"
                   mx={3}
                 >
-                  {user && (
-                    <NavButton
-                      className="followButton"
-                      variant={following ? 'contained' : 'outlined'}
-                      onClick={followAction}
-                    >
+                  {user && user?.username !== userName && (
+                    <FollowingButton variant="outlined" onClick={followAction}>
                       {following ? 'Un-Follow' : 'Follow'}
-                    </NavButton>
+                    </FollowingButton>
                   )}
                   <br />
-                  <TextBlock> {numFollowers} Follower(s)</TextBlock>
+                  <TextBlock>{`${numFollowers} Follower${
+                    numFollowers === 1 ? '' : 's'
+                  }`}</TextBlock>
                 </Box>
               </Grid>
             </Grid>
           </Grid>
         </Paper>
-
         <Paper
           sx={{
             p: 2,
@@ -197,7 +195,7 @@ const Profile = () => {
               <Grid item xs zeroMinWidth></Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <h1>Info</h1>
+              <h1></h1>
             </Grid>
             <Grid item xs={8} container direction="column">
               <Grid item xs zeroMinWidth>
@@ -205,7 +203,7 @@ const Profile = () => {
               </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <p>Profile Information</p>
+              <p></p>
             </Grid>
           </Grid>
         </Paper>
