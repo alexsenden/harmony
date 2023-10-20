@@ -6,7 +6,7 @@ export default function PostCard(post: Post) {
   return (
     <PostTemplate
       title={post.title}
-      name={post.userId}
+      name={post.username || 'Default'}
       numComments={0}
       numLikes={0}
       postId={post.postId}
