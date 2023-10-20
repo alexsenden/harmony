@@ -111,8 +111,8 @@ export const validateBody = (postData: Post): Array<string> => {
   if (!postData.body) {
     return ['body field is required to create a new discussion or review post']
   }
-  if (postData.title.length > 2000) {
-    return ['title field must be less than 1000 characters']
+  if (postData.body.length > 2000) {
+    return ['body field must be less than 2000 characters']
   }
 
   return []
@@ -144,7 +144,9 @@ export const validatePollOptions = (postData: Post): Array<string> => {
           `pollOptions[${i}] field failed validation: field must be non-empty to create a new poll post`
         )
       } else if (postData.pollOptions[i].option.length > 100) {
-        errorMessages.push('title field must be less than 1000 characters')
+        errorMessages.push(
+          `pollOptions[${i}] field must be less than 100 characters`
+        )
       }
     }
   }
