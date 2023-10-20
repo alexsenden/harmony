@@ -10,6 +10,7 @@ export type Post = {
   body?: string
   rating?: number
   pollOptions?: Array<PollOption>
+  username?: string
 }
 
 export enum PostType {
