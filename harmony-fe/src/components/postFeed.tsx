@@ -4,30 +4,31 @@ import PostCard from '../components/post/postCard'
 import TextBlock from './text'
 import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
 
+const NO_POSTS_HERE = 'No posts here'
+
 interface PostFeedProps {
   url: string
+  noResultsText?: string
 }
 
-const PostFeed = ({ url }: PostFeedProps) => {
+const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
   const [getPosts, posts] = useHttpRequest({
     url: url,
     method: HttpMethod.GET,
   })
 
   useEffect(() => {
-    if (url) {
-      getPosts()
-    }
-  }, [])
+    getPosts()
+  }, [url])
 
   const mappedPosts = (posts as Array<Post>) || []
 
-  return mappedPosts.length > 0 ? (
+  return mappedPosts.length > 0 && url ? (
     mappedPosts.map(post => {
       return <PostCard {...post} />
     })
   ) : (
-    <TextBlock>No posts here</TextBlock>
+    <TextBlock align="center">{noResultsText}</TextBlock>
   )
 }
 

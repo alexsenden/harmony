@@ -19,16 +19,16 @@ const FilterPostButtons = ({
       justifyContent="center"
     >
       <Button
-        variant={activeButton === FeedMode.FOLLOWING ? 'contained' : 'outlined'}
-        onClick={() => handleButtonClick(FeedMode.FOLLOWING)}
-      >
-        Following
-      </Button>
-      <Button
         variant={activeButton === FeedMode.TRENDING ? 'contained' : 'outlined'}
         onClick={() => handleButtonClick(FeedMode.TRENDING)}
       >
         Trending
+      </Button>
+      <Button
+        variant={activeButton === FeedMode.FOLLOWING ? 'contained' : 'outlined'}
+        onClick={() => handleButtonClick(FeedMode.FOLLOWING)}
+      >
+        Following
       </Button>
     </Stack>
   )

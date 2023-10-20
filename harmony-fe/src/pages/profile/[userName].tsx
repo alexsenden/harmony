@@ -8,11 +8,11 @@ import {
   Paper,
   Typography,
 } from '@mui/material'
+
 import HarmonyAppBar from '../../components/appBar/appBar'
-import TabLayout, { TabItem } from '../../components/tab-layout'
+import TabLayout from '../../components/tab-layout'
 import PostFeed from '../../components/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
-import { Post } from '../../models/post'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text'
 import { UserContext } from '../../contexts/user'

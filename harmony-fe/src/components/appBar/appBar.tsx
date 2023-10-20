@@ -77,9 +77,10 @@ const AppBar = () => {
                 Profile
               </Button>
             )}
+            {/* Commenting this out for sprint 2 since it it unimplemented
             <Button href="/home" className="navButton" color="inherit">
               Search
-            </Button>
+            </Button> */}
             {user && (
               <Button
                 className="navButton"

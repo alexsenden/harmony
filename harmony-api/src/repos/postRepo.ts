@@ -42,6 +42,72 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
     include: {
       user: true,
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  return posts.map(post => {
+    return {
+      postId: post.postId,
+      userId: post.userId,
+      title: post.title,
+      topicId: {
+        artistId: post.artistId || undefined,
+        albumId: post.albumId || undefined,
+        songId: post.songId || undefined,
+      },
+      postType: PostType[post.postType],
+      username: post.user.username,
+    }
+  })
+}
+
+export const getTrendingPosts = async (): Promise<Array<Post>> => {
+  const posts = await prisma.post.findMany({
+    include: {
+      user: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  return posts.map(post => {
+    return {
+      postId: post.postId,
+      userId: post.userId,
+      title: post.title,
+      topicId: {
+        artistId: post.artistId || undefined,
+        albumId: post.albumId || undefined,
+        songId: post.songId || undefined,
+      },
+      postType: PostType[post.postType],
+      username: post.user.username,
+    }
+  })
+}
+
+export const getFollowingPosts = async (
+  userId: string
+): Promise<Array<Post>> => {
+  const posts = await prisma.post.findMany({
+    where: {
+      user: {
+        followers: {
+          some: {
+            followerId: userId,
+          },
+        },
+      },
+    },
+    include: {
+      user: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
   })
 
   return posts.map(post => {
