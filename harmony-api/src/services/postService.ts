@@ -37,6 +37,26 @@ export const getPostByUserId = async (
   return await postRepo.getPostByUserId(userId)
 }
 
+export const getPostById = async (postId?: string): Promise<Post> => {
+  if (!postId) {
+    throw new HttpError('field postId is required to fetch post', 400)
+  }
+
+  return postRepo.getPostById(postId)
+}
+
+export const getTrendingPosts = async (): Promise<Array<Post>> => {
+  return postRepo.getTrendingPosts()
+}
+
+export const getFollowingPosts = async (userId?: string) => {
+  if (!userId) {
+    return []
+  }
+
+  return await postRepo.getFollowingPosts(userId)
+}
+
 export const validatePost = (postData?: Post): Post => {
   if (!postData) {
     throw new HttpError('Post data is required to create new post', 400)
@@ -80,6 +100,9 @@ export const validateTitle = (postData?: Post): Array<string> => {
   if (!postData?.title) {
     return ['title field is required to create a new post']
   }
+  if (postData.title.length > 150) {
+    return ['title field must be less than 150 characters']
+  }
 
   return []
 }
@@ -87,6 +110,9 @@ export const validateTitle = (postData?: Post): Array<string> => {
 export const validateBody = (postData: Post): Array<string> => {
   if (!postData.body) {
     return ['body field is required to create a new discussion or review post']
+  }
+  if (postData.body.length > 2000) {
+    return ['body field must be less than 2000 characters']
   }
 
   return []
@@ -116,6 +142,10 @@ export const validatePollOptions = (postData: Post): Array<string> => {
       if (!postData.pollOptions[i].option) {
         errorMessages.push(
           `pollOptions[${i}] field failed validation: field must be non-empty to create a new poll post`
+        )
+      } else if (postData.pollOptions[i].option.length > 100) {
+        errorMessages.push(
+          `pollOptions[${i}] field must be less than 100 characters`
         )
       }
     }

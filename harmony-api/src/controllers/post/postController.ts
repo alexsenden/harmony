@@ -23,3 +23,18 @@ export const get = async (req: Request, res: Response, next: NextFunction) => {
     next(error)
   }
 }
+
+export const getPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const postId =
+    typeof req.params.postId === 'string' ? req.params.postId : undefined
+
+  try {
+    res.json(await postService.getPostById(postId))
+  } catch (error) {
+    next(error)
+  }
+}

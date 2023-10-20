@@ -9,13 +9,17 @@ export interface TabItem {
 
 interface TabLayoutProps extends React.ComponentProps<typeof Tabs> {
   tabs: Array<TabItem>
+  onTabChange?: () => void
 }
 
-export const TabLayout = ({ tabs, ...props }: TabLayoutProps) => {
+export const TabLayout = ({ tabs, onTabChange, ...props }: TabLayoutProps) => {
   const [value, setValue] = useState(0)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
+    if (onTabChange) {
+      onTabChange()
+    }
   }
 
   return (

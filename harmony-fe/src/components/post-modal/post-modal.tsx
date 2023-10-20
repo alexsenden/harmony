@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Button, Dialog, DialogTitle } from '@mui/material'
 
 import TabLayout, { TabItem } from '../tab-layout'
@@ -6,19 +6,30 @@ import { Post, PostField, PostType } from '../../models/post'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { DiscussionPostForm } from './discussion-post-form'
 import { PollPostForm } from './poll-post-form'
-import { ReviewPostForm } from './review-post-form'
+import { DEFAULT_RATING, ReviewPostForm } from './review-post-form'
 import { PollOption } from '../../models/pollOption'
+import { UserContext } from '../../contexts/user'
 
 interface PostModalProps {
   open: boolean
   onClose: () => void
 }
 
-const DEFAULT_POST_STATE = {
-  userId: 'b12c47f8-036c-4bfd-8658-230e8fa4d7cb',
-} as Post
-
 export const PostModal = ({ open, onClose }: PostModalProps) => {
+  const user = useContext(UserContext)
+
+  useEffect(() => {
+    setPostData({
+      ...postData,
+      userId: user?.userId || '',
+    })
+  }, [user])
+
+  const DEFAULT_POST_STATE = {
+    rating: DEFAULT_RATING,
+    userId: user?.userId,
+  } as Post
+
   const [postData, setPostData] = useState<Post>(DEFAULT_POST_STATE)
 
   const onChange = (argName: PostField, argValue: unknown) => {
@@ -58,7 +69,6 @@ export const PostModal = ({ open, onClose }: PostModalProps) => {
 
   useEffect(() => {
     if (!createPostLoading && createPostResponse) {
-      setPostData(DEFAULT_POST_STATE)
       onClose()
     }
   }, [createPostLoading])
@@ -108,7 +118,11 @@ export const PostModal = ({ open, onClose }: PostModalProps) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>New Post</DialogTitle>
-      <TabLayout tabs={tabs} variant="fullWidth" />
+      <TabLayout
+        tabs={tabs}
+        variant="fullWidth"
+        onTabChange={() => setPostData(DEFAULT_POST_STATE)}
+      />
       <Button variant="outlined" onClick={createPost} sx={{ m: 3 }}>
         Create Post
       </Button>

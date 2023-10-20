@@ -13,7 +13,7 @@ export const getSongTopicByPartialName = async (
   const songs = await prisma.$queryRaw<Array<TPartialNameSong>>`
     select song_name, song_id 
     from song 
-    where song_name like ${`${partialName}%`}
+    where song_name ilike ${`${partialName}%`}
     limit 5;
   `
 
