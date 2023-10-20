@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   Avatar,
   Button,
@@ -15,11 +15,13 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Post } from '../../models/post'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text'
+import { UserContext } from '../../contexts/user'
 
 const Profile = () => {
   const router = useRouter()
   const { userName } = router.query
   const [userData, getUser] = useState<User>()
+  const user = useContext(UserContext)
 
   //Retrieve user data
   const [getUserData, receivedData, error] = useHttpRequest({
@@ -100,7 +102,9 @@ const Profile = () => {
                 </Grid>
               </Grid>
               <Grid item>
-                <Button className="followButton">Follow</Button>
+                {user?.username !== userName && (
+                  <Button className="followButton">Follow</Button>
+                )}
                 <br />
                 <TextBlock>100 Trillion Followers</TextBlock>
               </Grid>
@@ -123,7 +127,7 @@ const Profile = () => {
               </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <h1>Info</h1>
+              <h1></h1>
             </Grid>
             <Grid item xs={8} container direction="column">
               <Grid item xs zeroMinWidth>
@@ -131,7 +135,7 @@ const Profile = () => {
               </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <p>Profile Information</p>
+              <p></p>
             </Grid>
           </Grid>
         </Paper>
