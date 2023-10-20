@@ -1,5 +1,5 @@
 import { Container } from '@mui/material'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 
 import HarmonyAppBar from '../../components/appBar'
 import FilterPostButtons from '../../components/filterPostButtons'
@@ -14,7 +14,7 @@ export enum FeedMode {
 const HomePage = () => {
   const user = useContext(UserContext)
 
-  const trendingFeedUrl = `/post/trending`
+  const trendingFeedUrl = '/post/trending'
   const followingFeedUrl = `/post/following?userId=${user?.userId}`
 
   const handleButtonClick = (mode: FeedMode) => {

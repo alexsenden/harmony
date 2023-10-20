@@ -3,7 +3,6 @@ import {
   CardActions,
   CardContent,
   Button,
-  Avatar,
   Stack,
   Box,
   Divider,

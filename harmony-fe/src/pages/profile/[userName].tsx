@@ -8,7 +8,6 @@ import PostFeed from '../../components/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text'
-import NavButton from '../../components/appBar/navButton.styled'
 import { UserContext, UserCookieContext } from '../../contexts/user'
 import FollowingButton from '../../components/following-button'
 
