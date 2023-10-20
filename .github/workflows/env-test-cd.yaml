@@ -1,0 +1,28 @@
+name: env-test-cd
+on: pull_request
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./harmony-api
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm ci
+      - name: Replace .env
+        run: |
+          sed -i "s/POSTGRES_USER=.*/POSTGRES_USER=\${{ secrets.POSTGRES_USER_CI }}/" ./environment/.env.prod
+          sed -i "s/POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=\${{ secrets.POSTGRES_PASSWORD_CI }}/" ./environment/.env.prod
+          sed -i "s/POSTGRES_PORT=.*/POSTGRES_PORT=\${{ secrets.POSTGRES_PORT_CI }}/" ./environment/.env.prod
+          sed -i "s/POSTGRES_DB_NAME=.*/POSTGRES_DB_NAME=\${{ secrets.POSTGRES_DB_NAME_CI }}/" ./environment/.env.prod
+          sed -i "s/DB_HOST=.*/DB_HOST=\${{ secrets.azureHost2 }}/" ./environment/.env.prod
+          sed -i "s#POSTGRES_URL=\"postgresql://.*\"#POSTGRES_URL=\"postgresql://\${{ secrets.POSTGRES_USER_CI }}:\${{ secrets.POSTGRES_PASSWORD_CI }}@\${{ secrets.azureHost2 }}:\${{ secrets.POSTGRES_PORT_CI }}/\${{ secrets.POSTGRES_DB_NAME_CI }}\"#" ./environment/.env.prod
+      - name: Test Connection to DB
+        run: |
+          POSTGRES_URL=$(grep "POSTGRES_URL" ./environment/.env.prod | cut -d'=' -f2)
+          echo "Testing database connection to $POSTGRES_URL"
+          psql "$POSTGRES_URL"
