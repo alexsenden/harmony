@@ -42,7 +42,11 @@ export const removeUserCookie = async (cookie: string) => {
 }
 
 export const getUserFromCookie = async (token: string): Promise<User> => {
-  return await userRepo.getUserFromCookie(token)
+  try {
+    return await userRepo.getUserFromCookie(token)
+  } catch (error) {
+    throw new HttpError('No user linked to cookie', 404)
+  }
 }
 
 const validateUserRegistration = (userData: User) => {
