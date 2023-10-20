@@ -1,14 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-} from '@mui/material'
+import { Avatar, Box, Container, Grid, Paper } from '@mui/material'
 
 import HarmonyAppBar from '../../components/appBar/appBar'
 import TabLayout from '../../components/tab-layout'
@@ -16,13 +8,17 @@ import PostFeed from '../../components/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text'
-import { UserContext } from '../../contexts/user'
 import NavButton from '../../components/appBar/navButton.styled'
+import { UserContext, UserCookieContext } from '../../contexts/user'
 
 const Profile = () => {
   const router = useRouter()
   const { userName } = router.query
   const [userData, setUser] = useState<User>()
+  const [following, setFollowing] = useState(false)
+  const [numFollowers, setNumFollowers] = useState(0)
+
+  const userCookie = useContext(UserCookieContext)
   const user = useContext(UserContext)
 
   //Retrieve user data
@@ -34,7 +30,6 @@ const Profile = () => {
   useEffect(() => {
     if (userName) {
       getUserData()
-
       if (error) {
         router.replace('/error')
       }
@@ -46,6 +41,59 @@ const Profile = () => {
       setUser(receivedData)
     }
   }, [receivedData, userData])
+
+  //Retrieve follow data
+  const [getFollowData, receivedFollowData] = useHttpRequest({
+    url: '/follow',
+    method: HttpMethod.GET,
+    headers: { userCookie: userCookie, followingId: userData?.userId },
+  })
+
+  //Retrieve number of followers for the user
+  const [getFollowerInfo, receivedFollowerInfo] = useHttpRequest({
+    url: '/follow/followCount',
+    method: HttpMethod.GET,
+    headers: { userId: userData?.userId },
+  })
+
+  useEffect(() => {
+    if (userData) {
+      getFollowerInfo()
+      if (user) {
+        getFollowData()
+      }
+    }
+  }, [userData])
+
+  useEffect(() => {
+    if (receivedFollowData) {
+      setFollowing(receivedFollowData)
+    }
+  }, [receivedFollowData, userData])
+
+  useEffect(() => {
+    if (receivedFollowerInfo) {
+      setNumFollowers(receivedFollowerInfo)
+    }
+  }, [receivedFollowerInfo, userData])
+
+  //Sending follow data
+  const [setFollowActionData] = useHttpRequest({
+    url: '/follow',
+    method: HttpMethod.POST,
+    headers: { userCookie: userCookie, followingId: userData?.userId },
+    body: { followAction: !following },
+  })
+
+  function followAction() {
+    setFollowActionData()
+    if (following) {
+      setNumFollowers(numFollowers - 1)
+    } else {
+      setNumFollowers(numFollowers + 1)
+    }
+    setFollowing(!following)
+  }
 
   const tabs = [
     {
@@ -119,9 +167,17 @@ const Profile = () => {
                   justifyContent="flex-start"
                   mx={3}
                 >
-                  {user?.username !== userName && <NavButton>Follow</NavButton>}
+                  {user && (
+                    <NavButton
+                      className="followButton"
+                      variant={following ? 'contained' : 'outlined'}
+                      onClick={followAction}
+                    >
+                      {following ? 'Un-Follow' : 'Follow'}
+                    </NavButton>
+                  )}
                   <br />
-                  <TextBlock>100 Trillion Followers</TextBlock>
+                  <TextBlock> {numFollowers} Follower(s)</TextBlock>
                 </Box>
               </Grid>
             </Grid>
@@ -141,7 +197,7 @@ const Profile = () => {
               <Grid item xs zeroMinWidth></Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <h1></h1>
+              <h1>Info</h1>
             </Grid>
             <Grid item xs={8} container direction="column">
               <Grid item xs zeroMinWidth>
@@ -149,7 +205,7 @@ const Profile = () => {
               </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <p></p>
+              <p>Profile Information</p>
             </Grid>
           </Grid>
         </Paper>
