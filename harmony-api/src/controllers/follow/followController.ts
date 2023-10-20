@@ -27,7 +27,7 @@ export const getFollow = async (
 ) => {
   try {
     const cookie = req.headers.usercookie as string
-    const followingId = req.headers.followingId as string
+    const followingId = req.headers.followingid as string
     res.json(await followService.getFollow(cookie, followingId))
   } catch (error) {
     next(error)
