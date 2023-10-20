@@ -154,3 +154,36 @@ export const getFollowingPosts = async (
     }
   })
 }
+
+export const getPostById = async (postId: string): Promise<Post> => {
+  const post = await prisma.post.findUniqueOrThrow({
+    where: {
+      postId: postId,
+    },
+    include: {
+      user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
+    },
+  })
+
+  return {
+    postId: post.postId,
+    userId: post.userId,
+    title: post.title,
+    topicId: {
+      artistId: post.artistId || undefined,
+      albumId: post.albumId || undefined,
+      songId: post.songId || undefined,
+    },
+    postType: PostType[post.postType],
+    username: post.user.username,
+    body: post.content || undefined,
+    pollOptions: post.pollOptions,
+    rating: Number(post.rating) || undefined,
+    topicName:
+      post.song?.songName || post.album?.albumName || post.artist?.artistName,
+  }
+}

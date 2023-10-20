@@ -12,4 +12,6 @@ router.use('/following', followingRouter)
 router.post('/', postController.post)
 router.get('/', postController.get)
 
+router.get('/:postId', postController.getPost)
+
 export default router

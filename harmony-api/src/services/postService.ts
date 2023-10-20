@@ -37,6 +37,14 @@ export const getPostByUserId = async (
   return await postRepo.getPostByUserId(userId)
 }
 
+export const getPostById = async (postId?: string): Promise<Post> => {
+  if (!postId) {
+    throw new HttpError('field postId is required to fetch post', 400)
+  }
+
+  return postRepo.getPostById(postId)
+}
+
 export const getTrendingPosts = async (): Promise<Array<Post>> => {
   return postRepo.getTrendingPosts()
 }
