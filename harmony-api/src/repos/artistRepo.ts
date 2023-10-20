@@ -13,7 +13,7 @@ export const getArtistTopicByPartialName = async (
   const artists = await prisma.$queryRaw<Array<TPartialNameArtist>>`
     select artist_name, artist_id 
     from artist 
-    where artist_name like ${`${partialName}%`}
+    where artist_name ilike ${`${partialName}%`}
     limit 5;
   `
 

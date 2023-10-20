@@ -72,7 +72,7 @@ const LoginPage = () => {
             </TextBlock>
             <TextField
               onChange={event => (loginData.username = event.target.value)}
-              label="username"
+              label="Username"
               variant="outlined"
               placeholder="Enter username"
               sx={{
@@ -84,7 +84,7 @@ const LoginPage = () => {
             />
             <TextField
               onChange={event => (loginData.password = event.target.value)}
-              label="password"
+              label="Password"
               type="password"
               variant="outlined"
               placeholder="Enter password"

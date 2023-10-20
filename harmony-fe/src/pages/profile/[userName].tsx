@@ -1,27 +1,20 @@
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
-import {
-  Avatar,
-  Button,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-} from '@mui/material'
+import { Avatar, Box, Container, Grid, Paper } from '@mui/material'
+
 import HarmonyAppBar from '../../components/appBar/appBar'
-import TabLayout, { TabItem } from '../../components/tab-layout'
+import TabLayout from '../../components/tab-layout'
 import PostFeed from '../../components/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
-import { Post } from '../../models/post'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text'
 import { UserContext, UserCookieContext } from '../../contexts/user'
+import FollowingButton from '../../components/following-button'
 
-export default function Profile() {
+const Profile = () => {
   const router = useRouter()
   const { userName } = router.query
-  const [postsFromUser, getPosts] = useState<Array<Post>>([])
-  const [userData, getUser] = useState<User>()
+  const [userData, setUser] = useState<User>()
   const [following, setFollowing] = useState(false)
   const [numFollowers, setNumFollowers] = useState(0)
 
@@ -45,15 +38,9 @@ export default function Profile() {
 
   useEffect(() => {
     if (receivedData) {
-      getUser(receivedData)
+      setUser(receivedData)
     }
   }, [receivedData, userData])
-
-  //Retrieve posts
-  const [getPostsByUserId, postsReceived] = useHttpRequest({
-    url: `/post/?userId=${userData?.userId}`,
-    method: HttpMethod.GET,
-  })
 
   //Retrieve follow data
   const [getFollowData, receivedFollowData] = useHttpRequest({
@@ -71,33 +58,12 @@ export default function Profile() {
 
   useEffect(() => {
     if (userData) {
-      getPostsByUserId()
       getFollowerInfo()
       if (user) {
         getFollowData()
       }
     }
   }, [userData])
-
-  useEffect(() => {
-    if (postsReceived) {
-      getPosts(postsReceived)
-      updateTabs([
-        {
-          label: 'All Content',
-          tab: <>{PostFeed(postsFromUser)}</>,
-        },
-        {
-          label: 'Posts',
-          tab: <>{PostFeed(postsFromUser)}</>,
-        },
-        {
-          label: 'Comments',
-          tab: <TextBlock>No Comments Available</TextBlock>,
-        },
-      ])
-    }
-  }, [postsReceived, postsFromUser, userData])
 
   useEffect(() => {
     if (receivedFollowData) {
@@ -129,25 +95,39 @@ export default function Profile() {
     setFollowing(!following)
   }
 
-  const [tabs, updateTabs] = useState<Array<TabItem>>([
-    {
-      label: 'All Content',
-      tab: <TextBlock>No Content Available</TextBlock>,
-    },
+  const tabs = [
+    // Commented out for the sprint 2 review
+    // {
+    //   label: 'All Content',
+    //   tab: (
+    //     <PostFeed
+    //       url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
+    //       noResultsText="No Content Available"
+    //     />
+    //   ),
+    // },
     {
       label: 'Posts',
-      tab: <TextBlock>No Posts Available</TextBlock>,
+      tab: (
+        <PostFeed
+          url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
+        />
+      ),
     },
     {
       label: 'Comments',
-      tab: <TextBlock>No Comments Available</TextBlock>,
+      tab: (
+        <TextBlock align="center" sx={{ mt: 2 }}>
+          No Comments Available
+        </TextBlock>
+      ),
     },
-  ])
+  ]
 
   return (
     <>
       <HarmonyAppBar />
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{ mt: 2 }}>
         <Paper
           sx={{
             p: 2,
@@ -166,34 +146,42 @@ export default function Profile() {
             <Grid item>
               <Avatar
                 src="/harmony1.png"
-                sx={{ height: '200px', width: '200px' }}
+                sx={{ height: '200px', width: '200px', ml: 3 }}
               ></Avatar>
             </Grid>
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={2}>
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" component="div">
+                <Grid item xs sx={{ ml: 2 }}>
+                  <TextBlock gutterBottom variant="h4">
+                    {`${userData?.firstName} ${userData?.lastName}`}
+                  </TextBlock>
+                  <TextBlock gutterBottom variant="h5">
                     {userName}
-                  </Typography>
+                  </TextBlock>
                 </Grid>
               </Grid>
               <Grid item>
-                {user && (
-                  <Button
-                    className="followButton"
-                    variant={following ? 'contained' : 'outlined'}
-                    onClick={followAction}
-                  >
-                    {following ? 'Un-Follow' : 'Follow'}
-                  </Button>
-                )}
-                <br />
-                <TextBlock> {numFollowers} Follower(s)</TextBlock>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  mx={3}
+                >
+                  {user && user?.username !== userName && (
+                    <FollowingButton variant="outlined" onClick={followAction}>
+                      {following ? 'Un-Follow' : 'Follow'}
+                    </FollowingButton>
+                  )}
+                  <br />
+                  <TextBlock>{`${numFollowers} Follower${
+                    numFollowers === 1 ? '' : 's'
+                  }`}</TextBlock>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
         </Paper>
-
         <Paper
           sx={{
             p: 2,
@@ -204,12 +192,10 @@ export default function Profile() {
         >
           <Grid container spacing={2} direction="row" justifyContent="flex-end">
             <Grid item xs={8} container direction="column">
-              <Grid item xs zeroMinWidth>
-                <h1>Content</h1>
-              </Grid>
+              <Grid item xs zeroMinWidth></Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <h1>Info</h1>
+              <h1></h1>
             </Grid>
             <Grid item xs={8} container direction="column">
               <Grid item xs zeroMinWidth>
@@ -217,7 +203,7 @@ export default function Profile() {
               </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <p>Profile Information</p>
+              <p></p>
             </Grid>
           </Grid>
         </Paper>
@@ -225,3 +211,5 @@ export default function Profile() {
     </>
   )
 }
+
+export default Profile

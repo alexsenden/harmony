@@ -1,24 +1,44 @@
 import { Container } from '@mui/material'
+import { useContext, useState } from 'react'
+
 import HarmonyAppBar from '../../components/appBar'
-import PostContainer from '../../components/postContainer/postContainer'
-import { useState } from 'react'
 import FilterPostButtons from '../../components/filterPostButtons'
+import PostFeed from '../../components/postFeed'
+import { UserContext } from '../../contexts/user'
+
+export enum FeedMode {
+  FOLLOWING = 'following',
+  TRENDING = 'trending',
+}
 
 const HomePage = () => {
-  const [activeButton, setActiveButton] = useState('followed')
+  const user = useContext(UserContext)
 
-  const handleButtonClick = (button: string) => {
-    setActiveButton(button)
+  const trendingFeedUrl = '/post/trending'
+  const followingFeedUrl = `/post/following?userId=${user?.userId}`
+
+  const handleButtonClick = (mode: FeedMode) => {
+    setFeedMode(mode)
   }
+  const [feedMode, setFeedMode] = useState<FeedMode>(FeedMode.TRENDING)
+
+  const feedUrl =
+    feedMode === FeedMode.TRENDING ? trendingFeedUrl : followingFeedUrl
+
+  const noResultsText =
+    feedMode === FeedMode.TRENDING || user
+      ? undefined
+      : 'Log in to view posts by people you follow!'
+
   return (
     <>
       <HarmonyAppBar />
       <Container maxWidth="xl">
         <FilterPostButtons
-          activeButton={activeButton}
+          activeButton={feedMode}
           handleButtonClick={handleButtonClick}
         />
-        <PostContainer contentType={activeButton} />
+        <PostFeed url={feedUrl} noResultsText={noResultsText} />
       </Container>
     </>
   )

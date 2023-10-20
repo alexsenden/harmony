@@ -41,6 +41,13 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
     },
     include: {
       user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
     },
   })
 
@@ -56,6 +63,127 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
       },
       postType: PostType[post.postType],
       username: post.user.username,
+      body: post.content || undefined,
+      pollOptions: post.pollOptions,
+      rating: Number(post.rating) || undefined,
+      topicName:
+        post.song?.songName || post.album?.albumName || post.artist?.artistName,
     }
   })
+}
+
+export const getTrendingPosts = async (): Promise<Array<Post>> => {
+  const posts = await prisma.post.findMany({
+    include: {
+      user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  return posts.map(post => {
+    return {
+      postId: post.postId,
+      userId: post.userId,
+      title: post.title,
+      topicId: {
+        artistId: post.artistId || undefined,
+        albumId: post.albumId || undefined,
+        songId: post.songId || undefined,
+      },
+      postType: PostType[post.postType],
+      username: post.user.username,
+      body: post.content || undefined,
+      pollOptions: post.pollOptions,
+      rating: Number(post.rating) || undefined,
+      topicName:
+        post.song?.songName || post.album?.albumName || post.artist?.artistName,
+    }
+  })
+}
+
+export const getFollowingPosts = async (
+  userId: string
+): Promise<Array<Post>> => {
+  const posts = await prisma.post.findMany({
+    where: {
+      user: {
+        follows: {
+          some: {
+            followerId: {
+              equals: userId,
+            },
+          },
+        },
+      },
+    },
+    include: {
+      user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  return posts.map(post => {
+    return {
+      postId: post.postId,
+      userId: post.userId,
+      title: post.title,
+      topicId: {
+        artistId: post.artistId || undefined,
+        albumId: post.albumId || undefined,
+        songId: post.songId || undefined,
+      },
+      postType: PostType[post.postType],
+      username: post.user.username,
+      body: post.content || undefined,
+      pollOptions: post.pollOptions,
+      rating: Number(post.rating) || undefined,
+      topicName:
+        post.song?.songName || post.album?.albumName || post.artist?.artistName,
+    }
+  })
+}
+
+export const getPostById = async (postId: string): Promise<Post> => {
+  const post = await prisma.post.findUniqueOrThrow({
+    where: {
+      postId: postId,
+    },
+    include: {
+      user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
+    },
+  })
+
+  return {
+    postId: post.postId,
+    userId: post.userId,
+    title: post.title,
+    topicId: {
+      artistId: post.artistId || undefined,
+      albumId: post.albumId || undefined,
+      songId: post.songId || undefined,
+    },
+    postType: PostType[post.postType],
+    username: post.user.username,
+    body: post.content || undefined,
+    pollOptions: post.pollOptions,
+    rating: Number(post.rating) || undefined,
+    topicName:
+      post.song?.songName || post.album?.albumName || post.artist?.artistName,
+  }
 }
