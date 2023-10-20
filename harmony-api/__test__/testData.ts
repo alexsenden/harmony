@@ -64,3 +64,8 @@ export const FAKE_USER_2: User =  {
   firstName: 'fake-firstname-2',
   lastName: 'fake-lastname-2',
 }
+
+export const FAKE_USER_1_COOKIE = {
+  cookie: 'fake-user-1-cookie',
+  userId: FAKE_USER_1.userId,
+}
