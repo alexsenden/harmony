@@ -136,7 +136,7 @@ const Post = ({
           </CardContent>
 
           <CardActions>
-            <Button size="small" onClick={toggleLike}>
+            <Button disabled size="small" onClick={toggleLike}>
               {isLiked ? (
                 <ThumbUpIcon style={{ color: 'blue' }} />
               ) : (
