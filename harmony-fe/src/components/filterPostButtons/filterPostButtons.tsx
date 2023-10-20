@@ -12,7 +12,7 @@ const FilterPostButtons = ({
 }: FilterPostButtonsProps) => {
   return (
     <Stack
-      sx={{ p: 4 }}
+      sx={{ px: 4, pt: 4, pb: 2 }}
       direction="row"
       divider={<Divider orientation="vertical" flexItem />}
       spacing={2}

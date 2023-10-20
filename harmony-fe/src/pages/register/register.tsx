@@ -148,7 +148,7 @@ const RegisterPage = () => {
                   newUser.password
                 )
               }
-              label="username"
+              label="Username"
               placeholder="Enter username"
               variant="outlined"
               fullWidth
@@ -168,7 +168,7 @@ const RegisterPage = () => {
                   password.target.value
                 )
               }
-              label="password"
+              label="Password"
               placeholder="Enter password"
               type="password"
               variant="outlined"

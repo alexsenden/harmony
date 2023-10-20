@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 import {
   Avatar,
+  Box,
   Button,
   Container,
   Grid,
@@ -16,6 +17,7 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text'
 import { UserContext } from '../../contexts/user'
+import NavButton from '../../components/appBar/navButton.styled'
 
 const Profile = () => {
   const router = useRouter()
@@ -95,7 +97,7 @@ const Profile = () => {
             <Grid item>
               <Avatar
                 src="/harmony1.png"
-                sx={{ height: '200px', width: '200px' }}
+                sx={{ height: '200px', width: '200px', ml: 3 }}
               ></Avatar>
             </Grid>
             <Grid item xs={12} sm container>
@@ -110,11 +112,17 @@ const Profile = () => {
                 </Grid>
               </Grid>
               <Grid item>
-                {user?.username !== userName && (
-                  <Button className="followButton">Follow</Button>
-                )}
-                <br />
-                <TextBlock>100 Trillion Followers</TextBlock>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  mx={3}
+                >
+                  {user?.username !== userName && <NavButton>Follow</NavButton>}
+                  <br />
+                  <TextBlock>100 Trillion Followers</TextBlock>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
