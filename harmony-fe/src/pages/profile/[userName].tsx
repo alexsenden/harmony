@@ -16,10 +16,9 @@ import { Post } from '../../models/post'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text'
 
-export default function Profile() {
+const Profile = () => {
   const router = useRouter()
   const { userName } = router.query
-  const [postsFromUser, getPosts] = useState<Array<Post>>([])
   const [userData, getUser] = useState<User>()
 
   //Retrieve user data
@@ -44,52 +43,28 @@ export default function Profile() {
     }
   }, [receivedData, userData])
 
-  //Retrieve posts
-  const [getPostsByUserId, postsReceived] = useHttpRequest({
-    url: `/post/?userId=${userData?.userId}`,
-    method: HttpMethod.GET,
-  })
-
-  useEffect(() => {
-    if (userData) {
-      getPostsByUserId()
-    }
-  }, [userData])
-
-  useEffect(() => {
-    if (postsReceived) {
-      getPosts(postsReceived)
-      updateTabs([
-        {
-          label: 'All Content',
-          tab: <>{PostFeed(postsFromUser)}</>,
-        },
-        {
-          label: 'Posts',
-          tab: <>{PostFeed(postsFromUser)}</>,
-        },
-        {
-          label: 'Comments',
-          tab: <TextBlock>No Comments Available</TextBlock>,
-        },
-      ])
-    }
-  }, [postsReceived, postsFromUser, userData])
-
-  const [tabs, updateTabs] = useState<Array<TabItem>>([
+  const tabs = [
     {
       label: 'All Content',
-      tab: <TextBlock>No Content Available</TextBlock>,
+      tab: (
+        <PostFeed
+          url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
+        />
+      ),
     },
     {
       label: 'Posts',
-      tab: <TextBlock>No Posts Available</TextBlock>,
+      tab: (
+        <PostFeed
+          url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
+        />
+      ),
     },
     {
       label: 'Comments',
       tab: <TextBlock>No Comments Available</TextBlock>,
     },
-  ])
+  ]
 
   return (
     <>
@@ -164,3 +139,5 @@ export default function Profile() {
     </>
   )
 }
+
+export default Profile

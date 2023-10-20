@@ -1,9 +1,10 @@
 import React from 'react'
 import { Button, Divider, Stack } from '@mui/material'
+import { FeedMode } from '../../pages/home/home'
 
 interface FilterPostButtonsProps {
-  activeButton: string
-  handleButtonClick: (button: string) => void
+  activeButton: FeedMode
+  handleButtonClick: (button: FeedMode) => void
 }
 const FilterPostButtons = ({
   activeButton,
@@ -18,16 +19,16 @@ const FilterPostButtons = ({
       justifyContent="center"
     >
       <Button
-        variant={activeButton === 'followed' ? 'contained' : 'outlined'}
-        onClick={() => handleButtonClick('followed')}
+        variant={activeButton === FeedMode.FOLLOWING ? 'contained' : 'outlined'}
+        onClick={() => handleButtonClick(FeedMode.FOLLOWING)}
       >
-        Followed
+        Following
       </Button>
       <Button
-        variant={activeButton === 'recommended' ? 'contained' : 'outlined'}
-        onClick={() => handleButtonClick('recommended')}
+        variant={activeButton === FeedMode.TRENDING ? 'contained' : 'outlined'}
+        onClick={() => handleButtonClick(FeedMode.TRENDING)}
       >
-        Recommended
+        Trending
       </Button>
     </Stack>
   )

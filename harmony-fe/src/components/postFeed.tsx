@@ -1,14 +1,34 @@
 import { Post } from '../models/post'
-import React from 'react'
+import React, { useEffect } from 'react'
 import PostCard from '../components/post/postCard'
 import TextBlock from './text'
+import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
 
-export default function PostFeed(posts: Array<Post>) {
-  if (posts.length > 0) {
-    return posts.map(each => {
-      return <PostCard {...each} />
-    })
-  } else {
-    return <TextBlock>No posts here</TextBlock>
-  }
+interface PostFeedProps {
+  url: string
 }
+
+const PostFeed = ({ url }: PostFeedProps) => {
+  const [getPosts, posts] = useHttpRequest({
+    url: url,
+    method: HttpMethod.GET,
+  })
+
+  useEffect(() => {
+    if (url) {
+      getPosts()
+    }
+  }, [])
+
+  const mappedPosts = (posts as Array<Post>) || []
+
+  return mappedPosts.length > 0 ? (
+    mappedPosts.map(post => {
+      return <PostCard {...post} />
+    })
+  ) : (
+    <TextBlock>No posts here</TextBlock>
+  )
+}
+
+export default PostFeed
