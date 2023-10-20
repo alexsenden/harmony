@@ -15,7 +15,7 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Post } from '../../models/post'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text'
-import { UserCookieContext } from '../../contexts/user'
+import { UserContext, UserCookieContext } from '../../contexts/user'
 
 export default function Profile() {
   const router = useRouter()
@@ -26,6 +26,7 @@ export default function Profile() {
   const [numFollowers, setNumFollowers] = useState(0)
 
   const userCookie = useContext(UserCookieContext)
+  const user = useContext(UserContext)
 
   //Retrieve user data
   const [getUserData, receivedData, error] = useHttpRequest({
@@ -175,7 +176,7 @@ export default function Profile() {
                 </Grid>
               </Grid>
               <Grid item>
-                {userData && (
+                {user && (
                   <Button
                     className="followButton"
                     variant={following ? 'contained' : 'outlined'}
