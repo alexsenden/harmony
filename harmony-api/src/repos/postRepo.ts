@@ -39,6 +39,9 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
         mode: 'insensitive',
       },
     },
+    include: {
+      user: true,
+    },
   })
 
   return posts.map(post => {
@@ -52,6 +55,7 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
         songId: post.songId || undefined,
       },
       postType: PostType[post.postType],
+      username: post.user.username,
     }
   })
 }

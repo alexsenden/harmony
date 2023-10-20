@@ -90,7 +90,9 @@ const Post = ({ title, name, numComments, numLikes, postId }: PostProps) => {
           <Divider />
 
           <CardActions sx={{ display: 'flex', justifyContent: 'start' }}>
-            <TextBlock>By: {name} </TextBlock>
+            <Link href={`/profile/${name}`}>
+              <TextBlock>By: {name} </TextBlock>
+            </Link>
             <Button size="small" onClick={toggleCommentSection}>
               {numComments} comments
             </Button>
