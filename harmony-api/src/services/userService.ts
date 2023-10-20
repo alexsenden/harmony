@@ -30,15 +30,23 @@ export const login = async (loginData?: Login): Promise<User> => {
 }
 
 export const assignUserCookie = async (userData: User): Promise<String> => {
-  return userRepo.assignUserCookie(userData)
+  return await userRepo.assignUserCookie(userData)
 }
 
 export const removeUserCookie = async (cookie: string) => {
-  userRepo.removeUserCookie(cookie)
+  try {
+    await userRepo.removeUserCookie(cookie)
+  } catch (error) {
+    throw new HttpError('No user linked to cookie', 404)
+  }
 }
 
 export const getUserFromCookie = async (token: string): Promise<User> => {
-  return userRepo.getUserFromCookie(token)
+  try {
+    return await userRepo.getUserFromCookie(token)
+  } catch (error) {
+    throw new HttpError('No user linked to cookie', 404)
+  }
 }
 
 const validateUserRegistration = (userData: User) => {

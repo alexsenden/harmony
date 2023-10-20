@@ -33,5 +33,5 @@ app.use(
 // Initialize Server
 const port = process.env.PORT || 8081
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`)
+  console.log(`🚀[server]: Server is running at http://localhost:${port}`)
 })
