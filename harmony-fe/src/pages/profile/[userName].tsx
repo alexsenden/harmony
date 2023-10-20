@@ -72,8 +72,10 @@ export default function Profile() {
   useEffect(() => {
     if (userData) {
       getPostsByUserId()
-      getFollowData()
       getFollowerInfo()
+      if (user) {
+        getFollowData()
+      }
     }
   }, [userData])
 
