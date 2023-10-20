@@ -41,6 +41,10 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
     },
     include: {
       user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
     },
     orderBy: {
       createdAt: 'desc',
@@ -59,6 +63,11 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
       },
       postType: PostType[post.postType],
       username: post.user.username,
+      body: post.content || undefined,
+      pollOptions: post.pollOptions,
+      rating: Number(post.rating) || undefined,
+      topicName:
+        post.song?.songName || post.album?.albumName || post.artist?.artistName,
     }
   })
 }
@@ -67,6 +76,10 @@ export const getTrendingPosts = async (): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     include: {
       user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
     },
     orderBy: {
       createdAt: 'desc',
@@ -85,6 +98,11 @@ export const getTrendingPosts = async (): Promise<Array<Post>> => {
       },
       postType: PostType[post.postType],
       username: post.user.username,
+      body: post.content || undefined,
+      pollOptions: post.pollOptions,
+      rating: Number(post.rating) || undefined,
+      topicName:
+        post.song?.songName || post.album?.albumName || post.artist?.artistName,
     }
   })
 }
@@ -95,15 +113,21 @@ export const getFollowingPosts = async (
   const posts = await prisma.post.findMany({
     where: {
       user: {
-        followers: {
+        follows: {
           some: {
-            followerId: userId,
+            followerId: {
+              equals: userId,
+            },
           },
         },
       },
     },
     include: {
       user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
     },
     orderBy: {
       createdAt: 'desc',
@@ -122,6 +146,11 @@ export const getFollowingPosts = async (
       },
       postType: PostType[post.postType],
       username: post.user.username,
+      body: post.content || undefined,
+      pollOptions: post.pollOptions,
+      rating: Number(post.rating) || undefined,
+      topicName:
+        post.song?.songName || post.album?.albumName || post.artist?.artistName,
     }
   })
 }

@@ -97,15 +97,16 @@ const Profile = () => {
   }
 
   const tabs = [
-    {
-      label: 'All Content',
-      tab: (
-        <PostFeed
-          url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
-          noResultsText="No Content Available"
-        />
-      ),
-    },
+    // Commented out for the sprint 2 review
+    // {
+    //   label: 'All Content',
+    //   tab: (
+    //     <PostFeed
+    //       url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
+    //       noResultsText="No Content Available"
+    //     />
+    //   ),
+    // },
     {
       label: 'Posts',
       tab: (

@@ -26,6 +26,7 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
   const mappedPosts = (posts as Array<Post>) || []
 
   const renderedPosts = mappedPosts.map(post => {
+    console.log(post)
     return <PostCard {...post} />
   })
 
