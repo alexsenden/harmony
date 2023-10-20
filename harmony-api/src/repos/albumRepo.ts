@@ -13,7 +13,7 @@ export const getAlbumTopicByPartialName = async (
   const albums = await prisma.$queryRaw<Array<TPartialNameAlbum>>`
     select album_name, album_id 
     from album 
-    where album_name like ${`${partialName}%`}
+    where album_name ilike ${`${partialName}%`}
     limit 5;
   `
 

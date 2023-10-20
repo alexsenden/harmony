@@ -4,6 +4,9 @@ import { Post, PostField, PostType } from '../../models/post'
 import PostFormContainer from './post-form-container'
 import { PostInputField } from './post-input-field'
 import { TopicField } from './topic-field'
+import { useEffect } from 'react'
+
+export const DEFAULT_RATING = 2.5
 
 interface IDiscussionPostFormProps {
   errorFields: Partial<Post>
@@ -32,7 +35,7 @@ export const ReviewPostForm = ({
         />
         <Rating
           size="large"
-          defaultValue={2.5}
+          defaultValue={DEFAULT_RATING}
           precision={0.5}
           onChange={(event, newValue) => {
             onChange(PostField.RATING, newValue)

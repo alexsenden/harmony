@@ -125,6 +125,7 @@ const Post = ({
               <Rating
                 size="large"
                 value={rating}
+                precision={0.5}
                 readOnly
                 sx={{ my: 1, ml: 0.5 }}
               />
