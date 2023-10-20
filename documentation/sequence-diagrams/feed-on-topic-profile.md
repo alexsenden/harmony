@@ -1,7 +1,7 @@
 ```mermaid
 sequenceDiagram
-    User->>Frontend (Browser): Go to website, logged in
-    Frontend (Browser)-->>User: Show display a feed of trending posts
+    User->>Frontend (Browser): Go to website
+    Frontend (Browser)-->>User: Display a feed of trending posts
     User->>Frontend (Browser): Click on a post topic
     Frontend (Browser)-->>User: Redirect to that topic's profile page
     Frontend (Browser)->>Backend (REST API): Post to /posts/topic/:topicId route
