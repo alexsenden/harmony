@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express'
 import { PollOption } from '../src/models/pollOption'
 import { Post, PostType } from '../src/models/post'
 import { TopicId } from '../src/models/topic'
+import { User } from '../src/models/user'
 import bodyParser from 'body-parser'
 import router from '../src/routes/routes'
 
@@ -42,4 +43,24 @@ export const FAKE_POST: Post = {
   body: 'Fake Post Body!',
   rating: 3,
   pollOptions: [FAKE_POLL_OPTION],
+}
+
+export const FAKE_USER_1: User =  {
+  userId: 'fake-user-id-1',
+  username: 'fake-user-1',
+  password: 'fake-password-1',
+  active: true,
+  createdAt: new Date(),
+  firstName: 'fake-firstname-1',
+  lastName: 'fake-lastname-1',
+}
+
+export const FAKE_USER_2: User =  {
+  userId: 'fake-user-id-2',
+  username: 'fake-user-2',
+  password: 'fake-password-2',
+  active: true,
+  createdAt: new Date(),
+  firstName: 'fake-firstname-2',
+  lastName: 'fake-lastname-2',
 }
