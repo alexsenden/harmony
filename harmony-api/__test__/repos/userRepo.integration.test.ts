@@ -1,5 +1,4 @@
 import { register } from '../../src/repos/userRepo'
-import { prismaMock } from '../prisma/singleton' // Import the prismaMock
 import { HttpError } from '../../src/models/error/httpError'
 import prisma from '../../prisma/prisma'
 
@@ -8,6 +7,12 @@ import prisma from '../../prisma/prisma'
 */
 
 describe('register function with Singleton', () => {
+  const userToDelete = {
+    where: {
+      username: 'testuser',
+    },
+  }
+
   const userData = {
     userId: '1',
     username: 'testuser',
@@ -23,19 +28,12 @@ describe('register function with Singleton', () => {
     createdAt: new Date(),
   }
 
+  afterAll(async () => {
+    const deleted = await prisma.user.delete(userToDelete)
+    console.log('DELETED ', deleted)
+  })
+
   it('should create a new user', async () => {
-    jest.spyOn(prisma.user, 'create').mockResolvedValueOnce({
-      userId: '1',
-      username: 'testuser',
-      password: 'testpassword',
-      firstName: 'John',
-      lastName: 'Doe',
-      active: true,
-      createdAt: new Date(),
-    })
-
-    prismaMock.user.create.mockResolvedValue(userData)
-
     const result = await register(userData)
 
     const comparisonSrc = {
@@ -56,9 +54,6 @@ describe('register function with Singleton', () => {
   })
 
   it('should throw an error if username already exists', async () => {
-    prismaMock.user.create.mockResolvedValue(userData)
-
-    await register(userData)
     await expect(register(userData)).rejects.toThrow(HttpError)
   })
 })
