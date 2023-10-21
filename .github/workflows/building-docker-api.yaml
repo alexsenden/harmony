@@ -1,4 +1,4 @@
-name: bulding-docker
+name: bulding-docker-api
 on: push
 
 jobs:
