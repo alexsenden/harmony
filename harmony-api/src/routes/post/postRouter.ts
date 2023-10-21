@@ -15,4 +15,6 @@ router.post('/like', postController.postLike)
 
 router.get('/:postId', postController.getPost)
 
+router.get('/:postId', postController.getPost)
+
 export default router
