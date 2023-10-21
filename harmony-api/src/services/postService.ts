@@ -28,15 +28,11 @@ export const createPost = async (postData?: Post): Promise<Post> => {
   return postResult
 }
 
-
-export const createLike = async (
-  likeData: Like
-): Promise<Like> => {
-  if (!likeData.userId){
-    throw new HttpError("userId is required",400)
-  }
-  else if(!likeData.postId) {
-    throw new HttpError("postId is required",400)
+export const createLike = async (likeData: Like): Promise<Like> => {
+  if (!likeData.userId) {
+    throw new HttpError('userId is required', 400)
+  } else if (!likeData.postId) {
+    throw new HttpError('postId is required', 400)
   }
 
   return await postRepo.createLike(likeData)
