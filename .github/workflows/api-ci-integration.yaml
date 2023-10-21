@@ -41,7 +41,6 @@ jobs:
           export POSTGRES_URL=postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}
 
           # Testing DB connection (URL, whether it is correct)
-          POSTGRES_URL=$(grep "POSTGRES_URL" ./environment/.env.prod | cut -d'=' -f2)
           psql $POSTGRES_URL
           
           cd ../harmony-api
