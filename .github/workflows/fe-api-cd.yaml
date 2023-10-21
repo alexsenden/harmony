@@ -86,13 +86,13 @@ jobs:
               cd /etc/nginx/sites-enabled
               cat default
 
-              sudo docker image pull aprovozin/harmony-api-cd:andrii/connect-db-cd
+              sudo docker image pull aprovozin/harmony-api-cd:andrii-connect-db-cd
               sudo docker run -d -p 8081:8081 aprovozin/harmony-api-cd:andrii-connect-db-cd
 
               # let container api start
               sleep 10s	
 
-              sudo docker image pull aprovozin/harmony-fe-cd:andrii/connect-db-cd
+              sudo docker image pull aprovozin/harmony-fe-cd:andrii-connect-db-cd
               sudo docker run -d -p 8080:8080 aprovozin/harmony-fe-cd:andrii-connect-db-cd
 
               # let container fe start
