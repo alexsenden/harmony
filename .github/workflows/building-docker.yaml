@@ -1,5 +1,4 @@
-name: harmony-api-fe-cd
-
+name: bulding-docker
 on: push
 
 jobs:
