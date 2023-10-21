@@ -28,4 +28,5 @@ jobs:
           POSTGRES_URL=$(grep "POSTGRES_URL" ./environment/.env.prod | cut -d'=' -f2)
           echo "Testing database connection to $POSTGRES_URL"
           echo "$POSTGRES_URL" | sed 's/./&‌/g'
-          psql "$POSTGRES_URL"
+          psql --version
+          psql $POSTGRES_URL
