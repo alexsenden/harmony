@@ -17,10 +17,13 @@ jobs:
           echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT_CI }}" >> ./environment/.env.prod
           echo "POSTGRES_DB_NAME=${{ secrets.POSTGRES_DB_NAME_CI }}" >> ./environment/.env.prod
           echo "DB_HOST=${{ secrets.azureHost2 }}" >> ./environment/.env.prod
-          echo "POSTGRES_URL=\"postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}\"" >> ./environment/.env.prod
+          echo "POSTGRES_URL=postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}" >> ./environment/.env.prod
       - name: Test Connection to DB
         run: |
           POSTGRES_URL=$(grep "POSTGRES_URL" ./environment/.env.prod | cut -d'=' -f2)
+          echo "Testing database connection to $POSTGRES_URL"
+          echo "$POSTGRES_URL" | sed 's/./&‌/g'
+          psql --version
           psql $POSTGRES_URL
       - uses: actions/setup-node@v3
         with:
