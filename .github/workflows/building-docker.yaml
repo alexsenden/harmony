@@ -15,8 +15,9 @@ jobs:
           username: ${{ secrets.usernameDocker }}
           password: ${{ secrets.apiKeyDocker }}
 
-      - name: Create and set .env.prod with correct secrets
+      - name: Harmony API - Create and set .env.prod with correct secrets
         run: |
+          cd ./harmony-api
           touch ./environment/.env.prod
           echo "PORT=8081" > ./environment/.env.prod
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER_CI }}" >> ./environment/.env.prod
