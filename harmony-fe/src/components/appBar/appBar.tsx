@@ -10,6 +10,7 @@ import {
 import PostModal from '../post-modal'
 import { UserContext, UserCookieContext } from '../../contexts/user'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import NavButton from './navButton.styled'
 
 const AppBar = () => {
   const [open, setOpen] = useState(false)
@@ -40,7 +41,7 @@ const AppBar = () => {
   return (
     <React.Fragment>
       <Box sx={{ flexGrow: 1 }}>
-        <MuiAppBar className="navBar-root" position="sticky">
+        <MuiAppBar position="sticky" sx={{ backgroundColor: 'white' }}>
           <Toolbar>
             <Button href="/home">
               <Box
@@ -52,43 +53,28 @@ const AppBar = () => {
                 src={'/harmony1.png'}
               />
             </Button>
-            <Button href="/home" className="navButton" color="inherit">
-              Home
-            </Button>
+            <NavButton href="/home">Home</NavButton>
             {user && (
-              <Button
-                href={`/profile/${user.username}`}
-                className="navButton"
-                color="inherit"
-              >
-                Profile
-              </Button>
+              <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
             )}
-            <Button href="/home" className="navButton" color="inherit">
+            {/* Commenting this out for sprint 2 since it it unimplemented
+            <NavButton href="/home">
               Search
-            </Button>
-            {user && (
-              <Button
-                className="navButton"
-                color="inherit"
-                onClick={handleOpen}
-              >
-                New Post
-              </Button>
-            )}
+            </NavButton> */}
+            {user && <NavButton onClick={handleOpen}>New Post</NavButton>}
 
             <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
 
             <Divider orientation="vertical" flexItem />
             {!user && (
-              <Button href="/login" className="navButton" color="inherit">
+              <NavButton href="/login" sx={{ mx: 1 }}>
                 Login
-              </Button>
+              </NavButton>
             )}
             {user && (
-              <Button className="navButton" color="inherit" onClick={signOut}>
+              <NavButton onClick={signOut} sx={{ mx: 1 }}>
                 Sign out
-              </Button>
+              </NavButton>
             )}
             <Divider orientation="vertical" flexItem />
           </Toolbar>

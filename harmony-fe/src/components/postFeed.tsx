@@ -1,14 +1,44 @@
-import { Post } from '../models/post'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Box } from '@mui/material'
+
 import PostCard from '../components/post/postCard'
 import TextBlock from './text'
+import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
+import { Post } from '../models/post'
 
-export default function PostFeed(posts: Array<Post>) {
-  if (posts.length > 0) {
-    return posts.map(each => {
-      return <PostCard {...each} />
-    })
-  } else {
-    return <TextBlock>No posts here</TextBlock>
-  }
+const NO_POSTS_HERE = 'No Posts Available'
+
+interface PostFeedProps {
+  url: string
+  noResultsText?: string
 }
+
+const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
+  const [getPosts, posts] = useHttpRequest({
+    url: url,
+    method: HttpMethod.GET,
+  })
+
+  useEffect(() => {
+    getPosts()
+  }, [url])
+
+  const mappedPosts = (posts as Array<Post>) || []
+
+  const renderedPosts = mappedPosts.map(post => {
+    console.log(post)
+    return <PostCard {...post} />
+  })
+
+  return renderedPosts.length > 0 ? (
+    <Box width={1} display="flex" flexDirection="column" mt={2}>
+      {renderedPosts}
+    </Box>
+  ) : (
+    <TextBlock align="center" sx={{ mt: 2 }}>
+      {noResultsText}
+    </TextBlock>
+  )
+}
+
+export default PostFeed

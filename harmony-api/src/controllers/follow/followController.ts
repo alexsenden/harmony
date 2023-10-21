@@ -27,7 +27,7 @@ export const getFollow = async (
 ) => {
   try {
     const cookie = req.headers.usercookie as string
-    const followingId = req.headers.followingId as string
+    const followingId = req.headers.followingid as string
     res.json(await followService.getFollow(cookie, followingId))
   } catch (error) {
     next(error)
@@ -40,7 +40,7 @@ export const getFollowCount = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.headers.userId as string
+    const userId = req.headers.userid as string
     const followCount = await followService.getFollowCount(userId)
     res.json(followCount)
   } catch (error) {

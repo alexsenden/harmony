@@ -11,6 +11,7 @@ export type Post = {
   rating?: number
   pollOptions?: Array<PollOption>
   username?: string
+  topicName: string
 }
 
 export enum PostField {

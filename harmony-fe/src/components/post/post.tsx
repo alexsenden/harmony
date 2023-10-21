@@ -3,7 +3,6 @@ import {
   CardActions,
   CardContent,
   Button,
-  Avatar,
   Stack,
   Box,
   Divider,
@@ -12,8 +11,8 @@ import {
   InputAdornment,
   IconButton,
   Link,
+  Rating,
 } from '@mui/material'
-import { deepOrange } from '@mui/material/colors'
 import TextBlock from '../text'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined'
@@ -22,6 +21,11 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded'
 import { useContext, useState } from 'react'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { UserContext } from '../../contexts/user'
+import { PostType } from '../../models/post'
+import { Forum, Poll, RateReview } from '@mui/icons-material'
+import { PollOption } from '../../models/pollOption'
+import { PollAnswer } from './poll-answer'
+import { TopicId } from '../../models/topic'
 
 interface PostProps {
   title: string
@@ -29,9 +33,27 @@ interface PostProps {
   numComments: number
   numLikes: number
   postId: string
+  postType: PostType
+  body?: string
+  pollOptions?: Array<PollOption>
+  rating?: number
+  topicName: string
+  topicId: TopicId
 }
 
-const Post = ({ title, name, numComments, numLikes, postId }: PostProps) => {
+const Post = ({
+  title,
+  name,
+  numComments,
+  numLikes,
+  postId,
+  postType,
+  body,
+  pollOptions,
+  rating,
+  topicName,
+  topicId,
+}: PostProps) => {
   const [isLiked, setIsLiked] = useState(false)
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false)
 
@@ -73,12 +95,36 @@ const Post = ({ title, name, numComments, numLikes, postId }: PostProps) => {
       toggleCommentSection()
     }
   }
+
+  let topicContext
+  if (topicId.artistId) {
+    topicContext = '(Artist)'
+  } else if (topicId.albumId) {
+    topicContext = '(Album)'
+  } else if (topicId.songId) {
+    topicContext = '(Song)'
+  }
+
+  console.log(topicName)
+  let avatarIcon
+  const iconSx = { mt: 1, ml: 1 }
+  switch (postType) {
+    case PostType.DISCUSSION:
+      avatarIcon = <Forum sx={iconSx} />
+      break
+    case PostType.POLL:
+      avatarIcon = <Poll sx={iconSx} />
+      break
+    case PostType.REVIEW:
+    default:
+      avatarIcon = <RateReview sx={iconSx} />
+      break
+  }
+
   return (
     <Card variant="outlined" sx={{ mb: 1 }}>
       <Stack direction="row">
-        <CardContent>
-          <Avatar sx={{ bgcolor: deepOrange[500] }}>poll</Avatar>
-        </CardContent>
+        <CardContent>{avatarIcon}</CardContent>
 
         <Box sx={{ width: '100%' }}>
           <CardContent>
@@ -87,10 +133,26 @@ const Post = ({ title, name, numComments, numLikes, postId }: PostProps) => {
                 {title}
               </TextBlock>
             </Link>
+            <TextBlock>
+              {topicName} {topicContext}
+            </TextBlock>
+            <Divider sx={{ my: 1 }} />
+            {rating && postType === PostType.REVIEW && (
+              <Rating
+                size="large"
+                value={rating}
+                precision={0.5}
+                readOnly
+                sx={{ my: 1, ml: 0.5 }}
+              />
+            )}
+            {body && <TextBlock sx={{ ml: 1 }}>{body}</TextBlock>}
+            {pollOptions &&
+              pollOptions.map(option => <PollAnswer pollOption={option} />)}
           </CardContent>
 
           <CardActions>
-            <Button size="small" onClick={toggleLike}>
+            <Button disabled size="small" onClick={toggleLike}>
               {isLiked ? (
                 <ThumbUpIcon style={{ color: 'blue' }} />
               ) : (
@@ -109,16 +171,25 @@ const Post = ({ title, name, numComments, numLikes, postId }: PostProps) => {
             <Link href={`/profile/${name}`}>
               <TextBlock>By: {name} </TextBlock>
             </Link>
-            <Button size="small" onClick={toggleCommentSection}>
+            <Button
+              size="small"
+              onClick={toggleCommentSection}
+              sx={{ ml: 3, mt: 0.5 }}
+            >
               {numComments} comments
             </Button>
-            <Button size="small"> {numLikes} likes</Button>
+            <Button size="small" disabled sx={{ mt: 0.5 }}>
+              {' '}
+              {numLikes} likes
+            </Button>
           </CardActions>
 
           <Collapse in={isCommentSectionOpen}>
             <CardContent>
               <TextField
                 placeholder="Add a comment.."
+                // Disabling for sprint 2 evaluation
+                disabled
                 fullWidth
                 value={commentInput}
                 onChange={handleCommentInputChange}

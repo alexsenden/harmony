@@ -24,16 +24,3 @@ export const get = async (req: Request, res: Response, next: NextFunction) => {
     next(error)
   }
 }
-
-export const postLike = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const likeData = req.body as Like
-  try {
-    res.json(await postService.createLike(likeData))
-  } catch (error) {
-    next(error)
-  }
-}
