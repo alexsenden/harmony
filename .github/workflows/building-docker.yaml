@@ -1,0 +1,44 @@
+name: harmony-api-fe-cd
+
+on: push
+
+jobs:
+  build_docker_api:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.usernameDocker }}
+          password: ${{ secrets.apiKeyDocker }}
+
+      - name: Create and set .env.prod with correct secrets
+        run: |
+          touch ./environment/.env.prod
+          echo "PORT=8081" > ./environment/.env.prod
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER_CI }}" >> ./environment/.env.prod
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD_CI }}" >> ./environment/.env.prod
+          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT_CI }}" >> ./environment/.env.prod
+          echo "POSTGRES_DB_NAME=${{ secrets.POSTGRES_DB_NAME_CI }}" >> ./environment/.env.prod
+          echo "DB_HOST=${{ secrets.azureHost2 }}" >> ./environment/.env.prod
+          echo "POSTGRES_URL=postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}" >> ./environment/.env.prod         
+      
+      - name: Harmony API - Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: aprovozin/harmony-api-cd
+      
+      - name: Harmony API - Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: ./harmony-api
+          file: ./harmony-api/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: ENV=prod
