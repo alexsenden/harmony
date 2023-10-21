@@ -1,5 +1,5 @@
 name: api-ci-integration
-on: push
+on: pull-request
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,7 +31,6 @@ jobs:
         
       - name: Run integration tests on remote DB and linter 
         run: |
-          touch ./environment/.env.prod
           export PORT=8081
           export POSTGRES_USER=${{ secrets.POSTGRES_USER_CI }}
           export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD_CI }}
@@ -44,6 +43,6 @@ jobs:
           psql $POSTGRES_URL
           
           cd ../harmony-api
-
+        
           npx prisma migrate dev
           npm run test

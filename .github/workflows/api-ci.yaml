@@ -1,5 +1,5 @@
 name: harmony-api
-on: push
+on: pull-request
 jobs:
   build:
     runs-on: ubuntu-latest
