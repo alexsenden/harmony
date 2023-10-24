@@ -5,10 +5,10 @@ import TextBlock from '../../components/text/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 
 const LoginPage = () => {
-  const loginData = {
+  const [loginData] = useState({
     username: '',
     password: '',
-  }
+  })
   const [loginError, setLoginError] = useState(false) // Initialize error state
   const [userLogin, userLoginResponse, userLoginError, userLoginLoading] =
     useHttpRequest({

@@ -10,7 +10,8 @@ async function main() {
       create: {
         userId: 'b12c47f8-036c-4bfd-8658-230e8fa4d7cb',
         username: 'MrUserGuy',
-        password: '',
+        password:
+          'da39a3ee5e6b4b0d3255bfef95601890afd80709',
         active: true,
         firstName: 'Mr.',
         lastName: 'User',
@@ -25,7 +26,8 @@ async function main() {
       create: {
         userId: '9ba2787c-3178-45f1-9b60-2d2b701b2ab8',
         username: 'default_user',
-        password: '',
+        password:
+          'da39a3ee5e6b4b0d3255bfef95601890afd80709',
         active: true,
         firstName: 'John',
         lastName: 'Doe',

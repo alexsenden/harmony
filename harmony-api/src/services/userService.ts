@@ -1,4 +1,5 @@
 import * as userRepo from '../repos/userRepo'
+import * as crypto from 'crypto'
 import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 import { Login } from '../models/login'
@@ -14,7 +15,7 @@ export const register = async (userData?: User): Promise<User> => {
   }
 
   validateUserRegistration(userData)
-
+  userData.password = hashPassword(userData.password)
   return userRepo.register(userData)
 }
 
@@ -23,6 +24,7 @@ export const login = async (loginData?: Login): Promise<User> => {
     throw new HttpError('User data is required to login', 400)
   }
   try {
+    loginData.password = hashPassword(loginData.password)
     return await userRepo.getUserByLoginInfo(loginData as Login)
   } catch (error) {
     throw new HttpError('Incorrect Credentials', 401)
@@ -99,4 +101,10 @@ const validateUserRegistrationAdvanced = (userData: User) => {
   if (errorMessages.length > 0) {
     throw new HttpError(errorMessages.join('; '), 400)
   }
+}
+
+const hashPassword = (password: string) => {
+  const hash = crypto.createHash('sha1')
+  hash.update(password)
+  return hash.digest('hex')
 }
