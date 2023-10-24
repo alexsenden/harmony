@@ -83,9 +83,6 @@ jobs:
           script_stop: false
           port: 22
           script: |
-              cd /etc/nginx/sites-enabled
-              cat default
-              
               sudo docker image pull aprovozin/harmony-api-cd:andrii-connect-db-cd
               sudo docker run -d -p 8081:8081 aprovozin/harmony-api-cd:andrii-connect-db-cd
 
