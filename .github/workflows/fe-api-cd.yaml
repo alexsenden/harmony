@@ -89,7 +89,9 @@ jobs:
               # let container api start
               sleep 10s
 
-              sudo touch .env
+              mkdir app
+              cd ./app
+
               sudo echo "NEXT_PUBLIC_API_BASE_ENDPOINT=${{ secrets.azureHost1 }}:8081" >> .env
 
               sudo docker image pull aprovozin/harmony-fe-cd:andrii-connect-db-cd
