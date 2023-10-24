@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, Grid, Paper, TextField } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Paper,
+  TextField,
+  IconButton,
+  InputAdornment,
+} from '@mui/material'
 import HarmonyAppBar from '../../components/appBar/index'
 import TextBlock from '../../components/text/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 const LoginPage = () => {
   const [loginData] = useState({
@@ -10,6 +20,7 @@ const LoginPage = () => {
     password: '',
   })
   const [loginError, setLoginError] = useState(false) // Initialize error state
+  const [showPassword, setShowPassword] = useState(false)
   const [userLogin, userLoginResponse, userLoginError, userLoginLoading] =
     useHttpRequest({
       url: '/user/login',
@@ -34,6 +45,13 @@ const LoginPage = () => {
       }
     }
   }, [userLoginLoading])
+
+  const showPasswordButtonClick = () => setShowPassword(show => !show)
+  const showPasswordButtonDown = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault()
+  }
 
   return (
     <>
@@ -85,7 +103,7 @@ const LoginPage = () => {
             <TextField
               onChange={event => (loginData.password = event.target.value)}
               label="Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               variant="outlined"
               placeholder="Enter password"
               sx={{
@@ -95,6 +113,18 @@ const LoginPage = () => {
               required
               error={loginError}
               helperText={loginError ? 'Invalid username or password' : ''}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => showPasswordButtonClick()}
+                      onMouseDown={event => showPasswordButtonDown(event)}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               onClick={userLogin}
