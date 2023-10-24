@@ -104,7 +104,7 @@ const validateUserRegistrationAdvanced = (userData: User) => {
 }
 
 const hashPassword = (password: string) => {
-  const hash = crypto.createHash('sha1')
+  const hash = crypto.createHash('sha256')
   hash.update(password)
   return hash.digest('hex')
 }
