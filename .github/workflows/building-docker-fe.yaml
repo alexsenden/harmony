@@ -15,7 +15,13 @@ jobs:
         with:
           username: ${{ secrets.usernameDocker }}
           password: ${{ secrets.apiKeyDocker }}
-      
+
+      - name: Harmony FE - Create and set .env.prod with correct secrets
+        run: |
+          cd ./harmony-fe
+          touch ./environment/.env.prod
+          echo "NEXT_PUBLIC_API_BASE_ENDPOINT=http://${{ secrets.azureHost1 }}:8081" >> ./environment/.env.prod
+
       - name: Harmony FE - Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
