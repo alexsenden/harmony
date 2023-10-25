@@ -65,13 +65,8 @@ const RegisterPage = () => {
   }, [response, error])
 
   useEffect(() => {
-    console.log('stopped loading')
     stopLoading()
   }, [])
-
-  useEffect(() => {
-    console.log('LOADING ' + loading)
-  }, [loading])
 
   return (
     <>
