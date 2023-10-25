@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Container, Grid, Paper, TextField, Box, CircularProgress } from '@mui/material'
+import {
+  Button,
+  Container,
+  Grid,
+  Paper,
+  TextField,
+  Box,
+  CircularProgress,
+} from '@mui/material'
 
 import HarmonyAppBar from '../../components/appBar/appBar'
 
@@ -19,12 +27,13 @@ const RegisterPage = () => {
     password: '',
   })
 
-  const [sendHttpRequest, response, error, loading, stopLoading] = useHttpRequest({
-    url: '/user/register',
-    method: HttpMethod.POST,
-    body: newUser,
-    headers: {},
-  })
+  const [sendHttpRequest, response, error, loading, stopLoading] =
+    useHttpRequest({
+      url: '/user/register',
+      method: HttpMethod.POST,
+      body: newUser,
+      headers: {},
+    })
 
   const handleUserRegister = () => {
     setHasError(false)
@@ -56,12 +65,12 @@ const RegisterPage = () => {
   }, [response, error])
 
   useEffect(() => {
-    console.log("stopped loading")
-    stopLoading();
+    console.log('stopped loading')
+    stopLoading()
   }, [])
 
   useEffect(() => {
-    console.log("LOADING " + loading);
+    console.log('LOADING ' + loading)
   }, [loading])
 
   return (
@@ -188,22 +197,25 @@ const RegisterPage = () => {
               error={hasError}
               helperText={hasError ? error.response.data.message : ''}
             />
-            { (!loading)  ?
-            <Button
-              sx={{
-                mt: 3,
-                width: 8 / 12,
-              }}
-              onClick={() => {
-                handleUserRegister()
-              }}
-              type="submit"
-              variant="outlined"
-              fullWidth
-              disabled={hideSignUp}
-            >
-              <TextBlock fontSize={20}> Sign up </TextBlock>
-            </Button> : <CircularProgress style={{marginTop: 10}}/>} 
+            {!loading ? (
+              <Button
+                sx={{
+                  mt: 3,
+                  width: 8 / 12,
+                }}
+                onClick={() => {
+                  handleUserRegister()
+                }}
+                type="submit"
+                variant="outlined"
+                fullWidth
+                disabled={hideSignUp}
+              >
+                <TextBlock fontSize={20}> Sign up </TextBlock>
+              </Button>
+            ) : (
+              <CircularProgress style={{ marginTop: 10 }} />
+            )}
           </Grid>
         </Paper>
       </Container>

@@ -31,9 +31,9 @@ const useHttpRequest = ({
   const [loading, setloading] = useState(true)
 
   const stopLoading = () => {
-    setloading(false);
+    setloading(false)
   }
-  
+
   const sendHttpRequest = async () => {
     setResponse(undefined)
     setError(undefined)
