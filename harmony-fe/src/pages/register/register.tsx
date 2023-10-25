@@ -73,7 +73,7 @@ const RegisterPage = () => {
   }, [])
 
   const showPasswordButtonClick = () => setShowPassword(show => !show)
-  
+
   const showPasswordButtonDown = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
