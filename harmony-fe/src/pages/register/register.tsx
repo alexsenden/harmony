@@ -7,6 +7,8 @@ import {
   TextField,
   Box,
   CircularProgress,
+  InputAdornment,
+  IconButton,
 } from '@mui/material'
 
 import HarmonyAppBar from '../../components/appBar/appBar'
@@ -15,6 +17,7 @@ import { HttpMethod } from '../../hooks/httpRequest'
 
 import useHttpRequest from '../../hooks/httpRequest'
 import TextBlock from '../../components/text'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 const RegisterPage = () => {
   const [hasError, setHasError] = useState(false)
@@ -26,6 +29,7 @@ const RegisterPage = () => {
     username: '',
     password: '',
   })
+  const [showPassword, setShowPassword] = useState(false)
 
   const [sendHttpRequest, response, error, loading, stopLoading] =
     useHttpRequest({
@@ -67,6 +71,14 @@ const RegisterPage = () => {
   useEffect(() => {
     stopLoading()
   }, [])
+
+  const showPasswordButtonClick = () => setShowPassword(show => !show)
+  
+  const showPasswordButtonDown = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault()
+  }
 
   return (
     <>
@@ -185,12 +197,24 @@ const RegisterPage = () => {
               }
               label="Password"
               placeholder="Enter password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               variant="outlined"
               fullWidth
               required
               error={hasError}
               helperText={hasError ? error.response.data.message : ''}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => showPasswordButtonClick()}
+                      onMouseDown={event => showPasswordButtonDown(event)}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             {!loading ? (
               <Button
