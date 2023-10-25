@@ -6,6 +6,7 @@ import {
   Paper,
   TextField,
   Box,
+  CircularProgress,
   InputAdornment,
   IconButton,
 } from '@mui/material'
@@ -20,6 +21,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 const RegisterPage = () => {
   const [hasError, setHasError] = useState(false)
+  const [hideSignUp, setHideSignUp] = useState(false)
 
   const [newUser, setNewUser] = useState({
     firstName: '',
@@ -29,12 +31,13 @@ const RegisterPage = () => {
   })
   const [showPassword, setShowPassword] = useState(false)
 
-  const [sendHttpRequest, response, error, loading] = useHttpRequest({
-    url: '/user/register',
-    method: HttpMethod.POST,
-    body: newUser,
-    headers: {},
-  })
+  const [sendHttpRequest, response, error, loading, stopLoading] =
+    useHttpRequest({
+      url: '/user/register',
+      method: HttpMethod.POST,
+      body: newUser,
+      headers: {},
+    })
 
   const handleUserRegister = () => {
     setHasError(false)
@@ -59,12 +62,18 @@ const RegisterPage = () => {
       console.error('Error:', error)
       setHasError(true)
     } else if (!loading) {
+      setHideSignUp(true)
       document.cookie = response['Set-Cookie']
       window.location.href = '../home'
     }
   }, [response, error])
 
+  useEffect(() => {
+    stopLoading()
+  }, [])
+
   const showPasswordButtonClick = () => setShowPassword(show => !show)
+
   const showPasswordButtonDown = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -207,20 +216,25 @@ const RegisterPage = () => {
                 ),
               }}
             />
-            <Button
-              sx={{
-                mt: 3,
-                width: 8 / 12,
-              }}
-              onClick={() => {
-                handleUserRegister()
-              }}
-              type="submit"
-              variant="outlined"
-              fullWidth
-            >
-              <TextBlock fontSize={20}> Sign up </TextBlock>
-            </Button>
+            {!loading ? (
+              <Button
+                sx={{
+                  mt: 3,
+                  width: 8 / 12,
+                }}
+                onClick={() => {
+                  handleUserRegister()
+                }}
+                type="submit"
+                variant="outlined"
+                fullWidth
+                disabled={hideSignUp}
+              >
+                <TextBlock fontSize={20}> Sign up </TextBlock>
+              </Button>
+            ) : (
+              <CircularProgress style={{ marginTop: 10 }} />
+            )}
           </Grid>
         </Paper>
       </Container>

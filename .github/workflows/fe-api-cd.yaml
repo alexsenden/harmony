@@ -2,68 +2,10 @@ name: harmony-api-fe-cd
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      ["main"]
 
 jobs:
-
-  build_docker_api:
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
-      
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{ secrets.usernameDocker }}
-          password: ${{ secrets.apiKeyDocker }}
-      
-      - name: Harmony API - Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: aprovozin/harmony-api-cd
-      
-      - name: Harmony API - Build and push Docker image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-        with:
-          context: ./harmony-api
-          file: ./harmony-api/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: ENV=prod
-
-  build_docker_fe:
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
-      
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{ secrets.usernameDocker }}
-          password: ${{ secrets.apiKeyDocker }}
-      
-      - name: Harmony FE - Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: aprovozin/harmony-fe-cd
-      
-      - name:  Harmony FE - Build and push Docker image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-        with:
-          context: ./harmony-fe
-          file: ./harmony-fe/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: ENV=prod
-
   deployment:
     name: Redeploy Services
     runs-on: ubuntu-latest
@@ -144,17 +86,14 @@ jobs:
           script_stop: false
           port: 22
           script: |
-              cd /etc/nginx/sites-enabled
-              cat default
-
-              sudo docker image pull aprovozin/harmony-api-cd:main
-              sudo docker run -d -p 8081:8081 aprovozin/harmony-api-cd:main
+              sudo docker image pull aprovozin/harmony-api-cd:andrii-connect-db-cd
+              sudo docker run --network=host -d -p 8081:8081 aprovozin/harmony-api-cd:andrii-connect-db-cd
 
               # let container api start
-              sleep 15s	
+              sleep 10s
 
-              sudo docker image pull aprovozin/harmony-fe-cd:main	
-              sudo docker run -d -p 8080:8080 aprovozin/harmony-fe-cd:main	
+              sudo docker image pull aprovozin/harmony-fe-cd:andrii-connect-db-cd
+              sudo docker run -d -p 8080:8080 aprovozin/harmony-fe-cd:andrii-connect-db-cd
 
               # let container fe start
-              sleep 15s	
+              sleep 10s
