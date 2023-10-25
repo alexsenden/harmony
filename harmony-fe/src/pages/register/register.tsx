@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Container, Grid, Paper, TextField, Box } from '@mui/material'
+import { Button, Container, Grid, Paper, TextField, Box, CircularProgress } from '@mui/material'
 
 import HarmonyAppBar from '../../components/appBar/appBar'
 
@@ -10,6 +10,7 @@ import TextBlock from '../../components/text'
 
 const RegisterPage = () => {
   const [hasError, setHasError] = useState(false)
+  const [hideSignUp, setHideSignUp] = useState(false)
 
   const [newUser, setNewUser] = useState({
     firstName: '',
@@ -18,7 +19,7 @@ const RegisterPage = () => {
     password: '',
   })
 
-  const [sendHttpRequest, response, error, loading] = useHttpRequest({
+  const [sendHttpRequest, response, error, loading, stopLoading] = useHttpRequest({
     url: '/user/register',
     method: HttpMethod.POST,
     body: newUser,
@@ -48,10 +49,20 @@ const RegisterPage = () => {
       console.error('Error:', error)
       setHasError(true)
     } else if (!loading) {
+      setHideSignUp(true)
       document.cookie = response['Set-Cookie']
       window.location.href = '../home'
     }
   }, [response, error])
+
+  useEffect(() => {
+    console.log("stopped loading")
+    stopLoading();
+  }, [])
+
+  useEffect(() => {
+    console.log("LOADING " + loading);
+  }, [loading])
 
   return (
     <>
@@ -177,6 +188,7 @@ const RegisterPage = () => {
               error={hasError}
               helperText={hasError ? error.response.data.message : ''}
             />
+            { (!loading)  ?
             <Button
               sx={{
                 mt: 3,
@@ -188,9 +200,10 @@ const RegisterPage = () => {
               type="submit"
               variant="outlined"
               fullWidth
+              disabled={hideSignUp}
             >
               <TextBlock fontSize={20}> Sign up </TextBlock>
-            </Button>
+            </Button> : <CircularProgress style={{marginTop: 10}}/>} 
           </Grid>
         </Paper>
       </Container>
