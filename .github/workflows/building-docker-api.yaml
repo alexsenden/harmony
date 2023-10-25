@@ -1,7 +1,10 @@
 name: bulding-docker-api
 
-on: push
-
+on:
+  push:
+    branches:
+      ["main"]
+      
 jobs:
   build_docker_api:
     name: Push Docker image to Docker Hub

@@ -1,7 +1,10 @@
 name: bulding-docker-fe
 
-on: push
-
+on:
+  push:
+    branches:
+      ["main"]
+      
 jobs:
   build_docker_fe:
     name: Push Docker image to Docker Hub
