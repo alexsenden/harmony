@@ -112,7 +112,7 @@ const Post = ({
 
         <Box sx={{ width: '100%' }}>
           <CardContent>
-            <Link href={`/posts/${postId}`}>
+            <Link href={`/posts/${postId}`} underline="none">
               <TextBlock gutterBottom variant="h5">
                 {title}
               </TextBlock>

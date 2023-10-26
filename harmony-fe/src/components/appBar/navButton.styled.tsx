@@ -2,8 +2,7 @@ import styled from '@emotion/styled'
 import { Button } from '@mui/material'
 
 const NavButton = styled(Button)`
-  font-family: 'Oswald', sans-serif;
-  font-size: xx-large;
+  font-size: x-large;
   backgroundcolor: white;
 `
 

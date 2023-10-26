@@ -6,6 +6,35 @@ import { UserContext, UserCookieContext } from '../contexts/user'
 import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
 import { useEffect, useState } from 'react'
 import { User } from '../models/user'
+import { ThemeProvider } from '@emotion/react'
+import { createTheme } from '@mui/material'
+
+export const globalTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#FF4010',
+    },
+    secondary: {
+      main: '#0064AC',
+    },
+  },
+  components: {
+    // Name of the component
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'DM Sans, sans-serif',
+          textTransform: 'none',
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: { fontFamily: 'DM Sans, sans-serif' },
+      },
+    },
+  },
+})
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -59,7 +88,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <UserCookieContext.Provider value={userCookie}>
       <UserContext.Provider value={currentUser}>
-        <Component {...pageProps} />
+        <ThemeProvider theme={globalTheme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
       </UserContext.Provider>
     </UserCookieContext.Provider>
   )

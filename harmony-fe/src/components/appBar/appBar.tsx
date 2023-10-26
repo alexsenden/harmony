@@ -5,14 +5,15 @@ import {
   Toolbar,
   Button,
   Divider,
-  ThemeProvider,
+  Menu,
+  MenuItem,
+  Avatar,
 } from '@mui/material'
 
 import PostModal from '../post-modal'
 import { UserContext, UserCookieContext } from '../../contexts/user'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
-import { globalTheme } from '../../styles/globalTheme'
 
 const AppBar = () => {
   const [open, setOpen] = useState(false)
@@ -40,49 +41,71 @@ const AppBar = () => {
     window.location.href = '../home'
   }
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const openMenu = Boolean(anchorEl)
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
   return (
     <React.Fragment>
-      <ThemeProvider theme={globalTheme}>
-        <MuiAppBar position="sticky" sx={{ backgroundColor: 'white' }}>
-          <Toolbar>
-            <Button href="/home">
-              <Box
-                component="img"
-                sx={{
-                  height: 64,
-                }}
-                alt="Harmony Logo"
-                src={'/harmony1.png'}
-              />
-            </Button>
-            <NavButton href="/home">Home</NavButton>
-            {user && (
-              <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
-            )}
-            {/* Commenting this out for sprint 2 since it it unimplemented
+      <MuiAppBar position="sticky" sx={{ backgroundColor: 'white' }}>
+        <Toolbar>
+          <Button href="/home">
+            <Box
+              component="img"
+              sx={{
+                height: 64,
+              }}
+              alt="Harmony Logo"
+              src={'/harmony1.png'}
+            />
+          </Button>
+          <NavButton href="/home">Home</NavButton>
+          {user && (
+            <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
+          )}
+          {/* Commenting this out for sprint 2 since it it unimplemented
             <NavButton href="/home">
               Search
             </NavButton> */}
-            {user && <NavButton onClick={handleOpen}>New Post</NavButton>}
+          {user && <NavButton onClick={handleOpen}>New Post</NavButton>}
 
-            <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
+          <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
 
-            <Divider orientation="vertical" flexItem />
-            {!user && (
-              <NavButton href="/login" sx={{ mx: 1 }}>
-                Login
+          <Divider orientation="vertical" flexItem />
+          {!user && (
+            <NavButton href="/login" sx={{ px: 1 }}>
+              Login
+            </NavButton>
+          )}
+          {user && (
+            <>
+              <NavButton onClick={handleMenuClick}>
+                <Avatar src="/harmony1.png" sx={{ mr: 2 }}></Avatar>
+                {user.username}
               </NavButton>
-            )}
-            {user && (
-              <NavButton onClick={signOut} sx={{ mx: 1 }}>
-                Sign out
-              </NavButton>
-            )}
-            <Divider orientation="vertical" flexItem />
-          </Toolbar>
-        </MuiAppBar>
-        <PostModal open={open} onClose={handleClose} />
-      </ThemeProvider>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={openMenu}
+                onClose={handleMenuClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem onClick={handleMenuClose}>Account Settings</MenuItem>
+                <MenuItem onClick={signOut}>Sign Out</MenuItem>
+              </Menu>
+            </>
+          )}
+          <Divider orientation="vertical" flexItem />
+        </Toolbar>
+      </MuiAppBar>
+      <PostModal open={open} onClose={handleClose} />
     </React.Fragment>
   )
 }
