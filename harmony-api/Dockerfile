@@ -30,3 +30,5 @@ RUN rm -rf environment
 EXPOSE 8081
 
 CMD [ "npm", "run", "start" ]
+
+HEALTHCHECK --interval=5m --timeout=10s --retries=3 CMD curl -f http://localhost:8081/ || exit 1
