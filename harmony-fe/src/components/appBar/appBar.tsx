@@ -5,12 +5,14 @@ import {
   Toolbar,
   Button,
   Divider,
+  ThemeProvider,
 } from '@mui/material'
 
 import PostModal from '../post-modal'
 import { UserContext, UserCookieContext } from '../../contexts/user'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
+import { globalTheme } from '../../styles/globalTheme'
 
 const AppBar = () => {
   const [open, setOpen] = useState(false)
@@ -40,7 +42,7 @@ const AppBar = () => {
 
   return (
     <React.Fragment>
-      <Box sx={{ flexGrow: 1 }}>
+      <ThemeProvider theme={globalTheme}>
         <MuiAppBar position="sticky" sx={{ backgroundColor: 'white' }}>
           <Toolbar>
             <Button href="/home">
@@ -79,8 +81,8 @@ const AppBar = () => {
             <Divider orientation="vertical" flexItem />
           </Toolbar>
         </MuiAppBar>
-      </Box>
-      <PostModal open={open} onClose={handleClose} />
+        <PostModal open={open} onClose={handleClose} />
+      </ThemeProvider>
     </React.Fragment>
   )
 }

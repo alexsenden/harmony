@@ -3,8 +3,7 @@ import { Button } from '@mui/material'
 
 const NavButton = styled(Button)`
   font-family: 'Oswald', sans-serif;
-  font-size: x-large;
-  color: orangered;
+  font-size: xx-large;
   backgroundcolor: white;
 `
 

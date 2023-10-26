@@ -5,6 +5,8 @@ import HarmonyAppBar from '../../components/appBar'
 import FilterPostButtons from '../../components/filterPostButtons'
 import PostFeed from '../../components/postFeed'
 import { UserContext } from '../../contexts/user'
+import { globalTheme } from '../../styles/globalTheme'
+import { ThemeProvider } from '@emotion/react'
 
 export enum FeedMode {
   FOLLOWING = 'following',
@@ -32,14 +34,16 @@ const HomePage = () => {
 
   return (
     <>
-      <HarmonyAppBar />
-      <Container maxWidth="xl">
-        <FilterPostButtons
-          activeButton={feedMode}
-          handleButtonClick={handleButtonClick}
-        />
-        <PostFeed url={feedUrl} noResultsText={noResultsText} />
-      </Container>
+      <ThemeProvider theme={globalTheme}>
+        <HarmonyAppBar />
+        <Container maxWidth="xl">
+          <FilterPostButtons
+            activeButton={feedMode}
+            handleButtonClick={handleButtonClick}
+          />
+          <PostFeed url={feedUrl} noResultsText={noResultsText} />
+        </Container>
+      </ThemeProvider>
     </>
   )
 }
