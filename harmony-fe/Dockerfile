@@ -28,3 +28,5 @@ RUN rm -rf src
 EXPOSE 8080
 
 CMD [ "npm", "run", "start" ]
+
+HEALTHCHECK --interval=5m --timeout=10s --retries=3 CMD curl -f http://localhost:8080/ || exit 1
