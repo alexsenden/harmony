@@ -30,7 +30,7 @@ jobs:
               az vm delete --name backend --resource-group all_devs --yes 
               az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username "$usernameBackend" --admin-password "$passwordBackend" --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1ms --zone 1 --location canadacentral --nics backend-177_z1
               # To make sure that it is created and can be accessed and that docker services complete building
-              # sleep 30s
+              sleep 30s
 
       - name: SSH into backend VM, setup backend
         uses: appleboy/ssh-action@v1.0.0
