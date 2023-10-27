@@ -49,9 +49,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   }, [])
   useEffect(() => {
     const userAgent = window.navigator.userAgent
-    const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+    const mobileRegex =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
     setMobile(mobileRegex.test(userAgent))
-  }, []);
+  }, [])
   useEffect(() => {
     if (response && !loading) {
       setCurrentUser(response.userData as User)

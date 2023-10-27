@@ -19,7 +19,7 @@ import { MobileContext } from '../../contexts/mobile'
 
 const AppBar = () => {
   const [open, setOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
   const userCookie = useContext(UserCookieContext)
@@ -51,11 +51,11 @@ const AppBar = () => {
   }
 
   const handleMobileDropDown = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget)
   }
 
   const handleMobileClose = () => {
-    setAnchorEl(null);
+    setAnchorEl(null)
   }
 
   return (
@@ -73,7 +73,7 @@ const AppBar = () => {
                 src={'/harmony1.png'}
               />
             </Button>
-            { !mobile && (<NavButton href="/home">Home</NavButton>)}
+            {!mobile && <NavButton href="/home">Home</NavButton>}
             {user && !mobile && (
               <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
             )}
@@ -81,7 +81,9 @@ const AppBar = () => {
             <NavButton href="/home">
               Search
             </NavButton> */}
-            {user && !mobile && <NavButton onClick={handleOpen}>New Post</NavButton>}
+            {user && !mobile && (
+              <NavButton onClick={handleOpen}>New Post</NavButton>
+            )}
             {user && mobile && (
               <div>
                 <IconButton
@@ -98,7 +100,7 @@ const AppBar = () => {
                   id="mobile-menu"
                   anchorEl={anchorEl}
                   MenuListProps={{
-                    'aria-labelledby': 'mobile-button'
+                    'aria-labelledby': 'mobile-button',
                   }}
                   open={menuOpen}
                   onClose={handleMobileClose}

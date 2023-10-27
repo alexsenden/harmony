@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -67,12 +67,12 @@ const LoginPage = () => {
       >
         <Paper
           elevation={3}
-          style={{ padding: mobile? 20 : 50 }}
+          style={{ padding: mobile ? 20 : 50 }}
           sx={{
             p: 2,
             margin: 'auto',
-            my: mobile? 2 : 7,
-            width:  mobile? 10 / 12 : 5 / 12,
+            my: mobile ? 2 : 7,
+            width: mobile ? 10 / 12 : 5 / 12,
             flexGrow: 1,
           }}
         >
@@ -86,7 +86,7 @@ const LoginPage = () => {
               component="img"
               sx={{
                 maxWidth: 'auto',
-                width: mobile? 11 / 12 : 5 / 12,
+                width: mobile ? 11 / 12 : 5 / 12,
                 xs: 6,
               }}
               alt="Harmony Logo"
@@ -102,7 +102,7 @@ const LoginPage = () => {
               placeholder="Enter username"
               sx={{
                 mt: 3,
-                width: mobile? 11 / 12 : 8 / 12
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
               required
               error={loginError}
@@ -115,7 +115,7 @@ const LoginPage = () => {
               placeholder="Enter password"
               sx={{
                 mt: 3,
-                width: mobile? 11 / 12 : 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
               required
               error={loginError}
@@ -138,7 +138,7 @@ const LoginPage = () => {
               variant="outlined"
               sx={{
                 mt: 3,
-                width: mobile? 11 / 12 : 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
             >
               <TextBlock fontSize={20}> Log in </TextBlock>
@@ -148,7 +148,7 @@ const LoginPage = () => {
               variant="outlined"
               sx={{
                 mt: 3,
-                width: mobile? 11 / 12 : 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
             >
               <TextBlock fontSize={20}> Sign up </TextBlock>
