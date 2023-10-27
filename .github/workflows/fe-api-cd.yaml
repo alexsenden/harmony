@@ -41,6 +41,8 @@ jobs:
           script_stop: true
           port: 22
           script: |
+              export DEBIAN_FRONTEND=noninteractive
+
               # Add Docker's official GPG key:
               sudo apt-get update
               sudo apt-get install ca-certificates curl gnupg
