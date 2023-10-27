@@ -114,7 +114,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <UserCookieContext.Provider value={userCookie}>
       <UserContext.Provider value={currentUser}>
         <MobileContext.Provider value={mobile}>
-          <Component {...pageProps} />
+          <ThemeProvider theme={globalTheme}>
+            <HarmonyAppBar />
+            <Component {...pageProps} />
+          </ThemeProvider>
         </MobileContext.Provider>
       </UserContext.Provider>
     </UserCookieContext.Provider>

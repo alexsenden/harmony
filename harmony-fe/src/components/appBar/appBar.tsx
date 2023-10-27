@@ -8,7 +8,6 @@ import {
   Menu,
   MenuItem,
   Avatar,
-  Link,
   IconButton,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -52,7 +51,8 @@ const AppBar = () => {
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
-  const handleMenuClose = () => {    setAnchorEl(null)
+  const handleMenuClose = () => {
+    setAnchorEl(null)
   }
 
   const profileOpen = () => {
@@ -79,7 +79,7 @@ const AppBar = () => {
                   height: 64,
                 }}
                 alt="Harmony Logo"
-                src={'/harmony1.png'}
+                src={'/image/harmonylogo.png'}
               />
             </Button>
             {!mobile && <NavButton href="/home">Home</NavButton>}
@@ -116,33 +116,48 @@ const AppBar = () => {
                 >
                   <MenuItem onClick={profileOpen}>Profile</MenuItem>
                   <MenuItem onClick={handleOpen}>New Post</MenuItem>
+                  <Divider />
+                  <MenuItem component={'a'} href={'/account'}>
+                    Account Settings
+                  </MenuItem>
+                  <MenuItem onClick={signOut}>Sign Out</MenuItem>
                 </Menu>
               </div>
             )}
 
-          <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
-
-          <Divider orientation="vertical" flexItem />
-          {!user && (
-            <NavButton href="/login" sx={{ px: 1 }}>
-              Login
-            </NavButton>
-          )}
-          {user && (
-            
-              <NavButton onClick={handleMenuClick}>
-                <Avatar
-                  src={`/image/profilepic/${user.picture}.png`}
-                  sx={{ mr: 2 }}
-                ></Avatar>
-                {user.username}
+            {!user && (
+              <NavButton href="/login" sx={{ px: 1 }}>
+                Login
               </NavButton>
             )}
+            {user && !mobile && (
+              <>
+                <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
 
-            {user && (
-              <NavButton onClick={signOut} sx={{ mx: 1 }}>
-                Sign out
-              </NavButton>
+                <Divider orientation="vertical" flexItem />
+
+                <NavButton onClick={handleMenuClick}>
+                  <Avatar
+                    src={`/image/profilepic/${user.picture}.png`}
+                    sx={{ mr: 2 }}
+                  ></Avatar>
+                  {user.username}
+                </NavButton>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={openMenu}
+                  onClose={handleMenuClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <MenuItem component={'a'} href={'/account'}>
+                    Account Settings
+                  </MenuItem>
+                  <MenuItem onClick={signOut}>Sign out</MenuItem>
+                </Menu>
+              </>
             )}
             <Divider orientation="vertical" flexItem />
           </Toolbar>
