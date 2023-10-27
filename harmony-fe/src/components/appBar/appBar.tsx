@@ -61,7 +61,7 @@ const AppBar = () => {
                 height: 64,
               }}
               alt="Harmony Logo"
-              src={'/images/harmonylogo.png'}
+              src={'/image/harmonylogo.png'}
             />
           </Button>
           <NavButton href="/home">Home</NavButton>
@@ -85,7 +85,7 @@ const AppBar = () => {
           {user && (
             <>
               <NavButton onClick={handleMenuClick}>
-                <Avatar src="/images/harmonylogo.png" sx={{ mr: 2 }}></Avatar>
+                <Avatar src="/image/harmonylogo.png" sx={{ mr: 2 }}></Avatar>
                 {user.username}
               </NavButton>
               <Menu

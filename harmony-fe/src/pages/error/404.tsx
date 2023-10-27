@@ -5,7 +5,6 @@ import TextBlock from '../../components/text'
 export default function Error404() {
   return (
     <>
-      <HarmonyAppBar />
       <Box display="flex" justifyContent="center" alignItems="center">
         <TextBlock>404 - Page Not Found</TextBlock>
       </Box>

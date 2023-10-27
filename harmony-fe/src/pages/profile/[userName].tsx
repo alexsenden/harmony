@@ -10,6 +10,7 @@ import { User } from '../../models/user'
 import TextBlock from '../../components/text'
 import { UserContext, UserCookieContext } from '../../contexts/user'
 import FollowingButton from '../../components/following-button'
+import Head from 'next/head'
 
 const Profile = () => {
   const router = useRouter()
@@ -126,7 +127,10 @@ const Profile = () => {
 
   return (
     <>
-      <HarmonyAppBar />
+      <Head>
+        <title>{`${userData?.username}'s Profile`}</title>
+      </Head>
+
       <Container maxWidth="xl" sx={{ mt: 2 }}>
         <Paper
           sx={{
@@ -145,7 +149,7 @@ const Profile = () => {
           >
             <Grid item>
               <Avatar
-                src="/images/harmonylogo.png"
+                src="/image/harmonylogo.png"
                 sx={{ height: '200px', width: '200px', ml: 3 }}
               ></Avatar>
             </Grid>

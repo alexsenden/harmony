@@ -13,6 +13,7 @@ import HarmonyAppBar from '../../components/appBar/index'
 import TextBlock from '../../components/text/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import Head from 'next/head'
 
 const LoginPage = () => {
   const [loginData] = useState({
@@ -55,7 +56,10 @@ const LoginPage = () => {
 
   return (
     <>
-      <HarmonyAppBar />
+      <Head>
+        <title>Login to Harmony</title>
+      </Head>
+
       <Container maxWidth="xl">
         <Paper
           elevation={3}
@@ -83,7 +87,7 @@ const LoginPage = () => {
                 xs: 6,
               }}
               alt="Harmony Logo"
-              src={'/images/harmonylogo.png'}
+              src={'/image/harmonylogo.png'}
             />
             <TextBlock my={3} fontSize={40}>
               Log in to Harmony

@@ -5,6 +5,7 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { useEffect, useState } from 'react'
 import { Post } from '../../models/post'
 import { Box } from '@mui/material'
+import Head from 'next/head'
 
 export default function PostDetail() {
   const router = useRouter()
@@ -29,7 +30,10 @@ export default function PostDetail() {
 
   return (
     <>
-      <HarmonyAppBar />
+      <Head>
+        <title>{`${post?.title} - by ${post?.username}`}</title>
+      </Head>
+
       <Box sx={{ m: 5 }}>{post && <PostCard {...post}></PostCard>}</Box>
     </>
   )

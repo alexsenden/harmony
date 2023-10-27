@@ -1,6 +1,6 @@
 import '../styles/global.css'
 import type { ReactElement, ReactNode } from 'react'
-import type { NextPage } from 'next'
+import type { Metadata, NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { UserContext, UserCookieContext } from '../contexts/user'
 import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react'
 import { User } from '../models/user'
 import { ThemeProvider } from '@emotion/react'
 import { createTheme } from '@mui/material'
+import Head from 'next/head'
+import HarmonyAppBar from '../components/appBar'
 
 export const globalTheme = createTheme({
   palette: {
@@ -35,6 +37,10 @@ export const globalTheme = createTheme({
     },
   },
 })
+
+export const metadata: Metadata = {
+  title: 'My Page Title',
+}
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -86,12 +92,18 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? (page => page)
 
   return getLayout(
-    <UserCookieContext.Provider value={userCookie}>
-      <UserContext.Provider value={currentUser}>
-        <ThemeProvider theme={globalTheme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </UserContext.Provider>
-    </UserCookieContext.Provider>
+    <>
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <UserCookieContext.Provider value={userCookie}>
+        <UserContext.Provider value={currentUser}>
+          <ThemeProvider theme={globalTheme}>
+            <HarmonyAppBar />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </UserContext.Provider>
+      </UserCookieContext.Provider>
+    </>
   )
 }

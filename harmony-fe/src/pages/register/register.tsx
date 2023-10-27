@@ -17,6 +17,7 @@ import { HttpMethod } from '../../hooks/httpRequest'
 import useHttpRequest from '../../hooks/httpRequest'
 import TextBlock from '../../components/text'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import Head from 'next/head'
 
 const RegisterPage = () => {
   const [hasError, setHasError] = useState(false)
@@ -73,7 +74,9 @@ const RegisterPage = () => {
 
   return (
     <>
-      <HarmonyAppBar />
+      <Head>
+        <title>Account Registration</title>
+      </Head>
       <Container
         maxWidth="xl"
         sx={{

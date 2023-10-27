@@ -5,6 +5,7 @@ import HarmonyAppBar from '../../components/appBar'
 import FilterPostButtons from '../../components/filterPostButtons'
 import PostFeed from '../../components/postFeed'
 import { UserContext } from '../../contexts/user'
+import Head from 'next/head'
 
 export enum FeedMode {
   FOLLOWING = 'following',
@@ -32,7 +33,9 @@ const HomePage = () => {
 
   return (
     <>
-      <HarmonyAppBar />
+      <Head>
+        <title>Harmony - a place to discuss music</title>
+      </Head>
       <Container maxWidth="xl">
         <FilterPostButtons
           activeButton={feedMode}
