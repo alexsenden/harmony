@@ -69,100 +69,98 @@ const AppBar = () => {
 
   return (
     <React.Fragment>
-      <Box sx={{ flexGrow: 1 }}>
-        <MuiAppBar position="sticky" sx={{ backgroundColor: 'white' }}>
-          <Toolbar>
-            <Button href="/home">
-              <Box
-                component="img"
-                sx={{
-                  height: 64,
-                }}
-                alt="Harmony Logo"
-                src={'/image/harmonylogo.png'}
-              />
-            </Button>
-            {!mobile && <NavButton href="/home">Home</NavButton>}
-            {user && !mobile && (
-              <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
-            )}
-            {/* Commenting this out for sprint 2 since it unimplemented
+      <MuiAppBar position="sticky" sx={{ backgroundColor: 'white' }}>
+        <Toolbar>
+          <Button href="/home">
+            <Box
+              component="img"
+              sx={{
+                height: 64,
+              }}
+              alt="Harmony Logo"
+              src={'/image/harmonylogo.png'}
+            />
+          </Button>
+          {!mobile && <NavButton href="/home">Home</NavButton>}
+          {user && !mobile && (
+            <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
+          )}
+          {/* Commenting this out for sprint 2 since it unimplemented
             <NavButton href="/home">
               Search
             </NavButton> */}
-            {user && !mobile && (
-              <NavButton onClick={handleOpen}>New Post</NavButton>
-            )}
-            {user && mobile && (
-              <div>
-                <IconButton
-                  aria-label="menu"
-                  id="mobile-button"
-                  aria-controls={menuOpen ? 'mobile-menu' : undefined}
-                  aria-expanded={menuOpen ? 'true' : undefined}
-                  aria-haspopup="true"
-                  onClick={handleMobileDropDown}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="mobile-menu"
-                  anchorEl={anchorEl}
-                  MenuListProps={{
-                    'aria-labelledby': 'mobile-button',
-                  }}
-                  open={menuOpen}
-                  onClose={handleMobileClose}
-                >
-                  <MenuItem onClick={profileOpen}>Profile</MenuItem>
-                  <MenuItem onClick={handleOpen}>New Post</MenuItem>
-                  <Divider />
-                  <MenuItem component={'a'} href={'/account'}>
-                    Account Settings
-                  </MenuItem>
-                  <MenuItem onClick={signOut}>Sign Out</MenuItem>
-                </Menu>
-              </div>
-            )}
+          {user && !mobile && (
+            <NavButton onClick={handleOpen}>New Post</NavButton>
+          )}
+          {user && mobile && (
+            <div>
+              <IconButton
+                aria-label="menu"
+                id="mobile-button"
+                aria-controls={menuOpen ? 'mobile-menu' : undefined}
+                aria-expanded={menuOpen ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleMobileDropDown}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="mobile-menu"
+                anchorEl={anchorEl}
+                MenuListProps={{
+                  'aria-labelledby': 'mobile-button',
+                }}
+                open={menuOpen}
+                onClose={handleMobileClose}
+              >
+                <MenuItem onClick={profileOpen}>Profile</MenuItem>
+                <MenuItem onClick={handleOpen}>New Post</MenuItem>
+                <Divider />
+                <MenuItem component={'a'} href={'/account'}>
+                  Account Settings
+                </MenuItem>
+                <MenuItem onClick={signOut}>Sign Out</MenuItem>
+              </Menu>
+            </div>
+          )}
 
-            {!user && (
-              <NavButton href="/login" sx={{ px: 1 }}>
-                Login
+          {!user && (
+            <NavButton href="/login" sx={{ px: 1 }}>
+              Login
+            </NavButton>
+          )}
+          {user && !mobile && (
+            <>
+              <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
+
+              <Divider orientation="vertical" flexItem />
+
+              <NavButton onClick={handleMenuClick}>
+                <Avatar
+                  src={`/image/profilepic/${user.picture}.png`}
+                  sx={{ mr: 2 }}
+                ></Avatar>
+                {user.username}
               </NavButton>
-            )}
-            {user && !mobile && (
-              <>
-                <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
-
-                <Divider orientation="vertical" flexItem />
-
-                <NavButton onClick={handleMenuClick}>
-                  <Avatar
-                    src={`/image/profilepic/${user.picture}.png`}
-                    sx={{ mr: 2 }}
-                  ></Avatar>
-                  {user.username}
-                </NavButton>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={openMenu}
-                  onClose={handleMenuClose}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                >
-                  <MenuItem component={'a'} href={'/account'}>
-                    Account Settings
-                  </MenuItem>
-                  <MenuItem onClick={signOut}>Sign out</MenuItem>
-                </Menu>
-              </>
-            )}
-            <Divider orientation="vertical" flexItem />
-          </Toolbar>
-        </MuiAppBar>
-      </Box>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={openMenu}
+                onClose={handleMenuClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem component={'a'} href={'/account'}>
+                  Account Settings
+                </MenuItem>
+                <MenuItem onClick={signOut}>Sign out</MenuItem>
+              </Menu>
+            </>
+          )}
+          <Divider orientation="vertical" flexItem />
+        </Toolbar>
+      </MuiAppBar>
       <PostModal open={open} onClose={handleClose} />
     </React.Fragment>
   )
