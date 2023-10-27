@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import * as userService from '../../services/userService'
 import { User } from '../../models/user'
 import { Login } from '../../models/login'
-import { Bio } from '../../models/bio'
+import { Account } from '../../models/account'
 
 export const register = async (
   req: Request,
@@ -24,14 +24,14 @@ export const register = async (
   }
 }
 
-export const setBio = async (
+export const updateAccount = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const userData = req.body as Bio
+  const userData = req.body as Account
   try {
-    const userBio = await userService.setUserBio(userData)
+    const userBio = await userService.setUserData(userData)
     res.json({
       userData: userBio,
     })
@@ -66,6 +66,7 @@ export const getUser = async (
   try {
     const cookie = req.headers.usercookie as string
     const userData = await userService.getUserFromCookie(cookie)
+
     res.json({
       userData: userData,
     })

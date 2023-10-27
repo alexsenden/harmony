@@ -2,7 +2,7 @@ import prisma from '../../prisma/prisma'
 import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 import { Login } from '../models/login'
-import { Bio } from '../models/bio'
+import { Account } from '../models/account'
 
 export const register = async (userData: User): Promise<User> => {
   try {
@@ -26,6 +26,7 @@ export const register = async (userData: User): Promise<User> => {
       firstName: postResult.firstName,
       lastName: postResult.lastName,
       bio: postResult.bio,
+      picture: postResult.picture,
     }
   } catch (e) {
     throw new HttpError('Username already exists', 400)
@@ -70,6 +71,7 @@ export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
     firstName: userData.firstName,
     lastName: userData.lastName,
     bio: userData.bio,
+    picture: userData.picture,
   }
 }
 
@@ -115,6 +117,7 @@ export const getUserFromCookie = async (cookie: string): Promise<User> => {
     firstName: userData.firstName,
     lastName: userData.lastName,
     bio: userData.bio,
+    picture: userData.picture,
   }
 }
 
@@ -126,7 +129,7 @@ export const removeUserCookie = async (cookie: string) => {
   })
 }
 
-export const setUserBio = async (userData: Bio): Promise<string | void> => {
+export const setUserData = async (userData: Account): Promise<Account> => {
   try {
     const userResult = await prisma.user.update({
       where: {
@@ -134,11 +137,14 @@ export const setUserBio = async (userData: Bio): Promise<string | void> => {
       },
       data: {
         bio: userData.bio,
+        picture: userData.picture,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
       },
     })
 
     // other objects will come from another commit and then I will complete this part
-    return Promise.resolve(userResult.bio)
+    return Promise.resolve(userResult)
   } catch (e) {
     throw new HttpError('Username already exists', 400)
   }

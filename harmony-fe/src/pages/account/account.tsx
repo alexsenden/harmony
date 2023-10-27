@@ -1,29 +1,79 @@
 import Head from 'next/head'
 import { UserContext } from '../../contexts/user'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
+  Avatar,
   Box,
   Button,
   Container,
   Divider,
+  ImageList,
+  ImageListItem,
+  Menu,
   Paper,
   TextField,
 } from '@mui/material'
 import TextBlock from '../../components/text'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import React from 'react'
+import router from 'next/router'
 
 const Account = () => {
   const user = useContext(UserContext)
-  const [userData] = useState({
+  const [newData] = useState({
     userId: user?.userId,
     bio: user?.bio,
+    picture: user?.picture,
+    firstName: user?.firstName,
+    lastName: user?.lastName,
   })
 
-  const [setBio] = useHttpRequest({
-    url: '/user/setBio',
+  const [updateAccount] = useHttpRequest({
+    url: '/user/updateAccount',
     method: HttpMethod.POST,
-    body: userData,
+    body: newData,
   })
+
+  const handleSave = () => {
+    updateAccount()
+    router.reload()
+  }
+
+  useEffect(() => {
+    newData.userId = user?.userId
+    newData.bio = user?.bio
+    newData.picture = user?.picture
+  }, [user, UserContext])
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const openMenu = Boolean(anchorEl)
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
+  const itemData = [
+    {
+      img: '/image/profilepic/0.png',
+      value: 0,
+    },
+    {
+      img: '/image/profilepic/1.png',
+      value: 1,
+    },
+    {
+      img: '/image/profilepic/2.png',
+      value: 2,
+    },
+  ]
+
+  function handlePicture(picNum: number): void {
+    newData.picture = picNum
+    console.log(newData.picture)
+    handleMenuClose()
+  }
 
   return (
     <>
@@ -40,22 +90,73 @@ const Account = () => {
             flexGrow: 1,
           }}
         >
-          <TextBlock variant="h4">Account Settings</TextBlock>
-          <TextBlock variant="h5">Profile Picture</TextBlock>
-          <TextBlock>
-            Allow user to pick from a few premade profile pictures
+          <TextBlock variant="h4" sx={{ mb: '2rem' }}>
+            Account Settings
           </TextBlock>
-          <Divider />
+          <TextBlock variant="h5">Profile Picture</TextBlock>
+          <Button onClick={handleMenuClick}>
+            <Avatar
+              src={
+                newData?.picture !== undefined
+                  ? `/image/profilepic/${newData?.picture}.png`
+                  : `/image/profilepic/${user?.picture}.png`
+              }
+              sx={{ mr: 2 }}
+            />
+            {user?.username}
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={openMenu}
+            onClose={handleMenuClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <ImageList
+              sx={{ width: 500, height: 450 }}
+              cols={3}
+              rowHeight={164}
+            >
+              {itemData.map(item => (
+                <ImageListItem key={item.img}>
+                  <img
+                    srcSet={`${item.img}`}
+                    src={`${item.img}`}
+                    loading="lazy"
+                    onClick={() => handlePicture(item.value)}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </Menu>
+
+          <Divider sx={{ m: '2rem' }} />
           <TextBlock variant="h5">Name</TextBlock>
-          <TextBlock>Allow user to change their name</TextBlock>
-          <Divider />
+          <TextField
+            onChange={event => (newData.firstName = event.target.value)}
+            placeholder={user?.firstName}
+            variant="outlined"
+            required
+            margin="dense"
+          />
+          <TextField
+            onChange={event => (newData.lastName = event.target.value)}
+            placeholder={user?.lastName}
+            variant="outlined"
+            required
+            margin="dense"
+          />
+
+          <Divider sx={{ m: '2rem' }} />
           <TextBlock variant="h5">Bio</TextBlock>
-          <TextBlock>Allow user to change their bio</TextBlock>
           <Box>
             <TextField
               onChange={event => (
-                (userData.bio = event.target.value),
-                (userData.userId = user?.userId)
+                (newData.bio = event.target.value),
+                (newData.picture = user?.picture),
+                (newData.userId = user?.userId)
               )}
               placeholder={user?.bio}
               variant="outlined"
@@ -64,7 +165,10 @@ const Account = () => {
               margin="dense"
             />
           </Box>
-          <Button onClick={setBio}>Set Bio</Button>
+          <Divider sx={{ m: '2rem' }} />
+          <Button onClick={handleSave} variant="contained">
+            Save Changes
+          </Button>
         </Paper>
       </Container>
     </>

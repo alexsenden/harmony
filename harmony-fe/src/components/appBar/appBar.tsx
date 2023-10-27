@@ -86,7 +86,10 @@ const AppBar = () => {
           {user && (
             <>
               <NavButton onClick={handleMenuClick}>
-                <Avatar src="/image/harmonylogo.png" sx={{ mr: 2 }}></Avatar>
+                <Avatar
+                  src={`/image/profilepic/${user.picture}.png`}
+                  sx={{ mr: 2 }}
+                ></Avatar>
                 {user.username}
               </NavButton>
               <Menu

@@ -16,6 +16,7 @@ model User {
   active    Boolean      @default(true)
   firstName String       @map("first_name")
   lastName  String       @map("last_name")
+  picture   Int          @default(0)
   posts     Post[]
   likes     Like[]
   comments  Comment[]

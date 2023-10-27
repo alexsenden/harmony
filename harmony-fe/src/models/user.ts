@@ -7,6 +7,7 @@ export type User = {
   firstName: string
   lastName: string
   bio: string
+  picture: number
 }
 
 export type NewUser = {
