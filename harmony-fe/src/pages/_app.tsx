@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from 'react'
 import type { Metadata, NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { UserContext, UserCookieContext } from '../contexts/user'
+import { MobileContext } from '../contexts/mobile'
 import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
 import { useEffect, useState } from 'react'
 import { User } from '../models/user'
@@ -64,6 +65,7 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined)
   const [userCookie, setUserCookie] = useState<string>('')
+  const [mobile, setMobile] = useState<boolean>(false)
   const cookieInfo = { userCookie: '' }
   function getCookie(cookieName: string): string {
     const name = cookieName + '='
@@ -92,6 +94,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     }
   }, [])
   useEffect(() => {
+    const userAgent = window.navigator.userAgent
+    const mobileRegex =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+    setMobile(mobileRegex.test(userAgent))
+  }, [])
+  useEffect(() => {
     if (response && !loading) {
       setCurrentUser(response.userData as User)
     }
@@ -103,18 +111,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? (page => page)
 
   return getLayout(
-    <>
-      <Head>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <UserCookieContext.Provider value={userCookie}>
-        <UserContext.Provider value={currentUser}>
-          <ThemeProvider theme={globalTheme}>
-            <HarmonyAppBar />
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </UserContext.Provider>
-      </UserCookieContext.Provider>
-    </>
+    <UserCookieContext.Provider value={userCookie}>
+      <UserContext.Provider value={currentUser}>
+        <MobileContext.Provider value={mobile}>
+          <Component {...pageProps} />
+        </MobileContext.Provider>
+      </UserContext.Provider>
+    </UserCookieContext.Provider>
   )
 }

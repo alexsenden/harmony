@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import TextBlock from '../../components/text/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Head from 'next/head'
+import { MobileContext } from '../../contexts/mobile'
 
 const LoginPage = () => {
   const [loginData] = useState({
@@ -21,6 +22,7 @@ const LoginPage = () => {
   })
   const [loginError, setLoginError] = useState(false) // Initialize error state
   const [showPassword, setShowPassword] = useState(false)
+  const mobile = useContext(MobileContext)
   const [userLogin, userLoginResponse, userLoginError, userLoginLoading] =
     useHttpRequest({
       url: '/user/login',
@@ -58,17 +60,21 @@ const LoginPage = () => {
       <Head>
         <title>Login to Harmony</title>
       </Head>
-
-      <Container maxWidth="xl">
+      <Container
+        maxWidth="xl"
+        sx={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <Paper
           elevation={3}
-          style={{ padding: 50 }}
+          style={{ padding: mobile ? 20 : 50 }}
           sx={{
             p: 2,
             margin: 'auto',
-            my: 7,
-            maxWidth: 'auto',
-            width: 5 / 12,
+            my: mobile ? 2 : 7,
+            width: mobile ? 10 / 12 : 5 / 12,
             flexGrow: 1,
           }}
         >
@@ -82,7 +88,7 @@ const LoginPage = () => {
               component="img"
               sx={{
                 maxWidth: 'auto',
-                width: 5 / 12,
+                width: mobile ? 11 / 12 : 5 / 12,
                 xs: 6,
               }}
               alt="Harmony Logo"
@@ -98,7 +104,7 @@ const LoginPage = () => {
               placeholder="Enter username"
               sx={{
                 mt: 3,
-                width: 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
               required
               error={loginError}
@@ -111,7 +117,7 @@ const LoginPage = () => {
               placeholder="Enter password"
               sx={{
                 mt: 3,
-                width: 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
               required
               error={loginError}
@@ -134,7 +140,7 @@ const LoginPage = () => {
               variant="outlined"
               sx={{
                 mt: 3,
-                width: 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
             >
               <TextBlock fontSize={20}> Log in </TextBlock>
@@ -144,7 +150,7 @@ const LoginPage = () => {
               variant="outlined"
               sx={{
                 mt: 3,
-                width: 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
             >
               <TextBlock fontSize={20}> Sign up </TextBlock>

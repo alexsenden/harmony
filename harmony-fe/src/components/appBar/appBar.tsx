@@ -9,17 +9,23 @@ import {
   MenuItem,
   Avatar,
   Link,
+  IconButton,
 } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
 
 import PostModal from '../post-modal'
 import { UserContext, UserCookieContext } from '../../contexts/user'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
+import { MobileContext } from '../../contexts/mobile'
 
 const AppBar = () => {
   const [open, setOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const user = useContext(UserContext)
+  const mobile = useContext(MobileContext)
   const userCookie = useContext(UserCookieContext)
+  const menuOpen = Boolean(anchorEl)
 
   const [sendHttpRequest] = useHttpRequest({
     url: '/user/signOut',
@@ -42,38 +48,77 @@ const AppBar = () => {
     window.location.href = '../home'
   }
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const openMenu = Boolean(anchorEl)
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
-  const handleMenuClose = () => {
+  const handleMenuClose = () => {    setAnchorEl(null)
+  }
+
+  const profileOpen = () => {
+    window.location.href = `/profile/${user?.username}`
+  }
+
+  const handleMobileDropDown = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMobileClose = () => {
     setAnchorEl(null)
   }
 
   return (
     <React.Fragment>
-      <MuiAppBar position="sticky" sx={{ backgroundColor: 'white' }}>
-        <Toolbar>
-          <Button href="/home">
-            <Box
-              component="img"
-              sx={{
-                height: 64,
-              }}
-              alt="Harmony Logo"
-              src={'/image/harmonylogo.png'}
-            />
-          </Button>
-          <NavButton href="/home">Home</NavButton>
-          {user && (
-            <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
-          )}
-          {/* Commenting this out for sprint 2 since it it unimplemented
+      <Box sx={{ flexGrow: 1 }}>
+        <MuiAppBar position="sticky" sx={{ backgroundColor: 'white' }}>
+          <Toolbar>
+            <Button href="/home">
+              <Box
+                component="img"
+                sx={{
+                  height: 64,
+                }}
+                alt="Harmony Logo"
+                src={'/harmony1.png'}
+              />
+            </Button>
+            {!mobile && <NavButton href="/home">Home</NavButton>}
+            {user && !mobile && (
+              <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
+            )}
+            {/* Commenting this out for sprint 2 since it unimplemented
             <NavButton href="/home">
               Search
             </NavButton> */}
-          {user && <NavButton onClick={handleOpen}>New Post</NavButton>}
+            {user && !mobile && (
+              <NavButton onClick={handleOpen}>New Post</NavButton>
+            )}
+            {user && mobile && (
+              <div>
+                <IconButton
+                  aria-label="menu"
+                  id="mobile-button"
+                  aria-controls={menuOpen ? 'mobile-menu' : undefined}
+                  aria-expanded={menuOpen ? 'true' : undefined}
+                  aria-haspopup="true"
+                  onClick={handleMobileDropDown}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="mobile-menu"
+                  anchorEl={anchorEl}
+                  MenuListProps={{
+                    'aria-labelledby': 'mobile-button',
+                  }}
+                  open={menuOpen}
+                  onClose={handleMobileClose}
+                >
+                  <MenuItem onClick={profileOpen}>Profile</MenuItem>
+                  <MenuItem onClick={handleOpen}>New Post</MenuItem>
+                </Menu>
+              </div>
+            )}
 
           <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
 
@@ -84,7 +129,7 @@ const AppBar = () => {
             </NavButton>
           )}
           {user && (
-            <>
+            
               <NavButton onClick={handleMenuClick}>
                 <Avatar
                   src={`/image/profilepic/${user.picture}.png`}
@@ -92,25 +137,17 @@ const AppBar = () => {
                 ></Avatar>
                 {user.username}
               </NavButton>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={openMenu}
-                onClose={handleMenuClose}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
-                }}
-              >
-                <MenuItem component={'a'} href={'/account'}>
-                  Account Settings
-                </MenuItem>
-                <MenuItem onClick={signOut}>Sign Out</MenuItem>
-              </Menu>
-            </>
-          )}
-          <Divider orientation="vertical" flexItem />
-        </Toolbar>
-      </MuiAppBar>
+            )}
+
+            {user && (
+              <NavButton onClick={signOut} sx={{ mx: 1 }}>
+                Sign out
+              </NavButton>
+            )}
+            <Divider orientation="vertical" flexItem />
+          </Toolbar>
+        </MuiAppBar>
+      </Box>
       <PostModal open={open} onClose={handleClose} />
     </React.Fragment>
   )
