@@ -114,7 +114,7 @@ jobs:
           host: ${{ secrets.azureHost1 }}
           username: ${{ secrets.usernameBackend }}
           password: ${{ secrets.passwordBackend }}
-          script_stop: true
+          script_stop: false
           port: 22
           envs: hostBackend,grafanaAPIkey
           script: |
