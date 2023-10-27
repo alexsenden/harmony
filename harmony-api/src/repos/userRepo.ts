@@ -2,6 +2,7 @@ import prisma from '../../prisma/prisma'
 import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 import { Login } from '../models/login'
+import { Bio } from '../models/bio'
 
 export const register = async (userData: User): Promise<User> => {
   try {
@@ -123,4 +124,22 @@ export const removeUserCookie = async (cookie: string) => {
       cookie: cookie,
     },
   })
+}
+
+export const setUserBio = async (userData: Bio): Promise<string | void> => {
+  try {
+    const userResult = await prisma.user.update({
+      where: {
+        userId: userData.userId,
+      },
+      data: {
+        bio: userData.bio,
+      },
+    })
+
+    // other objects will come from another commit and then I will complete this part
+    return Promise.resolve(userResult.bio)
+  } catch (e) {
+    throw new HttpError('Username already exists', 400)
+  }
 }

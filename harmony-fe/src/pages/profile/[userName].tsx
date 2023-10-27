@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
-import { Avatar, Box, Container, Grid, Paper } from '@mui/material'
-
-import HarmonyAppBar from '../../components/appBar/appBar'
+import { Avatar, Box, Container, Grid, IconButton, Paper } from '@mui/material'
+import SettingsIcon from '@mui/icons-material/Settings'
 import TabLayout from '../../components/tab-layout'
 import PostFeed from '../../components/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
@@ -150,7 +149,7 @@ const Profile = () => {
             <Grid item>
               <Avatar
                 src="/image/harmonylogo.png"
-                sx={{ height: '200px', width: '200px', ml: 3 }}
+                sx={{ height: '175px', width: '175px', ml: 3 }}
               ></Avatar>
             </Grid>
             <Grid item xs={12} sm container>
@@ -176,6 +175,11 @@ const Profile = () => {
                     <FollowingButton variant="outlined" onClick={followAction}>
                       {following ? 'Un-Follow' : 'Follow'}
                     </FollowingButton>
+                  )}
+                  {user && user?.username === userName && (
+                    <IconButton href="/account">
+                      <SettingsIcon fontSize="inherit" />
+                    </IconButton>
                   )}
                   <br />
                   <TextBlock>{`${numFollowers} Follower${

@@ -1,7 +1,5 @@
 import { Container } from '@mui/material'
 import { useContext, useState } from 'react'
-
-import HarmonyAppBar from '../../components/appBar'
 import FilterPostButtons from '../../components/filterPostButtons'
 import PostFeed from '../../components/postFeed'
 import { UserContext } from '../../contexts/user'

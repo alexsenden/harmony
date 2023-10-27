@@ -3,6 +3,7 @@ import * as crypto from 'crypto'
 import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 import { Login } from '../models/login'
+import { Bio } from '../models/bio'
 
 export const getUserByUsername = async (userName?: string): Promise<User> => {
   const user = userRepo.getUserByName(userName)
@@ -107,4 +108,15 @@ const hashPassword = (password: string) => {
   const hash = crypto.createHash('sha256')
   hash.update(password)
   return hash.digest('hex')
+}
+
+export const setUserBio = async (userData?: Bio): Promise<string | void> => {
+  if (userData === undefined) {
+    throw new HttpError('User not found', 404)
+  }
+  try {
+    return await userRepo.setUserBio(userData)
+  } catch (error) {
+    throw new HttpError('Incorrect Credentials', 401)
+  }
 }

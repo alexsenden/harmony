@@ -35,6 +35,11 @@ export const globalTheme = createTheme({
         root: { fontFamily: 'DM Sans, sans-serif' },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: { fontFamily: 'DM Sans, sans-serif' },
+      },
+    },
   },
 })
 

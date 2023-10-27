@@ -8,6 +8,7 @@ import {
   Menu,
   MenuItem,
   Avatar,
+  Link,
 } from '@mui/material'
 
 import PostModal from '../post-modal'
@@ -97,7 +98,9 @@ const AppBar = () => {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem onClick={handleMenuClose}>Account Settings</MenuItem>
+                <MenuItem component={'a'} href={'/account'}>
+                  Account Settings
+                </MenuItem>
                 <MenuItem onClick={signOut}>Sign Out</MenuItem>
               </Menu>
             </>

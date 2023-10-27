@@ -9,5 +9,6 @@ router.get('/', userController.get)
 router.post('/login', userController.login)
 router.post('/signOut', userController.signOut)
 router.get('/getUser', userController.getUser)
+router.post('/setBio', userController.setBio)
 
 export default router

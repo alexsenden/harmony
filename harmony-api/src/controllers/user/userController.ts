@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import * as userService from '../../services/userService'
 import { User } from '../../models/user'
 import { Login } from '../../models/login'
+import { Bio } from '../../models/bio'
 
 export const register = async (
   req: Request,
@@ -17,6 +18,22 @@ export const register = async (
     res.json({
       userData: newUser,
       'Set-Cookie': 'userCookie = ' + userCookie,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const setBio = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userData = req.body as Bio
+  try {
+    const userBio = await userService.setUserBio(userData)
+    res.json({
+      userData: userBio,
     })
   } catch (error) {
     next(error)
