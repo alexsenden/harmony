@@ -11,10 +11,12 @@ import PostModal from '../post-modal'
 import { UserContext, UserCookieContext } from '../../contexts/user'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
+import { MobileContext } from '../../contexts/mobile'
 
 const AppBar = () => {
   const [open, setOpen] = useState(false)
   const user = useContext(UserContext)
+  const mobile = useContext(MobileContext)
   const userCookie = useContext(UserCookieContext)
 
   const [sendHttpRequest] = useHttpRequest({
@@ -53,7 +55,7 @@ const AppBar = () => {
                 src={'/harmony1.png'}
               />
             </Button>
-            <NavButton href="/home">Home</NavButton>
+            { !mobile && (<NavButton href="/home">Home</NavButton>)}
             {user && (
               <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
             )}
