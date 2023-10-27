@@ -114,9 +114,24 @@ export const setUserData = async (userData?: Account): Promise<Account> => {
   if (userData === undefined) {
     throw new HttpError('User not found', 404)
   }
-  try {
-    return await userRepo.setUserData(userData)
-  } catch (error) {
-    throw new HttpError('Incorrect Credentials', 401)
+
+  validateUserUpdate(userData)
+  return await userRepo.setUserData(userData)
+}
+
+const validateUserUpdate = (userData: Account) => {
+  const errorMessages = []
+
+  const nameRegex = /^[a-zA-Z-]+$/g
+
+  if (!userData.firstName.match(nameRegex)) {
+    errorMessages.push('First Name does not match rules')
+  }
+  if (!userData.lastName.match(nameRegex)) {
+    errorMessages.push('Last Name does not match rules')
+  }
+
+  if (errorMessages.length > 0) {
+    throw new HttpError(errorMessages.join('; '), 400)
   }
 }

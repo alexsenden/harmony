@@ -10,6 +10,7 @@ import { ThemeProvider } from '@emotion/react'
 import { createTheme } from '@mui/material'
 import Head from 'next/head'
 import HarmonyAppBar from '../components/appBar'
+import { Palette, StayPrimaryLandscape } from '@mui/icons-material'
 
 export const globalTheme = createTheme({
   palette: {
@@ -36,6 +37,11 @@ export const globalTheme = createTheme({
       },
     },
     MuiTab: {
+      styleOverrides: {
+        root: { fontFamily: 'DM Sans, sans-serif' },
+      },
+    },
+    MuiDialogTitle: {
       styleOverrides: {
         root: { fontFamily: 'DM Sans, sans-serif' },
       },

@@ -148,7 +148,7 @@ const Profile = () => {
           >
             <Grid item>
               <Avatar
-                src="/image/harmonylogo.png"
+                src={`/image/profilepic/${user?.picture}.png`}
                 sx={{ height: '175px', width: '175px', ml: 3 }}
               ></Avatar>
             </Grid>

@@ -12,18 +12,20 @@ import {
   IconButton,
   Link,
   Rating,
+  Avatar,
 } from '@mui/material'
 import TextBlock from '../text'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined'
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined'
 import SendRoundedIcon from '@mui/icons-material/SendRounded'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { PostType } from '../../models/post'
 import { Forum, Poll, RateReview } from '@mui/icons-material'
 import { PollOption } from '../../models/pollOption'
 import { PollAnswer } from './poll-answer'
 import { TopicId } from '../../models/topic'
+import { UserContext } from '../../contexts/user'
 
 interface PostProps {
   title: string
@@ -37,6 +39,7 @@ interface PostProps {
   rating?: number
   topicName: string
   topicId: TopicId
+  picture: number
 }
 
 const Post = ({
@@ -51,6 +54,7 @@ const Post = ({
   rating,
   topicName,
   topicId,
+  picture,
 }: PostProps) => {
   const [isLiked, setIsLiked] = useState(false)
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false)
@@ -94,14 +98,14 @@ const Post = ({
   const iconSx = { mt: 1, ml: 1 }
   switch (postType) {
     case PostType.DISCUSSION:
-      avatarIcon = <Forum sx={iconSx} />
+      avatarIcon = <Forum sx={iconSx} fontSize="large" />
       break
     case PostType.POLL:
-      avatarIcon = <Poll sx={iconSx} />
+      avatarIcon = <Poll sx={iconSx} fontSize="large" />
       break
     case PostType.REVIEW:
     default:
-      avatarIcon = <RateReview sx={iconSx} />
+      avatarIcon = <RateReview sx={iconSx} fontSize="large" />
       break
   }
 
@@ -109,7 +113,6 @@ const Post = ({
     <Card variant="outlined" sx={{ mb: 1 }}>
       <Stack direction="row">
         <CardContent>{avatarIcon}</CardContent>
-
         <Box sx={{ width: '100%' }}>
           <CardContent>
             <Link href={`/posts/${postId}`} underline="none">
@@ -152,9 +155,13 @@ const Post = ({
           <Divider />
 
           <CardActions sx={{ display: 'flex', justifyContent: 'start' }}>
-            <Link href={`/profile/${name}`}>
-              <TextBlock>By: {name} </TextBlock>
-            </Link>
+            <Button href={`/profile/${name}`}>
+              <Avatar
+                src={`/image/profilepic/${picture}.png`}
+                sx={{ mr: 1, height: 24, width: 24 }}
+              ></Avatar>
+              {name}
+            </Button>
             <Button
               size="small"
               onClick={toggleCommentSection}

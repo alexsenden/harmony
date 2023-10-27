@@ -136,14 +136,16 @@ const Account = () => {
           <TextBlock variant="h5">Name</TextBlock>
           <TextField
             onChange={event => (newData.firstName = event.target.value)}
-            placeholder={user?.firstName}
+            label={user?.firstName}
+            placeholder="First Name"
             variant="outlined"
             required
             margin="dense"
           />
           <TextField
             onChange={event => (newData.lastName = event.target.value)}
-            placeholder={user?.lastName}
+            label={user?.lastName}
+            placeholder="Last Name"
             variant="outlined"
             required
             margin="dense"
