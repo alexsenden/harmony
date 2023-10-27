@@ -31,8 +31,6 @@ jobs:
           echo "DB_HOST=${{ secrets.azureHost2 }}" >> ./environment/.env.prod
           echo "POSTGRES_URL=postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}" >> ./environment/.env.prod         
 
-          cat ./environment/.env.prod | sed 's/./&‌/g'
-
       - name: Harmony API - Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
