@@ -119,6 +119,7 @@ jobs:
           envs: hostBackend,grafanaAPIkey
           script: |
               export grafanaAPIkey="${{ env.grafanaAPIkey }}"
+              export hostBackend="${{ env.hostBackend }}"
 
               # Download grafana agent
               ARCH="amd64" GCLOUD_HOSTED_METRICS_URL="https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push" GCLOUD_HOSTED_METRICS_ID="1252941" GCLOUD_SCRAPE_INTERVAL="60s" GCLOUD_HOSTED_LOGS_URL="https://logs-prod-006.grafana.net/loki/api/v1/push" GCLOUD_HOSTED_LOGS_ID="725516" GCLOUD_RW_API_KEY="$grafanaAPIkey" /bin/sh -c "$(curl -fsSL https://storage.googleapis.com/cloud-onboarding/agent/scripts/grafanacloud-install.sh)"
@@ -126,7 +127,8 @@ jobs:
               sudo usermod -a -G docker grafana-agent
 
               # The following cmd + exit, needed to generate service file (i.e. "sudo systemctl edit --full grafana-agent.service" )
-              (echo -e '\x18' && echo -e ':q!' && echo -e '\x0d') | sudo EDITOR=nano systemctl edit --full grafana-agent.service
+              # (echo -e '\x18' && echo -e ':q!' && echo -e '\x0d') | sudo EDITOR=nano systemctl edit --full grafana-agent.service
+              sudo systemctl edit --full grafana-agent.service
 
               sudo sed -i 's/User=grafana-agent/User=root/' /etc/systemd/system/grafana-agent.service
               sudo systemctl daemon-reload
@@ -151,12 +153,6 @@ jobs:
               q
               EOF
 
-              ed -s grafana-agent.yaml <<EOF
-              /<your-instance-name>/a
-              $hostBackend
-              .
-              w
-              q
-              EOF
-
+              sudo sed -i "s/<your-instance-name>/$hostBackend/g" grafana-agent.yaml
+      
               sudo systemctl restart grafana-agent.service
