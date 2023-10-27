@@ -108,7 +108,7 @@ const RegisterPage = () => {
                 xs: 6,
               }}
               alt="Harmony Logo"
-              src={'/images/harmonylogo.png'}
+              src={'/harmony1.png'}
             />
             <TextBlock my={3} fontSize={40}>
               Join Harmony

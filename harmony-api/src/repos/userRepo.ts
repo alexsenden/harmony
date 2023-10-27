@@ -24,6 +24,7 @@ export const register = async (userData: User): Promise<User> => {
       active: postResult.active,
       firstName: postResult.firstName,
       lastName: postResult.lastName,
+      bio: postResult.bio,
     }
   } catch (e) {
     throw new HttpError('Username already exists', 400)
@@ -67,6 +68,7 @@ export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
     active: userData.active,
     firstName: userData.firstName,
     lastName: userData.lastName,
+    bio: userData.bio,
   }
 }
 
@@ -111,6 +113,7 @@ export const getUserFromCookie = async (cookie: string): Promise<User> => {
     active: userData.active,
     firstName: userData.firstName,
     lastName: userData.lastName,
+    bio: userData.bio,
   }
 }
 

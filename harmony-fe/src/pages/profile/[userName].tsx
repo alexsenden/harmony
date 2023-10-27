@@ -145,7 +145,7 @@ const Profile = () => {
           >
             <Grid item>
               <Avatar
-                src="/harmony1.png"
+                src="/images/harmonylogo.png"
                 sx={{ height: '200px', width: '200px', ml: 3 }}
               ></Avatar>
             </Grid>
@@ -203,7 +203,7 @@ const Profile = () => {
               </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <p></p>
+              <TextBlock>{userData?.bio}</TextBlock>
             </Grid>
           </Grid>
         </Paper>
