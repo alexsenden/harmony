@@ -35,6 +35,11 @@ const Account = () => {
   })
 
   const handleSave = () => {
+    if (newData.firstName === undefined) newData.firstName = user?.firstName
+    if (newData.lastName === undefined) newData.lastName = user?.lastName
+    if (newData.bio === undefined) newData.bio = user?.bio
+    if (newData.picture === undefined) newData.picture = user?.picture
+
     updateAccount()
     router.reload()
   }
@@ -155,11 +160,7 @@ const Account = () => {
           <TextBlock variant="h5">Bio</TextBlock>
           <Box>
             <TextField
-              onChange={event => (
-                (newData.bio = event.target.value),
-                (newData.picture = user?.picture),
-                (newData.userId = user?.userId)
-              )}
+              onChange={event => (newData.bio = event.target.value)}
               placeholder={user?.bio}
               variant="outlined"
               required
