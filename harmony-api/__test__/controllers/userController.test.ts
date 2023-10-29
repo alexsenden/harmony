@@ -17,6 +17,7 @@ describe('Register Controller', () => {
     lastName: 'vendi',
     createdAt: new Date(),
     active: true,
+    picture: 0,
   }
 
   it('should register a user', async () => {

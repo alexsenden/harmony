@@ -9,10 +9,10 @@ import {
   IconButton,
   InputAdornment,
 } from '@mui/material'
-import HarmonyAppBar from '../../components/appBar/index'
 import TextBlock from '../../components/text/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import Head from 'next/head'
 import { MobileContext } from '../../contexts/mobile'
 
 const LoginPage = () => {
@@ -57,7 +57,9 @@ const LoginPage = () => {
 
   return (
     <>
-      <HarmonyAppBar />
+      <Head>
+        <title>Login to Harmony</title>
+      </Head>
       <Container
         maxWidth="xl"
         sx={{
@@ -90,7 +92,7 @@ const LoginPage = () => {
                 xs: 6,
               }}
               alt="Harmony Logo"
-              src={'/harmony1.png'}
+              src={'/image/harmonylogo.png'}
             />
             <TextBlock my={3} fontSize={40}>
               Log in to Harmony
