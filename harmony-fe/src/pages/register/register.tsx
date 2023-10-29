@@ -11,10 +11,7 @@ import {
   IconButton,
 } from '@mui/material'
 
-import HarmonyAppBar from '../../components/appBar/appBar'
-
 import { HttpMethod } from '../../hooks/httpRequest'
-
 import useHttpRequest from '../../hooks/httpRequest'
 import TextBlock from '../../components/text'
 import { Visibility, VisibilityOff } from '@mui/icons-material'

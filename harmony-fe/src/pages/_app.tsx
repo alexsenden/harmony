@@ -8,10 +8,8 @@ import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
 import { useEffect, useState } from 'react'
 import { User } from '../models/user'
 import { ThemeProvider } from '@emotion/react'
-import { createTheme } from '@mui/material'
-import Head from 'next/head'
+import { CssBaseline, createTheme } from '@mui/material'
 import HarmonyAppBar from '../components/appBar'
-import { Palette, StayPrimaryLandscape } from '@mui/icons-material'
 
 export const globalTheme = createTheme({
   palette: {
@@ -21,30 +19,20 @@ export const globalTheme = createTheme({
     secondary: {
       main: '#0064AC',
     },
+    background: {
+      default: '#efefef',
+    },
+  },
+  typography: {
+    fontFamily: 'DM Sans, sans-serif', //Default font is DM Sans
   },
   components: {
     // Name of the component
     MuiButton: {
       styleOverrides: {
         root: {
-          fontFamily: 'DM Sans, sans-serif',
-          textTransform: 'none',
+          textTransform: 'none', //No uppercase buttons
         },
-      },
-    },
-    MuiMenuItem: {
-      styleOverrides: {
-        root: { fontFamily: 'DM Sans, sans-serif' },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: { fontFamily: 'DM Sans, sans-serif' },
-      },
-    },
-    MuiDialogTitle: {
-      styleOverrides: {
-        root: { fontFamily: 'DM Sans, sans-serif' },
       },
     },
   },
@@ -115,6 +103,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <UserContext.Provider value={currentUser}>
         <MobileContext.Provider value={mobile}>
           <ThemeProvider theme={globalTheme}>
+            <CssBaseline />
             <HarmonyAppBar />
             <Component {...pageProps} />
           </ThemeProvider>

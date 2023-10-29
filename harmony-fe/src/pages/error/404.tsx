@@ -1,5 +1,4 @@
 import { Box } from '@mui/material'
-import HarmonyAppBar from '../../components/appBar'
 import TextBlock from '../../components/text'
 
 export default function Error404() {

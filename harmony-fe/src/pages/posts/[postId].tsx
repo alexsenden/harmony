@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import HarmonyAppBar from '../../components/appBar'
 import PostCard from '../../components/post/postCard'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { useEffect, useState } from 'react'

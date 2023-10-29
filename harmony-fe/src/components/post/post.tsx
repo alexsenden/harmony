@@ -19,13 +19,12 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined'
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined'
 import SendRoundedIcon from '@mui/icons-material/SendRounded'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { PostType } from '../../models/post'
 import { Forum, Poll, RateReview } from '@mui/icons-material'
 import { PollOption } from '../../models/pollOption'
 import { PollAnswer } from './poll-answer'
 import { TopicId } from '../../models/topic'
-import { UserContext } from '../../contexts/user'
 
 interface PostProps {
   title: string
