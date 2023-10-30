@@ -5,6 +5,7 @@ import { validateTopicId } from './topicService'
 import { HttpError } from '../models/error/httpError'
 import { PollOption } from '../models/pollOption'
 import { Like } from '../models/like'
+import { Comment } from '../models/comment'
 
 export const createPost = async (postData?: Post): Promise<Post> => {
   const validatedPost = validatePost(postData)
@@ -36,6 +37,44 @@ export const createLike = async (likeData: Like): Promise<Like> => {
   }
 
   return await postRepo.createLike(likeData)
+}
+
+export const getLikesbyUserId = async (
+  userId?: string
+): Promise<Array<Like>> => {
+  if (!userId) {
+    return []
+  }
+
+  return await postRepo.getLikesByUserId(userId)
+}
+
+export const deleteLike = async (likeData: Like): Promise<Like> => {
+  if (!likeData.userId) {
+    throw new HttpError('userId is required', 400)
+  } else if (!likeData.postId) {
+    throw new HttpError('postId is required', 400)
+  }
+
+  return await postRepo.deleteLike(likeData)
+}
+
+export const createComment = async (commentData: Comment): Promise<Comment> => {
+  if (!commentData.userId) {
+    throw new HttpError('userId is required', 400)
+  } else if (!commentData.postId) {
+    throw new HttpError('postId is required', 400)
+  }
+
+  return await postRepo.createComment(commentData)
+}
+
+export const getComments = async (postId?: string) => {
+  if (!postId) {
+    return []
+  }
+
+  return await postRepo.getComments(postId)
 }
 
 export const getPostByUserId = async (
