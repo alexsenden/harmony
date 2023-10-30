@@ -11,7 +11,7 @@ export enum FeedMode {
 }
 
 const HomePage = () => {
-  const user = useContext(UserContext)
+  const user = useContext(UserContext)     
 
   const trendingFeedUrl = '/post/trending'
   const followingFeedUrl = `/post/following?userId=${user?.userId}`
