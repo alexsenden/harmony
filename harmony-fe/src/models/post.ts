@@ -12,6 +12,7 @@ export type Post = {
   pollOptions?: Array<PollOption>
   username?: string
   topicName: string
+  picture: number
 }
 
 export enum PostField {

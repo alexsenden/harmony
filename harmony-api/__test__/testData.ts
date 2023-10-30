@@ -53,6 +53,7 @@ export const FAKE_USER_1: User = {
   createdAt: new Date(),
   firstName: 'fake-firstname-1',
   lastName: 'fake-lastname-1',
+  picture: 0,
 }
 
 export const FAKE_USER_2: User = {
@@ -63,6 +64,7 @@ export const FAKE_USER_2: User = {
   createdAt: new Date(),
   firstName: 'fake-firstname-2',
   lastName: 'fake-lastname-2',
+  picture: 0,
 }
 
 export const FAKE_USER_1_COOKIE = {

@@ -1,15 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, Grid, Paper, TextField } from '@mui/material'
-import HarmonyAppBar from '../../components/appBar/index'
+import React, { useContext, useEffect, useState } from 'react'
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Paper,
+  TextField,
+  IconButton,
+  InputAdornment,
+} from '@mui/material'
 import TextBlock from '../../components/text/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
+import Head from 'next/head'
+import { MobileContext } from '../../contexts/mobile'
 
 const LoginPage = () => {
-  const loginData = {
+  const [loginData] = useState({
     username: '',
     password: '',
-  }
+  })
   const [loginError, setLoginError] = useState(false) // Initialize error state
+  const [showPassword, setShowPassword] = useState(false)
+  const mobile = useContext(MobileContext)
   const [userLogin, userLoginResponse, userLoginError, userLoginLoading] =
     useHttpRequest({
       url: '/user/login',
@@ -35,19 +48,33 @@ const LoginPage = () => {
     }
   }, [userLoginLoading])
 
+  const showPasswordButtonClick = () => setShowPassword(show => !show)
+  const showPasswordButtonDown = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault()
+  }
+
   return (
     <>
-      <HarmonyAppBar />
-      <Container maxWidth="xl">
+      <Head>
+        <title>Login to Harmony</title>
+      </Head>
+      <Container
+        maxWidth="xl"
+        sx={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <Paper
           elevation={3}
-          style={{ padding: 50 }}
+          style={{ padding: mobile ? 20 : 50 }}
           sx={{
             p: 2,
             margin: 'auto',
-            my: 7,
-            maxWidth: 'auto',
-            width: 5 / 12,
+            my: mobile ? 2 : 7,
+            width: mobile ? 10 / 12 : 5 / 12,
             flexGrow: 1,
           }}
         >
@@ -61,11 +88,11 @@ const LoginPage = () => {
               component="img"
               sx={{
                 maxWidth: 'auto',
-                width: 5 / 12,
+                width: mobile ? 11 / 12 : 5 / 12,
                 xs: 6,
               }}
               alt="Harmony Logo"
-              src={'/harmony1.png'}
+              src={'/image/harmonylogo.png'}
             />
             <TextBlock my={3} fontSize={40}>
               Log in to Harmony
@@ -77,7 +104,7 @@ const LoginPage = () => {
               placeholder="Enter username"
               sx={{
                 mt: 3,
-                width: 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
               required
               error={loginError}
@@ -85,23 +112,35 @@ const LoginPage = () => {
             <TextField
               onChange={event => (loginData.password = event.target.value)}
               label="Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               variant="outlined"
               placeholder="Enter password"
               sx={{
                 mt: 3,
-                width: 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
               required
               error={loginError}
               helperText={loginError ? 'Invalid username or password' : ''}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => showPasswordButtonClick()}
+                      onMouseDown={event => showPasswordButtonDown(event)}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               onClick={userLogin}
               variant="outlined"
               sx={{
                 mt: 3,
-                width: 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
             >
               <TextBlock fontSize={20}> Log in </TextBlock>
@@ -111,7 +150,7 @@ const LoginPage = () => {
               variant="outlined"
               sx={{
                 mt: 3,
-                width: 8 / 12,
+                width: mobile ? 11 / 12 : 8 / 12,
               }}
             >
               <TextBlock fontSize={20}> Sign up </TextBlock>

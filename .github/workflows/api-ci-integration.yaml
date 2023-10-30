@@ -1,4 +1,4 @@
-name: harmony-api
+name: api-ci-integration
 on: pull_request
 jobs:
   build:
@@ -28,20 +28,21 @@ jobs:
           node-version: "18"
       - name: Install dependencies
         run: npm ci
-      - name: Run local DB for testing, tests and linter 
+        
+      - name: Run integration tests on remote DB and linter 
         run: |
-          export POSTGRES_USER=username
-          export POSTGRES_PASSWORD=password
-          export POSTGRES_PORT=5432
-          export POSTGRES_DB_NAME=postgres_db
-          export POSTGRES_DB=postgres_db
-          export POSTGRES_DB_HOST=localhost
-          export POSTGRES_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME
+          export PORT=8081
+          export POSTGRES_USER=${{ secrets.POSTGRES_USER_CI }}
+          export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD_CI }}
+          export POSTGRES_PORT=${{ secrets.POSTGRES_PORT_CI }}
+          export POSTGRES_DB_NAME=${{ secrets.POSTGRES_DB_NAME_CI }}
+          export DB_HOST=${{ secrets.azureHost2 }}
+          export POSTGRES_URL=postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}
 
-          cd ../harmony-db
-          docker-compose up -d
+          # Testing DB connection (URL, whether it is correct)
+          psql $POSTGRES_URL
           
           cd ../harmony-api
-
+        
           npx prisma migrate dev
           npm run test

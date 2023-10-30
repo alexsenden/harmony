@@ -141,6 +141,7 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
       rating: Number(post.rating) || undefined,
       topicName:
         post.song?.songName || post.album?.albumName || post.artist?.artistName,
+      picture: post.user.picture,
     }
   })
 }
@@ -176,6 +177,7 @@ export const getTrendingPosts = async (): Promise<Array<Post>> => {
       rating: Number(post.rating) || undefined,
       topicName:
         post.song?.songName || post.album?.albumName || post.artist?.artistName,
+      picture: post.user.picture,
     }
   })
 }
@@ -224,6 +226,7 @@ export const getFollowingPosts = async (
       rating: Number(post.rating) || undefined,
       topicName:
         post.song?.songName || post.album?.albumName || post.artist?.artistName,
+      picture: post.user.picture,
     }
   })
 }
@@ -258,5 +261,6 @@ export const getPostById = async (postId: string): Promise<Post> => {
     rating: Number(post.rating) || undefined,
     topicName:
       post.song?.songName || post.album?.albumName || post.artist?.artistName,
+    picture: post.user.picture,
   }
 }

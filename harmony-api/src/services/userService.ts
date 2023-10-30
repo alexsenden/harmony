@@ -1,7 +1,9 @@
 import * as userRepo from '../repos/userRepo'
+import * as crypto from 'crypto'
 import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 import { Login } from '../models/login'
+import { Account } from '../models/account'
 
 export const getUserByUsername = async (userName?: string): Promise<User> => {
   const user = userRepo.getUserByName(userName)
@@ -14,7 +16,7 @@ export const register = async (userData?: User): Promise<User> => {
   }
 
   validateUserRegistration(userData)
-
+  userData.password = hashPassword(userData.password)
   return userRepo.register(userData)
 }
 
@@ -23,6 +25,7 @@ export const login = async (loginData?: Login): Promise<User> => {
     throw new HttpError('User data is required to login', 400)
   }
   try {
+    loginData.password = hashPassword(loginData.password)
     return await userRepo.getUserByLoginInfo(loginData as Login)
   } catch (error) {
     throw new HttpError('Incorrect Credentials', 401)
@@ -89,6 +92,38 @@ const validateUserRegistrationAdvanced = (userData: User) => {
   if (!userData.password.match(passwordRegex)) {
     errorMessages.push('Password does not match rules')
   }
+  if (!userData.firstName.match(nameRegex)) {
+    errorMessages.push('First Name does not match rules')
+  }
+  if (!userData.lastName.match(nameRegex)) {
+    errorMessages.push('Last Name does not match rules')
+  }
+
+  if (errorMessages.length > 0) {
+    throw new HttpError(errorMessages.join('; '), 400)
+  }
+}
+
+const hashPassword = (password: string) => {
+  const hash = crypto.createHash('sha256')
+  hash.update(password)
+  return hash.digest('hex')
+}
+
+export const setUserData = async (userData?: Account): Promise<Account> => {
+  if (userData === undefined) {
+    throw new HttpError('User not found', 404)
+  }
+
+  validateUserUpdate(userData)
+  return await userRepo.setUserData(userData)
+}
+
+const validateUserUpdate = (userData: Account) => {
+  const errorMessages = []
+
+  const nameRegex = /^[a-zA-Z-]+$/g
+
   if (!userData.firstName.match(nameRegex)) {
     errorMessages.push('First Name does not match rules')
   }

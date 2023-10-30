@@ -26,6 +26,7 @@ describe('register function with Singleton', () => {
     follows: [],
     followers: [],
     createdAt: new Date(),
+    picture: 0,
   }
 
   afterAll(async () => {

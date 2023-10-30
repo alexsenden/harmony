@@ -1,6 +1,7 @@
 import React from 'react'
-import { Button, Divider, Stack } from '@mui/material'
+import { Divider, Stack } from '@mui/material'
 import { FeedMode } from '../../pages/home/home'
+import FeedButton from './feedButton.styled'
 
 interface FilterPostButtonsProps {
   activeButton: FeedMode
@@ -18,18 +19,18 @@ const FilterPostButtons = ({
       spacing={2}
       justifyContent="center"
     >
-      <Button
+      <FeedButton
         variant={activeButton === FeedMode.TRENDING ? 'contained' : 'outlined'}
         onClick={() => handleButtonClick(FeedMode.TRENDING)}
       >
         Trending
-      </Button>
-      <Button
+      </FeedButton>
+      <FeedButton
         variant={activeButton === FeedMode.FOLLOWING ? 'contained' : 'outlined'}
         onClick={() => handleButtonClick(FeedMode.FOLLOWING)}
       >
         Following
-      </Button>
+      </FeedButton>
     </Stack>
   )
 }
