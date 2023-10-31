@@ -93,14 +93,14 @@ jobs:
           script_stop: true
           port: 22
           script: |
-              sudo docker image pull aprovozin/harmony-api-cd:andrii-connect-db-cd
-              sudo docker run --network=host --name backend -d -p 8081:8081 aprovozin/harmony-api-cd:andrii-connect-db-cd
+              sudo docker image pull aprovozin/harmony-api-cd:main
+              sudo docker run --network=host --name backend -d -p 8081:8081 aprovozin/harmony-api-cd:main
 
               # let container api start
               sleep 10s
 
-              sudo docker image pull aprovozin/harmony-fe-cd:andrii-connect-db-cd
-              sudo docker run --name frontend -d -p 8080:8080 aprovozin/harmony-fe-cd:andrii-connect-db-cd
+              sudo docker image pull aprovozin/harmony-fe-cd:main
+              sudo docker run --name frontend -d -p 8080:8080 aprovozin/harmony-fe-cd:main
 
               # let container fe start
               sleep 10s
