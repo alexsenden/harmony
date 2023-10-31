@@ -1,7 +1,9 @@
 name: harmony-api-fe-cd
 
 on:
-  push
+  push:
+    branches:
+      ["main"]
 
 jobs:
   deployment:
