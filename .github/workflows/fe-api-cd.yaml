@@ -130,9 +130,11 @@ jobs:
               # (echo -e '\x18' && echo -e ':q!' && echo -e '\x0d') | sudo EDITOR=nano systemctl edit --full grafana-agent.service
               # sudo systemctl edit --full grafana-agent.service
 
+              echo -e ':x' | sudo EDITOR=ex systemctl edit --full grafana-agent.service
+
               cd /etc/systemd/system
 
-              #sudo sed -i 's/User=grafana-agent/User=root/' /etc/systemd/system/grafana-agent.service
+              sudo sed -i 's/User=grafana-agent/User=root/' /etc/systemd/system/grafana-agent.service
               sudo systemctl daemon-reload
               sudo systemctl restart grafana-agent.service
 
