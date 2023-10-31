@@ -38,10 +38,6 @@ export const globalTheme = createTheme({
   },
 })
 
-export const metadata: Metadata = {
-  title: 'My Page Title',
-}
-
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
 }
@@ -69,7 +65,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   }
 
   const [sendHttpRequest, response, error, loading] = useHttpRequest({
-    url: '/user/getUser',
+    url: '/user',
     method: HttpMethod.GET,
     headers: cookieInfo,
     body: '',

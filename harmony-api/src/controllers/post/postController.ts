@@ -13,7 +13,11 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-export const get = async (req: Request, res: Response, next: NextFunction) => {
+export const getMany = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const userId =
     typeof req.query.userId === 'string' ? req.query.userId : undefined
 
@@ -24,7 +28,7 @@ export const get = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-export const getPost = async (
+export const getOne = async (
   req: Request,
   res: Response,
   next: NextFunction

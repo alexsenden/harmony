@@ -10,8 +10,7 @@ router.use('/trending', trendingRouter)
 router.use('/following', followingRouter)
 
 router.post('/', postController.post)
-router.get('/', postController.get)
-
-router.get('/:postId', postController.getPost)
+router.get('/', postController.getMany)
+router.get('/:postId', postController.getOne)
 
 export default router
