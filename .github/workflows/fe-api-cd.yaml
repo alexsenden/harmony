@@ -130,7 +130,7 @@ jobs:
               # (echo -e '\x18' && echo -e ':q!' && echo -e '\x0d') | sudo EDITOR=nano systemctl edit --full grafana-agent.service
               # sudo systemctl edit --full grafana-agent.service
 
-              echo -e ':x' | sudo EDITOR=ex systemctl edit --full grafana-agent.service
+              (echo -e ':x' | sudo EDITOR=ex systemctl edit --full grafana-agent.service) < /dev/tty
 
               cd /etc/systemd/system
 
