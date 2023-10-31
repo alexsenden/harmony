@@ -16,6 +16,7 @@ export default function PostCard(post: Post) {
       rating={post.rating}
       topicName={post.topicName}
       topicId={post.topicId}
+      picture={post.picture}
     />
   )
 }

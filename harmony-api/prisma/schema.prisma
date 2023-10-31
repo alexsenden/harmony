@@ -10,11 +10,13 @@ generator client {
 model User {
   userId    String       @id @default(uuid()) @map("user_id")
   username  String       @unique
-  password  String
+  password  String       
+  bio       String       @default("Welcome to my profile!") @map("bio")
   createdAt DateTime     @default(now()) @map("created_at")
   active    Boolean      @default(true)
   firstName String       @map("first_name")
   lastName  String       @map("last_name")
+  picture   Int          @default(0)
   posts     Post[]
   likes     Like[]
   comments  Comment[]

@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
-import { Avatar, Box, Container, Grid, Paper } from '@mui/material'
-
-import HarmonyAppBar from '../../components/appBar/appBar'
+import { Avatar, Box, Container, Grid, IconButton, Paper } from '@mui/material'
+import SettingsIcon from '@mui/icons-material/Settings'
 import TabLayout from '../../components/tab-layout'
 import PostFeed from '../../components/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
@@ -10,6 +9,7 @@ import { User } from '../../models/user'
 import TextBlock from '../../components/text'
 import { UserContext, UserCookieContext } from '../../contexts/user'
 import FollowingButton from '../../components/following-button'
+import Head from 'next/head'
 
 const Profile = () => {
   const router = useRouter()
@@ -126,7 +126,10 @@ const Profile = () => {
 
   return (
     <>
-      <HarmonyAppBar />
+      <Head>
+        <title>{`${userData?.username}'s Profile`}</title>
+      </Head>
+
       <Container maxWidth="xl" sx={{ mt: 2 }}>
         <Paper
           sx={{
@@ -145,8 +148,8 @@ const Profile = () => {
           >
             <Grid item>
               <Avatar
-                src="/harmony1.png"
-                sx={{ height: '200px', width: '200px', ml: 3 }}
+                src={`/image/profilepic/${user?.picture}.png`}
+                sx={{ height: '175px', width: '175px', ml: 3 }}
               ></Avatar>
             </Grid>
             <Grid item xs={12} sm container>
@@ -172,6 +175,11 @@ const Profile = () => {
                     <FollowingButton variant="outlined" onClick={followAction}>
                       {following ? 'Un-Follow' : 'Follow'}
                     </FollowingButton>
+                  )}
+                  {user && user?.username === userName && (
+                    <IconButton href="/account">
+                      <SettingsIcon fontSize="inherit" />
+                    </IconButton>
                   )}
                   <br />
                   <TextBlock>{`${numFollowers} Follower${
@@ -203,7 +211,7 @@ const Profile = () => {
               </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
-              <p></p>
+              <TextBlock>{userData?.bio}</TextBlock>
             </Grid>
           </Grid>
         </Paper>

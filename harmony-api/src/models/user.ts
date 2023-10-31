@@ -6,4 +6,6 @@ export type User = {
   active: boolean
   firstName: string
   lastName: string
+  bio?: string
+  picture: number
 }
