@@ -126,10 +126,6 @@ jobs:
 
               sudo usermod -a -G docker grafana-agent
 
-              # The following cmd + exit, needed to generate service file (i.e. "sudo systemctl edit --full grafana-agent.service" )
-              # (echo -e '\x18' && echo -e ':q!' && echo -e '\x0d') | sudo EDITOR=nano systemctl edit --full grafana-agent.service
-              # sudo systemctl edit --full grafana-agent.service
-
               sudo cp /lib/systemd/system/grafana-agent.service /etc/systemd/system/grafana-agent.service
 
               cd /etc/systemd/system
