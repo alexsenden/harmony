@@ -2,11 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 
 import * as followService from '../../services/followService'
 
-export const follow = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const post = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cookie = req.headers.usercookie as string
     const followingId = req.headers.followingid as string
@@ -20,29 +16,12 @@ export const follow = async (
     next(error)
   }
 }
-export const getFollow = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+
+export const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cookie = req.headers.usercookie as string
     const followingId = req.headers.followingid as string
     res.json(await followService.getFollow(cookie, followingId))
-  } catch (error) {
-    next(error)
-  }
-}
-
-export const getFollowCount = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const userId = req.headers.userid as string
-    const followCount = await followService.getFollowCount(userId)
-    res.json(followCount)
   } catch (error) {
     next(error)
   }
