@@ -62,7 +62,7 @@ const Post = ({
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false)
 
   const userCookie = useContext(UserCookieContext)
-  const commentInputRef = useRef(null)
+  const commentInputRef = useRef<HTMLInputElement | null>(null)
 
   const [postLikeRequest, postLikeResponse, postLikeError, postLikeLoading] =
     useHttpRequest({
@@ -128,7 +128,7 @@ const Post = ({
 
   useEffect(() => {
     if (isCommentSectionOpen) {
-      commentInputRef.current.focus()
+      commentInputRef.current?.focus()
     }
   }, [isCommentSectionOpen])
 
@@ -246,7 +246,6 @@ const Post = ({
               {numComments} comments
             </Button>
             <Button size="small" sx={{ mt: 0.5 }}>
-              {' '}
               {numLikes} likes
             </Button>
           </CardActions>
@@ -256,7 +255,7 @@ const Post = ({
               <TextField
                 placeholder="Add a comment.."
                 fullWidth
-                disabled={!userCookie}
+                disabled={!userCookie} // either keep this disabled when no user logged in or present a popup to login.
                 value={commentInput}
                 onChange={handleCommentInputChange}
                 inputRef={commentInputRef}
@@ -276,8 +275,15 @@ const Post = ({
               comments.map((comment, index) => (
                 <CardContent key={index}>
                   <TextBlock gutterBottom variant="body1">
-                    Comment {index + 1}: {comment.content}
+                    <Button href={`/profile/${comment.user.username}`}>
+                      <Avatar
+                        src={`/image/profilepic/${comment.user.picture}.png`}
+                        sx={{ mr: 1, height: 24, width: 24 }}
+                      ></Avatar>
+                      <strong>{comment.user.username}</strong>
+                    </Button>
                   </TextBlock>
+                  <TextBlock>{comment.content}</TextBlock>
                 </CardContent>
               ))
             ) : (

@@ -2,7 +2,7 @@ import prisma from '../../prisma/prisma'
 import { PostType as PrismaPostType } from '@prisma/client'
 import { Post, PostType } from '../models/post'
 import { Like } from '../models/like'
-import { Comment } from '../models/comment'
+import { Comment, CommentWithUser } from '../models/comment'
 
 export const createPost = async (postData: Post): Promise<Post> => {
   const postResult = await prisma.post.create({
@@ -87,10 +87,23 @@ export const createComment = async (commentData: Comment): Promise<Comment> => {
   }
 }
 
-export const getComments = async (postId?: string): Promise<Array<Comment>> => {
+export const getComments = async (
+  postId?: string
+): Promise<Array<CommentWithUser>> => {
   const comments = await prisma.comment.findMany({
     where: {
       postId: postId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      user: {
+        select: {
+          username: true,
+          picture: true,
+        },
+      },
     },
   })
   return comments.map(comment => {
@@ -100,6 +113,7 @@ export const getComments = async (postId?: string): Promise<Array<Comment>> => {
       postId: comment.postId,
       createdAt: comment.createdAt,
       content: comment.content || '',
+      user: comment.user,
     }
   })
 }
