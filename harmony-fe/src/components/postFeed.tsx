@@ -46,9 +46,10 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
       </TextBlock>
     )
   ) : (
-    <CircularProgress style={{ marginTop: 10, display: 'flex', flexDirection: 'column' }} />
-  );
-    
+    <CircularProgress
+      style={{ marginTop: 10, display: 'flex', flexDirection: 'column' }}
+    />
+  )
 }
 
 export default PostFeed

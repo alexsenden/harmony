@@ -31,13 +31,12 @@ const RegisterPage = () => {
   })
   const [showPassword, setShowPassword] = useState(false)
 
-  const [sendHttpRequest, response, error, loading] =
-    useHttpRequest({
-      url: '/user/register',
-      method: HttpMethod.POST,
-      body: newUser,
-      headers: {},
-    })
+  const [sendHttpRequest, response, error, loading] = useHttpRequest({
+    url: '/user/register',
+    method: HttpMethod.POST,
+    body: newUser,
+    headers: {},
+  })
 
   const handleUserRegister = () => {
     setHasError(false)
