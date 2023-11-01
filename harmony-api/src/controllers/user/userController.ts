@@ -65,11 +65,16 @@ export const getUser = async (
 ) => {
   try {
     const cookie = req.headers.usercookie as string
-    const userData = await userService.getUserFromCookie(cookie)
+    if (cookie==='') {
+      res.json(null)
+    } else {
+      const userData = await userService.getUserFromCookie(cookie)
 
-    res.json({
-      userData: userData,
-    })
+      res.json({
+        userData: userData,
+      })
+    }
+
   } catch (error) {
     next(error)
   }

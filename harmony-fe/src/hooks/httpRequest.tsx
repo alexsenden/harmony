@@ -20,6 +20,8 @@ export interface HttpRequestInput {
   headers?: any
 }
 
+const cookieName = 'userCookie'
+
 const useHttpRequest = ({
   url,
   method,
@@ -39,7 +41,7 @@ const useHttpRequest = ({
     setError(undefined)
     setloading(true)
 
-    const requestHeaders = { accept: '*/*', ...headers }
+    const requestHeaders = { accept: '*/*',... {[cookieName]:getCookie(cookieName)} , ...headers }
 
     new Promise(() =>
       axios({
@@ -60,6 +62,18 @@ const useHttpRequest = ({
     )
   }
   return [sendHttpRequest, response, error, loading, stopLoading]
+}
+function getCookie(cookieName: string): string {
+  const name = cookieName + '='
+  const decodedCookie = decodeURIComponent(document.cookie)
+  const cookieList = decodedCookie.split(';')
+  let foundCookie = ''
+  cookieList.forEach(val => {
+    if (val.indexOf(name) === 0) {
+      foundCookie = val.substring(name.length)
+    }
+  })
+  return foundCookie
 }
 
 export default useHttpRequest
