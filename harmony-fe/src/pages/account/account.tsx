@@ -61,15 +61,15 @@ const Account = () => {
 
   const itemData = [
     {
-      img: '/image/profilepic/0.png',
+      img: '/images/profilepic/0.png',
       value: 0,
     },
     {
-      img: '/image/profilepic/1.png',
+      img: '/images/profilepic/1.png',
       value: 1,
     },
     {
-      img: '/image/profilepic/2.png',
+      img: '/images/profilepic/2.png',
       value: 2,
     },
   ]
@@ -103,8 +103,8 @@ const Account = () => {
             <Avatar
               src={
                 newData?.picture !== undefined
-                  ? `/image/profilepic/${newData?.picture}.png`
-                  : `/image/profilepic/${user?.picture}.png`
+                  ? `/images/profilepic/${newData?.picture}.png`
+                  : `/images/profilepic/${user?.picture}.png`
               }
               sx={{ mr: 2 }}
             />
