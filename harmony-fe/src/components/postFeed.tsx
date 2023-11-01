@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Box, CircularProgress } from '@mui/material'
+import { Box, CircularProgress, Stack } from '@mui/material'
 
 import PostCard from '../components/post/postCard'
 import TextBlock from './text'
@@ -46,9 +46,12 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
       </TextBlock>
     )
   ) : (
-    <CircularProgress
-      style={{ marginTop: 10, display: 'flex', flexDirection: 'column' }}
-    />
+    <Stack sx={{ display: 'flex' }}>
+      <CircularProgress
+        size="4rem"
+        style={{ marginTop: 20, alignSelf: 'center' }}
+      />
+    </Stack>
   )
 }
 
