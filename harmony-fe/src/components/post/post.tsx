@@ -28,6 +28,7 @@ import { PollOption } from '../../models/pollOption'
 import { PollAnswer } from './poll-answer'
 import { TopicId } from '../../models/topic'
 import { Like } from '../../models/like'
+import { CommentWithUser } from '../../models/comment'
 
 interface PostProps {
   title: string
@@ -119,7 +120,9 @@ const Post = ({
   })
 
   useEffect(() => {
-    getComments()
+    if (isCommentSectionOpen) {
+      getComments()
+    }
   }, [isCommentSectionOpen])
 
   const toggleCommentSection = () => {
@@ -155,8 +158,6 @@ const Post = ({
     if (commentInput.trim() !== '') {
       postCommentRequest()
       setCommentInput('')
-      toggleCommentSection()
-      toggleCommentSection()
     }
   }
 
@@ -216,11 +217,7 @@ const Post = ({
 
           <CardActions>
             <Button size="small" onClick={toggleLike}>
-              {isLiked ? (
-                <ThumbUpIcon style={{ color: 'blue' }} />
-              ) : (
-                <ThumbUpOffAltOutlinedIcon />
-              )}
+              {isLiked ? <ThumbUpIcon /> : <ThumbUpOffAltOutlinedIcon />}
             </Button>
 
             <Button size="small" onClick={toggleCommentSection}>
@@ -272,7 +269,7 @@ const Post = ({
             </CardContent>
 
             {comments ? (
-              comments.map((comment, index) => (
+              comments.map((comment: CommentWithUser, index: number) => (
                 <CardContent key={index}>
                   <TextBlock gutterBottom variant="body1">
                     <Button href={`/profile/${comment.user.username}`}>
@@ -287,7 +284,7 @@ const Post = ({
                 </CardContent>
               ))
             ) : (
-              <p>Loading comments</p>
+              <p>Loading comments...</p>
             )}
           </Collapse>
         </Box>
