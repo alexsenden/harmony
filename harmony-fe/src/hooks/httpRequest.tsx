@@ -25,14 +25,10 @@ const useHttpRequest = ({
   method,
   body = {},
   headers = {},
-}: HttpRequestInput): [() => void, any, any, boolean, any] => {
+}: HttpRequestInput): [() => void, any, any, boolean] => {
   const [response, setResponse] = useState(undefined)
   const [error, setError] = useState(undefined)
-  const [loading, setloading] = useState(true)
-
-  const stopLoading = () => {
-    setloading(false)
-  }
+  const [loading, setloading] = useState(false)
 
   const sendHttpRequest = async () => {
     setResponse(undefined)
@@ -59,7 +55,7 @@ const useHttpRequest = ({
         })
     )
   }
-  return [sendHttpRequest, response, error, loading, stopLoading]
+  return [sendHttpRequest, response, error, loading]
 }
 
 export default useHttpRequest
