@@ -1,6 +1,8 @@
 import prisma from '../../prisma/prisma'
 import { PostType as PrismaPostType } from '@prisma/client'
 import { Post, PostType } from '../models/post'
+import { Like } from '../models/like'
+import { Comment, CommentWithUser } from '../models/comment'
 
 export const createPost = async (postData: Post): Promise<Post> => {
   const postResult = await prisma.post.create({
@@ -29,6 +31,91 @@ export const createPost = async (postData: Post): Promise<Post> => {
       songId: postResult.songId || undefined,
     },
   }
+}
+
+export const createLike = async (likeData: Like): Promise<Like> => {
+  const likeResult = await prisma.like.create({
+    data: {
+      userId: likeData.userId,
+      postId: likeData.postId,
+    },
+  })
+
+  return likeResult
+}
+
+export const getLikesByUserId = async (
+  userId?: string
+): Promise<Array<Like>> => {
+  const likes = await prisma.like.findMany({
+    where: {
+      userId: userId,
+    },
+  })
+  return likes.map(like => {
+    return like
+  })
+}
+
+export const deleteLike = async (likeData: Like): Promise<Like> => {
+  const deleteLike = await prisma.like.delete({
+    where: {
+      userId_postId: {
+        userId: likeData.userId,
+        postId: likeData.postId,
+      },
+    },
+  })
+
+  return deleteLike
+}
+
+export const createComment = async (commentData: Comment): Promise<Comment> => {
+  const commentResult = await prisma.comment.create({
+    data: {
+      userId: commentData.userId,
+      postId: commentData.postId,
+      content: commentData.content,
+    },
+  })
+  return {
+    commentId: commentResult.commentId,
+    userId: commentResult.userId,
+    postId: commentResult.postId,
+    createdAt: commentResult.createdAt,
+    content: commentResult.content || '',
+  }
+}
+
+export const getComments = async (
+  postId?: string
+): Promise<Array<CommentWithUser>> => {
+  const comments = await prisma.comment.findMany({
+    where: {
+      postId: postId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      user: {
+        select: {
+          username: true,
+          picture: true,
+        },
+      },
+    },
+  })
+  return comments.map(comment => {
+    return {
+      commentId: comment.commentId,
+      userId: comment.userId,
+      postId: comment.postId,
+      createdAt: comment.createdAt,
+      content: comment.content || '',
+      user: comment.user,
+    }
+  })
 }
 
 export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {

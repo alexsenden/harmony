@@ -12,6 +12,13 @@ router.use('/following', followingRouter)
 router.post('/', postController.post)
 router.get('/', postController.get)
 
+router.post('/like', postController.postLike)
+router.get('/like', postController.getLike)
+router.delete('/like', postController.removeLike)
+
+router.post('/comment', postController.postComment)
+router.get('/comments', postController.getComments)
+
 router.get('/:postId', postController.getPost)
 
 export default router
