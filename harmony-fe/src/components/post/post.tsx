@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
   Card,
   CardActions,
@@ -18,6 +18,7 @@ import {
   ThumbUpOffAltOutlined,
   CommentOutlined,
 } from '@mui/icons-material'
+import { v4 as newUuid } from 'uuid'
 
 import TextBlock from '../text-block'
 import { Post, PostType } from '../../models/post'
@@ -26,6 +27,11 @@ import { CommentInput } from './comment-input'
 import { ReviewContent } from './review-content'
 import { PollContent } from './poll-content'
 import { DiscussionContent } from './discussion-content'
+import { UserContext, UserCookieContext } from '../../contexts/user'
+import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { Like } from '../../models/like'
+import { CommentWithUser } from '../../models/comment'
+import Comment from './comment'
 
 interface PostProps {
   post: Post
@@ -34,23 +40,97 @@ interface PostProps {
 const Post = ({ post }: PostProps) => {
   const [isLiked, setIsLiked] = useState(false)
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false)
+  const [comments, setComments] = useState<CommentWithUser[] | undefined>(
+    undefined
+  )
+
+  const userCookie = useContext(UserCookieContext)
+  const user = useContext(UserContext)
+
+  const [postLikeRequest] = useHttpRequest({
+    url: `/post/${post.postId}/like`,
+    method: HttpMethod.POST,
+    body: { postId: post.postId, userCookie },
+  })
+
+  const [removeLikeRequest] = useHttpRequest({
+    url: `/post/${post.postId}/like`,
+    method: HttpMethod.DELETE,
+    body: { postId: post.postId, userCookie },
+  })
+
+  const [getLike, like] = useHttpRequest({
+    url: `/post/${post.postId}/like`,
+    method: HttpMethod.GET,
+    body: { postId: post.postId, userCookie },
+  })
 
   const toggleLike = () => {
-    setIsLiked(prevState => !prevState)
+    if (!isLiked) {
+      postLikeRequest()
+      setIsLiked(true)
+    } else {
+      removeLikeRequest()
+      setIsLiked(false)
+    }
   }
+
+  useEffect(() => {
+    if (userCookie) {
+      getLike()
+    }
+  }, [userCookie])
+
+  useEffect(() => {
+    if (like && like.length > 0) {
+      const userLiked = like.some(
+        (likeItem: Like) => likeItem.postId === post.postId
+      )
+      setIsLiked(userLiked)
+    }
+  }, [like])
+
+  const [getComments, commentsResponse] = useHttpRequest({
+    url: `post/${post.postId}/comment`,
+    method: HttpMethod.GET,
+  })
+
+  useEffect(() => {
+    if (!comments && isCommentSectionOpen) {
+      getComments()
+    }
+  }, [isCommentSectionOpen, comments])
+
+  useEffect(() => {
+    setComments(commentsResponse)
+  }, [commentsResponse])
 
   const toggleCommentSection = () => {
     setIsCommentSectionOpen(prevState => !prevState)
   }
 
-  const [comments, setComments] = useState<string[]>([])
-
   const handleCommentSubmission = (comment: string) => {
-    setComments(prevComments => [...prevComments, comment])
+    setComments(prevComments => {
+      if (prevComments) {
+        return [
+          ...prevComments,
+          {
+            user: {
+              username: user?.username || '',
+              picture: user?.picture || 0,
+            },
+            commentId: newUuid(),
+            userId: user?.userId || '',
+            postId: post.postId,
+            createdAt: new Date(Date.now()),
+            content: comment,
+          },
+        ]
+      }
+      return undefined
+    })
     setIsCommentSectionOpen(false)
   }
-
-  const topicContext = getTopicContext(post.topicId)
 
   let avatarIcon
   let postContent
@@ -71,6 +151,8 @@ const Post = ({ post }: PostProps) => {
       break
   }
 
+  const topicContext = getTopicContext(post.topicId)
+
   return (
     <Card variant="outlined" sx={{ mb: 1 }}>
       <Stack direction="row">
@@ -90,12 +172,8 @@ const Post = ({ post }: PostProps) => {
           </CardContent>
 
           <CardActions>
-            <Button disabled size="small" onClick={toggleLike}>
-              {isLiked ? (
-                <ThumbUp style={{ color: 'blue' }} />
-              ) : (
-                <ThumbUpOffAltOutlined />
-              )}
+            <Button size="small" onClick={toggleLike}>
+              {isLiked ? <ThumbUp /> : <ThumbUpOffAltOutlined />}
             </Button>
 
             <Button size="small" onClick={toggleCommentSection}>
@@ -118,7 +196,7 @@ const Post = ({ post }: PostProps) => {
               onClick={toggleCommentSection}
               sx={{ ml: 3, mt: 0.5 }}
             >
-              {/*post.comments.length*/} comments
+              {comments?.length || 0} comments
             </Button>
             <Button size="small" disabled sx={{ mt: 0.5 }}>
               {`${post.numLikes} like${post.numLikes !== 1 ? 's' : ''}`}
@@ -127,17 +205,17 @@ const Post = ({ post }: PostProps) => {
 
           <CommentInput
             open={isCommentSectionOpen}
+            post={post}
             submitComment={handleCommentSubmission}
           />
 
-          {/* This section should be replaced with the dynamic comments from database */}
-          {comments.map((comment, index) => (
-            <CardContent key={index}>
-              <TextBlock gutterBottom variant="body1">
-                Comment {index + 1}: {comment}
-              </TextBlock>
-            </CardContent>
-          ))}
+          {comments ? (
+            comments.map((comment: CommentWithUser, index: number) => (
+              <Comment comment={comment} index={index} />
+            ))
+          ) : (
+            <p>Loading comments...</p>
+          )}
         </Box>
       </Stack>
     </Card>
