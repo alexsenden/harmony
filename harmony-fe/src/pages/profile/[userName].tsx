@@ -85,7 +85,7 @@ const Profile = () => {
     body: { followAction: !following },
   })
 
-  function followAction() {
+  const followAction = () => {
     setFollowActionData()
     if (following) {
       setNumFollowers(numFollowers - 1)

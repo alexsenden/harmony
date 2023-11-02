@@ -7,7 +7,7 @@ import { Post } from '../../models/post'
 import PostComponent from '../../components/post'
 import TextBlock from '../../components/text-block'
 
-export default function PostDetail() {
+const PostDetail = () => {
   const router = useRouter()
   const postID = router.query.postId
 
@@ -38,3 +38,5 @@ export default function PostDetail() {
     </Box>
   )
 }
+
+export default PostDetail

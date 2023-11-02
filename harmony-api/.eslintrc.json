@@ -12,6 +12,8 @@
       {
         "allowModules": ["supertest", "jest-mock-extended"]
       }
-    ]
+    ],
+    "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
+    "func-style": ["error", "expression", { "allowArrowFunctions": true }]
   }
 }

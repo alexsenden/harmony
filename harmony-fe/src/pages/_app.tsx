@@ -46,12 +46,12 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined)
   const [userCookie, setUserCookie] = useState<string>('')
   const [mobile, setMobile] = useState<boolean>(false)
   const cookieInfo = { userCookie: '' }
-  function getCookie(cookieName: string): string {
+  const getCookie = (cookieName: string): string => {
     const name = cookieName + '='
     const decodedCookie = decodeURIComponent(document.cookie)
     const cookieList = decodedCookie.split(';')
@@ -108,3 +108,4 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     </UserCookieContext.Provider>
   )
 }
+export default App

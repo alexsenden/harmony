@@ -74,7 +74,7 @@ const Account = () => {
     },
   ]
 
-  function handlePicture(picNum: number): void {
+  const handlePicture = (picNum: number): void => {
     newData.picture = picNum
     console.log(newData.picture)
     handleMenuClose()
