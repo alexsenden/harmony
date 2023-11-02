@@ -8,7 +8,7 @@ beforeEach(() => {
   app = FakeApp()
 })
 
-describe('GET /topic/partialName?partialName={partialName} returns list of topics', () => {
+describe('GET /topic/partialName/:partialName returns list of topics', () => {
   it('responds to /post code 200 and the new post', async () => {
     jest.spyOn(prisma, '$queryRaw').mockResolvedValueOnce([
       {
@@ -29,7 +29,7 @@ describe('GET /topic/partialName?partialName={partialName} returns list of topic
       },
     ])
 
-    const res = await request(app).get('/topic/partialName?partialName=name')
+    const res = await request(app).get('/topic/partialName/name')
 
     expect(res.statusCode).toBe(200)
     expect(res.body).toEqual([

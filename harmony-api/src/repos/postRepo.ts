@@ -7,7 +7,6 @@ import {
   Album,
   User,
   PollOption,
-  Prisma,
 } from '@prisma/client'
 import { Post, PostType } from '../models/post'
 
