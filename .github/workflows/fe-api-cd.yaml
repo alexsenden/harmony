@@ -140,11 +140,18 @@ jobs:
               cd /etc
               sudo curl -O -L https://raw.githubusercontent.com/alexsenden/harmony/main/configurations/grafana_integration.yaml
               sudo curl -O -L https://raw.githubusercontent.com/alexsenden/harmony/main/configurations/grafana_logs.yaml
-
+              sudo curl -O -L https://raw.githubusercontent.com/alexsenden/harmony/main/configurations/grafana_linux_logs.yaml
+              
               # Insert config files data into generated base config file
 
               ed -s grafana-agent.yaml <<EOF
               /integrations:/r grafana_integration.yaml
+              w
+              q
+              EOF
+
+              ed -s grafana-agent.yaml <<EOF
+              /integrations:/r grafana_linux_logs.yaml
               w
               q
               EOF
@@ -157,4 +164,5 @@ jobs:
 
               sudo sed -i "s/<your-instance-name>/$hostBackend/g" grafana-agent.yaml
       
+              sudo systemctl daemon-reload
               sudo systemctl restart grafana-agent.service
