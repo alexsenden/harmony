@@ -13,7 +13,7 @@ import {
   Paper,
   TextField,
 } from '@mui/material'
-import TextBlock from '../../components/text'
+import TextBlock from '../../components/text-block'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import React from 'react'
 import router from 'next/router'

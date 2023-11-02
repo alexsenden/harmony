@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { Box } from '@mui/material'
 
-import PostCard from '../components/post/postCard'
-import TextBlock from './text'
-import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
-import { Post } from '../models/post'
+import PostCard from '../post/postCard'
+import TextBlock from '../text-block'
+import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { Post } from '../../models/post'
 
 const NO_POSTS_HERE = 'No Posts Available'
 

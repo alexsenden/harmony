@@ -9,7 +9,7 @@ import {
   IconButton,
   InputAdornment,
 } from '@mui/material'
-import TextBlock from '../../components/text/index'
+import TextBlock from '../../components/text-block/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Head from 'next/head'

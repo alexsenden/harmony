@@ -13,7 +13,7 @@ import {
 
 import { HttpMethod } from '../../hooks/httpRequest'
 import useHttpRequest from '../../hooks/httpRequest'
-import TextBlock from '../../components/text'
+import TextBlock from '../../components/text-block'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Head from 'next/head'
 import { MobileContext } from '../../contexts/mobile'

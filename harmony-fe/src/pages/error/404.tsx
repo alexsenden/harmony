@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import TextBlock from '../../components/text'
+import TextBlock from '../../components/text-block'
 
 export default function Error404() {
   return (

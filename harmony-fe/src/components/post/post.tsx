@@ -14,7 +14,7 @@ import {
   Rating,
   Avatar,
 } from '@mui/material'
-import TextBlock from '../text'
+import TextBlock from '../text-block'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined'
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined'

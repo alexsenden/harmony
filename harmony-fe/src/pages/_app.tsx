@@ -1,6 +1,6 @@
 import '../styles/global.css'
 import type { ReactElement, ReactNode } from 'react'
-import type { Metadata, NextPage } from 'next'
+import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { UserContext, UserCookieContext } from '../contexts/user'
 import { MobileContext } from '../contexts/mobile'
@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { User } from '../models/user'
 import { ThemeProvider } from '@emotion/react'
 import { CssBaseline, createTheme } from '@mui/material'
-import HarmonyAppBar from '../components/appBar'
+import HarmonyAppBar from '../components/app-bar'
 
 export const globalTheme = createTheme({
   palette: {

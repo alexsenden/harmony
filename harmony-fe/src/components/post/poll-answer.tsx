@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material'
 import { PollOption } from '../../models/pollOption'
-import TextBlock from '../text'
+import TextBlock from '../text-block'
 
 interface PollAnswerProps {
   pollOption: PollOption
