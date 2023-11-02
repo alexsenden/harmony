@@ -108,7 +108,7 @@ const Post = ({ post }: PostProps) => {
           <CardActions sx={{ display: 'flex', justifyContent: 'start' }}>
             <Button href={`/profile/${post.user?.username}`}>
               <Avatar
-                src={`/image/profilepic/${post.user?.picture}.png`}
+                src={`/images/profilepic/${post.user?.picture}.png`}
                 sx={{ mr: 1, height: 24, width: 24 }}
               ></Avatar>
               {post.user?.username}

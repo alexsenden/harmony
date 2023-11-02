@@ -15,15 +15,22 @@ jobs:
         
       - name: SSH into azure VM and recreate existing backend
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          usernameBackend: ${{ secrets.usernameBackend }}
+          passwordBackend: ${{ secrets.passwordBackend }}
         with:
           host: ${{ secrets.azureHost2 }}
           username: ${{ secrets.usernameDeployment }}
           password: ${{ secrets.passwordDeployment }}
           script_stop: true
           port: 22
+          envs: usernameBackend,passwordBackend
           script: |
+              export usernameBackend="${{ env.usernameBackend }}"
+              export passwordBackend="${{ env.passwordBackend }}"
+
               az vm delete --name backend --resource-group all_devs --yes 
-              az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username backend_user --admin-password ZDE7QNVXUJepLq9RmxXu --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1ms --zone 1 --location canadacentral --nics backend-177_z1
+              az vm create --resource-group all_devs --name backend --image Ubuntu2204 --admin-username "$usernameBackend" --admin-password "$passwordBackend" --authentication-type password --os-disk-size-gb 30 --nic-delete-option detach --os-disk-delete-option delete --size Standard_B1ms --zone 1 --location canadacentral --nics backend-177_z1
               # To make sure that it is created and can be accessed and that docker services complete building
               sleep 30s
 
@@ -36,9 +43,11 @@ jobs:
           script_stop: false
           port: 22
           script: |
+              export DEBIAN_FRONTEND=noninteractive
+
               # Add Docker's official GPG key:
               sudo apt-get update
-              sudo apt-get install ca-certificates curl gnupg
+              sudo apt-get install ca-certificates curl gnupg --yes
               sudo install -m 0755 -d /etc/apt/keyrings
               curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
               sudo chmod a+r /etc/apt/keyrings/docker.gpg
@@ -83,17 +92,77 @@ jobs:
           host: ${{ secrets.azureHost1 }}
           username: ${{ secrets.usernameBackend }}
           password: ${{ secrets.passwordBackend }}
-          script_stop: false
+          script_stop: true
           port: 22
           script: |
-              sudo docker image pull aprovozin/harmony-api-cd:andrii-connect-db-cd
-              sudo docker run --network=host -d -p 8081:8081 aprovozin/harmony-api-cd:andrii-connect-db-cd
+              sudo docker image pull aprovozin/harmony-api-cd:main
+              sudo docker run --network=host --name backend -d -p 8081:8081 aprovozin/harmony-api-cd:main
 
               # let container api start
               sleep 10s
 
-              sudo docker image pull aprovozin/harmony-fe-cd:andrii-connect-db-cd
-              sudo docker run -d -p 8080:8080 aprovozin/harmony-fe-cd:andrii-connect-db-cd
+              sudo docker image pull aprovozin/harmony-fe-cd:main
+              sudo docker run --name frontend -d -p 8080:8080 aprovozin/harmony-fe-cd:main
 
               # let container fe start
               sleep 10s
+
+      - name: Set up logging and monitoring for (front-end / back-end) services
+        uses: appleboy/ssh-action@v1.0.0
+        env:
+          hostBackend: ${{ secrets.azureHost1 }}
+          grafanaAPIkey: ${{ secrets.grafanaAPIkey }}
+        with:
+          host: ${{ secrets.azureHost1 }}
+          username: ${{ secrets.usernameBackend }}
+          password: ${{ secrets.passwordBackend }}
+          script_stop: false
+          port: 22
+          envs: hostBackend,grafanaAPIkey
+          script: |
+              export grafanaAPIkey="${{ env.grafanaAPIkey }}"
+              export hostBackend="${{ env.hostBackend }}"
+
+              # Download grafana agent
+              ARCH="amd64" GCLOUD_HOSTED_METRICS_URL="https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push" GCLOUD_HOSTED_METRICS_ID="1252941" GCLOUD_SCRAPE_INTERVAL="60s" GCLOUD_HOSTED_LOGS_URL="https://logs-prod-006.grafana.net/loki/api/v1/push" GCLOUD_HOSTED_LOGS_ID="725516" GCLOUD_RW_API_KEY="$grafanaAPIkey" /bin/sh -c "$(curl -fsSL https://storage.googleapis.com/cloud-onboarding/agent/scripts/grafanacloud-install.sh)"
+
+              sudo usermod -a -G docker grafana-agent
+
+              sudo cp /lib/systemd/system/grafana-agent.service /etc/systemd/system/grafana-agent.service
+
+              cd /etc/systemd/system
+
+              sudo sed -i 's/User=grafana-agent/User=root/' /etc/systemd/system/grafana-agent.service
+              sudo systemctl daemon-reload
+              sudo systemctl restart grafana-agent.service
+
+              # Download config files from our git repo
+              cd /etc
+              sudo curl -O -L https://raw.githubusercontent.com/alexsenden/harmony/main/configurations/grafana_integration.yaml
+              sudo curl -O -L https://raw.githubusercontent.com/alexsenden/harmony/main/configurations/grafana_logs.yaml
+              sudo curl -O -L https://raw.githubusercontent.com/alexsenden/harmony/main/configurations/grafana_linux_logs.yaml
+              
+              # Insert config files data into generated base config file
+
+              ed -s grafana-agent.yaml <<EOF
+              /integrations:/r grafana_integration.yaml
+              w
+              q
+              EOF
+
+              ed -s grafana-agent.yaml <<EOF
+              /integrations:/r grafana_linux_logs.yaml
+              w
+              q
+              EOF
+
+              ed -s grafana-agent.yaml <<EOF
+              /scrape_configs:/r grafana_logs.yaml
+              w
+              q
+              EOF
+
+              sudo sed -i "s/<your-instance-name>/$hostBackend/g" grafana-agent.yaml
+      
+              sudo systemctl daemon-reload
+              sudo systemctl restart grafana-agent.service

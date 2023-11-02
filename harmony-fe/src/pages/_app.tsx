@@ -10,6 +10,7 @@ import { User } from '../models/user'
 import { ThemeProvider } from '@emotion/react'
 import { CssBaseline, createTheme } from '@mui/material'
 import HarmonyAppBar from '../components/app-bar'
+import Favicon from '../components/favicon-component'
 
 export const globalTheme = createTheme({
   palette: {
@@ -96,6 +97,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   return getLayout(
     <UserCookieContext.Provider value={userCookie}>
+      <Favicon />
       <UserContext.Provider value={currentUser}>
         <MobileContext.Provider value={mobile}>
           <ThemeProvider theme={globalTheme}>

@@ -31,13 +31,12 @@ const RegisterPage = () => {
   })
   const [showPassword, setShowPassword] = useState(false)
 
-  const [sendHttpRequest, response, error, loading, stopLoading] =
-    useHttpRequest({
-      url: '/user/register',
-      method: HttpMethod.POST,
-      body: newUser,
-      headers: {},
-    })
+  const [sendHttpRequest, response, error, loading] = useHttpRequest({
+    url: '/user/register',
+    method: HttpMethod.POST,
+    body: newUser,
+    headers: {},
+  })
 
   const handleUserRegister = () => {
     setHasError(false)
@@ -61,16 +60,12 @@ const RegisterPage = () => {
     if (error) {
       console.error('Error:', error)
       setHasError(true)
-    } else if (!loading) {
+    } else if (response && !loading) {
       setHideSignUp(true)
       document.cookie = response['Set-Cookie']
       window.location.href = '../home'
     }
   }, [response, error])
-
-  useEffect(() => {
-    stopLoading()
-  }, [])
 
   const showPasswordButtonClick = () => setShowPassword(show => !show)
 
@@ -118,7 +113,7 @@ const RegisterPage = () => {
                 xs: 6,
               }}
               alt="Harmony Logo"
-              src={'/image/harmonylogo.png'}
+              src={'/images/harmonylogo.png'}
             />
             <TextBlock my={3} fontSize={40}>
               Join Harmony
