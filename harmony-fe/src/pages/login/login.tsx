@@ -92,7 +92,7 @@ const LoginPage = () => {
                 xs: 6,
               }}
               alt="Harmony Logo"
-              src={'/image/harmonylogo.png'}
+              src={'/images/harmonylogo.png'}
             />
             <TextBlock my={3} fontSize={40}>
               Log in to Harmony

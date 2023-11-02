@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Box } from '@mui/material'
+import { Box, CircularProgress, Stack } from '@mui/material'
 
 import PostCard from '../components/post/postCard'
 import TextBlock from './text'
@@ -7,6 +7,7 @@ import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
 import { Post } from '../models/post'
 
 const NO_POSTS_HERE = 'No Posts Available'
+const SERVER_ERROR = 'Server is Not Responding'
 
 interface PostFeedProps {
   url: string
@@ -14,7 +15,7 @@ interface PostFeedProps {
 }
 
 const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
-  const [getPosts, posts] = useHttpRequest({
+  const [getPosts, posts, error, loading] = useHttpRequest({
     url: url,
     method: HttpMethod.GET,
   })
@@ -30,14 +31,27 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
     return <PostCard {...post} />
   })
 
-  return renderedPosts.length > 0 ? (
-    <Box width={1} display="flex" flexDirection="column" mt={2}>
-      {renderedPosts}
-    </Box>
-  ) : (
+  return error ? (
     <TextBlock align="center" sx={{ mt: 2 }}>
-      {noResultsText}
+      {SERVER_ERROR}
     </TextBlock>
+  ) : !loading ? (
+    renderedPosts.length > 0 ? (
+      <Box width={1} display="flex" flexDirection="column" mt={2}>
+        {renderedPosts}
+      </Box>
+    ) : (
+      <TextBlock align="center" sx={{ mt: 2 }}>
+        {noResultsText}
+      </TextBlock>
+    )
+  ) : (
+    <Stack sx={{ display: 'flex' }}>
+      <CircularProgress
+        size="4rem"
+        style={{ marginTop: 20, alignSelf: 'center' }}
+      />
+    </Stack>
   )
 }
 
