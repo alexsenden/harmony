@@ -25,6 +25,9 @@ import { Post, PostType } from '../../models/post'
 import { PollAnswer } from './poll-answer'
 import { getTopicContext } from '../../utils/topicContext'
 import { CommentInput } from './comment-input'
+import { ReviewContent } from './review-content'
+import { PollContent } from './poll-content'
+import { DiscussionContent } from './discussion-content'
 
 interface PostProps {
   post: Post
@@ -52,17 +55,21 @@ const Post = ({ post }: PostProps) => {
   const topicContext = getTopicContext(post.topicId)
 
   let avatarIcon
+  let postContent
   const iconSx = { mt: 1, ml: 1 }
   switch (post.postType) {
-    case PostType.DISCUSSION:
-      avatarIcon = <Forum sx={iconSx} fontSize="large" />
+    case PostType.REVIEW:
+      avatarIcon = <RateReview sx={iconSx} fontSize="large" />
+      postContent = <ReviewContent post={post} />
       break
     case PostType.POLL:
       avatarIcon = <Poll sx={iconSx} fontSize="large" />
+      postContent = <PollContent post={post} />
       break
-    case PostType.REVIEW:
+    case PostType.DISCUSSION:
     default:
-      avatarIcon = <RateReview sx={iconSx} fontSize="large" />
+      avatarIcon = <Forum sx={iconSx} fontSize="large" />
+      postContent = <DiscussionContent post={post} />
       break
   }
 
@@ -81,20 +88,7 @@ const Post = ({ post }: PostProps) => {
               {post.topicName} {topicContext}
             </TextBlock>
             <Divider sx={{ my: 1 }} />
-            {post.rating && post.postType === PostType.REVIEW && (
-              <Rating
-                size="large"
-                value={post.rating}
-                precision={0.5}
-                readOnly
-                sx={{ my: 1, ml: 0.5 }}
-              />
-            )}
-            {post.body && <TextBlock sx={{ ml: 1 }}>{post.body}</TextBlock>}
-            {post.pollOptions &&
-              post.pollOptions.map(option => (
-                <PollAnswer pollOption={option} />
-              ))}
+            {postContent}
           </CardContent>
 
           <CardActions>
@@ -111,10 +105,10 @@ const Post = ({ post }: PostProps) => {
             </Button>
           </CardActions>
 
-          <Divider />
+          <Divider sx={{ mx: 2 }} />
 
           <CardActions sx={{ display: 'flex', justifyContent: 'start' }}>
-            <Button href={`/profile/${name}`}>
+            <Button href={`/profile/${post.username}`}>
               <Avatar
                 src={`/image/profilepic/${post.picture}.png`}
                 sx={{ mr: 1, height: 24, width: 24 }}
