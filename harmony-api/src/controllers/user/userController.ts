@@ -58,7 +58,7 @@ export const login = async (
   }
 }
 
-export const getUser = async (
+export const getUserByCookie = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -70,6 +70,23 @@ export const getUser = async (
     res.json({
       userData: userData,
     })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getUserByUsername = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const username =
+    typeof req.params.username === 'string'
+      ? (req.params.username as string)
+      : undefined
+
+  try {
+    res.json(await userService.getUserByUsername(username))
   } catch (error) {
     next(error)
   }

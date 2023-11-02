@@ -23,7 +23,7 @@ const Profile = () => {
 
   //Retrieve user data
   const [getUserData, receivedData, error] = useHttpRequest({
-    url: `/user/?username=${userName}`,
+    url: `/user/${userName}`,
     method: HttpMethod.GET,
   })
 
