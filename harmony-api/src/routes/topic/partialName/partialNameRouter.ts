@@ -4,6 +4,6 @@ import * as topicController from '../../../controllers/topic/topicController'
 
 const router = express.Router()
 
-router.get('/', topicController.get)
+router.get('/:partialName?', topicController.get)
 
 export default router

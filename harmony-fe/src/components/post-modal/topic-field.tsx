@@ -23,7 +23,7 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
   }
 
   const [getTopicsByPartialName, topicsResponse] = useHttpRequest({
-    url: `/topic/partialName?partialName=${topicInput}`,
+    url: `/topic/partialName/${topicInput}`,
     method: HttpMethod.GET,
   })
 
