@@ -21,7 +21,6 @@ export interface HttpRequestInput {
   headers?: any
 }
 
-
 const useHttpRequest = ({
   url,
   method,

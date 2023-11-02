@@ -296,5 +296,3 @@ export const getPostById = async (postId: string): Promise<Post> => {
     picture: post.user.picture,
   }
 }
-
-

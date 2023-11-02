@@ -15,7 +15,7 @@ export const register = async (
   try {
     const newUser = await userService.register(userData)
     const userCookie = await userService.assignUserCookie(newUser)
-    res.cookie('userCookie',userCookie, {sameSite: 'none', secure: true} )
+    res.cookie('userCookie', userCookie, { sameSite: 'none', secure: true })
     res.json({
       userData: newUser,
     })
@@ -48,11 +48,13 @@ export const login = async (
   const loginData = req.body as Login
   try {
     const loginUser = await userService.login(loginData)
-    res.cookie('userCookie',(await userService.assignUserCookie(loginUser)), {sameSite: 'none', secure: true} )
+    res.cookie('userCookie', await userService.assignUserCookie(loginUser), {
+      sameSite: 'none',
+      secure: true,
+    })
     res.json({
       userData: loginUser,
     })
-
   } catch (error) {
     next(error)
   }
@@ -65,7 +67,7 @@ export const getUser = async (
 ) => {
   try {
     const cookie = req.cookies.userCookie
-    if (cookie===undefined) {
+    if (cookie === undefined) {
       res.json(null)
     } else {
       const userData = await userService.getUserFromCookie(cookie)
@@ -74,7 +76,6 @@ export const getUser = async (
         userData: userData,
       })
     }
-
   } catch (error) {
     next(error)
   }

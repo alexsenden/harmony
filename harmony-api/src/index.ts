@@ -13,10 +13,12 @@ const app: Express = express()
 const jsonParser = bodyParser.json()
 
 // Allow different origins to use the API
-app.use(cors({
-  origin: `${process.env.FRONT_END_BASE_ENDPOINT}`,
-  credentials: true,
-}))
+app.use(
+  cors({
+    origin: `${process.env.FRONT_END_BASE_ENDPOINT}`,
+    credentials: true,
+  })
+)
 
 app.use(cookieParser())
 

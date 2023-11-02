@@ -28,7 +28,7 @@ import { PollAnswer } from './poll-answer'
 import { TopicId } from '../../models/topic'
 import { Like } from '../../models/like'
 import { CommentWithUser } from '../../models/comment'
-import {UserContext} from "../../contexts/user";
+import { UserContext } from '../../contexts/user'
 
 interface PostProps {
   title: string
@@ -67,19 +67,13 @@ const Post = ({
 
   const commentInputRef = useRef<HTMLInputElement | null>(null)
 
-  const [postLikeRequest, postLikeResponse, postLikeError, postLikeLoading] =
-    useHttpRequest({
-      url: '/post/like',
-      method: HttpMethod.POST,
-      body: { postId },
-    })
+  const [postLikeRequest] = useHttpRequest({
+    url: '/post/like',
+    method: HttpMethod.POST,
+    body: { postId },
+  })
 
-  const [
-    removeLikeRequest,
-    removeLikeResponse,
-    removeLikeError,
-    removeLikeLoading,
-  ] = useHttpRequest({
+  const [removeLikeRequest] = useHttpRequest({
     url: '/post/like',
     method: HttpMethod.DELETE,
     body: { postId },
@@ -88,11 +82,11 @@ const Post = ({
   const toggleLike = () => {
     if (!isLiked) {
       postLikeRequest()
-      setCurrLikes(currLikes+1)
+      setCurrLikes(currLikes + 1)
       setIsLiked(true)
     } else {
       removeLikeRequest()
-      setCurrLikes(currLikes-1)
+      setCurrLikes(currLikes - 1)
       setIsLiked(false)
     }
   }
@@ -104,7 +98,7 @@ const Post = ({
   })
 
   useEffect(() => {
-      getLike()
+    getLike()
   }, [])
 
   useEffect(() => {
@@ -139,12 +133,7 @@ const Post = ({
 
   const [commentInput, setCommentInput] = useState('')
 
-  const [
-    postCommentRequest,
-    postCommentResponse,
-    postCommentError,
-    postCommentLoading,
-  ] = useHttpRequest({
+  const [postCommentRequest] = useHttpRequest({
     url: '/post/comment',
     method: HttpMethod.POST,
     body: { postId, commentInput },
@@ -158,13 +147,13 @@ const Post = ({
 
   const handleCommentSubmission = () => {
     if (commentInput.trim() !== '') {
-      setCurrComments(currComments+1)
+      setCurrComments(currComments + 1)
       comments.unshift({
         commentId: '',
         content: commentInput,
         createdAt: new Date(),
         postId: postId,
-        user: {username: user?.username, picture: user?.picture},
+        user: { username: user?.username, picture: user?.picture },
         userId: user?.userId,
       })
       postCommentRequest()
@@ -252,11 +241,7 @@ const Post = ({
             >
               {currComments} comments
             </Button>
-            <Button
-              size="small"
-              onClick={toggleLike}
-              sx={{ mt: 0.5 }}
-            >
+            <Button size="small" onClick={toggleLike} sx={{ mt: 0.5 }}>
               {currLikes} likes
             </Button>
           </CardActions>
