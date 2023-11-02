@@ -4,6 +4,7 @@ import { useState } from 'react'
 import axios from 'axios'
 
 axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_BASE_ENDPOINT}`
+axios.defaults.withCredentials = true
 
 export enum HttpMethod {
   GET = 'get',
@@ -20,7 +21,6 @@ export interface HttpRequestInput {
   headers?: any
 }
 
-const cookieName = 'userCookie'
 
 const useHttpRequest = ({
   url,
@@ -41,7 +41,7 @@ const useHttpRequest = ({
     setError(undefined)
     setloading(true)
 
-    const requestHeaders = { accept: '*/*',... {[cookieName]:getCookie(cookieName)} , ...headers }
+    const requestHeaders = { accept: '*/*', ...headers }
 
     new Promise(() =>
       axios({
@@ -62,18 +62,6 @@ const useHttpRequest = ({
     )
   }
   return [sendHttpRequest, response, error, loading, stopLoading]
-}
-function getCookie(cookieName: string): string {
-  const name = cookieName + '='
-  const decodedCookie = decodeURIComponent(document.cookie)
-  const cookieList = decodedCookie.split(';')
-  let foundCookie = ''
-  cookieList.forEach(val => {
-    if (val.indexOf(name) === 0) {
-      foundCookie = val.substring(name.length)
-    }
-  })
-  return foundCookie
 }
 
 export default useHttpRequest

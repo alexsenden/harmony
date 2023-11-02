@@ -20,7 +20,7 @@ export const register = async (userData: User): Promise<User> => {
     return {
       userId: postResult.userId,
       username: postResult.username,
-      password: postResult.password,
+      password: '',
       createdAt: postResult.createdAt,
       active: postResult.active,
       firstName: postResult.firstName,
@@ -65,7 +65,7 @@ export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
   return {
     userId: userData.userId,
     username: userData.username,
-    password: userData.password,
+    password: '',
     createdAt: userData.createdAt,
     active: userData.active,
     firstName: userData.firstName,

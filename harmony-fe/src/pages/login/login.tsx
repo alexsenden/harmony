@@ -42,7 +42,6 @@ const LoginPage = () => {
         // userLoginPost returned sucessfully
         // Needs some way to show the post was successfully created in the future
         console.log(userLoginResponse)
-        document.cookie = userLoginResponse['Set-Cookie']
         window.location.href = '../home'
       }
     }
