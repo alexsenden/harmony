@@ -7,10 +7,6 @@ import {
   Stack,
   Box,
   Divider,
-  TextField,
-  Collapse,
-  InputAdornment,
-  IconButton,
   Link,
   Rating,
   Avatar,
@@ -20,7 +16,6 @@ import {
   Poll,
   RateReview,
   ThumbUp,
-  SendRounded,
   ThumbUpOffAltOutlined,
   CommentOutlined,
 } from '@mui/icons-material'
@@ -29,6 +24,7 @@ import TextBlock from '../text-block'
 import { Post, PostType } from '../../models/post'
 import { PollAnswer } from './poll-answer'
 import { getTopicContext } from '../../utils/topicContext'
+import { CommentInput } from './comment-input'
 
 interface PostProps {
   post: Post
@@ -46,21 +42,11 @@ const Post = ({ post }: PostProps) => {
     setIsCommentSectionOpen(prevState => !prevState)
   }
 
-  const [commentInput, setCommentInput] = useState('')
   const [comments, setComments] = useState<string[]>([])
 
-  const handleCommentInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCommentInput(event.target.value)
-  }
-
-  const handleCommentSubmission = () => {
-    if (commentInput.trim() !== '') {
-      setComments(prevComments => [...prevComments, commentInput])
-      setCommentInput('')
-      toggleCommentSection()
-    }
+  const handleCommentSubmission = (comment: string) => {
+    setComments(prevComments => [...prevComments, comment])
+    setIsCommentSectionOpen(false)
   }
 
   const topicContext = getTopicContext(post.topicId)
@@ -148,27 +134,10 @@ const Post = ({ post }: PostProps) => {
             </Button>
           </CardActions>
 
-          <Collapse in={isCommentSectionOpen}>
-            <CardContent>
-              <TextField
-                placeholder="Add a comment.."
-                // Disabling for sprint 2 evaluation
-                disabled
-                fullWidth
-                value={commentInput}
-                onChange={handleCommentInputChange}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleCommentSubmission}>
-                        <SendRounded />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </CardContent>
-          </Collapse>
+          <CommentInput
+            open={isCommentSectionOpen}
+            submitComment={handleCommentSubmission}
+          />
 
           {/* This section should be replaced with the dynamic comments from database */}
           {comments.map((comment, index) => (
