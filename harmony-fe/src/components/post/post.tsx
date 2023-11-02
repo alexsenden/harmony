@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Card,
   CardActions,
@@ -14,47 +15,26 @@ import {
   Rating,
   Avatar,
 } from '@mui/material'
+import {
+  Forum,
+  Poll,
+  RateReview,
+  ThumbUp,
+  SendRounded,
+  ThumbUpOffAltOutlined,
+  CommentOutlined,
+} from '@mui/icons-material'
+
 import TextBlock from '../text-block'
-import ThumbUpIcon from '@mui/icons-material/ThumbUp'
-import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined'
-import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined'
-import SendRoundedIcon from '@mui/icons-material/SendRounded'
-import { useState } from 'react'
-import { PostType } from '../../models/post'
-import { Forum, Poll, RateReview } from '@mui/icons-material'
-import { PollOption } from '../../models/pollOption'
+import { Post, PostType } from '../../models/post'
 import { PollAnswer } from './poll-answer'
-import { TopicId } from '../../models/topic'
+import { getTopicContext } from '../../utils/topicContext'
 
 interface PostProps {
-  title: string
-  name: string
-  numComments: number
-  numLikes: number
-  postId: string
-  postType: PostType
-  body?: string
-  pollOptions?: Array<PollOption>
-  rating?: number
-  topicName: string
-  topicId: TopicId
-  picture: number
+  post: Post
 }
 
-const Post = ({
-  title,
-  name,
-  numComments,
-  numLikes,
-  postId,
-  postType,
-  body,
-  pollOptions,
-  rating,
-  topicName,
-  topicId,
-  picture,
-}: PostProps) => {
+const Post = ({ post }: PostProps) => {
   const [isLiked, setIsLiked] = useState(false)
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false)
 
@@ -83,19 +63,11 @@ const Post = ({
     }
   }
 
-  let topicContext
-  if (topicId.artistId) {
-    topicContext = '(Artist)'
-  } else if (topicId.albumId) {
-    topicContext = '(Album)'
-  } else if (topicId.songId) {
-    topicContext = '(Song)'
-  }
+  const topicContext = getTopicContext(post.topicId)
 
-  console.log(topicName)
   let avatarIcon
   const iconSx = { mt: 1, ml: 1 }
-  switch (postType) {
+  switch (post.postType) {
     case PostType.DISCUSSION:
       avatarIcon = <Forum sx={iconSx} fontSize="large" />
       break
@@ -114,40 +86,42 @@ const Post = ({
         <CardContent>{avatarIcon}</CardContent>
         <Box sx={{ width: '100%' }}>
           <CardContent>
-            <Link href={`/posts/${postId}`} underline="none">
+            <Link href={`/posts/${post.postId}`} underline="none">
               <TextBlock gutterBottom variant="h5">
-                {title}
+                {post.title}
               </TextBlock>
             </Link>
             <TextBlock>
-              {topicName} {topicContext}
+              {post.topicName} {topicContext}
             </TextBlock>
             <Divider sx={{ my: 1 }} />
-            {rating && postType === PostType.REVIEW && (
+            {post.rating && post.postType === PostType.REVIEW && (
               <Rating
                 size="large"
-                value={rating}
+                value={post.rating}
                 precision={0.5}
                 readOnly
                 sx={{ my: 1, ml: 0.5 }}
               />
             )}
-            {body && <TextBlock sx={{ ml: 1 }}>{body}</TextBlock>}
-            {pollOptions &&
-              pollOptions.map(option => <PollAnswer pollOption={option} />)}
+            {post.body && <TextBlock sx={{ ml: 1 }}>{post.body}</TextBlock>}
+            {post.pollOptions &&
+              post.pollOptions.map(option => (
+                <PollAnswer pollOption={option} />
+              ))}
           </CardContent>
 
           <CardActions>
             <Button disabled size="small" onClick={toggleLike}>
               {isLiked ? (
-                <ThumbUpIcon style={{ color: 'blue' }} />
+                <ThumbUp style={{ color: 'blue' }} />
               ) : (
-                <ThumbUpOffAltOutlinedIcon />
+                <ThumbUpOffAltOutlined />
               )}
             </Button>
 
             <Button size="small" onClick={toggleCommentSection}>
-              <CommentOutlinedIcon />
+              <CommentOutlined />
             </Button>
           </CardActions>
 
@@ -156,21 +130,21 @@ const Post = ({
           <CardActions sx={{ display: 'flex', justifyContent: 'start' }}>
             <Button href={`/profile/${name}`}>
               <Avatar
-                src={`/image/profilepic/${picture}.png`}
+                src={`/image/profilepic/${post.picture}.png`}
                 sx={{ mr: 1, height: 24, width: 24 }}
               ></Avatar>
-              {name}
+              {post.username}
             </Button>
             <Button
               size="small"
               onClick={toggleCommentSection}
               sx={{ ml: 3, mt: 0.5 }}
             >
-              {numComments} comments
+              {/*post.comments.length*/} comments
             </Button>
             <Button size="small" disabled sx={{ mt: 0.5 }}>
               {' '}
-              {numLikes} likes
+              {/*post.numLikes */} likes
             </Button>
           </CardActions>
 
@@ -187,7 +161,7 @@ const Post = ({
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton onClick={handleCommentSubmission}>
-                        <SendRoundedIcon />
+                        <SendRounded />
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -196,7 +170,7 @@ const Post = ({
             </CardContent>
           </Collapse>
 
-          {/* This section should be replace with the dynamic comments from database */}
+          {/* This section should be replaced with the dynamic comments from database */}
           {comments.map((comment, index) => (
             <CardContent key={index}>
               <TextBlock gutterBottom variant="body1">
