@@ -150,6 +150,12 @@ jobs:
               EOF
 
               ed -s grafana-agent.yaml <<EOF
+              /integrations:/r grafana_linux_logs.yaml
+              w
+              q
+              EOF
+
+              ed -s grafana-agent.yaml <<EOF
               /scrape_configs:/r grafana_logs.yaml
               w
               q
