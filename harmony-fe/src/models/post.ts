@@ -7,6 +7,8 @@ export type Post = {
   topicId: TopicId
   postType: PostType
   title: string
+  numComments: number
+  numLikes: number
   body: string
   rating?: number
   pollOptions?: Array<PollOption>

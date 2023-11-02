@@ -21,7 +21,6 @@ import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined'
 import SendRoundedIcon from '@mui/icons-material/SendRounded'
 import { useContext, useState, useRef, useEffect } from 'react'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
-import { UserCookieContext } from '../../contexts/user'
 import { PostType } from '../../models/post'
 import { Forum, Poll, RateReview } from '@mui/icons-material'
 import { PollOption } from '../../models/pollOption'
@@ -29,6 +28,7 @@ import { PollAnswer } from './poll-answer'
 import { TopicId } from '../../models/topic'
 import { Like } from '../../models/like'
 import { CommentWithUser } from '../../models/comment'
+import {UserContext} from "../../contexts/user";
 
 interface PostProps {
   title: string
@@ -60,16 +60,18 @@ const Post = ({
   picture,
 }: PostProps) => {
   const [isLiked, setIsLiked] = useState(false)
+  const [currLikes, setCurrLikes] = useState(numLikes)
   const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false)
+  const [currComments, setCurrComments] = useState(numComments)
+  const user = useContext(UserContext)
 
-  const userCookie = useContext(UserCookieContext)
   const commentInputRef = useRef<HTMLInputElement | null>(null)
 
   const [postLikeRequest, postLikeResponse, postLikeError, postLikeLoading] =
     useHttpRequest({
       url: '/post/like',
       method: HttpMethod.POST,
-      body: { postId, userCookie },
+      body: { postId },
     })
 
   const [
@@ -80,15 +82,17 @@ const Post = ({
   ] = useHttpRequest({
     url: '/post/like',
     method: HttpMethod.DELETE,
-    body: { postId, userCookie },
+    body: { postId },
   })
 
   const toggleLike = () => {
     if (!isLiked) {
       postLikeRequest()
+      setCurrLikes(currLikes+1)
       setIsLiked(true)
     } else {
       removeLikeRequest()
+      setCurrLikes(currLikes-1)
       setIsLiked(false)
     }
   }
@@ -96,14 +100,12 @@ const Post = ({
   const [getLike, like] = useHttpRequest({
     url: 'post/like',
     method: HttpMethod.GET,
-    body: { postId, userCookie },
+    body: { postId },
   })
 
   useEffect(() => {
-    if (userCookie) {
       getLike()
-    }
-  }, [userCookie])
+  }, [])
 
   useEffect(() => {
     if (like && like.length > 0) {
@@ -145,7 +147,7 @@ const Post = ({
   ] = useHttpRequest({
     url: '/post/comment',
     method: HttpMethod.POST,
-    body: { userCookie, postId, commentInput },
+    body: { postId, commentInput },
   })
 
   const handleCommentInputChange = (
@@ -156,6 +158,15 @@ const Post = ({
 
   const handleCommentSubmission = () => {
     if (commentInput.trim() !== '') {
+      setCurrComments(currComments+1)
+      comments.unshift({
+        commentId: '',
+        content: commentInput,
+        createdAt: new Date(),
+        postId: postId,
+        user: {username: user?.username, picture: user?.picture},
+        userId: user?.userId,
+      })
       postCommentRequest()
       setCommentInput('')
     }
@@ -170,7 +181,6 @@ const Post = ({
     topicContext = '(Song)'
   }
 
-  console.log(topicName)
   let avatarIcon
   const iconSx = { mt: 1, ml: 1 }
   switch (postType) {
@@ -240,10 +250,14 @@ const Post = ({
               onClick={toggleCommentSection}
               sx={{ ml: 3, mt: 0.5 }}
             >
-              {numComments} comments
+              {currComments} comments
             </Button>
-            <Button size="small" sx={{ mt: 0.5 }}>
-              {numLikes} likes
+            <Button
+              size="small"
+              onClick={toggleLike}
+              sx={{ mt: 0.5 }}
+            >
+              {currLikes} likes
             </Button>
           </CardActions>
 
@@ -252,7 +266,7 @@ const Post = ({
               <TextField
                 placeholder="Add a comment.."
                 fullWidth
-                disabled={!userCookie} // either keep this disabled when no user logged in or present a popup to login.
+                disabled={!user} // either keep this disabled when no user logged in or present a popup to login.
                 value={commentInput}
                 onChange={handleCommentInputChange}
                 inputRef={commentInputRef}
