@@ -13,26 +13,7 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-export const getMany = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const userId =
-    typeof req.query.userId === 'string' ? req.query.userId : undefined
-
-  try {
-    res.json(await postService.getPostByUserId(userId))
-  } catch (error) {
-    next(error)
-  }
-}
-
-export const getOne = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const get = async (req: Request, res: Response, next: NextFunction) => {
   const postId =
     typeof req.params.postId === 'string' ? req.params.postId : undefined
 

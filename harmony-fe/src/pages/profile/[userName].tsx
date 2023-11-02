@@ -110,7 +110,7 @@ const Profile = () => {
       label: 'Posts',
       tab: (
         <PostFeed
-          url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
+          url={userData?.userId ? `/post/user/${userData?.userId}` : ''}
         />
       ),
     },

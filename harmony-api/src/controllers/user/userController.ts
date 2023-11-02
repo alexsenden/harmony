@@ -81,9 +81,7 @@ export const getUserByUsername = async (
   next: NextFunction
 ) => {
   const username =
-    typeof req.params.username === 'string'
-      ? (req.params.username as string)
-      : undefined
+    typeof req.params.username === 'string' ? req.params.username : undefined
 
   try {
     res.json(await userService.getUserByUsername(username))
