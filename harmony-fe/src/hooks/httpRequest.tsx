@@ -4,6 +4,7 @@ import { useState } from 'react'
 import axios from 'axios'
 
 axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_BASE_ENDPOINT}`
+axios.defaults.withCredentials = true
 
 export enum HttpMethod {
   GET = 'get',
