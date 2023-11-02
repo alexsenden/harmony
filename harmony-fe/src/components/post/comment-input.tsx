@@ -7,17 +7,31 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material'
+import Post from './post'
+import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 
 interface CommentInputProps {
   open: boolean
+  post: Post
   submitComment: (comment: string) => void
 }
 
-export const CommentInput = ({ open, submitComment }: CommentInputProps) => {
+export const CommentInput = ({
+  open,
+  post,
+  submitComment,
+}: CommentInputProps) => {
   const [commentInput, setCommentInput] = useState('')
+
+  const [postComment] = useHttpRequest({
+    url: `/post/${post.postId}/comment`,
+    method: HttpMethod.POST,
+    body: { commentInput },
+  })
 
   const handleCommentSubmission = () => {
     if (commentInput.trim() !== '') {
+      postComment()
       submitComment(commentInput)
       setCommentInput('')
     }
@@ -34,8 +48,6 @@ export const CommentInput = ({ open, submitComment }: CommentInputProps) => {
       <CardContent>
         <TextField
           placeholder="Add a comment.."
-          // Disabling for sprint 2 evaluation
-          //disabled
           fullWidth
           value={commentInput}
           onChange={handleCommentInputChange}
