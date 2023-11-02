@@ -230,7 +230,7 @@ const Post = ({
           <CardActions sx={{ display: 'flex', justifyContent: 'start' }}>
             <Button href={`/profile/${name}`}>
               <Avatar
-                src={`/image/profilepic/${picture}.png`}
+                src={`/images/profilepic/${picture}.png`}
                 sx={{ mr: 1, height: 24, width: 24 }}
               ></Avatar>
               {name}
