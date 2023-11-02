@@ -64,7 +64,7 @@ export const getUserByCookie = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.headers.usercookie as string
+    const cookie = req.cookies.usercookie
     const userData = await userService.getUserFromCookie(cookie)
 
     res.json({
@@ -96,7 +96,7 @@ export const signOut = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.headers.usercookie as string
+    const cookie = req.cookies.usercookie
     await userService.removeUserCookie(cookie)
     res.json(true)
   } catch (error) {

@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 import router from './routes/routes'
 
@@ -18,6 +19,7 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
+app.use(cookieParser())
 app.use('/', jsonParser, router)
 
 // Error handler middleware

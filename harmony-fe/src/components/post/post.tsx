@@ -27,7 +27,7 @@ import { CommentInput } from './comment-input'
 import { ReviewContent } from './review-content'
 import { PollContent } from './poll-content'
 import { DiscussionContent } from './discussion-content'
-import { UserContext, UserCookieContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/user'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Like } from '../../models/like'
 import { CommentWithUser } from '../../models/comment'
@@ -44,25 +44,24 @@ const Post = ({ post }: PostProps) => {
     undefined
   )
 
-  const userCookie = useContext(UserCookieContext)
   const user = useContext(UserContext)
 
   const [postLikeRequest] = useHttpRequest({
     url: `/post/${post.postId}/like`,
     method: HttpMethod.POST,
-    body: { postId: post.postId, userCookie },
+    body: { postId: post.postId },
   })
 
   const [removeLikeRequest] = useHttpRequest({
     url: `/post/${post.postId}/like`,
     method: HttpMethod.DELETE,
-    body: { postId: post.postId, userCookie },
+    body: { postId: post.postId },
   })
 
   const [getLike, like] = useHttpRequest({
     url: `/post/${post.postId}/like`,
     method: HttpMethod.GET,
-    body: { postId: post.postId, userCookie },
+    body: { postId: post.postId },
   })
 
   const toggleLike = () => {
@@ -76,10 +75,8 @@ const Post = ({ post }: PostProps) => {
   }
 
   useEffect(() => {
-    if (userCookie) {
-      getLike()
-    }
-  }, [userCookie])
+    getLike()
+  }, [])
 
   useEffect(() => {
     if (like && like.length > 0) {
@@ -90,7 +87,7 @@ const Post = ({ post }: PostProps) => {
     }
   }, [like])
 
-  const [getComments, commentsResponse] = useHttpRequest({
+  const [getComments, commentsResponse, , commentsLoading] = useHttpRequest({
     url: `post/${post.postId}/comment`,
     method: HttpMethod.GET,
   })
@@ -209,8 +206,8 @@ const Post = ({ post }: PostProps) => {
             submitComment={handleCommentSubmission}
           />
 
-          {comments ? (
-            comments.map((comment: CommentWithUser, index: number) => (
+          {commentsLoading ? (
+            comments?.map((comment: CommentWithUser, index: number) => (
               <Comment comment={comment} index={index} />
             ))
           ) : (

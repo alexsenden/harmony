@@ -35,7 +35,7 @@ export const postLike = async (
 ) => {
   try {
     const likeData = req.body as Like
-    const userCookie = req.body.userCookie
+    const userCookie = req.cookies.userCookie
     const user = await userService.getUserFromCookie(userCookie)
     likeData.userId = user.userId
     res.json(await postService.createLike(likeData))
@@ -50,7 +50,7 @@ export const getLike = async (
   next: NextFunction
 ) => {
   try {
-    const userCookie = req.body.userCookie
+    const userCookie = req.cookies.userCookie
     const user = await userService.getUserFromCookie(userCookie)
     res.json(await postService.getLikesbyUserId(user.userId))
   } catch (error) {
@@ -65,7 +65,7 @@ export const removeLike = async (
 ) => {
   try {
     const likeData = req.body as Like
-    const userCookie = req.body.userCookie
+    const userCookie = req.cookies.userCookie
     const user = await userService.getUserFromCookie(userCookie)
     likeData.userId = user.userId
     res.json(await postService.deleteLike(likeData))
@@ -81,7 +81,7 @@ export const postComment = async (
 ) => {
   try {
     const commentData = req.body as Comment
-    const userCookie = req.body.userCookie
+    const userCookie = req.cookies.userCookie
     const user = await userService.getUserFromCookie(userCookie)
     commentData.userId = user.userId
     commentData.content = req.body.commentInput
