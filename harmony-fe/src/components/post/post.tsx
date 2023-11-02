@@ -8,7 +8,6 @@ import {
   Box,
   Divider,
   Link,
-  Rating,
   Avatar,
 } from '@mui/material'
 import {
@@ -22,7 +21,6 @@ import {
 
 import TextBlock from '../text-block'
 import { Post, PostType } from '../../models/post'
-import { PollAnswer } from './poll-answer'
 import { getTopicContext } from '../../utils/topicContext'
 import { CommentInput } from './comment-input'
 import { ReviewContent } from './review-content'
@@ -108,12 +106,12 @@ const Post = ({ post }: PostProps) => {
           <Divider sx={{ mx: 2 }} />
 
           <CardActions sx={{ display: 'flex', justifyContent: 'start' }}>
-            <Button href={`/profile/${post.username}`}>
+            <Button href={`/profile/${post.user?.username}`}>
               <Avatar
-                src={`/image/profilepic/${post.picture}.png`}
+                src={`/image/profilepic/${post.user?.picture}.png`}
                 sx={{ mr: 1, height: 24, width: 24 }}
               ></Avatar>
-              {post.username}
+              {post.user?.username}
             </Button>
             <Button
               size="small"
@@ -123,8 +121,7 @@ const Post = ({ post }: PostProps) => {
               {/*post.comments.length*/} comments
             </Button>
             <Button size="small" disabled sx={{ mt: 0.5 }}>
-              {' '}
-              {/*post.numLikes */} likes
+              {`${post.numLikes} like${post.numLikes !== 1 ? 's' : ''}`}
             </Button>
           </CardActions>
 

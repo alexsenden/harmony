@@ -1,5 +1,14 @@
 import prisma from '../../prisma/prisma'
-import { PostType as PrismaPostType } from '@prisma/client'
+import {
+  PostType as PrismaPostType,
+  Post as PrismaPost,
+  Song,
+  Artist,
+  Album,
+  User,
+  PollOption,
+  Prisma,
+} from '@prisma/client'
 import { Post, PostType } from '../models/post'
 
 export const createPost = async (postData: Post): Promise<Post> => {
@@ -45,6 +54,11 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
       song: true,
       album: true,
       artist: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
@@ -52,24 +66,7 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
   })
 
   return posts.map(post => {
-    return {
-      postId: post.postId,
-      userId: post.userId,
-      title: post.title,
-      topicId: {
-        artistId: post.artistId || undefined,
-        albumId: post.albumId || undefined,
-        songId: post.songId || undefined,
-      },
-      postType: PostType[post.postType],
-      username: post.user.username,
-      body: post.content || undefined,
-      pollOptions: post.pollOptions,
-      rating: Number(post.rating) || undefined,
-      topicName:
-        post.song?.songName || post.album?.albumName || post.artist?.artistName,
-      picture: post.user.picture,
-    }
+    return mapPrismaPostToPost(post)
   })
 }
 
@@ -81,6 +78,11 @@ export const getTrendingPosts = async (): Promise<Array<Post>> => {
       song: true,
       album: true,
       artist: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
@@ -88,24 +90,7 @@ export const getTrendingPosts = async (): Promise<Array<Post>> => {
   })
 
   return posts.map(post => {
-    return {
-      postId: post.postId,
-      userId: post.userId,
-      title: post.title,
-      topicId: {
-        artistId: post.artistId || undefined,
-        albumId: post.albumId || undefined,
-        songId: post.songId || undefined,
-      },
-      postType: PostType[post.postType],
-      username: post.user.username,
-      body: post.content || undefined,
-      pollOptions: post.pollOptions,
-      rating: Number(post.rating) || undefined,
-      topicName:
-        post.song?.songName || post.album?.albumName || post.artist?.artistName,
-      picture: post.user.picture,
-    }
+    return mapPrismaPostToPost(post)
   })
 }
 
@@ -130,6 +115,11 @@ export const getFollowingPosts = async (
       song: true,
       album: true,
       artist: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
@@ -137,24 +127,7 @@ export const getFollowingPosts = async (
   })
 
   return posts.map(post => {
-    return {
-      postId: post.postId,
-      userId: post.userId,
-      title: post.title,
-      topicId: {
-        artistId: post.artistId || undefined,
-        albumId: post.albumId || undefined,
-        songId: post.songId || undefined,
-      },
-      postType: PostType[post.postType],
-      username: post.user.username,
-      body: post.content || undefined,
-      pollOptions: post.pollOptions,
-      rating: Number(post.rating) || undefined,
-      topicName:
-        post.song?.songName || post.album?.albumName || post.artist?.artistName,
-      picture: post.user.picture,
-    }
+    return mapPrismaPostToPost(post)
   })
 }
 
@@ -169,9 +142,29 @@ export const getPostById = async (postId: string): Promise<Post> => {
       song: true,
       album: true,
       artist: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
     },
   })
 
+  return mapPrismaPostToPost(post)
+}
+
+interface PostWithRelations extends PrismaPost {
+  song: Song | null
+  artist: Artist | null
+  album: Album | null
+  user: User
+  pollOptions: Array<PollOption>
+  _count: {
+    likes?: number
+  }
+}
+
+const mapPrismaPostToPost = (post: PostWithRelations): Post => {
   return {
     postId: post.postId,
     userId: post.userId,
@@ -182,12 +175,12 @@ export const getPostById = async (postId: string): Promise<Post> => {
       songId: post.songId || undefined,
     },
     postType: PostType[post.postType],
-    username: post.user.username,
     body: post.content || undefined,
     pollOptions: post.pollOptions,
     rating: Number(post.rating) || undefined,
     topicName:
       post.song?.songName || post.album?.albumName || post.artist?.artistName,
-    picture: post.user.picture,
+    user: post.user,
+    numLikes: post._count.likes || 0,
   }
 }
