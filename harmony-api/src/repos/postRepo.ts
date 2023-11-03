@@ -24,6 +24,8 @@ export const createPost = async (postData: Post): Promise<Post> => {
     postType: PostType[postResult.postType],
     title: postResult.title,
     body: postResult.content || '',
+    numLikes: 0,
+    numComments: 0,
     rating: Number(postResult.rating) || undefined,
     topicId: {
       artistId: postResult.artistId || undefined,
@@ -132,6 +134,8 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
       song: true,
       album: true,
       artist: true,
+      comments: true,
+      likes: true,
     },
     orderBy: {
       createdAt: 'desc',
@@ -151,6 +155,8 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
       postType: PostType[post.postType],
       username: post.user.username,
       body: post.content || undefined,
+      numComments: post.comments.length,
+      numLikes: post.likes.length,
       pollOptions: post.pollOptions,
       rating: Number(post.rating) || undefined,
       topicName:
@@ -168,6 +174,8 @@ export const getTrendingPosts = async (): Promise<Array<Post>> => {
       song: true,
       album: true,
       artist: true,
+      comments: true,
+      likes: true,
     },
     orderBy: {
       createdAt: 'desc',
@@ -187,6 +195,8 @@ export const getTrendingPosts = async (): Promise<Array<Post>> => {
       postType: PostType[post.postType],
       username: post.user.username,
       body: post.content || undefined,
+      numComments: post.comments.length,
+      numLikes: post.likes.length,
       pollOptions: post.pollOptions,
       rating: Number(post.rating) || undefined,
       topicName:
@@ -217,6 +227,8 @@ export const getFollowingPosts = async (
       song: true,
       album: true,
       artist: true,
+      comments: true,
+      likes: true,
     },
     orderBy: {
       createdAt: 'desc',
@@ -236,6 +248,8 @@ export const getFollowingPosts = async (
       postType: PostType[post.postType],
       username: post.user.username,
       body: post.content || undefined,
+      numComments: post.comments.length,
+      numLikes: post.likes.length,
       pollOptions: post.pollOptions,
       rating: Number(post.rating) || undefined,
       topicName:
@@ -256,6 +270,8 @@ export const getPostById = async (postId: string): Promise<Post> => {
       song: true,
       album: true,
       artist: true,
+      comments: true,
+      likes: true,
     },
   })
 
@@ -271,6 +287,8 @@ export const getPostById = async (postId: string): Promise<Post> => {
     postType: PostType[post.postType],
     username: post.user.username,
     body: post.content || undefined,
+    numComments: post.comments.length,
+    numLikes: post.likes.length,
     pollOptions: post.pollOptions,
     rating: Number(post.rating) || undefined,
     topicName:
