@@ -41,6 +41,8 @@ export const FAKE_POST: Post = {
   postType: PostType.DISCUSSION,
   title: 'Fake Post Title!',
   body: 'Fake Post Body!',
+  numComments: 0,
+  numLikes: 0,
   rating: 3,
   pollOptions: [FAKE_POLL_OPTION],
 }

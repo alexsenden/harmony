@@ -33,6 +33,8 @@ describe('POST /post', () => {
       postId: FAKE_POST.postId,
       postType: FAKE_POST.postType,
       rating: FAKE_POST.rating,
+      numComments: FAKE_POST.numComments,
+      numLikes: FAKE_POST.numLikes,
       title: FAKE_POST.title,
       topicId: FAKE_POST.topicId,
       userId: FAKE_POST.userId,

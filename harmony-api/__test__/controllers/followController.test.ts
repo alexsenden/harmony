@@ -14,7 +14,6 @@ interface CustomFollowRequest extends Request {
     followAction: boolean
   }
   headers: {
-    usercookie: string
     followingid: string
   }
 } //express did not like headers in the request, so I made this subtype
@@ -35,8 +34,10 @@ describe('Follow Controller', () => {
     }
 
     const req: Request = {
+      cookies: {
+        userCookie: FAKE_USER_1_COOKIE,
+      },
       headers: {
-        usercookie: FAKE_USER_1_COOKIE.cookie,
         followingid: FAKE_USER_2.userId,
       },
       body: {
@@ -47,7 +48,6 @@ describe('Follow Controller', () => {
       json: jest.fn(),
     } as unknown as Response
     const next = jest.fn() as unknown as NextFunction
-
     jest.spyOn(followService, 'followUser').mockResolvedValue(mockedFollow)
 
     await follow(req, res, next)
@@ -65,8 +65,10 @@ describe('Follow Controller', () => {
       followerId: FAKE_USER_2.userId,
     }
     const req: Request = {
+      cookies: {
+        userCookie: 'REAL-USER-1-COOKIE',
+      },
       headers: {
-        usercookie: 'REAL-USER-1-COOKIE',
         followingid: FAKE_USER_2.userId,
       },
       body: {
@@ -94,8 +96,10 @@ describe('Follow Controller', () => {
       followerId: FAKE_USER_2.userId,
     }
     const req: Request = {
+      cookies: {
+        userCookie: FAKE_USER_1_COOKIE.cookie,
+      },
       headers: {
-        usercookie: FAKE_USER_1_COOKIE.cookie,
         followingid: FAKE_USER_2.userId,
       },
       body: {
@@ -127,8 +131,10 @@ describe('Un-Follow Controller', () => {
     }
 
     const req: Request = {
+      cookies: {
+        userCookie: FAKE_USER_1_COOKIE.cookie,
+      },
       headers: {
-        usercookie: FAKE_USER_1_COOKIE.cookie,
         followingid: FAKE_USER_2.userId,
       },
       body: {
@@ -157,8 +163,10 @@ describe('Un-Follow Controller', () => {
       followerId: FAKE_USER_2.userId,
     }
     const req: Request = {
+      cookies: {
+        userCookie: 'REAL-USER-1-COOKIE',
+      },
       headers: {
-        usercookie: 'REAL-USER-1-COOKIE',
         followingid: FAKE_USER_2.userId,
       },
       body: {
@@ -187,8 +195,10 @@ describe('Un-Follow Controller', () => {
       followerId: FAKE_USER_2.userId,
     }
     const req: Request = {
+      cookies: {
+        userCookie: FAKE_USER_1_COOKIE.cookie,
+      },
       headers: {
-        usercookie: FAKE_USER_1_COOKIE.cookie,
         followingid: FAKE_USER_2.userId,
       },
       body: {
@@ -247,8 +257,10 @@ describe('Follow Check Controller', () => {
     const mockedFollowResult = true
 
     const req: Request = {
+      cookies: {
+        userCookie: FAKE_USER_1_COOKIE.cookie,
+      },
       headers: {
-        usercookie: FAKE_USER_1_COOKIE.cookie,
         followingid: FAKE_USER_2.userId,
       },
       body: {
