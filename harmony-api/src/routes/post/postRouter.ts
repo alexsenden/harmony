@@ -4,6 +4,8 @@ import trendingRouter from './trending/trendingRouter'
 import followingRouter from './following/followingRouter'
 import userRouter from './user/userRouter'
 import * as postController from '../../controllers/post/postController'
+import * as commentController from '../../controllers/post/commentController'
+import * as likeController from '../../controllers/post/likeController'
 
 const router = express.Router()
 
@@ -13,12 +15,12 @@ router.use('/following', followingRouter)
 router.use('/user', userRouter)
 
 // Like routes
-router.post('/:postId/like', postController.postLike)
-router.delete('/:postId/like', postController.removeLike)
+router.post('/:postId/like', likeController.postLike)
+router.delete('/:postId/like', likeController.removeLike)
 
 // Comment routes
-router.post('/:postId/comment', postController.postComment)
-router.get('/:postId/comment', postController.getComments)
+router.post('/:postId/comment', commentController.postComment)
+router.get('/:postId/comment', commentController.getComments)
 
 // Individual post routes
 router.post('/:postId', postController.post)
