@@ -64,7 +64,7 @@ export const getUserByCookie = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.cookies.usercookie
+    const cookie = req.cookies.userCookie
     const userData = await userService.getUserFromCookie(cookie)
 
     res.json({

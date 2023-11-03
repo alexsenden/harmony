@@ -85,6 +85,8 @@ export const assignUserCookie = async (userData: User): Promise<string> => {
 }
 
 export const getUserFromCookie = async (cookie: string): Promise<User> => {
+  console.log(cookie)
+
   const cookieData = await prisma.userCookie
     .findFirstOrThrow({
       where: {
@@ -96,6 +98,9 @@ export const getUserFromCookie = async (cookie: string): Promise<User> => {
     .catch(() => {
       return Promise.reject('Cookie does not exist')
     })
+
+  console.log(cookieData)
+
   const userData = await prisma.user.findFirst({
     where: {
       userId: {
@@ -107,6 +112,8 @@ export const getUserFromCookie = async (cookie: string): Promise<User> => {
   if (userData === null) {
     return Promise.reject('No user connected to cookie')
   }
+
+  console.log(userData)
 
   return {
     userId: userData.userId,

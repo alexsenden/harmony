@@ -68,8 +68,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const [sendHttpRequest, response, error, loading] = useHttpRequest({
     url: '/user',
     method: HttpMethod.GET,
-    headers: cookieInfo,
-    body: '',
   })
   useEffect(() => {
     cookieInfo.userCookie = getCookie('userCookie')

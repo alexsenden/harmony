@@ -5,7 +5,6 @@ import * as userService from '../../services/userService'
 
 import { Post } from '../../models/post'
 import { Like } from '../../models/like'
-import { Comment } from '../../models/comment'
 
 export const post = async (req: Request, res: Response, next: NextFunction) => {
   const postData = req.body as Post
@@ -80,12 +79,18 @@ export const postComment = async (
   next: NextFunction
 ) => {
   try {
-    const commentData = req.body as Comment
-    const userCookie = req.cookies.userCookie
-    const user = await userService.getUserFromCookie(userCookie)
-    commentData.userId = user.userId
-    commentData.content = req.body.commentInput
-    res.json(await postService.createComment(commentData))
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    const comment = {
+      postId: req.params.postId,
+      userId: user.userId,
+      content: req.body.commentInput,
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    console.log((req as any).postId)
+    console.log(comment)
+    console.log(req.params)
+    res.json(await postService.createComment(comment))
   } catch (error) {
     next(error)
   }
@@ -98,7 +103,7 @@ export const getComments = async (
 ) => {
   try {
     const postId =
-      typeof req.query.postId === 'string' ? req.query.postId : undefined
+      typeof req.params.postId === 'string' ? req.params.postId : undefined
     res.json(await postService.getComments(postId))
   } catch (error) {
     next(error)

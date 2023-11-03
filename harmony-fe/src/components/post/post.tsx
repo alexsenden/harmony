@@ -206,7 +206,7 @@ const Post = ({ post }: PostProps) => {
             submitComment={handleCommentSubmission}
           />
 
-          {commentsLoading ? (
+          {!commentsLoading ? (
             comments?.map((comment: CommentWithUser, index: number) => (
               <Comment comment={comment} index={index} />
             ))
