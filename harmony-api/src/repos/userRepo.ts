@@ -56,15 +56,6 @@ export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
   return mapPrismaUserToUser(userData)
 }
 
-export const assignUserCookie = async (userData: User): Promise<string> => {
-  const cookieData = await prisma.userCookie.create({
-    data: {
-      userId: userData.userId,
-    },
-  })
-  return cookieData.cookie
-}
-
 export const getUserFromCookie = async (cookie: string): Promise<User> => {
   const userData = await prisma.user
     .findFirstOrThrow({
@@ -81,14 +72,6 @@ export const getUserFromCookie = async (cookie: string): Promise<User> => {
     })
 
   return mapPrismaUserToUser(userData)
-}
-
-export const removeUserCookie = async (cookie: string) => {
-  await prisma.userCookie.delete({
-    where: {
-      cookie: cookie,
-    },
-  })
 }
 
 export const setUserData = async (userData: Account): Promise<Account> => {
