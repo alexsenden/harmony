@@ -4,6 +4,6 @@ import * as userController from '../../../controllers/post/user/userController'
 
 const router = express.Router()
 
-router.get('/:userId', userController.get)
+router.get('/:userId', userController.getPostsByUser)
 
 export default router

@@ -1,4 +1,4 @@
-import { get } from '../../../../src/controllers/follow/followCount/folowCountController'
+import * as followCountController from '../../../../src/controllers/follow/followCount/followCountController'
 import { Request, Response, NextFunction } from 'express'
 import { FAKE_USER_1 } from '../../../testData'
 
@@ -26,7 +26,7 @@ describe('Follow Count Controller', () => {
       .spyOn(followService, 'getFollowCount')
       .mockResolvedValue(mockedFollowers)
 
-    await get(req, res, next)
+    await followCountController.getFollowCount(req, res, next)
 
     expect(res.json).toHaveBeenCalledTimes(1)
     expect(res.json).toHaveBeenCalledWith(3)

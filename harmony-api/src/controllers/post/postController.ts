@@ -5,7 +5,11 @@ import * as userService from '../../services/userService'
 
 import { Post } from '../../models/post'
 
-export const post = async (req: Request, res: Response, next: NextFunction) => {
+export const createPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const postData = req.body as Post
 
   try {
@@ -15,7 +19,11 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-export const get = async (req: Request, res: Response, next: NextFunction) => {
+export const getPostById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const postId =
     typeof req.params.postId === 'string' ? req.params.postId : undefined
   const requester = await userService.getUserFromCookie(req.cookies.userCookie)

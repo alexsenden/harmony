@@ -1,5 +1,7 @@
+import crypto from 'crypto'
+
 import * as userRepo from '../repos/userRepo'
-import * as crypto from 'crypto'
+import * as userCookieRepo from '../repos/userCookieRepo'
 import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 import { Login } from '../models/login'
@@ -33,12 +35,12 @@ export const login = async (loginData?: Login): Promise<User> => {
 }
 
 export const assignUserCookie = async (userData: User): Promise<String> => {
-  return await userRepo.assignUserCookie(userData)
+  return await userCookieRepo.assignUserCookie(userData)
 }
 
 export const removeUserCookie = async (cookie: string) => {
   try {
-    await userRepo.removeUserCookie(cookie)
+    await userCookieRepo.removeUserCookie(cookie)
   } catch (error) {
     throw new HttpError('No user linked to cookie', 404)
   }

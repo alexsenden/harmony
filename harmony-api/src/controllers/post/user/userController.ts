@@ -3,7 +3,11 @@ import { NextFunction, Request, Response } from 'express'
 import * as postService from '../../../services/postService'
 import * as userService from '../../../services/userService'
 
-export const get = async (req: Request, res: Response, next: NextFunction) => {
+export const getPostsByUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const userId =
     typeof req.params.userId === 'string' ? req.params.userId : undefined
 

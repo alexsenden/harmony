@@ -4,6 +4,6 @@ import * as followingController from '../../../controllers/post/following/follow
 
 const router = express.Router()
 
-router.get('/', followingController.get)
+router.get('/', followingController.getFollowingFeed)
 
 export default router

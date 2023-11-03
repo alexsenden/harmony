@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.use('/followCount', followCountRouter)
 
-router.get('/', followController.get)
-router.post('/', followController.post)
+router.get('/', followController.getFollow)
+router.post('/', followController.toggleUserFollow)
 
 export default router

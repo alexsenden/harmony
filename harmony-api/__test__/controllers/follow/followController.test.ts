@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 
-import { post, get } from '../../../src/controllers/follow/followController'
+import * as followController from '../../../src/controllers/follow/followController'
 import { FAKE_USER_1, FAKE_USER_2, FAKE_USER_1_COOKIE } from '../../testData'
 import * as followService from '../../../src/services/followService'
 import { Follow } from '../../../src/models/follow'
@@ -32,7 +32,7 @@ describe('Follow Controller', () => {
     const next = jest.fn() as unknown as NextFunction
     jest.spyOn(followService, 'followUser').mockResolvedValue(mockedFollow)
 
-    await post(req, res, next)
+    await followController.toggleUserFollow(req, res, next)
 
     expect(res.json).toHaveBeenCalledTimes(1)
     expect(res.json).toHaveBeenCalledWith(mockedFollow)
@@ -65,7 +65,7 @@ describe('Follow Controller', () => {
 
     jest.spyOn(followService, 'followUser').mockRejectedValue(mockedFollow)
 
-    await post(req, res, next)
+    await followController.toggleUserFollow(req, res, next)
 
     expect(res.json).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalledTimes(1)
@@ -97,7 +97,7 @@ describe('Follow Controller', () => {
 
     jest.spyOn(followService, 'followUser').mockRejectedValue(mockedFollow)
 
-    await post(req, res, next)
+    await followController.toggleUserFollow(req, res, next)
 
     expect(res.json).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalledTimes(1)
@@ -132,7 +132,7 @@ describe('Un-Follow Controller', () => {
 
     jest.spyOn(followService, 'unFollowUser').mockResolvedValue(mockedFollow)
 
-    await post(req, res, next)
+    await followController.toggleUserFollow(req, res, next)
 
     expect(res.json).toHaveBeenCalledTimes(1)
     expect(res.json).toHaveBeenCalledWith(mockedFollow)
@@ -165,7 +165,7 @@ describe('Un-Follow Controller', () => {
 
     jest.spyOn(followService, 'unFollowUser').mockRejectedValue(mockedFollow)
 
-    await post(req, res, next)
+    await followController.toggleUserFollow(req, res, next)
 
     expect(res.json).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalledTimes(1)
@@ -198,7 +198,7 @@ describe('Un-Follow Controller', () => {
 
     jest.spyOn(followService, 'unFollowUser').mockRejectedValue(mockedFollow)
 
-    await post(req, res, next)
+    await followController.toggleUserFollow(req, res, next)
 
     expect(res.json).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalledTimes(1)
@@ -230,7 +230,7 @@ describe('Follow Check Controller', () => {
 
     jest.spyOn(followService, 'getFollow').mockResolvedValue(mockedFollowResult)
 
-    await get(req, res, next)
+    await followController.getFollow(req, res, next)
 
     expect(res.json).toHaveBeenCalledTimes(1)
     expect(res.json).toHaveBeenCalledWith(true)

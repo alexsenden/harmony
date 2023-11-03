@@ -23,7 +23,7 @@ router.post('/:postId/comment', commentController.postComment)
 router.get('/:postId/comment', commentController.getComments)
 
 // Individual post routes
-router.post('/:postId', postController.post)
-router.get('/:postId', postController.get)
+router.post('/', postController.createPost)
+router.get('/:postId', postController.getPostById)
 
 export default router
