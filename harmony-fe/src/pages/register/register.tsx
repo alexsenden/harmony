@@ -16,7 +16,7 @@ import useHttpRequest from '../../hooks/httpRequest'
 import TextBlock from '../../components/text-block'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Head from 'next/head'
-import { MobileContext } from '../../contexts/mobile'
+import { MobileContext } from '../../contexts/mobileContext'
 
 const RegisterPage = () => {
   const [hasError, setHasError] = useState(false)

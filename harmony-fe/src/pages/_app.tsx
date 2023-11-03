@@ -1,14 +1,13 @@
-import '../styles/global.css'
 import type { ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { UserContext } from '../contexts/user'
-import { MobileContext } from '../contexts/mobile'
-import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
-import { useEffect, useState } from 'react'
-import { User } from '../models/user'
 import { ThemeProvider } from '@emotion/react'
 import { CssBaseline, createTheme } from '@mui/material'
+
+import '../styles/global.css'
+
+import UserContextProvider from '../contexts/userContext'
+import MobileContextProvider from '../contexts/mobileContext'
 import HarmonyAppBar from '../components/app-bar'
 import Favicon from '../components/favicon-component'
 
@@ -25,14 +24,13 @@ export const globalTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'DM Sans, sans-serif', //Default font is DM Sans
+    fontFamily: 'DM Sans, sans-serif', // Default font is DM Sans
   },
   components: {
-    // Name of the component
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none', //No uppercase buttons
+          textTransform: 'none', // No uppercase buttons
         },
       },
     },
@@ -48,44 +46,21 @@ type AppPropsWithLayout = AppProps & {
 }
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
-  const [currentUser, setCurrentUser] = useState<User | undefined>(undefined)
-  const [mobile, setMobile] = useState<boolean>(false)
-
-  const [sendHttpRequest, response, error, loading] = useHttpRequest({
-    url: '/user',
-    method: HttpMethod.GET,
-  })
-  useEffect(() => {
-    sendHttpRequest()
-  }, [])
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent
-    const mobileRegex =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-    setMobile(mobileRegex.test(userAgent))
-  }, [])
-  useEffect(() => {
-    if (response && !loading) {
-      setCurrentUser(response.userData as User)
-    }
-    if (error) {
-      console.error('Error getting user: ', error)
-    }
-  }, [loading])
-
   const getLayout = Component.getLayout ?? (page => page)
 
   return getLayout(
-    <UserContext.Provider value={currentUser}>
+    <>
       <Favicon />
-      <MobileContext.Provider value={mobile}>
-        <ThemeProvider theme={globalTheme}>
-          <CssBaseline />
-          <HarmonyAppBar />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </MobileContext.Provider>
-    </UserContext.Provider>
+      <UserContextProvider>
+        <MobileContextProvider>
+          <ThemeProvider theme={globalTheme}>
+            <CssBaseline />
+            <HarmonyAppBar />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </MobileContextProvider>
+      </UserContextProvider>
+    </>
   )
 }
 export default App

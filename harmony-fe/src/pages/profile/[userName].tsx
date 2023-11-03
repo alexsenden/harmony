@@ -7,7 +7,7 @@ import PostFeed from '../../components/post-feed/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text-block'
-import { UserContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/userContext'
 import FollowingButton from '../../components/following-button'
 import Head from 'next/head'
 

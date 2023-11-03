@@ -13,10 +13,10 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 
 import PostModal from '../post-modal'
-import { UserContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/userContext'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
-import { MobileContext } from '../../contexts/mobile'
+import { MobileContext } from '../../contexts/mobileContext'
 
 const AppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)

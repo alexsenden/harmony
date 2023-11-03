@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { UserContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/userContext'
 import { useContext, useEffect, useState } from 'react'
 import {
   Avatar,

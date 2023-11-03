@@ -6,7 +6,7 @@ import { CommentInput } from './comment-input'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { CommentWithUser } from '../../models/comment'
 import Comment from './comment'
-import { UserContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/userContext'
 import TextBlock from '../text-block'
 
 interface CommentSectionProps {
