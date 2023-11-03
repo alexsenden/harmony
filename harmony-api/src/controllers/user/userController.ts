@@ -11,7 +11,6 @@ export const register = async (
   next: NextFunction
 ) => {
   const userData = req.body as User
-  console.log(userData)
   try {
     const newUser = await userService.register(userData)
     const userCookie = await userService.assignUserCookie(newUser)

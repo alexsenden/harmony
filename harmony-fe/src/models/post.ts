@@ -15,8 +15,6 @@ export type Post = {
   pollOptions?: Array<PollOption>
   topicName: string
   user?: User
-  comments?: Array<Object> // To be replaced with new comment type
-  numLikes?: number
 }
 
 export enum PostField {
