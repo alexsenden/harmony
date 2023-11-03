@@ -26,8 +26,8 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
 
   const mappedPosts = (posts as Array<Post>) || []
 
-  const renderedPosts = mappedPosts.map(post => {
-    return <PostComponent post={post} />
+  const renderedPosts = mappedPosts.map((post, index) => {
+    return <PostComponent post={post} key={`post-${index}`} />
   })
 
   return error ? (

@@ -9,7 +9,9 @@ export const PollContent = ({ post }: PollContentProps) => {
   return (
     <>
       {post.pollOptions &&
-        post.pollOptions.map(option => <PollAnswer pollOption={option} />)}
+        post.pollOptions.map((option, index) => (
+          <PollAnswer pollOption={option} key={`poll-answer=${index}`} />
+        ))}
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Card,
   CardActions,
@@ -18,20 +18,16 @@ import {
   ThumbUpOffAltOutlined,
   CommentOutlined,
 } from '@mui/icons-material'
-import { v4 as newUuid } from 'uuid'
 
 import TextBlock from '../text-block'
 import { Post, PostType } from '../../models/post'
 import { getTopicContext } from '../../utils/topicContext'
-import { CommentInput } from './comment-input'
 import { ReviewContent } from './review-content'
 import { PollContent } from './poll-content'
 import { DiscussionContent } from './discussion-content'
-import { UserContext } from '../../contexts/user'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Like } from '../../models/like'
-import { CommentWithUser } from '../../models/comment'
-import Comment from './comment'
+import CommentSection from './comment-section'
 
 interface PostProps {
   post: Post
@@ -39,12 +35,8 @@ interface PostProps {
 
 const Post = ({ post }: PostProps) => {
   const [isLiked, setIsLiked] = useState(false)
-  const [isCommentSectionOpen, setIsCommentSectionOpen] = useState(false)
-  const [comments, setComments] = useState<CommentWithUser[] | undefined>(
-    undefined
-  )
-
-  const user = useContext(UserContext)
+  const [numComments, setNumComments] = useState(post.numComments)
+  const [commentSectionOpen, setCommentSectionOpen] = useState(false)
 
   const [postLikeRequest] = useHttpRequest({
     url: `/post/${post.postId}/like`,
@@ -86,48 +78,6 @@ const Post = ({ post }: PostProps) => {
       setIsLiked(userLiked)
     }
   }, [like])
-
-  const [getComments, commentsResponse, , commentsLoading] = useHttpRequest({
-    url: `post/${post.postId}/comment`,
-    method: HttpMethod.GET,
-  })
-
-  useEffect(() => {
-    if (!comments && isCommentSectionOpen) {
-      getComments()
-    }
-  }, [isCommentSectionOpen, comments])
-
-  useEffect(() => {
-    setComments(commentsResponse)
-  }, [commentsResponse])
-
-  const toggleCommentSection = () => {
-    setIsCommentSectionOpen(prevState => !prevState)
-  }
-
-  const handleCommentSubmission = (comment: string) => {
-    setComments(prevComments => {
-      if (prevComments) {
-        return [
-          ...prevComments,
-          {
-            user: {
-              username: user?.username || '',
-              picture: user?.picture || 0,
-            },
-            commentId: newUuid(),
-            userId: user?.userId || '',
-            postId: post.postId,
-            createdAt: new Date(Date.now()),
-            content: comment,
-          },
-        ]
-      }
-      return undefined
-    })
-    setIsCommentSectionOpen(false)
-  }
 
   let avatarIcon
   let postContent
@@ -173,7 +123,10 @@ const Post = ({ post }: PostProps) => {
               {isLiked ? <ThumbUp /> : <ThumbUpOffAltOutlined />}
             </Button>
 
-            <Button size="small" onClick={toggleCommentSection}>
+            <Button
+              size="small"
+              onClick={() => setCommentSectionOpen(prevState => !prevState)}
+            >
               <CommentOutlined />
             </Button>
           </CardActions>
@@ -190,29 +143,21 @@ const Post = ({ post }: PostProps) => {
             </Button>
             <Button
               size="small"
-              onClick={toggleCommentSection}
+              onClick={() => setCommentSectionOpen(prevState => !prevState)}
               sx={{ ml: 3, mt: 0.5 }}
             >
-              {comments?.length || 0} comments
+              {`${numComments} comment${numComments !== 1 ? 's' : ''}`}
             </Button>
             <Button size="small" disabled sx={{ mt: 0.5 }}>
               {`${post.numLikes} like${post.numLikes !== 1 ? 's' : ''}`}
             </Button>
           </CardActions>
 
-          <CommentInput
-            open={isCommentSectionOpen}
+          <CommentSection
+            commentSectionOpen={commentSectionOpen}
             post={post}
-            submitComment={handleCommentSubmission}
+            setNumComments={setNumComments}
           />
-
-          {!commentsLoading ? (
-            comments?.map((comment: CommentWithUser, index: number) => (
-              <Comment comment={comment} index={index} />
-            ))
-          ) : (
-            <p>Loading comments...</p>
-          )}
         </Box>
       </Stack>
     </Card>

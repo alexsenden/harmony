@@ -5,16 +5,15 @@ import TextBlock from '../text-block'
 
 interface CommentProps {
   comment: CommentWithUser
-  index: number
 }
 
-const Comment = ({ comment, index }: CommentProps) => {
+const Comment = ({ comment }: CommentProps) => {
   return (
-    <CardContent key={index}>
+    <CardContent>
       <TextBlock gutterBottom variant="body1">
         <Button href={`/profile/${comment.user.username}`}>
           <Avatar
-            src={`/image/profilepic/${comment.user.picture}.png`}
+            src={`/images/profilepic/${comment.user.picture}.png`}
             sx={{ mr: 1, height: 24, width: 24 }}
           ></Avatar>
           <strong>{comment.user.username}</strong>
