@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { SendRounded } from '@mui/icons-material'
 import {
   CardContent,
@@ -7,8 +7,10 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material'
+
 import Post from './post'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { UserContext } from '../../contexts/userContext'
 
 interface CommentInputProps {
   open: boolean
@@ -21,6 +23,7 @@ export const CommentInput = ({
   post,
   submitComment,
 }: CommentInputProps) => {
+  const user = useContext(UserContext)
   const [commentInput, setCommentInput] = useState('')
 
   const [postComment] = useHttpRequest({
@@ -43,13 +46,16 @@ export const CommentInput = ({
     setCommentInput(event.target.value)
   }
 
+  const placeholder = user ? 'Add a comment..' : 'Log in to post comments!'
+
   return (
     <Collapse in={open}>
       <CardContent>
         <TextField
-          placeholder="Add a comment.."
+          placeholder={placeholder}
           fullWidth
           value={commentInput}
+          disabled={!user}
           onChange={handleCommentInputChange}
           InputProps={{
             endAdornment: (

@@ -3,6 +3,8 @@ import { ThumbUp, ThumbUpOffAltOutlined } from '@mui/icons-material'
 
 import { Post } from '../../models/post'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { useContext } from 'react'
+import { UserContext } from '../../contexts/userContext'
 
 interface LikeButtonProps {
   isLiked: boolean
@@ -11,6 +13,8 @@ interface LikeButtonProps {
 }
 
 const LikeButton = ({ isLiked, post, handleLike }: LikeButtonProps) => {
+  const user = useContext(UserContext)
+
   const [postLikeRequest] = useHttpRequest({
     url: `/post/${post.postId}/like`,
     method: HttpMethod.POST,
@@ -34,7 +38,7 @@ const LikeButton = ({ isLiked, post, handleLike }: LikeButtonProps) => {
   }
 
   return (
-    <Button size="small" onClick={toggleLike}>
+    <Button size="small" onClick={toggleLike} disabled={!user}>
       {isLiked ? <ThumbUp /> : <ThumbUpOffAltOutlined />}
     </Button>
   )
