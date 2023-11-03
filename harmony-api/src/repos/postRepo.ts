@@ -62,7 +62,7 @@ export const getPostByUserId = async (
       artist: true,
       likes: {
         where: {
-          userId: requester?.userId,
+          userId: requester?.userId || '',
         },
       },
       _count: {
@@ -94,7 +94,7 @@ export const getTrendingPosts = async (
       artist: true,
       likes: {
         where: {
-          userId: requester?.userId,
+          userId: requester?.userId || '',
         },
       },
       _count: {
@@ -173,7 +173,7 @@ export const getPostById = async (
       artist: true,
       likes: {
         where: {
-          userId: requester?.userId,
+          userId: requester?.userId || '',
         },
       },
       _count: {
