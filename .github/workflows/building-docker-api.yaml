@@ -24,6 +24,7 @@ jobs:
           cd ./harmony-api
           touch ./environment/.env.prod
           echo "PORT=8081" > ./environment/.env.prod
+          echo "FRONT_END_BASE_ENDPOINT=http://${{ secrets.azureHost1 }}:8080" >> ./environment/.env.prod
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER_CI }}" >> ./environment/.env.prod
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD_CI }}" >> ./environment/.env.prod
           echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT_CI }}" >> ./environment/.env.prod
