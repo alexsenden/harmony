@@ -7,7 +7,7 @@ import PostFeed from '../../components/post-feed/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text-block'
-import { UserContext, UserCookieContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/user'
 import FollowingButton from '../../components/following-button'
 import Head from 'next/head'
 
@@ -18,7 +18,6 @@ const Profile = () => {
   const [following, setFollowing] = useState(false)
   const [numFollowers, setNumFollowers] = useState(0)
 
-  const userCookie = useContext(UserCookieContext)
   const user = useContext(UserContext)
 
   //Retrieve user data
@@ -46,7 +45,7 @@ const Profile = () => {
   const [getFollowData, receivedFollowData] = useHttpRequest({
     url: '/follow',
     method: HttpMethod.GET,
-    headers: { userCookie: userCookie, followingId: userData?.userId },
+    headers: { followingId: userData?.userId },
   })
 
   //Retrieve number of followers for the user
@@ -81,7 +80,7 @@ const Profile = () => {
   const [setFollowActionData] = useHttpRequest({
     url: '/follow',
     method: HttpMethod.POST,
-    headers: { userCookie: userCookie, followingId: userData?.userId },
+    headers: { followingId: userData?.userId },
     body: { followAction: !following },
   })
 

@@ -30,6 +30,7 @@ describe('Register Controller', () => {
       },
     } as Request
     const res = {
+      cookie: jest.fn(),
       json: jest.fn(),
     } as unknown as Response
     const next = jest.fn() as unknown as NextFunction
@@ -40,10 +41,9 @@ describe('Register Controller', () => {
     jest.spyOn(userService, 'assignUserCookie').mockResolvedValue(mockCookie)
 
     await register(req, res, next)
-
+    expect(res.cookie).toHaveBeenCalledTimes(1)
     expect(res.json).toHaveBeenCalledTimes(1)
     expect(res.json).toHaveBeenCalledWith({
-      'Set-Cookie': 'userCookie = ' + mockCookie,
       userData: mockUser,
     })
     expect(next).not.toHaveBeenCalled()

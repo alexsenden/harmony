@@ -13,7 +13,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 
 import PostModal from '../post-modal'
-import { UserContext, UserCookieContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/user'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
 import { MobileContext } from '../../contexts/mobile'
@@ -23,13 +23,11 @@ const AppBar = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
-  const userCookie = useContext(UserCookieContext)
   const menuOpen = Boolean(anchorEl)
 
   const [sendHttpRequest] = useHttpRequest({
     url: '/user/signOut',
     method: HttpMethod.POST,
-    headers: { userCookie: userCookie },
     body: '',
   })
 

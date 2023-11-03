@@ -7,6 +7,8 @@ export type Post = {
   postId: string
   topicId: TopicId
   postType: PostType
+  numComments?: number
+  numLikes?: number
   title: string
   body?: string
   rating?: number

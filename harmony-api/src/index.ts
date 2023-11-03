@@ -12,12 +12,13 @@ const app: Express = express()
 
 const jsonParser = bodyParser.json()
 
-// Configure CORS
-const corsOptions = {
-  origin: true,
-  credentials: true,
-}
-app.use(cors(corsOptions))
+// Allow different origins to use the API
+app.use(
+  cors({
+    origin: `${process.env.FRONT_END_BASE_ENDPOINT}`,
+    credentials: true,
+  })
+)
 
 app.use(cookieParser())
 app.use('/', jsonParser, router)

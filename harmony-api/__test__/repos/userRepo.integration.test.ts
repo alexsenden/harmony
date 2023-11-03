@@ -39,7 +39,7 @@ describe('register function with Singleton', () => {
 
     const comparisonSrc = {
       username: userData.username,
-      password: userData.password,
+      password: '',
       firstName: userData.firstName,
       lastName: userData.lastName,
     }

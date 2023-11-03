@@ -7,9 +7,9 @@ import {
   Album,
   User,
   PollOption,
+  Like,
 } from '@prisma/client'
 import { Post, PostType } from '../models/post'
-import { Like } from '../models/like'
 import { Comment, CommentWithUser } from '../models/comment'
 
 export const createPost = async (postData: Post): Promise<Post> => {
@@ -32,6 +32,8 @@ export const createPost = async (postData: Post): Promise<Post> => {
     postType: PostType[postResult.postType],
     title: postResult.title,
     body: postResult.content || '',
+    numLikes: 0,
+    numComments: 0,
     rating: Number(postResult.rating) || undefined,
     topicId: {
       artistId: postResult.artistId || undefined,
@@ -140,9 +142,10 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
       song: true,
       album: true,
       artist: true,
+      likes: true,
       _count: {
         select: {
-          likes: true,
+          comments: true,
         },
       },
     },
@@ -164,9 +167,10 @@ export const getTrendingPosts = async (): Promise<Array<Post>> => {
       song: true,
       album: true,
       artist: true,
+      likes: true,
       _count: {
         select: {
-          likes: true,
+          comments: true,
         },
       },
     },
@@ -201,9 +205,10 @@ export const getFollowingPosts = async (
       song: true,
       album: true,
       artist: true,
+      likes: true,
       _count: {
         select: {
-          likes: true,
+          comments: true,
         },
       },
     },
@@ -228,9 +233,10 @@ export const getPostById = async (postId: string): Promise<Post> => {
       song: true,
       album: true,
       artist: true,
+      likes: true,
       _count: {
         select: {
-          likes: true,
+          comments: true,
         },
       },
     },
@@ -245,8 +251,9 @@ interface PostWithRelations extends PrismaPost {
   album: Album | null
   user: User
   pollOptions: Array<PollOption>
+  likes: Array<Like>
   _count: {
-    likes?: number
+    comments?: number
   }
 }
 
@@ -267,6 +274,7 @@ const mapPrismaPostToPost = (post: PostWithRelations): Post => {
     topicName:
       post.song?.songName || post.album?.albumName || post.artist?.artistName,
     user: post.user,
-    numLikes: post._count.likes || 0,
+    numComments: post._count.comments,
+    numLikes: post.likes.length,
   }
 }

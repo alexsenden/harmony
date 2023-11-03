@@ -86,10 +86,6 @@ export const postComment = async (
       content: req.body.commentInput,
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    console.log((req as any).postId)
-    console.log(comment)
-    console.log(req.params)
     res.json(await postService.createComment(comment))
   } catch (error) {
     next(error)
