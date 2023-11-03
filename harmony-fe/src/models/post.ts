@@ -8,13 +8,14 @@ export type Post = {
   topicId: TopicId
   postType: PostType
   title: string
-  numComments: number
-  numLikes: number
   body: string
   rating?: number
   pollOptions?: Array<PollOption>
   topicName: string
   user?: User
+  isLiked?: boolean
+  numComments?: number
+  numLikes?: number
 }
 
 export enum PostField {

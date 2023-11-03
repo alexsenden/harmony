@@ -4,7 +4,7 @@ import * as postService from '../../services/postService'
 import * as userService from '../../services/userService'
 
 import { Post } from '../../models/post'
-import { Like } from '../../models/like'
+import { HttpError } from '../../models/error/httpError'
 
 export const post = async (req: Request, res: Response, next: NextFunction) => {
   const postData = req.body as Post
@@ -19,9 +19,10 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
 export const get = async (req: Request, res: Response, next: NextFunction) => {
   const postId =
     typeof req.params.postId === 'string' ? req.params.postId : undefined
+  const requester = await userService.getUserFromCookie(req.cookies.userCookie)
 
   try {
-    res.json(await postService.getPostById(postId))
+    res.json(await postService.getPostById(postId, requester))
   } catch (error) {
     next(error)
   }
@@ -33,25 +34,17 @@ export const postLike = async (
   next: NextFunction
 ) => {
   try {
-    const likeData = req.body as Like
-    const userCookie = req.cookies.userCookie
-    const user = await userService.getUserFromCookie(userCookie)
-    likeData.userId = user.userId
-    res.json(await postService.createLike(likeData))
-  } catch (error) {
-    next(error)
-  }
-}
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
 
-export const getLike = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const userCookie = req.cookies.userCookie
-    const user = await userService.getUserFromCookie(userCookie)
-    res.json(await postService.getLikesbyUserId(user.userId))
+    const likeData = {
+      userId: user.userId,
+      postId: req.body.postId,
+    }
+
+    res.json(await postService.createLike(likeData))
   } catch (error) {
     next(error)
   }
@@ -63,10 +56,16 @@ export const removeLike = async (
   next: NextFunction
 ) => {
   try {
-    const likeData = req.body as Like
-    const userCookie = req.cookies.userCookie
-    const user = await userService.getUserFromCookie(userCookie)
-    likeData.userId = user.userId
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
+    const likeData = {
+      userId: user.userId,
+      postId: req.body.postId,
+    }
+
     res.json(await postService.deleteLike(likeData))
   } catch (error) {
     next(error)
@@ -80,6 +79,10 @@ export const postComment = async (
 ) => {
   try {
     const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     const comment = {
       postId: req.params.postId,
       userId: user.userId,

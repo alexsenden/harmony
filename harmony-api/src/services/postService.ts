@@ -6,6 +6,7 @@ import { HttpError } from '../models/error/httpError'
 import { PollOption } from '../models/pollOption'
 import { Like } from '../models/like'
 import { Comment } from '../models/comment'
+import { User } from '../models/user'
 
 export const createPost = async (postData?: Post): Promise<Post> => {
   const validatedPost = validatePost(postData)
@@ -78,25 +79,31 @@ export const getComments = async (postId?: string) => {
 }
 
 export const getPostByUserId = async (
-  userId?: string
+  userId?: string,
+  requester?: User
 ): Promise<Array<Post>> => {
   if (!userId) {
     return []
   }
 
-  return await postRepo.getPostByUserId(userId)
+  return await postRepo.getPostByUserId(userId, requester)
 }
 
-export const getPostById = async (postId?: string): Promise<Post> => {
+export const getPostById = async (
+  postId?: string,
+  requester?: User
+): Promise<Post> => {
   if (!postId) {
     throw new HttpError('field postId is required to fetch post', 400)
   }
 
-  return postRepo.getPostById(postId)
+  return postRepo.getPostById(postId, requester)
 }
 
-export const getTrendingPosts = async (): Promise<Array<Post>> => {
-  return postRepo.getTrendingPosts()
+export const getTrendingPosts = async (
+  requester?: User
+): Promise<Array<Post>> => {
+  return postRepo.getTrendingPosts(requester)
 }
 
 export const getFollowingPosts = async (userId?: string) => {

@@ -14,7 +14,6 @@ router.use('/user', userRouter)
 
 // Like routes
 router.post('/:postId/like', postController.postLike)
-router.get('/:postId/like', postController.getLike)
 router.delete('/:postId/like', postController.removeLike)
 
 // Comment routes

@@ -5,12 +5,13 @@ import {
   Song,
   Artist,
   Album,
-  User,
+  User as PrismaUser,
   PollOption,
   Like,
 } from '@prisma/client'
 import { Post, PostType } from '../models/post'
 import { Comment, CommentWithUser } from '../models/comment'
+import { User } from '../models/user'
 
 export const createPost = async (postData: Post): Promise<Post> => {
   const postResult = await prisma.post.create({
@@ -128,7 +129,10 @@ export const getComments = async (
   })
 }
 
-export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
+export const getPostByUserId = async (
+  userID: string,
+  requester?: User
+): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     where: {
       userId: {
@@ -142,10 +146,15 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
       song: true,
       album: true,
       artist: true,
-      likes: true,
+      likes: {
+        where: {
+          userId: requester?.userId,
+        },
+      },
       _count: {
         select: {
           comments: true,
+          likes: true,
         },
       },
     },
@@ -159,7 +168,9 @@ export const getPostByUserId = async (userID: string): Promise<Array<Post>> => {
   })
 }
 
-export const getTrendingPosts = async (): Promise<Array<Post>> => {
+export const getTrendingPosts = async (
+  requester?: User
+): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     include: {
       user: true,
@@ -167,10 +178,15 @@ export const getTrendingPosts = async (): Promise<Array<Post>> => {
       song: true,
       album: true,
       artist: true,
-      likes: true,
+      likes: {
+        where: {
+          userId: requester?.userId,
+        },
+      },
       _count: {
         select: {
           comments: true,
+          likes: true,
         },
       },
     },
@@ -205,10 +221,15 @@ export const getFollowingPosts = async (
       song: true,
       album: true,
       artist: true,
-      likes: true,
+      likes: {
+        where: {
+          userId: userId,
+        },
+      },
       _count: {
         select: {
           comments: true,
+          likes: true,
         },
       },
     },
@@ -222,7 +243,10 @@ export const getFollowingPosts = async (
   })
 }
 
-export const getPostById = async (postId: string): Promise<Post> => {
+export const getPostById = async (
+  postId: string,
+  requester?: User
+): Promise<Post> => {
   const post = await prisma.post.findUniqueOrThrow({
     where: {
       postId: postId,
@@ -233,10 +257,15 @@ export const getPostById = async (postId: string): Promise<Post> => {
       song: true,
       album: true,
       artist: true,
-      likes: true,
+      likes: {
+        where: {
+          userId: requester?.userId,
+        },
+      },
       _count: {
         select: {
           comments: true,
+          likes: true,
         },
       },
     },
@@ -249,11 +278,12 @@ interface PostWithRelations extends PrismaPost {
   song: Song | null
   artist: Artist | null
   album: Album | null
-  user: User
+  user: PrismaUser
   pollOptions: Array<PollOption>
   likes: Array<Like>
   _count: {
     comments?: number
+    likes?: number
   }
 }
 
@@ -275,6 +305,7 @@ const mapPrismaPostToPost = (post: PostWithRelations): Post => {
       post.song?.songName || post.album?.albumName || post.artist?.artistName,
     user: post.user,
     numComments: post._count.comments,
-    numLikes: post.likes.length,
+    numLikes: post._count.likes,
+    isLiked: post.likes.length > 0,
   }
 }

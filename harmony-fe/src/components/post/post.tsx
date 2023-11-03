@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Card,
   CardActions,
@@ -10,14 +10,7 @@ import {
   Link,
   Avatar,
 } from '@mui/material'
-import {
-  Forum,
-  Poll,
-  RateReview,
-  ThumbUp,
-  ThumbUpOffAltOutlined,
-  CommentOutlined,
-} from '@mui/icons-material'
+import { Forum, Poll, RateReview, CommentOutlined } from '@mui/icons-material'
 
 import TextBlock from '../text-block'
 import { Post, PostType } from '../../models/post'
@@ -25,59 +18,28 @@ import { getTopicContext } from '../../utils/topicContext'
 import { ReviewContent } from './review-content'
 import { PollContent } from './poll-content'
 import { DiscussionContent } from './discussion-content'
-import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
-import { Like } from '../../models/like'
 import CommentSection from './comment-section'
+import LikeButton from './like-button'
 
 interface PostProps {
   post: Post
 }
 
 const Post = ({ post }: PostProps) => {
-  const [isLiked, setIsLiked] = useState(false)
-  const [numComments, setNumComments] = useState(post.numComments)
+  const [numComments, setNumComments] = useState(post.numComments || 0)
+  const [numLikes, setNumLikes] = useState(post.numLikes || 0)
+  const [isLiked, setIsLiked] = useState(post.isLiked || false)
   const [commentSectionOpen, setCommentSectionOpen] = useState(false)
 
-  const [postLikeRequest] = useHttpRequest({
-    url: `/post/${post.postId}/like`,
-    method: HttpMethod.POST,
-    body: { postId: post.postId },
-  })
-
-  const [removeLikeRequest] = useHttpRequest({
-    url: `/post/${post.postId}/like`,
-    method: HttpMethod.DELETE,
-    body: { postId: post.postId },
-  })
-
-  const [getLike, like] = useHttpRequest({
-    url: `/post/${post.postId}/like`,
-    method: HttpMethod.GET,
-    body: { postId: post.postId },
-  })
-
-  const toggleLike = () => {
-    if (!isLiked) {
-      postLikeRequest()
-      setIsLiked(true)
-    } else {
-      removeLikeRequest()
+  const handleLike = () => {
+    if (isLiked) {
+      setNumLikes(prevState => prevState - 1)
       setIsLiked(false)
+    } else {
+      setNumLikes(prevState => prevState + 1)
+      setIsLiked(true)
     }
   }
-
-  useEffect(() => {
-    getLike()
-  }, [])
-
-  useEffect(() => {
-    if (like && like.length > 0) {
-      const userLiked = like.some(
-        (likeItem: Like) => likeItem.postId === post.postId
-      )
-      setIsLiked(userLiked)
-    }
-  }, [like])
 
   let avatarIcon
   let postContent
@@ -119,9 +81,7 @@ const Post = ({ post }: PostProps) => {
           </CardContent>
 
           <CardActions>
-            <Button size="small" onClick={toggleLike}>
-              {isLiked ? <ThumbUp /> : <ThumbUpOffAltOutlined />}
-            </Button>
+            <LikeButton isLiked={isLiked} post={post} handleLike={handleLike} />
 
             <Button
               size="small"
@@ -149,7 +109,7 @@ const Post = ({ post }: PostProps) => {
               {`${numComments} comment${numComments !== 1 ? 's' : ''}`}
             </Button>
             <Button size="small" disabled sx={{ mt: 0.5 }}>
-              {`${post.numLikes} like${post.numLikes !== 1 ? 's' : ''}`}
+              {`${numLikes} like${numLikes !== 1 ? 's' : ''}`}
             </Button>
           </CardActions>
 

@@ -15,6 +15,7 @@ export type Post = {
   pollOptions?: Array<PollOption>
   topicName?: string
   user?: User
+  isLiked?: boolean
 }
 
 export enum PostType {
