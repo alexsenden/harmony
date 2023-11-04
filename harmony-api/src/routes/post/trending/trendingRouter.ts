@@ -4,6 +4,6 @@ import * as trendingController from '../../../controllers/post/trending/trending
 
 const router = express.Router()
 
-router.get('/', trendingController.get)
+router.get('/', trendingController.getTrendingFeed)
 
 export default router

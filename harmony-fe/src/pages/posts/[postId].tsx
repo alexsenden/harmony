@@ -1,12 +1,13 @@
 import { useRouter } from 'next/router'
-import PostCard from '../../components/post/postCard'
-import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
-import { useEffect, useState } from 'react'
-import { Post } from '../../models/post'
 import { Box } from '@mui/material'
-import Head from 'next/head'
+import { useEffect, useState } from 'react'
 
-export default function PostDetail() {
+import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { Post } from '../../models/post'
+import PostComponent from '../../components/post'
+import TextBlock from '../../components/text-block'
+
+const PostDetail = () => {
   const router = useRouter()
   const postID = router.query.postId
 
@@ -28,12 +29,14 @@ export default function PostDetail() {
   }, [postResponse])
 
   return (
-    <>
-      <Head>
-        <title>{`${post?.title} - by ${post?.username}`}</title>
-      </Head>
-
-      <Box sx={{ m: 5 }}>{post && <PostCard {...post}></PostCard>}</Box>
-    </>
+    <Box sx={{ m: 5 }}>
+      {post ? (
+        <PostComponent post={post}></PostComponent>
+      ) : (
+        <TextBlock>This post is unavailable.</TextBlock>
+      )}
+    </Box>
   )
 }
+
+export default PostDetail

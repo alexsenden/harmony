@@ -8,7 +8,7 @@ import { DiscussionPostForm } from './discussion-post-form'
 import { PollPostForm } from './poll-post-form'
 import { DEFAULT_RATING, ReviewPostForm } from './review-post-form'
 import { PollOption } from '../../models/pollOption'
-import { UserContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/userContext'
 
 interface PostModalProps {
   open: boolean

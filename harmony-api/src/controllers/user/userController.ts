@@ -11,7 +11,6 @@ export const register = async (
   next: NextFunction
 ) => {
   const userData = req.body as User
-  console.log(userData)
   try {
     const newUser = await userService.register(userData)
     const userCookie = await userService.assignUserCookie(newUser)
@@ -60,7 +59,7 @@ export const login = async (
   }
 }
 
-export const getUser = async (
+export const getUserByCookie = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -81,6 +80,21 @@ export const getUser = async (
   }
 }
 
+export const getUserByUsername = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const username =
+    typeof req.params.username === 'string' ? req.params.username : undefined
+
+  try {
+    res.json(await userService.getUserByUsername(username))
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const signOut = async (
   req: Request,
   res: Response,
@@ -90,17 +104,6 @@ export const signOut = async (
     const cookie = req.cookies.userCookie
     await userService.removeUserCookie(cookie)
     res.json(true)
-  } catch (error) {
-    next(error)
-  }
-}
-
-export const get = async (req: Request, res: Response, next: NextFunction) => {
-  const username =
-    typeof req.query.username === 'string' ? req.query.username : undefined
-
-  try {
-    res.json(await userService.getUserByUsername(username))
   } catch (error) {
     next(error)
   }

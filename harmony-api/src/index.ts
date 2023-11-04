@@ -1,8 +1,8 @@
 import express, { Express, NextFunction, Request, Response } from 'express'
 import bodyParser from 'body-parser'
-import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 import router from './routes/routes'
 
@@ -21,7 +21,6 @@ app.use(
 )
 
 app.use(cookieParser())
-
 app.use('/', jsonParser, router)
 
 // Error handler middleware

@@ -2,7 +2,7 @@ import { PostType, PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-async function main() {
+const main = async () => {
   console.log(
     await prisma.user.upsert({
       where: { userId: 'b12c47f8-036c-4bfd-8658-230e8fa4d7cb' },

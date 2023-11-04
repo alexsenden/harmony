@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
-import TextBlock from '../../components/text'
+import TextBlock from '../../components/text-block'
 
-export default function Error404() {
+const Error404 = () => {
   return (
     <>
       <Box display="flex" justifyContent="center" alignItems="center">
@@ -10,3 +10,5 @@ export default function Error404() {
     </>
   )
 }
+
+export default Error404

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { Box, CircularProgress, Stack } from '@mui/material'
 
-import PostCard from '../components/post/postCard'
-import TextBlock from './text'
-import useHttpRequest, { HttpMethod } from '../hooks/httpRequest'
-import { Post } from '../models/post'
+import TextBlock from '../text-block'
+import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
+import { Post } from '../../models/post'
+import PostComponent from '../post'
 
 const NO_POSTS_HERE = 'No Posts Available'
 const SERVER_ERROR = 'Server is Not Responding'
@@ -26,9 +26,8 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
 
   const mappedPosts = (posts as Array<Post>) || []
 
-  const renderedPosts = mappedPosts.map(post => {
-    console.log(post)
-    return <PostCard {...post} />
+  const renderedPosts = mappedPosts.map((post, index) => {
+    return <PostComponent post={post} key={`post-${index}`} />
   })
 
   return error ? (

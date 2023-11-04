@@ -3,11 +3,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Avatar, Box, Container, Grid, IconButton, Paper } from '@mui/material'
 import SettingsIcon from '@mui/icons-material/Settings'
 import TabLayout from '../../components/tab-layout'
-import PostFeed from '../../components/postFeed'
+import PostFeed from '../../components/post-feed/postFeed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { User } from '../../models/user'
-import TextBlock from '../../components/text'
-import { UserContext } from '../../contexts/user'
+import TextBlock from '../../components/text-block'
+import { UserContext } from '../../contexts/userContext'
 import FollowingButton from '../../components/following-button'
 import Head from 'next/head'
 
@@ -22,7 +22,7 @@ const Profile = () => {
 
   //Retrieve user data
   const [getUserData, receivedData, error] = useHttpRequest({
-    url: `/user/?username=${userName}`,
+    url: `/user/${userName}`,
     method: HttpMethod.GET,
   })
 
@@ -84,7 +84,7 @@ const Profile = () => {
     body: { followAction: !following },
   })
 
-  function followAction() {
+  const followAction = () => {
     setFollowActionData()
     if (following) {
       setNumFollowers(numFollowers - 1)
@@ -109,7 +109,7 @@ const Profile = () => {
       label: 'Posts',
       tab: (
         <PostFeed
-          url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
+          url={userData?.userId ? `/post/user/${userData?.userId}` : ''}
         />
       ),
     },

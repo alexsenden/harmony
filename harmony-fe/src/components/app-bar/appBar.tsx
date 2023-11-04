@@ -13,13 +13,13 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 
 import PostModal from '../post-modal'
-import { UserContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/userContext'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
-import { MobileContext } from '../../contexts/mobile'
+import { MobileContext } from '../../contexts/mobileContext'
 
 const AppBar = () => {
-  const [open, setOpen] = useState(false)
+  const [postModalOpen, setPostModalOpen] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
@@ -31,12 +31,12 @@ const AppBar = () => {
     body: '',
   })
 
-  const handleOpen = () => {
-    setOpen(true)
+  const openPostModal = () => {
+    setPostModalOpen(true)
   }
 
-  const handleClose = () => {
-    setOpen(false)
+  const closePostModal = () => {
+    setPostModalOpen(false)
   }
 
   const signOut = () => {
@@ -88,7 +88,7 @@ const AppBar = () => {
               Search
             </NavButton> */}
           {user && !mobile && (
-            <NavButton onClick={handleOpen}>New Post</NavButton>
+            <NavButton onClick={openPostModal}>New Post</NavButton>
           )}
           {user && mobile && (
             <div>
@@ -112,7 +112,7 @@ const AppBar = () => {
                 onClose={handleMobileClose}
               >
                 <MenuItem onClick={profileOpen}>Profile</MenuItem>
-                <MenuItem onClick={handleOpen}>New Post</MenuItem>
+                <MenuItem onClick={openPostModal}>New Post</MenuItem>
                 <Divider />
                 <MenuItem component={'a'} href={'/account'}>
                   Account Settings
@@ -159,7 +159,7 @@ const AppBar = () => {
           <Divider orientation="vertical" flexItem />
         </Toolbar>
       </MuiAppBar>
-      <PostModal open={open} onClose={handleClose} />
+      <PostModal open={postModalOpen} onClose={closePostModal} />
     </React.Fragment>
   )
 }

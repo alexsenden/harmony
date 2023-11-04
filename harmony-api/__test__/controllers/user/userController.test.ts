@@ -1,13 +1,13 @@
-import { register } from '../../src/controllers/user/userController'
+import { register } from '../../../src/controllers/user/userController'
 import { Request, Response, NextFunction } from 'express'
 
-import * as userService from '../../src/services/userService'
+import * as userService from '../../../src/services/userService'
 
 describe('Register Controller', () => {
   /*
-        Description: test if usercontroller does not throw an error with correct return
-        from register function in userservice.
-    */
+    Description: test if usercontroller does not throw an error with correct return
+    from register function in userservice.
+  */
 
   const mockUser = {
     userId: '12124',
@@ -50,9 +50,9 @@ describe('Register Controller', () => {
   })
 
   /*
-        Description: test if usercontroller throws an error with an error from register function
-        in userservice.
-    */
+    Description: test if usercontroller throws an error with an error from register function
+    in userservice.
+  */
 
   it('should handle registration errors', async () => {
     const req = {

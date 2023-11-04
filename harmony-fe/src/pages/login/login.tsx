@@ -9,11 +9,11 @@ import {
   IconButton,
   InputAdornment,
 } from '@mui/material'
-import TextBlock from '../../components/text/index'
+import TextBlock from '../../components/text-block/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Head from 'next/head'
-import { MobileContext } from '../../contexts/mobile'
+import { MobileContext } from '../../contexts/mobileContext'
 
 const LoginPage = () => {
   const [loginData] = useState({

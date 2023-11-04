@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { UserContext } from '../../contexts/user'
+import { UserContext } from '../../contexts/userContext'
 import { useContext, useEffect, useState } from 'react'
 import {
   Avatar,
@@ -13,7 +13,7 @@ import {
   Paper,
   TextField,
 } from '@mui/material'
-import TextBlock from '../../components/text'
+import TextBlock from '../../components/text-block'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import React from 'react'
 import router from 'next/router'
@@ -74,7 +74,7 @@ const Account = () => {
     },
   ]
 
-  function handlePicture(picNum: number): void {
+  const handlePicture = (picNum: number): void => {
     newData.picture = picNum
     console.log(newData.picture)
     handleMenuClose()

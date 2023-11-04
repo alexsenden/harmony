@@ -23,7 +23,7 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
   }
 
   const [getTopicsByPartialName, topicsResponse] = useHttpRequest({
-    url: `/topic/partialName?partialName=${topicInput}`,
+    url: `/topic/partialName/${topicInput}`,
     method: HttpMethod.GET,
   })
 
@@ -34,7 +34,11 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
   }, [topicsResponse])
 
   useEffect(() => {
-    getTopicsByPartialName()
+    const debounceTimer = setTimeout(() => {
+      getTopicsByPartialName()
+    }, 1000)
+
+    return () => clearTimeout(debounceTimer)
   }, [topicInput])
 
   return (

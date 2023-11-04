@@ -3,7 +3,7 @@ import { HttpError } from '../../src/models/error/httpError'
 import prisma from '../../prisma/prisma'
 
 /*
-    This test interacts with locally deployable DB, and part of the integration testing
+  This test interacts with locally deployable DB, and part of the integration testing
 */
 
 describe('register function with Singleton', () => {

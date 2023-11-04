@@ -11,9 +11,7 @@
     "ts-node": "^10.9.1"
   },
   "scripts": {
-    "lint": "gts lint",
-    "clean": "gts clean",
-    "fix": "gts fix",
+    "lint": "eslint \"**/*.ts\" \"**/*.tsx\" --max-warnings=0",
     "posttest": "npm run lint",
     "build": "next build",
     "start": "next start -p 8080",
