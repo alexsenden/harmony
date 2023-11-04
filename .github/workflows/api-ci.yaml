@@ -11,11 +11,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18"
+      - name: Remove __test__ for build
+        run: rm -rf __test__
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --omit=dev
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema ./prisma/schema.prisma
       - name: Build project
         run: tsc
-  
+
   test-and-lint:
     runs-on: ubuntu-latest
     defaults:
@@ -28,7 +32,7 @@ jobs:
           node-version: "18"
       - name: Install dependencies
         run: npm ci
-      - name: Run local DB for testing, tests and linter 
+      - name: Run local DB for testing, tests and linter
         run: |
           export POSTGRES_USER=username
           export POSTGRES_PASSWORD=password
@@ -40,7 +44,38 @@ jobs:
 
           cd ../harmony-db
           docker-compose up -d
-          
+
+          cd ../harmony-api
+
+          npx prisma migrate dev
+          npm run test
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./harmony-api
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run integration tests on remote DB and linter
+        run: |
+          export PORT=8081
+          export POSTGRES_USER=${{ secrets.POSTGRES_USER_CI }}
+          export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD_CI }}
+          export POSTGRES_PORT=${{ secrets.POSTGRES_PORT_CI }}
+          export POSTGRES_DB_NAME=${{ secrets.POSTGRES_DB_NAME_CI }}
+          export DB_HOST=${{ secrets.azureHost2 }}
+          export POSTGRES_URL=postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}
+
+          # Testing DB connection (URL, whether it is correct)
+          psql $POSTGRES_URL
+
           cd ../harmony-api
 
           npx prisma migrate dev
