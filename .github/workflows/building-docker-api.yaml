@@ -23,12 +23,12 @@ jobs:
           cd ./harmony-api
           touch ./environment/.env.prod
           echo "PORT=8081" > ./environment/.env.prod
-          echo "FRONT_END_BASE_ENDPOINT=http://${{ secrets.azureHost1 }}:8080" >> ./environment/.env.prod
+          echo "FRONT_END_BASE_ENDPOINT=${{ secrets.FE_DOMAIN }}" >> ./environment/.env.prod
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER_CI }}" >> ./environment/.env.prod
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD_CI }}" >> ./environment/.env.prod
           echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT_CI }}" >> ./environment/.env.prod
           echo "POSTGRES_DB_NAME=${{ secrets.POSTGRES_DB_NAME_CI }}" >> ./environment/.env.prod
-          echo "DB_HOST=${{ secrets.FE_DOMAIN }}" >> ./environment/.env.prod
+          echo "DB_HOST=${{ secrets.azureHost2 }}" >> ./environment/.env.prod
           echo "POSTGRES_URL=postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}" >> ./environment/.env.prod
 
       - name: Harmony API - Extract metadata (tags, labels) for Docker
