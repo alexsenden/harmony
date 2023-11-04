@@ -14,7 +14,7 @@ export const register = async (
   try {
     const newUser = await userService.register(userData)
     const userCookie = await userService.assignUserCookie(newUser)
-    res.cookie('userCookie', userCookie, { sameSite: 'none' })
+    res.cookie('userCookie', userCookie)
     res.json({
       userData: newUser,
     })
@@ -47,9 +47,7 @@ export const login = async (
   const loginData = req.body as Login
   try {
     const loginUser = await userService.login(loginData)
-    res.cookie('userCookie', await userService.assignUserCookie(loginUser), {
-      sameSite: 'none',
-    })
+    res.cookie('userCookie', await userService.assignUserCookie(loginUser))
     res.json({
       userData: loginUser,
     })
