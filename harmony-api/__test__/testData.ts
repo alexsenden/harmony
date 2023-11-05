@@ -45,6 +45,7 @@ export const FAKE_POST: Post = {
   numLikes: 0,
   rating: 3,
   pollOptions: [FAKE_POLL_OPTION],
+  createdAt: new Date(),
 }
 
 export const FAKE_USER_1: User = {
