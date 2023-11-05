@@ -12,6 +12,14 @@ export const createLike = async (likeData: Like): Promise<Like> => {
   return await likeRepo.createLike(likeData)
 }
 
+export const getLikes = async (postId?: string) => {
+  if (!postId) {
+    return []
+  }
+
+  return await likeRepo.getLikes(postId)
+}
+
 export const deleteLike = async (likeData: Like): Promise<Like> => {
   if (!likeData.userId) {
     throw new HttpError('userId is required', 400)
