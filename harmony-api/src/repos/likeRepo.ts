@@ -1,5 +1,5 @@
 import prisma from '../../prisma/prisma'
-import { Like } from '../models/like'
+import { Like, LikeWithUser } from '../models/like'
 
 export const createLike = async (likeData: Like): Promise<Like> => {
   const likeResult = await prisma.like.create({
@@ -10,6 +10,32 @@ export const createLike = async (likeData: Like): Promise<Like> => {
   })
 
   return likeResult
+}
+
+export const getLikes = async (
+  postId?: string
+): Promise<Array<LikeWithUser>> => {
+  const likes = await prisma.like.findMany({
+    where: {
+      postId: postId,
+    },
+    include: {
+      user: {
+        select: {
+          username: true,
+          picture: true,
+        },
+      },
+    },
+  })
+
+  return likes.map(like => {
+    return {
+      userId: like.userId,
+      postId: like.postId,
+      user: like.user,
+    }
+  })
 }
 
 export const deleteLike = async (likeData: Like): Promise<Like> => {

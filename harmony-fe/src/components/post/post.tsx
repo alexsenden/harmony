@@ -20,6 +20,7 @@ import { PollContent } from './poll-content'
 import { DiscussionContent } from './discussion-content'
 import CommentSection from './comment-section'
 import LikeButton from './like-button'
+import LikeModal from './like-modal'
 
 interface PostProps {
   post: Post
@@ -29,6 +30,7 @@ const Post = ({ post }: PostProps) => {
   const [numComments, setNumComments] = useState(post.numComments || 0)
   const [numLikes, setNumLikes] = useState(post.numLikes || 0)
   const [isLiked, setIsLiked] = useState(post.isLiked || false)
+  const [likeModalOpen, setLikeModalOpen] = useState(false)
   const [commentSectionOpen, setCommentSectionOpen] = useState(false)
 
   const handleLike = () => {
@@ -39,6 +41,14 @@ const Post = ({ post }: PostProps) => {
       setNumLikes(prevState => prevState + 1)
       setIsLiked(true)
     }
+  }
+
+  const openLikeModal = () => {
+    setLikeModalOpen(true)
+  }
+
+  const closeLikeModal = () => {
+    setLikeModalOpen(false)
   }
 
   let avatarIcon
@@ -63,64 +73,80 @@ const Post = ({ post }: PostProps) => {
   const topicContext = getTopicContext(post.topicId)
 
   return (
-    <Card variant="outlined" sx={{ mb: 1 }}>
-      <Stack direction="row">
-        <CardContent>{avatarIcon}</CardContent>
-        <Box sx={{ width: '100%' }}>
-          <CardContent>
-            <Link href={`/posts/${post.postId}`} underline="none">
-              <TextBlock gutterBottom variant="h5">
-                {post.title}
+    <>
+      <Card variant="outlined" sx={{ mb: 1 }}>
+        <Stack direction="row">
+          <CardContent>{avatarIcon}</CardContent>
+          <Box sx={{ width: '100%' }}>
+            <CardContent>
+              <Link href={`/posts/${post.postId}`} underline="none">
+                <TextBlock gutterBottom variant="h5">
+                  {post.title}
+                </TextBlock>
+              </Link>
+              <TextBlock>
+                {post.topicName} {topicContext}
               </TextBlock>
-            </Link>
-            <TextBlock>
-              {post.topicName} {topicContext}
-            </TextBlock>
-            <Divider sx={{ my: 1 }} />
-            {postContent}
-          </CardContent>
+              <Divider sx={{ my: 1 }} />
+              {postContent}
+            </CardContent>
 
-          <CardActions>
-            <LikeButton isLiked={isLiked} post={post} handleLike={handleLike} />
+            <CardActions>
+              <LikeButton
+                isLiked={isLiked}
+                post={post}
+                handleLike={handleLike}
+              />
 
-            <Button
-              size="small"
-              onClick={() => setCommentSectionOpen(prevState => !prevState)}
-            >
-              <CommentOutlined />
-            </Button>
-          </CardActions>
+              <Button
+                size="small"
+                onClick={() => setCommentSectionOpen(prevState => !prevState)}
+              >
+                <CommentOutlined />
+              </Button>
+            </CardActions>
 
-          <Divider sx={{ mx: 2 }} />
+            <Divider sx={{ mx: 2 }} />
 
-          <CardActions sx={{ display: 'flex', justifyContent: 'start' }}>
-            <Button href={`/profile/${post.user?.username}`}>
-              <Avatar
-                src={`/images/profilepic/${post.user?.picture}.png`}
-                sx={{ mr: 1, height: 24, width: 24 }}
-              ></Avatar>
-              {post.user?.username}
-            </Button>
-            <Button
-              size="small"
-              onClick={() => setCommentSectionOpen(prevState => !prevState)}
-              sx={{ ml: 3, mt: 0.5 }}
-            >
-              {`${numComments} comment${numComments !== 1 ? 's' : ''}`}
-            </Button>
-            <Button size="small" disabled sx={{ mt: 0.5 }}>
-              {`${numLikes} like${numLikes !== 1 ? 's' : ''}`}
-            </Button>
-          </CardActions>
+            <CardActions sx={{ display: 'flex', justifyContent: 'start' }}>
+              <Button href={`/profile/${post.user?.username}`}>
+                <Avatar
+                  src={`/images/profilepic/${post.user?.picture}.png`}
+                  sx={{ mr: 1, height: 24, width: 24 }}
+                ></Avatar>
+                {post.user?.username}
+              </Button>
+              <Button
+                size="small"
+                onClick={() => setCommentSectionOpen(prevState => !prevState)}
+                sx={{ ml: 3, mt: 0.5 }}
+              >
+                {`${numComments} comment${numComments !== 1 ? 's' : ''}`}
+              </Button>
+              <Button
+                size="small"
+                onClick={openLikeModal}
+                sx={{ mt: 0.5 }}
+                disabled={numLikes === 0}
+              >
+                {`${numLikes} like${numLikes !== 1 ? 's' : ''}`}
+              </Button>
+            </CardActions>
 
-          <CommentSection
-            commentSectionOpen={commentSectionOpen}
-            post={post}
-            setNumComments={setNumComments}
-          />
-        </Box>
-      </Stack>
-    </Card>
+            <CommentSection
+              commentSectionOpen={commentSectionOpen}
+              post={post}
+              setNumComments={setNumComments}
+            />
+          </Box>
+        </Stack>
+      </Card>
+      <LikeModal
+        likeModalOpen={likeModalOpen}
+        onClose={closeLikeModal}
+        post={post}
+      ></LikeModal>
+    </>
   )
 }
 

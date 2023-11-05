@@ -26,6 +26,19 @@ export const postLike = async (
     next(error)
   }
 }
+export const getLikes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const postId =
+      typeof req.params.postId === 'string' ? req.params.postId : undefined
+    res.json(await likeService.getLikes(postId))
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const removeLike = async (
   req: Request,
