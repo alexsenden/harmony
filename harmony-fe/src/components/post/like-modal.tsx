@@ -48,25 +48,26 @@ const LikeModal = ({ likeModalOpen, onClose, post }: LikeModalProps) => {
       <DialogTitle>Likes</DialogTitle>
       <Divider />
       <List>
-        {likes ? (
-          likes.map((like: LikeWithUser, index: number) => (
-            <ListItem key={index}>
-              <Button
-                key={index}
-                href={`/profile/${like.user.username}`}
-                sx={{ mx: 3 }}
-              >
-                <Avatar
-                  src={`/images/profilepic/${like.user.picture}.png`}
-                  sx={{ mr: 1, height: 24, width: 24 }}
-                ></Avatar>
-                <strong>{like.user.username}</strong>
-              </Button>
-            </ListItem>
-          ))
-        ) : (
-          <TextBlock>No likes available</TextBlock>
-        )}
+        {likeModalOpen &&
+          (!likesLoading ? (
+            likes?.map((like: LikeWithUser, index: number) => (
+              <ListItem key={index}>
+                <Button
+                  key={index}
+                  href={`/profile/${like.user.username}`}
+                  sx={{ mx: 3 }}
+                >
+                  <Avatar
+                    src={`/images/profilepic/${like.user.picture}.png`}
+                    sx={{ mr: 1, height: 24, width: 24 }}
+                  ></Avatar>
+                  <strong>{like.user.username}</strong>
+                </Button>
+              </ListItem>
+            ))
+          ) : (
+            <TextBlock>Loading likes...</TextBlock>
+          ))}
       </List>
     </Dialog>
   )
