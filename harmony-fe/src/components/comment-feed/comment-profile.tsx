@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Link,
-} from '@mui/material'
+import { Avatar, Box, Button, Card, CardContent, Link } from '@mui/material'
 
 import { CommentWithUser } from '../../models/comment'
 import TextBlock from '../text-block'
