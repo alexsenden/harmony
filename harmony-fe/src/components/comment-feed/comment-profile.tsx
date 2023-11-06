@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Link,
-  Stack,
 } from '@mui/material'
 
 import { CommentWithUser } from '../../models/comment'
