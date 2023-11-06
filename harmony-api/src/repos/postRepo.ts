@@ -40,6 +40,7 @@ export const createPost = async (postData: Post): Promise<Post> => {
       albumId: postResult.albumId || undefined,
       songId: postResult.songId || undefined,
     },
+    createdAt: postResult.createdAt,
   }
 }
 
@@ -221,5 +222,6 @@ const mapPrismaPostToPost = (post: PostWithRelations): Post => {
     numComments: post._count.comments,
     numLikes: post._count.likes,
     isLiked: post.likes.length > 0,
+    createdAt: post.createdAt,
   }
 }

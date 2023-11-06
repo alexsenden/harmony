@@ -22,7 +22,7 @@ describe('POST /post', () => {
       albumId: FAKE_POST.topicId.albumId || null,
       songId: FAKE_POST.topicId.songId || null,
       postId: FAKE_POST.postId,
-      createdAt: new Date(),
+      createdAt: FAKE_POST.createdAt,
     })
 
     const res = await request(app).post('/post').send(FAKE_POST)
@@ -38,6 +38,7 @@ describe('POST /post', () => {
       title: FAKE_POST.title,
       topicId: FAKE_POST.topicId,
       userId: FAKE_POST.userId,
+      createdAt: FAKE_POST.createdAt.toISOString(),
     })
   })
 })
