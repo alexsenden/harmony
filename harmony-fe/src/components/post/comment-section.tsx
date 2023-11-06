@@ -37,6 +37,7 @@ const CommentSection = ({
               username: user?.username || '',
               picture: user?.picture || 0,
             },
+            postTitle: post.title,
             commentId: newUuid(),
             userId: user?.userId || '',
             postId: post.postId,
