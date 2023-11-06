@@ -10,6 +10,7 @@ import TextBlock from '../../components/text-block'
 import { UserContext } from '../../contexts/userContext'
 import FollowingButton from '../../components/following-button'
 import Head from 'next/head'
+import CommentFeed from '../../components/comment-feed/comment-feed'
 
 const Profile = () => {
   const router = useRouter()
@@ -95,7 +96,6 @@ const Profile = () => {
   }
 
   const tabs = [
-    // Commented out for the sprint 2 review
     // {
     //   label: 'All Content',
     //   tab: (
@@ -116,9 +116,9 @@ const Profile = () => {
     {
       label: 'Comments',
       tab: (
-        <TextBlock align="center" sx={{ mt: 2 }}>
-          No Comments Available
-        </TextBlock>
+        <CommentFeed
+          url={userData?.userId ? `/user/${userData?.userId}/comment` : ''}
+        />
       ),
     },
   ]

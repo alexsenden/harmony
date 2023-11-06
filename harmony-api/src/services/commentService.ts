@@ -19,3 +19,11 @@ export const getComments = async (postId?: string) => {
 
   return await commentRepo.getComments(postId)
 }
+
+export const getCommentsByUserID = async (userID?: string) => {
+  if (!userID) {
+    return []
+  }
+
+  return await commentRepo.getCommentsByUserID(userID)
+}
