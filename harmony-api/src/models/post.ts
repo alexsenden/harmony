@@ -16,6 +16,7 @@ export type Post = {
   topicName?: string
   user?: User
   isLiked?: boolean
+  createdAt: Date
 }
 
 export enum PostType {

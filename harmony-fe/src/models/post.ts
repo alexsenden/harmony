@@ -16,6 +16,7 @@ export type Post = {
   isLiked?: boolean
   numComments?: number
   numLikes?: number
+  createdAt: Date
 }
 
 export enum PostField {

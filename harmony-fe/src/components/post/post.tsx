@@ -21,6 +21,7 @@ import { DiscussionContent } from './discussion-content'
 import CommentSection from './comment-section'
 import LikeButton from './like-button'
 import LikeModal from './like-modal'
+import moment from 'moment'
 
 interface PostProps {
   post: Post
@@ -79,11 +80,15 @@ const Post = ({ post }: PostProps) => {
           <CardContent>{avatarIcon}</CardContent>
           <Box sx={{ width: '100%' }}>
             <CardContent>
-              <Link href={`/posts/${post.postId}`} underline="none">
-                <TextBlock gutterBottom variant="h5">
-                  {post.title}
-                </TextBlock>
-              </Link>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Link href={`/posts/${post.postId}`} underline="none">
+                  <TextBlock gutterBottom variant="h5">
+                    {post.title}
+                  </TextBlock>
+                </Link>
+                <TextBlock>{moment(post.createdAt).fromNow()}</TextBlock>
+              </Box>
+
               <TextBlock>
                 {post.topicName} {topicContext}
               </TextBlock>
