@@ -105,18 +105,3 @@ export const signOut = async (
     next(error)
   }
 }
-
-export const getCommentsByUsername = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const username =
-    typeof req.params.username === 'string' ? req.params.username : undefined
-
-  try {
-    res.json(await userService.getUserByUsername(username))
-  } catch (error) {
-    next(error)
-  }
-}
