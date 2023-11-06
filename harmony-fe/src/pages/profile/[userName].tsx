@@ -147,7 +147,7 @@ const Profile = () => {
           >
             <Grid item>
               <Avatar
-                src={`/images/profilepic/${user?.picture}.png`}
+                src={`/images/profilepic/${userData?.picture}.png`}
                 sx={{ height: '175px', width: '175px', ml: 3 }}
               ></Avatar>
             </Grid>
@@ -199,7 +199,9 @@ const Profile = () => {
         >
           <Grid container spacing={2} direction="row" justifyContent="flex-end">
             <Grid item xs={8} container direction="column">
-              <Grid item xs zeroMinWidth></Grid>
+              <Grid item xs zeroMinWidth>
+                <h1>Content</h1>
+              </Grid>
             </Grid>
             <Grid item xs={4} zeroMinWidth>
               <h1>Info</h1>
