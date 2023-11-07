@@ -16,7 +16,10 @@
     "start": "npm run connectprisma && node build/src/index.js",
     "buildAndStart": "npm run connectprisma && tsc && node build/src/index.js",
     "dev": "nodemon -L -w src -e ts --exec \"npm run buildAndStart\"",
-    "test": "jest --runInBand --collect-coverage"
+    "all-tests": "jest --testRegex=__test__ --testPathIgnorePatterns=testUtils --runInBand --collect-coverage",
+    "unit-tests": "jest --testRegex=test\\.ts$ --runInBand",
+    "integration-tests": "jest --testRegex=integration\\.ts$ --runInBand",
+    "test": "npm run all-tests"
   },
   "prisma": {
     "seed": "ts-node prisma/seed/seedData.ts"

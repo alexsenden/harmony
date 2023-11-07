@@ -1,10 +1,10 @@
 import express, { Express, NextFunction, Request, Response } from 'express'
-import { PollOption } from '../src/models/pollOption'
-import { Post, PostType } from '../src/models/post'
-import { TopicId } from '../src/models/topic'
-import { User } from '../src/models/user'
+import { PollOption } from '../../src/models/pollOption'
+import { Post, PostType } from '../../src/models/post'
+import { TopicId } from '../../src/models/topic'
+import { User } from '../../src/models/user'
 import bodyParser from 'body-parser'
-import router from '../src/routes/routes'
+import router from '../../src/routes/routes'
 
 export const FakeApp = () => {
   const app: Express = express()

@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { Express } from 'express'
-import { FAKE_POST, FakeApp } from '../testData'
+import { FAKE_POST, FakeApp } from '../testUtils/testData'
 import prisma from '../../prisma/prisma'
 import { PostType as PrismaPostType } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'

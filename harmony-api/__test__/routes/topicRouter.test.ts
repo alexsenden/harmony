@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { Express } from 'express'
-import { FakeApp } from '../testData'
+import { FakeApp } from '../testUtils/testData'
 import prisma from '../../prisma/prisma'
 
 let app: Express

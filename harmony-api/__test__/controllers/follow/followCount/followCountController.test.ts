@@ -1,6 +1,6 @@
 import * as followCountController from '../../../../src/controllers/follow/followCount/followCountController'
 import { Request, Response, NextFunction } from 'express'
-import { FAKE_USER_1 } from '../../../testData'
+import { FAKE_USER_1 } from '../../../testUtils/testData'
 
 import * as followService from '../../../../src/services/followService'
 

@@ -8,7 +8,7 @@ import {
   validateTitle,
   validateUserId,
 } from '../../src/services/postService'
-import { FAKE_POST } from '../testData'
+import { FAKE_POST } from '../testUtils/testData'
 
 describe('validatePost', () => {
   it('returns an error message if postType is undefined', async () => {

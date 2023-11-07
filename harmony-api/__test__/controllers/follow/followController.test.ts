@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 
 import * as followController from '../../../src/controllers/follow/followController'
-import { FAKE_USER_1, FAKE_USER_2, FAKE_USER_1_COOKIE } from '../../testData'
+import {
+  FAKE_USER_1,
+  FAKE_USER_2,
+  FAKE_USER_1_COOKIE,
+} from '../../testUtils/testData'
 import * as followService from '../../../src/services/followService'
 import { Follow } from '../../../src/models/follow'
 
