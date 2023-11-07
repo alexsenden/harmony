@@ -79,8 +79,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   if (typeof window !== 'undefined') {
     useEffect(() => {
-      console.log('bruh')
-
       const changeTheme = function () {
         const getTheme = localStorage.getItem('theme')
 
