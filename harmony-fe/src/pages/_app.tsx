@@ -10,6 +10,7 @@ import UserContextProvider from '../contexts/userContext'
 import MobileContextProvider from '../contexts/mobileContext'
 import HarmonyAppBar from '../components/app-bar'
 import Favicon from '../components/favicon-component'
+import React, { useEffect, useState } from 'react'
 
 export const globalTheme = createTheme({
   palette: {
@@ -37,6 +38,33 @@ export const globalTheme = createTheme({
   },
 })
 
+export const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#FF4010',
+    },
+    secondary: {
+      main: '#0064AC',
+    },
+    background: {
+      //default: '#efefef',
+    },
+  },
+  typography: {
+    fontFamily: 'DM Sans, sans-serif', // Default font is DM Sans
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none', // No uppercase buttons
+        },
+      },
+    },
+  },
+})
+
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
 }
@@ -47,13 +75,31 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? (page => page)
+  const [activeTheme, setTheme] = useState(darkTheme)
+
+  if (typeof window !== 'undefined') {
+    useEffect(() => {
+      console.log('bruh')
+
+      const changeTheme = function () {
+        const getTheme = localStorage.getItem('theme')
+
+        if (getTheme) {
+          setTheme(getTheme === 'light' ? globalTheme : darkTheme)
+        }
+      }
+      changeTheme()
+      window.addEventListener('storage', changeTheme)
+      return () => window.removeEventListener('storage', changeTheme)
+    }, [])
+  }
 
   return getLayout(
     <>
       <Favicon />
       <UserContextProvider>
         <MobileContextProvider>
-          <ThemeProvider theme={globalTheme}>
+          <ThemeProvider theme={activeTheme}>
             <CssBaseline />
             <HarmonyAppBar />
             <Component {...pageProps} />

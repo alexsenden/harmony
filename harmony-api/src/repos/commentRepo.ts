@@ -35,6 +35,11 @@ export const getComments = async (
           picture: true,
         },
       },
+      post: {
+        select: {
+          title: true,
+        },
+      },
     },
   })
   return comments.map(comment => {
@@ -42,6 +47,45 @@ export const getComments = async (
       commentId: comment.commentId,
       userId: comment.userId,
       postId: comment.postId,
+      postTitle: comment.post.title,
+
+      createdAt: comment.createdAt,
+      content: comment.content || '',
+      user: comment.user,
+    }
+  })
+}
+
+export const getCommentsByUserID = async (
+  userID?: string
+): Promise<Array<CommentWithUser>> => {
+  const comments = await prisma.comment.findMany({
+    where: {
+      userId: userID,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      user: {
+        select: {
+          username: true,
+          picture: true,
+        },
+      },
+      post: {
+        select: {
+          title: true,
+        },
+      },
+    },
+  })
+  return comments.map(comment => {
+    return {
+      commentId: comment.commentId,
+      userId: comment.userId,
+      postId: comment.postId,
+      postTitle: comment.post.title,
       createdAt: comment.createdAt,
       content: comment.content || '',
       user: comment.user,
