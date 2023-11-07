@@ -4,8 +4,9 @@ import { TextField } from '@mui/material'
 import { Topic } from '../../models/topic'
 import { User } from '../../models/user'
 import ApiAutocomplete from '../api-autocomplete'
+import AutocompleteLi from '../autocomplete-li/autocomplete-li'
 
-type TSearchOption = Partial<User> | Topic
+export type TSearchOption = Partial<User> | Topic
 
 interface ISearchBarProps {
   onSearch: () => void
@@ -13,13 +14,6 @@ interface ISearchBarProps {
 
 export const SearchBar = ({ onSearch }: ISearchBarProps) => {
   const router = useRouter()
-
-  const getOptionLabel = (option: unknown) => {
-    const searchOption = option as TSearchOption
-    return 'name' in searchOption
-      ? searchOption.name
-      : searchOption.username || ''
-  }
 
   const buildResultUrl = (search?: TSearchOption) => {
     if (!search) {
@@ -51,7 +45,6 @@ export const SearchBar = ({ onSearch }: ISearchBarProps) => {
     <ApiAutocomplete
       url={'/topic/partialNameOrUsername'}
       onChange={(event, value) => onSubmit(value as TSearchOption)}
-      getOptionLabel={getOptionLabel}
       autoHighlight
       autoComplete
       autoFocus
@@ -63,6 +56,9 @@ export const SearchBar = ({ onSearch }: ISearchBarProps) => {
           multiline
           autoFocus
         />
+      )}
+      renderOption={(props, option) => (
+        <AutocompleteLi option={option as TSearchOption} {...props} />
       )}
       sx={{ mx: 3, mb: 2 }}
     />

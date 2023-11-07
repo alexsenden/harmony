@@ -24,7 +24,7 @@ import { SearchBar } from '../search-bar/search-bar'
 const AppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)
   const [searchModalOpen, setSearchModalOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
   const menuOpen = Boolean(anchorEl)

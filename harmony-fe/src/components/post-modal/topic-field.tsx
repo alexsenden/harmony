@@ -4,6 +4,8 @@ import { Autocomplete, TextField } from '@mui/material'
 import { Topic } from '../../models/topic'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { PostField } from '../../models/post'
+import AutocompleteLi from '../autocomplete-li/autocomplete-li'
+import { TSearchOption } from '../search-bar/search-bar'
 
 interface ITopicFieldProps {
   error?: boolean
@@ -61,6 +63,9 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
           error={error}
           sx={{ mt: 3 }}
         />
+      )}
+      renderOption={(props, option) => (
+        <AutocompleteLi option={option as TSearchOption} {...props} />
       )}
     />
   )
