@@ -20,7 +20,7 @@ jobs:
       - name: Build project
         run: tsc
 
-  test-and-lint:
+  unit-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -32,23 +32,8 @@ jobs:
           node-version: "18"
       - name: Install dependencies
         run: npm ci
-      - name: Run local DB for testing, tests and linter
-        run: |
-          export POSTGRES_USER=username
-          export POSTGRES_PASSWORD=password
-          export POSTGRES_PORT=5432
-          export POSTGRES_DB_NAME=postgres_db
-          export POSTGRES_DB=postgres_db
-          export POSTGRES_DB_HOST=localhost
-          export POSTGRES_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_PORT/$POSTGRES_DB_NAME
-
-          cd ../harmony-db
-          docker-compose up -d
-
-          cd ../harmony-api
-
-          npx prisma migrate dev
-          npm run test
+      - name: Run unit tests
+        run: npm run unit-tests
 
   integration-tests:
     runs-on: ubuntu-latest
@@ -63,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run integration tests on remote DB and linter
+      - name: Run integration tests on remote DB
         run: |
           export PORT=8081
           export POSTGRES_USER=${{ secrets.POSTGRES_USER_CI }}
@@ -79,4 +64,19 @@ jobs:
           cd ../harmony-api
 
           npx prisma migrate dev
-          npm run test
+          npm run integration-tests
+
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./harmony-api
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run linter
+        run: npm run lint
