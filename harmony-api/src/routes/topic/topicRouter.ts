@@ -1,9 +1,13 @@
 import express from 'express'
 
-import partialNameRouter from './partialName/partialNameRouter'
+import * as topicController from '../../controllers/topic/topicController'
 
 const router = express.Router()
 
-router.use('/partialName', partialNameRouter)
+router.get('/partialName/:partialName?', topicController.getTopicByPartialName)
+router.get(
+  '/partialNameOrUsername/:partialName?',
+  topicController.getTopicOrUserByPartialName
+)
 
 export default router

@@ -9,6 +9,8 @@ import {
   MenuItem,
   Avatar,
   IconButton,
+  Dialog,
+  DialogTitle,
   useTheme,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -18,10 +20,12 @@ import { UserContext } from '../../contexts/userContext'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
 import { MobileContext } from '../../contexts/mobileContext'
+import SearchBar from '../search-bar'
 
 const AppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [searchModalOpen, setSearchModalOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
   const menuOpen = Boolean(anchorEl)
@@ -93,21 +97,33 @@ const AppBar = () => {
               src={'/images/harmonylogo.png'}
             />
           </Button>
-          {!mobile && <NavButton href="/home">Home</NavButton>}
+          {!mobile && (
+            <>
+              <NavButton href="/home">Home</NavButton>
+              <NavButton
+                onClick={() => setSearchModalOpen(true)}
+                sx={{ px: 1 }}
+              >
+                Search
+              </NavButton>
+            </>
+          )}
           {user && !mobile && (
             <>
               <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
-              <NavButton href="/home" disabled>
-                Search
-              </NavButton>
               <NavButton onClick={openPostModal}>New Post</NavButton>
-              <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
-              <NavButton onClick={changeTheme}>
-                {useTheme().palette.mode.charAt(0).toUpperCase() +
-                  useTheme().palette.mode.slice(1)}{' '}
-                Mode
-              </NavButton>
+            </>
+          )}
 
+          <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
+          <NavButton onClick={changeTheme}>
+            {useTheme().palette.mode.charAt(0).toUpperCase() +
+              useTheme().palette.mode.slice(1)}{' '}
+            Mode
+          </NavButton>
+
+          {user && !mobile && (
+            <>
               <Divider orientation="vertical" flexItem />
 
               <NavButton onClick={handleMenuClick}>
@@ -134,7 +150,7 @@ const AppBar = () => {
             </>
           )}
           {user && mobile && (
-            <div>
+            <>
               <IconButton
                 aria-label="menu"
                 id="mobile-button"
@@ -154,6 +170,14 @@ const AppBar = () => {
                 open={menuOpen}
                 onClose={handleMobileClose}
               >
+                <MenuItem
+                  onClick={() => {
+                    setSearchModalOpen(true)
+                    handleMobileClose()
+                  }}
+                >
+                  Search
+                </MenuItem>
                 <MenuItem onClick={profileOpen}>Profile</MenuItem>
                 <MenuItem onClick={openPostModal}>New Post</MenuItem>
                 <Divider />
@@ -167,40 +191,12 @@ const AppBar = () => {
                   Mode
                 </MenuItem>
               </Menu>
-            </div>
-          )}
-          {!user && mobile && (
-            <>
-              <IconButton
-                aria-label="menu"
-                id="mobile-button"
-                aria-controls={menuOpen ? 'mobile-menu' : undefined}
-                aria-expanded={menuOpen ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={handleMobileDropDown}
-              ></IconButton>
-              <NavButton onClick={changeTheme}>
-                {useTheme().palette.mode.charAt(0).toUpperCase() +
-                  useTheme().palette.mode.slice(1)}{' '}
-                Mode
-              </NavButton>
-              <Divider orientation="vertical" flexItem />
-
-              <NavButton href="/login" sx={{ px: 1 }}>
-                Login
-              </NavButton>
             </>
           )}
-          {!user && !mobile && (
-            <>
-              <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
-              <NavButton onClick={changeTheme}>
-                {useTheme().palette.mode.charAt(0).toUpperCase() +
-                  useTheme().palette.mode.slice(1)}{' '}
-                Mode
-              </NavButton>
-              <Divider orientation="vertical" flexItem />
 
+          {!user && (
+            <>
+              <Divider orientation="vertical" flexItem />
               <NavButton href="/login" sx={{ px: 1 }}>
                 Login
               </NavButton>
@@ -210,6 +206,15 @@ const AppBar = () => {
         </Toolbar>
       </MuiAppBar>
       <PostModal open={postModalOpen} onClose={closePostModal} />
+      <Dialog
+        open={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>Search for artists, albums, songs, or users</DialogTitle>
+        <SearchBar onSearch={() => setSearchModalOpen(false)} />
+      </Dialog>
     </React.Fragment>
   )
 }

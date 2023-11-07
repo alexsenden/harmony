@@ -74,6 +74,21 @@ export const getUserFromCookie = async (cookie: string): Promise<User> => {
   return mapPrismaUserToUser(userData)
 }
 
+export const getUserByPartialUsername = async (
+  partialName: string
+): Promise<Array<Partial<User>>> => {
+  return prisma.$queryRaw<Array<Partial<User>>>`
+    select 
+      user_id as userId,
+      first_name as firstName,
+      last_name as lastName,
+      username
+    from "user"
+    where username ilike ${`${partialName}%`}
+    limit 5;
+  `
+}
+
 export const setUserData = async (userData: Account): Promise<Account> => {
   const userResult = prisma.user.update({
     where: {

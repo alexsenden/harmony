@@ -2,7 +2,6 @@ import { Avatar, Box, Button, CardContent } from '@mui/material'
 import moment from 'moment'
 import { CommentWithUser } from '../../models/comment'
 import TextBlock from '../text-block'
-import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded'
 
 interface CommentProps {
   comment: CommentWithUser
@@ -28,7 +27,6 @@ const Comment = ({ comment }: CommentProps) => {
       </TextBlock>
       <Box display="flex" justifyContent="space-between">
         <TextBlock>{comment.content}</TextBlock>
-        <MoreHorizRoundedIcon></MoreHorizRoundedIcon>
       </Box>
     </CardContent>
   )

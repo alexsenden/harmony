@@ -4,6 +4,9 @@ import { Autocomplete, TextField } from '@mui/material'
 import { Topic } from '../../models/topic'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { PostField } from '../../models/post'
+import AutocompleteLi from '../autocomplete-li'
+import { getSearchableLabel } from '../../utils/additionalContext'
+import { Searchable } from '../../models/searchable'
 
 interface ITopicFieldProps {
   error?: boolean
@@ -46,7 +49,7 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
       options={topicOptions}
       onInputChange={(event, value) => onTopicInputChange(value)}
       onChange={(event, value) => onTopicChange(value)}
-      getOptionLabel={topic => topic?.name || ''}
+      getOptionLabel={option => getSearchableLabel(option as Searchable)}
       isOptionEqualToValue={(option, value) => option?.name === value?.name}
       fullWidth
       autoHighlight
@@ -61,6 +64,9 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
           error={error}
           sx={{ mt: 3 }}
         />
+      )}
+      renderOption={(props, option) => (
+        <AutocompleteLi option={option as Searchable} {...props} />
       )}
     />
   )
