@@ -41,3 +41,17 @@ export const getComments = async (
     next(error)
   }
 }
+
+export const getCommentsByUserID = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userID =
+      typeof req.params.userId === 'string' ? req.params.userId : undefined
+    res.json(await commentService.getCommentsByUserID(userID))
+  } catch (error) {
+    next(error)
+  }
+}

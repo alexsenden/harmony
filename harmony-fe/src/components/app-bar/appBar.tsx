@@ -11,6 +11,7 @@ import {
   IconButton,
   Dialog,
   DialogTitle,
+  useTheme,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
@@ -69,9 +70,22 @@ const AppBar = () => {
     setAnchorEl(null)
   }
 
+  const changeTheme = function () {
+    if (localStorage.getItem('theme') === 'dark') {
+      localStorage.setItem('theme', 'light')
+    } else {
+      localStorage.setItem('theme', 'dark')
+    }
+
+    window.dispatchEvent(new Event('storage'))
+  }
+
   return (
     <React.Fragment>
-      <MuiAppBar position="sticky" sx={{ backgroundColor: 'white' }}>
+      <MuiAppBar
+        position="sticky"
+        sx={{ backgroundColor: useTheme().palette.background.paper }}
+      >
         <Toolbar>
           <Button href="/home">
             <Box
@@ -95,10 +109,43 @@ const AppBar = () => {
             </>
           )}
           {user && !mobile && (
-            <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
-          )}
-          {user && !mobile && (
-            <NavButton onClick={openPostModal}>New Post</NavButton>
+            <>
+              <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
+              <NavButton href="/home" disabled>
+                Search
+              </NavButton>
+              <NavButton onClick={openPostModal}>New Post</NavButton>
+              <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
+              <NavButton onClick={changeTheme}>
+                {useTheme().palette.mode.charAt(0).toUpperCase() +
+                  useTheme().palette.mode.slice(1)}{' '}
+                Mode
+              </NavButton>
+
+              <Divider orientation="vertical" flexItem />
+
+              <NavButton onClick={handleMenuClick}>
+                <Avatar
+                  src={`/images/profilepic/${user.picture}.png`}
+                  sx={{ mr: 2 }}
+                ></Avatar>
+                {user.username}
+              </NavButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={openMenu}
+                onClose={handleMenuClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem component={'a'} href={'/account'}>
+                  Account Settings
+                </MenuItem>
+                <MenuItem onClick={signOut}>Sign out</MenuItem>
+              </Menu>
+            </>
           )}
           {user && mobile && (
             <>
@@ -136,6 +183,11 @@ const AppBar = () => {
                   Account Settings
                 </MenuItem>
                 <MenuItem onClick={signOut}>Sign Out</MenuItem>
+                <MenuItem onClick={changeTheme}>
+                  {useTheme().palette.mode.charAt(0).toUpperCase() +
+                    useTheme().palette.mode.slice(1)}{' '}
+                  Mode
+                </MenuItem>
               </Menu>
             </>
           )}
@@ -148,31 +200,24 @@ const AppBar = () => {
 
           {user && !mobile && (
             <>
-              <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
-
+              <IconButton
+                aria-label="menu"
+                id="mobile-button"
+                aria-controls={menuOpen ? 'mobile-menu' : undefined}
+                aria-expanded={menuOpen ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleMobileDropDown}
+              ></IconButton>
+              <NavButton onClick={changeTheme}>
+                {useTheme().palette.mode.charAt(0).toUpperCase() +
+                  useTheme().palette.mode.slice(1)}{' '}
+                Mode
+              </NavButton>
               <Divider orientation="vertical" flexItem />
 
-              <NavButton onClick={handleMenuClick}>
-                <Avatar
-                  src={`/images/profilepic/${user.picture}.png`}
-                  sx={{ mr: 2 }}
-                ></Avatar>
-                {user.username}
+              <NavButton href="/login" sx={{ px: 1 }}>
+                Login
               </NavButton>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={openMenu}
-                onClose={handleMenuClose}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
-                }}
-              >
-                <MenuItem component={'a'} href={'/account'}>
-                  Account Settings
-                </MenuItem>
-                <MenuItem onClick={signOut}>Sign out</MenuItem>
-              </Menu>
             </>
           )}
           <Divider orientation="vertical" flexItem />
