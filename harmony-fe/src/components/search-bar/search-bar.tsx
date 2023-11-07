@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation'
 import { TextField } from '@mui/material'
 
 import ApiAutocomplete from '../api-autocomplete'
-import AutocompleteLi from '../autocomplete-li/autocomplete-li'
+import AutocompleteLi from '../autocomplete-li'
 import { getSearchableLabel } from '../../utils/additionalContext'
 import { Searchable } from '../../models/searchable'
 

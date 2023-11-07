@@ -20,7 +20,7 @@ import { UserContext } from '../../contexts/userContext'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
 import { MobileContext } from '../../contexts/mobileContext'
-import { SearchBar } from '../search-bar/search-bar'
+import SearchBar from '../search-bar'
 
 const AppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)

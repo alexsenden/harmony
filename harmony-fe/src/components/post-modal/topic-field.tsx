@@ -4,7 +4,7 @@ import { Autocomplete, TextField } from '@mui/material'
 import { Topic } from '../../models/topic'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { PostField } from '../../models/post'
-import AutocompleteLi from '../autocomplete-li/autocomplete-li'
+import AutocompleteLi from '../autocomplete-li'
 import { getSearchableLabel } from '../../utils/additionalContext'
 import { Searchable } from '../../models/searchable'
 
