@@ -25,14 +25,15 @@ import moment from 'moment'
 
 interface PostProps {
   post: Post
+  commentOpen?: boolean
 }
 
-const Post = ({ post }: PostProps) => {
+const Post = ({ post, commentOpen = false }: PostProps) => {
   const [numComments, setNumComments] = useState(post.numComments || 0)
   const [numLikes, setNumLikes] = useState(post.numLikes || 0)
   const [isLiked, setIsLiked] = useState(post.isLiked || false)
   const [likeModalOpen, setLikeModalOpen] = useState(false)
-  const [commentSectionOpen, setCommentSectionOpen] = useState(false)
+  const [commentSectionOpen, setCommentSectionOpen] = useState(commentOpen)
 
   const handleLike = () => {
     if (isLiked) {
