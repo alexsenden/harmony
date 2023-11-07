@@ -24,6 +24,28 @@ export const unFollowUser = async (
   })
 }
 
+export const unFollowArtist = async (
+  userCookie: string,
+  followerId: string
+): Promise<Follow> => {
+  const followingUser = await userRepo.getUserFromCookie(userCookie)
+  return await followRepo.unFollowArtist({
+    followerId: followerId,
+    followingId: followingUser.userId,
+  })
+}
+
+export const followArtist = async (
+  userCookie: string,
+  followerId: string
+): Promise<Follow> => {
+  const followingUser = await userRepo.getUserFromCookie(userCookie)
+  return await followRepo.followArtist({
+    followerId: followerId,
+    followingId: followingUser.userId,
+  })
+}
+
 export const getFollow = async (
   userCookie: string,
   followingId: string

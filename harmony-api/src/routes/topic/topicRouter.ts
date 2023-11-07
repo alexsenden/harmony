@@ -10,4 +10,6 @@ router.get(
   topicController.getTopicOrUserByPartialName
 )
 
+router.get('/artist/:artistID', topicController.getArtistById)
+
 export default router

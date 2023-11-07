@@ -38,6 +38,43 @@ export const unFollowUser = async (followInfo: Follow): Promise<Follow> => {
   }
 }
 
+export const followArtist = async (followInfo: Follow): Promise<Follow> => {
+  try {
+    const followResult = await prisma.followArtist.create({
+      data: {
+        followingId: followInfo.followingId,
+        followerId: parseInt(followInfo.followerId),
+      },
+    })
+
+    return {
+      followingId: followResult.followingId,
+      followerId: followResult.followerId.toString(),
+    }
+  } catch (e) {
+    throw new HttpError('Already following artist', 400)
+  }
+}
+
+export const unFollowArtist = async (followInfo: Follow): Promise<Follow> => {
+  console.log(followInfo.followingId + ',' + followInfo.followerId)
+  const followResult = await prisma.followArtist.delete({
+    where: {
+      followingId_followerId: {
+        followingId: followInfo.followingId,
+        followerId: parseInt(followInfo.followerId),
+      },
+    },
+  })
+  if (followResult === null) {
+    throw new HttpError('Not following user', 400)
+  }
+  return {
+    followingId: followResult.followingId,
+    followerId: followResult.followerId.toString(),
+  }
+}
+
 export const getFollow = async (followInfo: Follow): Promise<boolean> => {
   const followResult = await prisma.follow.findFirst({
     where: {

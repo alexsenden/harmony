@@ -21,6 +21,25 @@ export const toggleUserFollow = async (
   }
 }
 
+export const toggleArtistFollow = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const cookie = req.cookies.userCookie
+    const followingId = req.headers.followingid as string
+    const followAction = req.body.followAction as boolean
+    if (followAction) {
+      res.json(await followService.followArtist(cookie, followingId))
+    } else {
+      res.json(await followService.unFollowArtist(cookie, followingId))
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const getFollow = async (
   req: Request,
   res: Response,

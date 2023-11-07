@@ -4,6 +4,7 @@ import * as songRepo from '../repos/songRepo'
 import * as userRepo from '../repos/userRepo'
 import { Topic, TopicId } from '../models/topic'
 import { User } from '../models/user'
+import { Artist } from '@prisma/client'
 
 export const getTopicByPartialName = async (
   partialName?: string
@@ -37,6 +38,12 @@ export const getTopicOrUserByPartialName = async (
     ...(await songs),
     ...(await users),
   ]
+}
+
+export const getArtistById = async (artistID?: number): Promise<Artist> => {
+  console.log(artistID)
+  const artist = artistRepo.getArtistById(artistID)
+  return artist
 }
 
 export const validateTopicId = (topicId?: TopicId): Array<string> => {

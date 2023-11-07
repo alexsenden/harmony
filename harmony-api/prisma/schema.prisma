@@ -21,6 +21,8 @@ model User {
   likes     Like[]
   comments  Comment[]
   follows   Follow[]     @relation("Following")
+    followsArtist   FollowArtist[]     @relation("Following")
+
   followers Follow[]     @relation("Follower")
   tokens    UserCookie[]
 
@@ -69,6 +71,18 @@ model Follow {
   @@map("follow")
 }
 
+model FollowArtist {
+  followingId String   @map("following_id")
+  followerId  Int   @map("follower_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  following   User     @relation("Following", fields: [followingId], references: [userId])
+  follower    Artist     @relation("Follower", fields: [followerId], references: [artistId])
+
+  @@id([followingId, followerId])
+  @@map("follow_artist")
+}
+
+
 model Like {
   userId String @map("user_id")
   postId String @map("post_id")
@@ -99,6 +113,7 @@ model Artist {
   artistDescription    String?                @map("comment")
   posts                Post[]
   Alias                Alias[]
+  followers FollowArtist[]     @relation("Follower")
   ArtistCreditRelation ArtistCreditRelation[]
 
   @@map("artist")

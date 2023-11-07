@@ -1,4 +1,6 @@
+import { Artist } from '@prisma/client'
 import prisma from '../../prisma/prisma'
+import { HttpError } from '../models/error/httpError'
 
 import { Topic } from '../models/topic'
 
@@ -25,4 +27,24 @@ export const getArtistTopicByPartialName = async (
       name: artist.artist_name,
     }
   })
+}
+
+export const getArtistById = async (artistID?: number): Promise<Artist> => {
+  const artistData = await prisma.artist
+    .findUniqueOrThrow({
+      where: {
+        artistId: artistID,
+      },
+    })
+    .catch(() => {
+      throw new HttpError(`Artist with id ${artistID} not found`, 404)
+    })
+
+  return {
+    artistId: artistData.artistId,
+    artistName: artistData.artistName,
+    beginYear: artistData.beginYear,
+    end: artistData.end,
+    artistDescription: artistData.artistDescription,
+  }
 }

@@ -101,13 +101,13 @@ const AppBar = () => {
           {user && !mobile && (
             <>
               <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
-              <NavButton href="/home">Home</NavButton>
               <NavButton
                 onClick={() => setSearchModalOpen(true)}
                 sx={{ px: 1 }}
               >
                 Search
               </NavButton>
+
               <NavButton onClick={openPostModal}>New Post</NavButton>
               <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
               <NavButton onClick={changeTheme}>
@@ -139,6 +139,16 @@ const AppBar = () => {
                 </MenuItem>
                 <MenuItem onClick={signOut}>Sign out</MenuItem>
               </Menu>
+            </>
+          )}
+          {!user && (
+            <>
+              <NavButton
+                onClick={() => setSearchModalOpen(true)}
+                sx={{ px: 1 }}
+              >
+                Search
+              </NavButton>
             </>
           )}
           {user && mobile && (
@@ -259,14 +269,6 @@ const AppBar = () => {
             </>
           )}
 
-          {!user && (
-            <>
-              <Divider orientation="vertical" flexItem />
-              <NavButton href="/login" sx={{ px: 1 }}>
-                Login
-              </NavButton>
-            </>
-          )}
           <Divider orientation="vertical" flexItem />
         </Toolbar>
       </MuiAppBar>

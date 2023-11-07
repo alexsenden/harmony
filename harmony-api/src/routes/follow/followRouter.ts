@@ -9,5 +9,6 @@ router.use('/followCount', followCountRouter)
 
 router.get('/', followController.getFollow)
 router.post('/', followController.toggleUserFollow)
+router.post('/artist', followController.toggleArtistFollow)
 
 export default router
