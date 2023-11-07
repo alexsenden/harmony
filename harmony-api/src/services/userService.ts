@@ -129,13 +129,16 @@ export const setUserData = async (userData?: Account): Promise<Account> => {
 const validateUserUpdate = (userData: Account) => {
   const errorMessages = []
 
-  const nameRegex = /^[a-zA-Z-]+$/g
+  const nameRegex = /^[a-zA-Z-']+$/g
 
   if (!userData.firstName.match(nameRegex)) {
-    errorMessages.push('First Name does not match rules')
+    errorMessages.push("First Name can only contain letters, -, or '")
   }
   if (!userData.lastName.match(nameRegex)) {
-    errorMessages.push('Last Name does not match rules')
+    errorMessages.push("Last Name can only contain letters, -, or '")
+  }
+  if (userData.bio.length > 1000) {
+    errorMessages.push('Bio must be fewer than than 1000 characters')
   }
 
   if (errorMessages.length > 0) {

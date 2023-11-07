@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { UserContext } from '../../contexts/userContext'
 import { useContext, useEffect, useState } from 'react'
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -16,10 +17,10 @@ import {
 import TextBlock from '../../components/text-block'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import React from 'react'
-import router from 'next/router'
 
 const Account = () => {
   const user = useContext(UserContext)
+  const [hasError, setHasError] = useState(false)
   const [newData] = useState({
     userId: user?.userId,
     bio: user?.bio,
@@ -28,20 +29,23 @@ const Account = () => {
     lastName: user?.lastName,
   })
 
-  const [updateAccount] = useHttpRequest({
+  const [updateAccount, response, error, loading] = useHttpRequest({
     url: '/user/updateAccount',
     method: HttpMethod.POST,
     body: newData,
   })
 
   const handleSave = () => {
-    if (newData.firstName === undefined) newData.firstName = user?.firstName
-    if (newData.lastName === undefined) newData.lastName = user?.lastName
-    if (newData.bio === undefined) newData.bio = user?.bio
+    if (newData.firstName === undefined || newData.firstName.length === 0)
+      newData.firstName = user?.firstName
+    if (newData.lastName === undefined || newData.lastName.length === 0)
+      newData.lastName = user?.lastName
+    if (newData.bio === undefined || newData.bio.length === 0)
+      newData.bio = user?.bio
     if (newData.picture === undefined) newData.picture = user?.picture
 
+    setHasError(false)
     updateAccount()
-    router.reload()
   }
 
   useEffect(() => {
@@ -49,6 +53,19 @@ const Account = () => {
     newData.bio = user?.bio
     newData.picture = user?.picture
   }, [user, UserContext])
+
+  useEffect(() => {
+    if (response) {
+      console.log('Response:', response)
+    }
+
+    if (error) {
+      console.error('Error:', error)
+      setHasError(true)
+    } else if (response && !loading) {
+      window.location.href = '../account'
+    }
+  }, [response, error])
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const openMenu = Boolean(anchorEl)
@@ -172,6 +189,11 @@ const Account = () => {
           <Button onClick={handleSave} variant="contained">
             Save Changes
           </Button>
+          {hasError && (
+            <Alert severity="error" sx={{ whiteSpace: 'pre-line' }}>
+              {error.response.data.message.replace(/;/, '\n')}
+            </Alert>
+          )}
         </Paper>
       </Container>
     </>
