@@ -7,7 +7,11 @@ import ApiAutocomplete from '../api-autocomplete'
 
 type TSearchOption = Partial<User> | Topic
 
-export const SearchBar = () => {
+interface ISearchBarProps {
+  onSearch: () => void
+}
+
+export const SearchBar = ({ onSearch }: ISearchBarProps) => {
   const router = useRouter()
 
   const getOptionLabel = (option: unknown) => {
@@ -40,6 +44,7 @@ export const SearchBar = () => {
     const resultUrl = buildResultUrl(search)
     if (resultUrl) {
       router.push(resultUrl)
+      onSearch()
     }
   }
 
@@ -49,17 +54,18 @@ export const SearchBar = () => {
       onChange={(event, value) => onSubmit(value as TSearchOption)}
       getOptionLabel={getOptionLabel}
       autoHighlight
-      fullWidth
+      autoComplete
+      autoFocus
       renderInput={params => (
         <TextField
           {...params}
           label="Search artists, albums, songs, or users"
           variant="outlined"
           multiline
-          fullWidth
+          autoFocus
         />
       )}
-      sx={{ mx: 4, my: 2, maxWidth: '50%' }}
+      sx={{ mx: 3, mb: 2 }}
     />
   )
 }

@@ -9,6 +9,8 @@ import {
   MenuItem,
   Avatar,
   IconButton,
+  Dialog,
+  DialogTitle,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
@@ -21,6 +23,7 @@ import { SearchBar } from '../search-bar/search-bar'
 
 const AppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)
+  const [searchModalOpen, setSearchModalOpen] = useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
@@ -88,7 +91,7 @@ const AppBar = () => {
             <NavButton onClick={openPostModal}>New Post</NavButton>
           )}
           {user && mobile && (
-            <div>
+            <>
               <IconButton
                 aria-label="menu"
                 id="mobile-button"
@@ -116,16 +119,22 @@ const AppBar = () => {
                 </MenuItem>
                 <MenuItem onClick={signOut}>Sign Out</MenuItem>
               </Menu>
-            </div>
+            </>
           )}
 
           {!user && (
-            <NavButton href="/login" sx={{ px: 1 }}>
-              Login
-            </NavButton>
+            <>
+              <NavButton href="/login" sx={{ px: 1 }}>
+                Login
+              </NavButton>
+              <NavButton
+                onClick={() => setSearchModalOpen(true)}
+                sx={{ px: 1 }}
+              >
+                Search
+              </NavButton>
+            </>
           )}
-
-          <SearchBar />
 
           {user && !mobile && (
             <>
@@ -160,6 +169,15 @@ const AppBar = () => {
         </Toolbar>
       </MuiAppBar>
       <PostModal open={postModalOpen} onClose={closePostModal} />
+      <Dialog
+        open={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>Search for artists, albums, songs, or users</DialogTitle>
+        <SearchBar onSearch={() => setSearchModalOpen(false)} />
+      </Dialog>
     </React.Fragment>
   )
 }

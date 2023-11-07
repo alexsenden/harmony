@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { Autocomplete } from '@mui/material'
 
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
@@ -14,6 +15,8 @@ const ApiAutocomplete = ({
   debounceTimeMillis = 1000,
   ...props
 }: IApiAutocompleteProps) => {
+  const router = useRouter()
+
   const [input, setInput] = useState('')
   const [options, setOptions] = useState([])
 
@@ -41,11 +44,17 @@ const ApiAutocomplete = ({
     return () => clearTimeout(debounceTimer)
   }, [input])
 
+  useEffect(() => {
+    setInput('')
+    setOptions([])
+  }, [router.pathname])
+
   return (
     <Autocomplete
       renderInput={() => <></>}
       {...props}
       options={options}
+      inputValue={input}
       onInputChange={(event, value) => onInputChange(value)}
     />
   )
