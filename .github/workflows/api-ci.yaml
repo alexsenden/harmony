@@ -32,6 +32,8 @@ jobs:
           node-version: "18"
       - name: Install dependencies
         run: npm ci
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema ./prisma/schema.prisma
       - name: Run unit tests
         run: npm run unit-tests
 
@@ -47,6 +49,8 @@ jobs:
           node-version: "18"
       - name: Install dependencies
         run: npm ci
+      - name: Generate and connect to Prisma client
+        run: npm run connectprisma
 
       - name: Run integration tests on remote DB
         run: |
@@ -63,7 +67,6 @@ jobs:
 
           cd ../harmony-api
 
-          npx prisma migrate dev
           npm run integration-tests
 
   lint:
@@ -78,5 +81,7 @@ jobs:
           node-version: "18"
       - name: Install dependencies
         run: npm ci
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema ./prisma/schema.prisma
       - name: Run linter
         run: npm run lint
