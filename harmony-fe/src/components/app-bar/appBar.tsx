@@ -17,6 +17,7 @@ import { UserContext } from '../../contexts/userContext'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
 import { MobileContext } from '../../contexts/mobileContext'
+import { SearchBar } from '../search-bar/search-bar'
 
 const AppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)
@@ -83,10 +84,6 @@ const AppBar = () => {
           {user && !mobile && (
             <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
           )}
-          {/* Commenting this out for sprint 2 since it unimplemented
-            <NavButton href="/home">
-              Search
-            </NavButton> */}
           {user && !mobile && (
             <NavButton onClick={openPostModal}>New Post</NavButton>
           )}
@@ -127,6 +124,9 @@ const AppBar = () => {
               Login
             </NavButton>
           )}
+
+          <SearchBar />
+
           {user && !mobile && (
             <>
               <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />

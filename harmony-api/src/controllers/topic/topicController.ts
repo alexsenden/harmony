@@ -18,3 +18,20 @@ export const getTopicByPartialName = async (
     next(error)
   }
 }
+
+export const getTopicOrUserByPartialName = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const partialName =
+    typeof req.params.partialName === 'string'
+      ? req.params.partialName
+      : undefined
+
+  try {
+    res.json(await topicService.getTopicOrUserByPartialName(partialName))
+  } catch (error) {
+    next(error)
+  }
+}
