@@ -1,22 +1,18 @@
 import React from 'react'
 import { Box } from '@mui/material'
 
-import { getTopicContext } from '../../utils/topicContext'
-import { TSearchOption } from '../search-bar/search-bar'
+import {
+  getTopicContext,
+  getSearchableLabel,
+} from '../../utils/additionalContext'
 import TextBlock from '../text-block'
+import { Searchable } from '../../models/searchable'
 
 interface IAutocompleteLiProps extends React.LiHTMLAttributes<HTMLLIElement> {
-  option: TSearchOption
+  option: Searchable
 }
 
 const AutocompleteLi = ({ option, ...props }: IAutocompleteLiProps) => {
-  const getOptionLabel = (option: unknown) => {
-    const searchOption = option as TSearchOption
-    return 'name' in searchOption
-      ? searchOption.name
-      : searchOption.username || ''
-  }
-
   return (
     <li {...props}>
       <Box
@@ -25,7 +21,7 @@ const AutocompleteLi = ({ option, ...props }: IAutocompleteLiProps) => {
         justifyContent={'space-between'}
         width="100%"
       >
-        <TextBlock>{getOptionLabel(option)}</TextBlock>
+        <TextBlock>{getSearchableLabel(option)}</TextBlock>
         <TextBlock>
           {'topicId' in option ? getTopicContext(option.topicId) : '(User)'}
         </TextBlock>

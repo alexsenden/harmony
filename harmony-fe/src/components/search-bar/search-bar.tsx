@@ -1,12 +1,10 @@
 import { useRouter } from 'next/navigation'
 import { TextField } from '@mui/material'
 
-import { Topic } from '../../models/topic'
-import { User } from '../../models/user'
 import ApiAutocomplete from '../api-autocomplete'
 import AutocompleteLi from '../autocomplete-li/autocomplete-li'
-
-export type TSearchOption = Partial<User> | Topic
+import { getSearchableLabel } from '../../utils/additionalContext'
+import { Searchable } from '../../models/searchable'
 
 interface ISearchBarProps {
   onSearch: () => void
@@ -15,7 +13,7 @@ interface ISearchBarProps {
 export const SearchBar = ({ onSearch }: ISearchBarProps) => {
   const router = useRouter()
 
-  const buildResultUrl = (search?: TSearchOption) => {
+  const buildResultUrl = (search?: Searchable) => {
     if (!search) {
       return undefined
     }
@@ -33,7 +31,7 @@ export const SearchBar = ({ onSearch }: ISearchBarProps) => {
     return '/home'
   }
 
-  const onSubmit = (search?: TSearchOption) => {
+  const onSubmit = (search?: Searchable) => {
     const resultUrl = buildResultUrl(search)
     if (resultUrl) {
       router.push(resultUrl)
@@ -44,10 +42,11 @@ export const SearchBar = ({ onSearch }: ISearchBarProps) => {
   return (
     <ApiAutocomplete
       url={'/topic/partialNameOrUsername'}
-      onChange={(event, value) => onSubmit(value as TSearchOption)}
+      onChange={(event, value) => onSubmit(value as Searchable)}
       autoHighlight
       autoComplete
       autoFocus
+      getOptionLabel={option => getSearchableLabel(option as Searchable)}
       renderInput={params => (
         <TextField
           {...params}
@@ -58,7 +57,7 @@ export const SearchBar = ({ onSearch }: ISearchBarProps) => {
         />
       )}
       renderOption={(props, option) => (
-        <AutocompleteLi option={option as TSearchOption} {...props} />
+        <AutocompleteLi option={option as Searchable} {...props} />
       )}
       sx={{ mx: 3, mb: 2 }}
     />

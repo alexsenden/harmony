@@ -14,7 +14,7 @@ import { Forum, Poll, RateReview, CommentOutlined } from '@mui/icons-material'
 
 import TextBlock from '../text-block'
 import { Post, PostType } from '../../models/post'
-import { getTopicContext } from '../../utils/topicContext'
+import { getTopicContext } from '../../utils/additionalContext'
 import { ReviewContent } from './review-content'
 import { PollContent } from './poll-content'
 import { DiscussionContent } from './discussion-content'
