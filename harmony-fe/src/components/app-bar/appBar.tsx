@@ -9,6 +9,8 @@ import {
   MenuItem,
   Avatar,
   IconButton,
+  Dialog,
+  DialogTitle,
   useTheme,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -18,10 +20,12 @@ import { UserContext } from '../../contexts/userContext'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
 import { MobileContext } from '../../contexts/mobileContext'
+import SearchBar from '../search-bar'
 
 const AppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [searchModalOpen, setSearchModalOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
   const menuOpen = Boolean(anchorEl)
@@ -97,7 +101,11 @@ const AppBar = () => {
           {user && !mobile && (
             <>
               <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
-              <NavButton href="/home" disabled>
+              <NavButton href="/home">Home</NavButton>
+              <NavButton
+                onClick={() => setSearchModalOpen(true)}
+                sx={{ px: 1 }}
+              >
                 Search
               </NavButton>
               <NavButton onClick={openPostModal}>New Post</NavButton>
@@ -206,10 +214,72 @@ const AppBar = () => {
               </NavButton>
             </>
           )}
+          {user && mobile && (
+            <>
+              <IconButton
+                aria-label="menu"
+                id="mobile-button"
+                aria-controls={menuOpen ? 'mobile-menu' : undefined}
+                aria-expanded={menuOpen ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleMobileDropDown}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="mobile-menu"
+                anchorEl={anchorEl}
+                MenuListProps={{
+                  'aria-labelledby': 'mobile-button',
+                }}
+                open={menuOpen}
+                onClose={handleMobileClose}
+              >
+                <MenuItem
+                  onClick={() => {
+                    setSearchModalOpen(true)
+                    handleMobileClose()
+                  }}
+                >
+                  Search
+                </MenuItem>
+                <MenuItem onClick={profileOpen}>Profile</MenuItem>
+                <MenuItem onClick={openPostModal}>New Post</MenuItem>
+                <Divider />
+                <MenuItem component={'a'} href={'/account'}>
+                  Account Settings
+                </MenuItem>
+                <MenuItem onClick={signOut}>Sign Out</MenuItem>
+                <MenuItem onClick={changeTheme}>
+                  {useTheme().palette.mode.charAt(0).toUpperCase() +
+                    useTheme().palette.mode.slice(1)}{' '}
+                  Mode
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+
+          {!user && (
+            <>
+              <Divider orientation="vertical" flexItem />
+              <NavButton href="/login" sx={{ px: 1 }}>
+                Login
+              </NavButton>
+            </>
+          )}
           <Divider orientation="vertical" flexItem />
         </Toolbar>
       </MuiAppBar>
       <PostModal open={postModalOpen} onClose={closePostModal} />
+      <Dialog
+        open={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>Search for artists, albums, songs, or users</DialogTitle>
+        <SearchBar onSearch={() => setSearchModalOpen(false)} />
+      </Dialog>
     </React.Fragment>
   )
 }

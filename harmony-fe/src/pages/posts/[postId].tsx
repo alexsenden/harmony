@@ -31,7 +31,7 @@ const PostDetail = () => {
   return (
     <Box sx={{ m: 5 }}>
       {post ? (
-        <PostComponent post={post}></PostComponent>
+        <PostComponent post={post} commentOpen={true}></PostComponent>
       ) : (
         <TextBlock>This post is unavailable.</TextBlock>
       )}

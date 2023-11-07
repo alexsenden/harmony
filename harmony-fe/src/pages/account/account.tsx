@@ -93,7 +93,6 @@ const Account = () => {
 
   const handlePicture = (picNum: number): void => {
     newData.picture = picNum
-    console.log(newData.picture)
     handleMenuClose()
   }
 
