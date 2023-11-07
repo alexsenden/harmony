@@ -32,7 +32,6 @@ const ApiAutocomplete = ({
   useEffect(() => {
     if (topicsResponse) {
       setOptions(topicsResponse)
-      console.log(topicsResponse)
     }
   }, [topicsResponse])
 

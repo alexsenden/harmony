@@ -4,9 +4,9 @@ import * as topicController from '../../controllers/topic/topicController'
 
 const router = express.Router()
 
-router.use('/partialName/:partialName', topicController.getTopicByPartialName)
-router.use(
-  '/partialNameOrUsername/:partialName',
+router.get('/partialName/:partialName?', topicController.getTopicByPartialName)
+router.get(
+  '/partialNameOrUsername/:partialName?',
   topicController.getTopicOrUserByPartialName
 )
 

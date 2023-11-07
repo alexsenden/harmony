@@ -83,7 +83,17 @@ const AppBar = () => {
               src={'/images/harmonylogo.png'}
             />
           </Button>
-          {!mobile && <NavButton href="/home">Home</NavButton>}
+          {!mobile && (
+            <>
+              <NavButton href="/home">Home</NavButton>
+              <NavButton
+                onClick={() => setSearchModalOpen(true)}
+                sx={{ px: 1 }}
+              >
+                Search
+              </NavButton>
+            </>
+          )}
           {user && !mobile && (
             <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
           )}
@@ -111,6 +121,14 @@ const AppBar = () => {
                 open={menuOpen}
                 onClose={handleMobileClose}
               >
+                <MenuItem
+                  onClick={() => {
+                    setSearchModalOpen(true)
+                    handleMobileClose()
+                  }}
+                >
+                  Search
+                </MenuItem>
                 <MenuItem onClick={profileOpen}>Profile</MenuItem>
                 <MenuItem onClick={openPostModal}>New Post</MenuItem>
                 <Divider />
@@ -123,17 +141,9 @@ const AppBar = () => {
           )}
 
           {!user && (
-            <>
-              <NavButton href="/login" sx={{ px: 1 }}>
-                Login
-              </NavButton>
-              <NavButton
-                onClick={() => setSearchModalOpen(true)}
-                sx={{ px: 1 }}
-              >
-                Search
-              </NavButton>
-            </>
+            <NavButton href="/login" sx={{ px: 1 }}>
+              Login
+            </NavButton>
           )}
 
           {user && !mobile && (

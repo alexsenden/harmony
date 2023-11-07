@@ -22,7 +22,6 @@ export const SearchBar = ({ onSearch }: ISearchBarProps) => {
   }
 
   const buildResultUrl = (search?: TSearchOption) => {
-    console.log(search)
     if (!search) {
       return undefined
     }
