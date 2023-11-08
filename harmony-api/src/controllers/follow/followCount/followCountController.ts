@@ -43,3 +43,17 @@ export const getSongFollowCount = async (
     next(error)
   }
 }
+
+export const getAlbumFollowCount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const albumID = req.headers.albumId as string
+    const followCount = await followService.getAlbumFollowCount(albumID)
+    res.json(followCount)
+  } catch (error) {
+    next(error)
+  }
+}

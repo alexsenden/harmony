@@ -21,8 +21,10 @@ model User {
   likes     Like[]
   comments  Comment[]
   follows   Follow[]     @relation("Following")
-  followsArtist  FollowArtist[]     @relation("Following")
-  followsSong  FollowSong[]     @relation("Following")
+  followsArtist FollowArtist[]  @relation("Following")
+  followsSong   FollowSong[]    @relation("Following")
+  followsAlbum  FollowAlbum[]   @relation("Following")
+
   followers Follow[]     @relation("Follower")
   tokens    UserCookie[]
 
@@ -93,6 +95,16 @@ model FollowSong {
   @@map("follow_song")
 }
 
+model FollowAlbum {
+  followingId String   @map("following_id")
+  followerId  Int      @map("follower_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  following   User     @relation("Following", fields: [followingId], references: [userId])
+  follower    Album     @relation("Follower", fields: [followerId], references: [albumId])
+
+  @@id([followingId, followerId])
+  @@map("follow_album")
+}
 
 model Like {
   userId String @map("user_id")
@@ -168,6 +180,7 @@ model Album {
   artistCredit     ArtistCredit @relation(fields: [artistCreditId], references: [artistCreditId])
   tracks           Track[]
   posts            Post[]
+  followers FollowAlbum[]     @relation("Follower")
 
   @@map("album")
 }

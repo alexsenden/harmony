@@ -112,6 +112,43 @@ export const unFollowSong = async (followInfo: Follow): Promise<Follow> => {
   }
 }
 
+export const followAlbum = async (followInfo: Follow): Promise<Follow> => {
+  try {
+    const followResult = await prisma.followAlbum.create({
+      data: {
+        followingId: followInfo.followingId,
+        followerId: parseInt(followInfo.followerId),
+      },
+    })
+
+    return {
+      followingId: followResult.followingId,
+      followerId: followResult.followerId.toString(),
+    }
+  } catch (e) {
+    throw new HttpError('Already following album', 400)
+  }
+}
+
+export const unFollowAlbum = async (followInfo: Follow): Promise<Follow> => {
+  console.log(followInfo.followingId + ',' + followInfo.followerId)
+  const followResult = await prisma.followAlbum.delete({
+    where: {
+      followingId_followerId: {
+        followingId: followInfo.followingId,
+        followerId: parseInt(followInfo.followerId),
+      },
+    },
+  })
+  if (followResult === null) {
+    throw new HttpError('Not following album', 400)
+  }
+  return {
+    followingId: followResult.followingId,
+    followerId: followResult.followerId.toString(),
+  }
+}
+
 export const getFollow = async (followInfo: Follow): Promise<boolean> => {
   const followResult = await prisma.follow.findFirst({
     where: {
@@ -154,6 +191,20 @@ export const getSongFollow = async (followInfo: Follow): Promise<boolean> => {
   return followResult !== null
 }
 
+export const getAlbumFollow = async (followInfo: Follow): Promise<boolean> => {
+  const followResult = await prisma.followAlbum.findFirst({
+    where: {
+      followerId: {
+        equals: parseInt(followInfo.followerId),
+      },
+      followingId: {
+        equals: followInfo.followingId,
+      },
+    },
+  })
+  return followResult !== null
+}
+
 export const getFollowCount = async (userId: string): Promise<number> => {
   const aggregation = await prisma.follow.aggregate({
     _count: {
@@ -182,6 +233,18 @@ export const getArtistFollowCount = async (
 
 export const getSongFollowCount = async (songId: string): Promise<number> => {
   const aggregation = await prisma.followSong.aggregate({
+    _count: {
+      followingId: true,
+    },
+    where: {
+      followingId: songId,
+    },
+  })
+  return aggregation._count.followingId
+}
+
+export const getAlbumFollowCount = async (songId: string): Promise<number> => {
+  const aggregation = await prisma.followAlbum.aggregate({
     _count: {
       followingId: true,
     },

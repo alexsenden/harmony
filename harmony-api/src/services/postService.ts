@@ -80,6 +80,14 @@ export const getFollowingSongPosts = async (userId?: string) => {
   return await postRepo.getFollowingSongPosts(userId)
 }
 
+export const getFollowingAlbumPosts = async (userId?: string) => {
+  if (!userId) {
+    return []
+  }
+
+  return await postRepo.getFollowingAlbumPosts(userId)
+}
+
 export const getAllFollowingPosts = async (userId?: string) => {
   if (!userId) {
     return []
@@ -88,10 +96,12 @@ export const getAllFollowingPosts = async (userId?: string) => {
   const userPosts = await getFollowingUserPosts(userId)
   const artistPosts = await getFollowingArtistPosts(userId)
   const songPosts = await getFollowingSongPosts(userId)
+  const albumPosts = await getFollowingAlbumPosts(userId)
 
   return userPosts
     .concat(artistPosts)
     .concat(songPosts)
+    .concat(albumPosts)
     .sort(sortPostsByDate)
     .reverse()
 }

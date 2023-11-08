@@ -66,3 +66,19 @@ export const getSongById = async (
     next(error)
   }
 }
+
+export const getAlbumById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const albumID =
+    typeof req.params.albumID === 'string' ? req.params.albumID : -1
+
+  try {
+    const numId: number = +albumID
+    res.json(await topicService.getAlbumById(numId))
+  } catch (error) {
+    next(error)
+  }
+}

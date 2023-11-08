@@ -68,6 +68,28 @@ export const followSong = async (
   })
 }
 
+export const unFollowAlbum = async (
+  userCookie: string,
+  followerId: string
+): Promise<Follow> => {
+  const followingUser = await userRepo.getUserFromCookie(userCookie)
+  return await followRepo.unFollowAlbum({
+    followerId: followerId,
+    followingId: followingUser.userId,
+  })
+}
+
+export const followAlbum = async (
+  userCookie: string,
+  followerId: string
+): Promise<Follow> => {
+  const followingUser = await userRepo.getUserFromCookie(userCookie)
+  return await followRepo.followAlbum({
+    followerId: followerId,
+    followingId: followingUser.userId,
+  })
+}
+
 export const getFollow = async (
   userCookie: string,
   followingId: string
@@ -101,6 +123,17 @@ export const getSongFollow = async (
   })
 }
 
+export const getAlbumFollow = async (
+  userCookie: string,
+  followerId: string
+): Promise<boolean> => {
+  const followerUser = await userRepo.getUserFromCookie(userCookie)
+  return await followRepo.getAlbumFollow({
+    followerId: followerId,
+    followingId: followerUser.userId,
+  })
+}
+
 export const getFollowCount = async (userId: string): Promise<number> => {
   return await followRepo.getFollowCount(userId)
 }
@@ -113,4 +146,8 @@ export const getArtistFollowCount = async (
 
 export const getSongFollowCount = async (songId: string): Promise<number> => {
   return await followRepo.getSongFollowCount(songId)
+}
+
+export const getAlbumFollowCount = async (songId: string): Promise<number> => {
+  return await followRepo.getAlbumFollowCount(songId)
 }

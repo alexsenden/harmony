@@ -12,6 +12,6 @@ router.get(
 
 router.get('/artist/:artistID', topicController.getArtistById)
 router.get('/song/:songID', topicController.getSongById)
-router.get('/album/:albumID', topicController.getArtistById)
+router.get('/album/:albumID', topicController.getAlbumById)
 
 export default router
