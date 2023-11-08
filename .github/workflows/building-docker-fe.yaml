@@ -1,9 +1,7 @@
 name: bulding-docker-fe
 
 on:
-  push:
-    branches:
-      ["main"]
+  push
       
 jobs:
   build_docker_fe:
@@ -23,7 +21,7 @@ jobs:
         run: |
           cd ./harmony-fe
           touch ./environment/.env.prod
-          echo "NEXT_PUBLIC_API_BASE_ENDPOINT=https://${{ secrets.azureHost1 }}:8081" >> ./environment/.env.prod
+          echo "NEXT_PUBLIC_API_BASE_ENDPOINT=http://localhost:8081" >> ./environment/.env.prod
 
       - name: Harmony FE - Extract metadata (tags, labels) for Docker
         id: meta

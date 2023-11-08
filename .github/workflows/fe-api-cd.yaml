@@ -1,9 +1,7 @@
 name: harmony-api-fe-cd
 
 on:
-  push:
-    branches:
-      ["main"]
+  push
 
 jobs:
   deployment:
@@ -97,10 +95,7 @@ jobs:
                   ssl_certificate /etc/nginx/ssl/certificate.crt;
                   ssl_certificate_key /etc/nginx/ssl/private.key;
 
-                  ssl_protocols TLSv1.2 TLSv1.3;
-
-                  ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384';
-
+                  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
                   ssl_prefer_server_ciphers off;
 
                   location / {
@@ -123,14 +118,14 @@ jobs:
           script_stop: true
           port: 22
           script: |
-              sudo docker image pull aprovozin/harmony-api-cd:main
-              sudo docker run --network=host --name backend -d -p 8081:8081 aprovozin/harmony-api-cd:main
+              sudo docker image pull aprovozin/harmony-api-cd:andrii-add-ssl-certificate	
+              sudo docker run --network=host --name backend -d -p 8081:8081 aprovozin/harmony-api-cd:andrii-add-ssl-certificate	
 
               # let container api start
               sleep 10s
 
-              sudo docker image pull aprovozin/harmony-fe-cd:main
-              sudo docker run --name frontend -d -p 8080:8080 aprovozin/harmony-fe-cd:main
+              sudo docker image pull aprovozin/harmony-fe-cd:andrii-add-ssl-certificate	
+              sudo docker run --name frontend -d -p 8080:8080 aprovozin/harmony-fe-cd:andrii-add-ssl-certificate	
 
               # let container fe start
               sleep 10s
