@@ -105,6 +105,12 @@ export const getFollowCount = async (userId: string): Promise<number> => {
   return await followRepo.getFollowCount(userId)
 }
 
-export const getArtistFollowCount = async (userId: string): Promise<number> => {
-  return await followRepo.getArtistFollowCount(userId)
+export const getArtistFollowCount = async (
+  artistId: string
+): Promise<number> => {
+  return await followRepo.getArtistFollowCount(artistId)
+}
+
+export const getSongFollowCount = async (songId: string): Promise<number> => {
+  return await followRepo.getSongFollowCount(songId)
 }

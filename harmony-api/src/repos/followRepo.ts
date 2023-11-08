@@ -166,13 +166,27 @@ export const getFollowCount = async (userId: string): Promise<number> => {
   return aggregation._count.followingId
 }
 
-export const getArtistFollowCount = async (userId: string): Promise<number> => {
+export const getArtistFollowCount = async (
+  artistId: string
+): Promise<number> => {
   const aggregation = await prisma.followArtist.aggregate({
     _count: {
       followingId: true,
     },
     where: {
-      followingId: userId,
+      followingId: artistId,
+    },
+  })
+  return aggregation._count.followingId
+}
+
+export const getSongFollowCount = async (songId: string): Promise<number> => {
+  const aggregation = await prisma.followSong.aggregate({
+    _count: {
+      followingId: true,
+    },
+    where: {
+      followingId: songId,
     },
   })
   return aggregation._count.followingId
