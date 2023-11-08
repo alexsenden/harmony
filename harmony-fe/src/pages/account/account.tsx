@@ -43,7 +43,7 @@ const Account = () => {
     if (newData.bio === undefined || newData.bio.length === 0)
       newData.bio = user?.bio
     if (newData.picture === undefined) newData.picture = user?.picture
-
+    console.log(newData.firstName)
     setHasError(false)
     updateAccount()
   }
@@ -190,7 +190,7 @@ const Account = () => {
           </Button>
           {hasError && (
             <Alert severity="error" sx={{ whiteSpace: 'pre-line' }}>
-              {error.response.data.message.replace(/;/, '\n')}
+              {error.response.data.message.split(';').join('\n')}
             </Alert>
           )}
         </Paper>

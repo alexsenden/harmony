@@ -100,7 +100,7 @@ const validateUserRegistrationAdvanced = (userData: User) => {
   }
   if (!userData.password.match(passwordRegex)) {
     errorMessages.push(
-      "Password must contain at least one upper and lower case letter (a-z, A-Z), a number (0-9), and a symbol (@, #, $, %, ^, &, -, +, =, (, ), !, ?, ' ' , \"), "
+      "Password must contain be at least 8 characters long, have at least one upper and lower case letter (a-z, A-Z), a number (0-9), and a symbol (@, #, $, %, ^, &, -, +, =, (, ), !, ?, ' ' , \"), "
     )
   }
   if (!userData.firstName.match(nameRegex)) {
