@@ -13,4 +13,7 @@ router.post('/', followController.toggleUserFollow)
 router.get('/artist', followController.getArtistFollow)
 router.post('/artist', followController.toggleArtistFollow)
 
+router.get('/song', followController.getSongFollow)
+router.post('/song', followController.toggleSongFollow)
+
 export default router

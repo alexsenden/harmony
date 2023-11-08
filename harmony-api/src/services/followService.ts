@@ -46,6 +46,28 @@ export const followArtist = async (
   })
 }
 
+export const unFollowSong = async (
+  userCookie: string,
+  followerId: string
+): Promise<Follow> => {
+  const followingUser = await userRepo.getUserFromCookie(userCookie)
+  return await followRepo.unFollowSong({
+    followerId: followerId,
+    followingId: followingUser.userId,
+  })
+}
+
+export const followSong = async (
+  userCookie: string,
+  followerId: string
+): Promise<Follow> => {
+  const followingUser = await userRepo.getUserFromCookie(userCookie)
+  return await followRepo.followSong({
+    followerId: followerId,
+    followingId: followingUser.userId,
+  })
+}
+
 export const getFollow = async (
   userCookie: string,
   followingId: string
@@ -63,6 +85,17 @@ export const getArtistFollow = async (
 ): Promise<boolean> => {
   const followerUser = await userRepo.getUserFromCookie(userCookie)
   return await followRepo.getArtistFollow({
+    followerId: followerId,
+    followingId: followerUser.userId,
+  })
+}
+
+export const getSongFollow = async (
+  userCookie: string,
+  followerId: string
+): Promise<boolean> => {
+  const followerUser = await userRepo.getUserFromCookie(userCookie)
+  return await followRepo.getSongFollow({
     followerId: followerId,
     followingId: followerUser.userId,
   })

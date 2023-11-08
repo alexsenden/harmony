@@ -9,7 +9,7 @@ import { Artist } from '../../models/artist'
 const ArtistPage = () => {
   const router = useRouter()
   const { artistId } = router.query
-  const [artistData, setUser] = useState<Artist>()
+  const [artistData, setArtist] = useState<Artist>()
   const [following, setFollowing] = useState(false)
   const [numFollowers, setNumFollowers] = useState(0)
   const user = useContext(UserContext)
@@ -28,7 +28,7 @@ const ArtistPage = () => {
 
   useEffect(() => {
     if (receivedData) {
-      setUser(receivedData)
+      setArtist(receivedData)
     }
   }, [receivedData, artistData])
 

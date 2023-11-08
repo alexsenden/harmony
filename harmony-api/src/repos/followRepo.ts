@@ -67,7 +67,44 @@ export const unFollowArtist = async (followInfo: Follow): Promise<Follow> => {
     },
   })
   if (followResult === null) {
-    throw new HttpError('Not following user', 400)
+    throw new HttpError('Not following artist', 400)
+  }
+  return {
+    followingId: followResult.followingId,
+    followerId: followResult.followerId.toString(),
+  }
+}
+
+export const followSong = async (followInfo: Follow): Promise<Follow> => {
+  try {
+    const followResult = await prisma.followSong.create({
+      data: {
+        followingId: followInfo.followingId,
+        followerId: parseInt(followInfo.followerId),
+      },
+    })
+
+    return {
+      followingId: followResult.followingId,
+      followerId: followResult.followerId.toString(),
+    }
+  } catch (e) {
+    throw new HttpError('Already following song', 400)
+  }
+}
+
+export const unFollowSong = async (followInfo: Follow): Promise<Follow> => {
+  console.log(followInfo.followingId + ',' + followInfo.followerId)
+  const followResult = await prisma.followSong.delete({
+    where: {
+      followingId_followerId: {
+        followingId: followInfo.followingId,
+        followerId: parseInt(followInfo.followerId),
+      },
+    },
+  })
+  if (followResult === null) {
+    throw new HttpError('Not following song', 400)
   }
   return {
     followingId: followResult.followingId,
@@ -91,6 +128,20 @@ export const getFollow = async (followInfo: Follow): Promise<boolean> => {
 
 export const getArtistFollow = async (followInfo: Follow): Promise<boolean> => {
   const followResult = await prisma.followArtist.findFirst({
+    where: {
+      followerId: {
+        equals: parseInt(followInfo.followerId),
+      },
+      followingId: {
+        equals: followInfo.followingId,
+      },
+    },
+  })
+  return followResult !== null
+}
+
+export const getSongFollow = async (followInfo: Follow): Promise<boolean> => {
+  const followResult = await prisma.followSong.findFirst({
     where: {
       followerId: {
         equals: parseInt(followInfo.followerId),
