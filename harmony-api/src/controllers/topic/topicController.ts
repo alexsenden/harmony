@@ -51,3 +51,18 @@ export const getArtistById = async (
     next(error)
   }
 }
+
+export const getSongById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const songID = typeof req.params.songID === 'string' ? req.params.songID : -1
+
+  try {
+    const numId: number = +songID
+    res.json(await topicService.getSongById(numId))
+  } catch (error) {
+    next(error)
+  }
+}

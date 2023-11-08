@@ -56,12 +56,12 @@ export const getTrendingPosts = async (
   return postRepo.getTrendingPosts(requester)
 }
 
-export const getFollowingPosts = async (userId?: string) => {
+export const getFollowingUserPosts = async (userId?: string) => {
   if (!userId) {
     return []
   }
 
-  return await postRepo.getFollowingPosts(userId)
+  return await postRepo.getFollowingUserPosts(userId)
 }
 
 export const getFollowingArtistPosts = async (userId?: string) => {
@@ -70,6 +70,27 @@ export const getFollowingArtistPosts = async (userId?: string) => {
   }
 
   return await postRepo.getFollowingArtistPosts(userId)
+}
+
+export const getAllFollowingPosts = async (userId?: string) => {
+  if (!userId) {
+    return []
+  }
+
+  const userPosts = await getFollowingUserPosts(userId)
+  const artistPosts = await getFollowingArtistPosts(userId)
+  return userPosts.concat(artistPosts).sort(sortPostsByDate).reverse()
+}
+
+const sortPostsByDate = function (postA: Post, postB: Post) {
+  if (postA.createdAt.getTime() > postB.createdAt.getTime()) {
+    return 1
+  } else if (postA.createdAt.getTime() < postB.createdAt.getTime()) {
+    return -1
+  } else postA.createdAt.getTime() === postB.createdAt.getTime()
+  {
+    return 0
+  }
 }
 
 export const validatePost = (postData?: Post): Post => {

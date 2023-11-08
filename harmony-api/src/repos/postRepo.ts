@@ -115,7 +115,7 @@ export const getTrendingPosts = async (
   })
 }
 
-export const getFollowingPosts = async (
+export const getFollowingUserPosts = async (
   userId: string
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
