@@ -69,6 +69,9 @@ jobs:
           script_stop: true
           port: 22
           script: |
+              sudo apt install nginx --yes
+
+               # Add SSL certificates and keys
               sudo mkdir /etc/nginx/ssl
               cd /etc/nginx/ssl
 
@@ -77,8 +80,6 @@ jobs:
               
               sudo touch ./private.key
               sudo echo "${{ secrets.SSLPrivateKey }}" | sudo tee -a ./private.key
-
-              sudo apt install nginx --yes
 
               # Set Nginx settings 
               cd /etc/nginx/sites-enabled
