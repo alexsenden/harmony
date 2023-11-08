@@ -15,3 +15,17 @@ export const getFollowCount = async (
     next(error)
   }
 }
+
+export const getArtistFollowCount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const artistID = req.headers.artistId as string
+    const followCount = await followService.getArtistFollowCount(artistID)
+    res.json(followCount)
+  } catch (error) {
+    next(error)
+  }
+}

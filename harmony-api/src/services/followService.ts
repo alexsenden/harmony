@@ -57,6 +57,21 @@ export const getFollow = async (
   })
 }
 
+export const getArtistFollow = async (
+  userCookie: string,
+  followerId: string
+): Promise<boolean> => {
+  const followerUser = await userRepo.getUserFromCookie(userCookie)
+  return await followRepo.getArtistFollow({
+    followerId: followerId,
+    followingId: followerUser.userId,
+  })
+}
+
 export const getFollowCount = async (userId: string): Promise<number> => {
   return await followRepo.getFollowCount(userId)
+}
+
+export const getArtistFollowCount = async (userId: string): Promise<number> => {
+  return await followRepo.getArtistFollowCount(userId)
 }

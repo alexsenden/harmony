@@ -89,8 +89,34 @@ export const getFollow = async (followInfo: Follow): Promise<boolean> => {
   return followResult !== null
 }
 
+export const getArtistFollow = async (followInfo: Follow): Promise<boolean> => {
+  const followResult = await prisma.followArtist.findFirst({
+    where: {
+      followerId: {
+        equals: parseInt(followInfo.followingId),
+      },
+      followingId: {
+        equals: followInfo.followerId,
+      },
+    },
+  })
+  return followResult !== null
+}
+
 export const getFollowCount = async (userId: string): Promise<number> => {
   const aggregation = await prisma.follow.aggregate({
+    _count: {
+      followingId: true,
+    },
+    where: {
+      followingId: userId,
+    },
+  })
+  return aggregation._count.followingId
+}
+
+export const getArtistFollowCount = async (userId: string): Promise<number> => {
+  const aggregation = await prisma.followArtist.aggregate({
     _count: {
       followingId: true,
     },

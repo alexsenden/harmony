@@ -53,3 +53,17 @@ export const getFollow = async (
     next(error)
   }
 }
+
+export const getArtistFollow = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const cookie = req.cookies.userCookie
+    const followingId = req.headers.followingid as string
+    res.json(await followService.getArtistFollow(cookie, followingId))
+  } catch (error) {
+    next(error)
+  }
+}

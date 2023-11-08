@@ -5,5 +5,6 @@ import * as followCountController from '../../../controllers/follow/followCount/
 const router = express.Router()
 
 router.get('/', followCountController.getFollowCount)
+router.get('/artist', followCountController.getArtistFollowCount)
 
 export default router
