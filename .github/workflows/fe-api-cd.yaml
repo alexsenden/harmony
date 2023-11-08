@@ -104,6 +104,27 @@ jobs:
                             proxy_set_header Host \$host;
                             proxy_pass http://localhost:8080; 
                   }
+                }
+                
+                
+                server {
+                  listen 8081 ssl default_server;
+                  listen [::]:8081 ssl default_server;
+
+                  server_name _;
+
+                  ssl_certificate /etc/nginx/ssl/certificate.crt;
+                  ssl_certificate_key /etc/nginx/ssl/private.key;
+
+                  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+                  ssl_prefer_server_ciphers off;
+
+                  location / {
+                            proxy_http_version 1.1;
+                            proxy_set_header X-Forwarded-For $remote_addr;
+                            proxy_set_header Host $host;
+                            proxy_pass http://localhost:8082;
+                  }
                 }" | sudo tee -a default
 
               # Apply Nginx Settings
@@ -119,7 +140,7 @@ jobs:
           port: 22
           script: |
               sudo docker image pull aprovozin/harmony-api-cd:andrii-add-ssl-certificate	
-              sudo docker run --network=host --name backend -d -p 8081:8081 aprovozin/harmony-api-cd:andrii-add-ssl-certificate	
+              sudo docker run --network=host --name backend -d -p 8082:8082 aprovozin/harmony-api-cd:andrii-add-ssl-certificate	
 
               # let container api start
               sleep 10s
