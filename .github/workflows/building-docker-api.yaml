@@ -1,8 +1,7 @@
 name: bulding-docker-api
 
 on:
-  push:
-    branches: ["main"]
+  push
 
 jobs:
   build_docker_api:
