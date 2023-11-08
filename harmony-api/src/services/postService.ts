@@ -64,6 +64,14 @@ export const getFollowingPosts = async (userId?: string) => {
   return await postRepo.getFollowingPosts(userId)
 }
 
+export const getFollowingArtistPosts = async (userId?: string) => {
+  if (!userId) {
+    return []
+  }
+
+  return await postRepo.getFollowingArtistPosts(userId)
+}
+
 export const validatePost = (postData?: Post): Post => {
   if (!postData) {
     throw new HttpError('Post data is required to create new post', 400)

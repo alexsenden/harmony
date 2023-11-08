@@ -21,7 +21,7 @@ model User {
   likes     Like[]
   comments  Comment[]
   follows   Follow[]     @relation("Following")
-    followsArtist   FollowArtist[]     @relation("Following")
+  followsArtist  FollowArtist[]     @relation("Following")
 
   followers Follow[]     @relation("Follower")
   tokens    UserCookie[]
@@ -81,7 +81,6 @@ model FollowArtist {
   @@id([followingId, followerId])
   @@map("follow_artist")
 }
-
 
 model Like {
   userId String @map("user_id")

@@ -16,3 +16,18 @@ export const getFollowingFeed = async (
     next(error)
   }
 }
+
+export const getFollowingArtistsFeed = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId =
+    typeof req.query.userId === 'string' ? req.query.userId : undefined
+
+  try {
+    res.json(await postService.getFollowingArtistPosts(userId))
+  } catch (error) {
+    next(error)
+  }
+}

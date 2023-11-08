@@ -158,6 +158,49 @@ export const getFollowingPosts = async (
   })
 }
 
+export const getFollowingArtistPosts = async (
+  userId: string
+): Promise<Array<Post>> => {
+  const posts = await prisma.post.findMany({
+    where: {
+      artist: {
+        followers: {
+          some: {
+            followingId: {
+              equals: userId,
+            },
+          },
+        },
+      },
+    },
+    include: {
+      user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
+      likes: {
+        where: {
+          userId: userId,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  return posts.map(post => {
+    return mapPrismaPostToPost(post)
+  })
+}
+
 export const getPostById = async (
   postId: string,
   requester?: User

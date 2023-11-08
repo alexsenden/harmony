@@ -93,10 +93,10 @@ export const getArtistFollow = async (followInfo: Follow): Promise<boolean> => {
   const followResult = await prisma.followArtist.findFirst({
     where: {
       followerId: {
-        equals: parseInt(followInfo.followingId),
+        equals: parseInt(followInfo.followerId),
       },
       followingId: {
-        equals: followInfo.followerId,
+        equals: followInfo.followingId,
       },
     },
   })

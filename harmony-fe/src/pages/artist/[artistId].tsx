@@ -1,14 +1,9 @@
 import { useRouter } from 'next/router'
 import TextBlock from '../../components/text-block'
-import { Container, Paper, Grid, Avatar, Box } from '@mui/material'
 import { useState, useEffect, useContext } from 'react'
-import CommentFeed from '../../components/comment-feed/comment-feed'
 import FollowingButton from '../../components/following-button'
-import PostFeed from '../../components/post-feed'
-import TabLayout from '../../components/tab-layout'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { UserContext } from '../../contexts/userContext'
-import Head from 'next/head'
 import { Artist } from '../../models/artist'
 
 const ArtistPage = () => {
