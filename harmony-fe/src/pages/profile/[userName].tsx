@@ -1,6 +1,15 @@
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
-import { Avatar, Box, Container, Grid, IconButton, Paper } from '@mui/material'
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  IconButton,
+  Paper,
+  Stack,
+} from '@mui/material'
 import SettingsIcon from '@mui/icons-material/Settings'
 import TabLayout from '../../components/tab-layout'
 import PostFeed from '../../components/post-feed/postFeed'
@@ -18,6 +27,7 @@ const Profile = () => {
   const [userData, setUser] = useState<User>()
   const [following, setFollowing] = useState(false)
   const [numFollowers, setNumFollowers] = useState(0)
+  const [isLoading, setLoading] = useState(true)
 
   const user = useContext(UserContext)
 
@@ -39,6 +49,7 @@ const Profile = () => {
   useEffect(() => {
     if (receivedData) {
       setUser(receivedData)
+      setLoading(false)
     }
   }, [receivedData, userData])
 
@@ -123,7 +134,7 @@ const Profile = () => {
     },
   ]
 
-  return (
+  return !isLoading ? (
     <>
       <Head>
         <title>{`${userData?.username}'s Profile`}</title>
@@ -218,6 +229,13 @@ const Profile = () => {
         </Paper>
       </Container>
     </>
+  ) : (
+    <Stack sx={{ display: 'flex' }}>
+      <CircularProgress
+        size="4rem"
+        style={{ marginTop: 20, alignSelf: 'center' }}
+      />
+    </Stack>
   )
 }
 
