@@ -111,10 +111,8 @@ const sortPostsByDate = function (postA: Post, postB: Post) {
     return 1
   } else if (postA.createdAt.getTime() < postB.createdAt.getTime()) {
     return -1
-  } else postA.createdAt.getTime() === postB.createdAt.getTime()
-  {
-    return 0
   }
+  return 0
 }
 
 export const validatePost = (postData?: Post): Post => {

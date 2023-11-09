@@ -29,7 +29,7 @@ const AppBar = () => {
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
   const menuOpen = Boolean(anchorEl)
-
+  const theme = useTheme()
   const [sendHttpRequest] = useHttpRequest({
     url: '/user/signOut',
     method: HttpMethod.POST,
@@ -84,7 +84,7 @@ const AppBar = () => {
     <React.Fragment>
       <MuiAppBar
         position="sticky"
-        sx={{ backgroundColor: useTheme().palette.background.paper }}
+        sx={{ backgroundColor: theme.palette.background.paper }}
       >
         <Toolbar>
           <Button href="/home">
@@ -111,8 +111,8 @@ const AppBar = () => {
               <NavButton onClick={openPostModal}>New Post</NavButton>
               <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
               <NavButton onClick={changeTheme}>
-                {useTheme().palette.mode.charAt(0).toUpperCase() +
-                  useTheme().palette.mode.slice(1)}{' '}
+                {theme.palette.mode.charAt(0).toUpperCase() +
+                  theme.palette.mode.slice(1)}{' '}
                 Mode
               </NavButton>
 
@@ -180,8 +180,8 @@ const AppBar = () => {
                 </MenuItem>
                 <MenuItem onClick={signOut}>Sign Out</MenuItem>
                 <MenuItem onClick={changeTheme}>
-                  {useTheme().palette.mode.charAt(0).toUpperCase() +
-                    useTheme().palette.mode.slice(1)}{' '}
+                  {theme.palette.mode.charAt(0).toUpperCase() +
+                    theme.palette.mode.slice(1)}{' '}
                   Mode
                 </MenuItem>
               </Menu>
@@ -198,8 +198,8 @@ const AppBar = () => {
                 onClick={handleMobileDropDown}
               ></IconButton>
               <NavButton onClick={changeTheme}>
-                {useTheme().palette.mode.charAt(0).toUpperCase() +
-                  useTheme().palette.mode.slice(1)}{' '}
+                {theme.palette.mode.charAt(0).toUpperCase() +
+                  theme.palette.mode.slice(1)}{' '}
                 Mode
               </NavButton>
               <Divider orientation="vertical" flexItem />
@@ -213,8 +213,8 @@ const AppBar = () => {
             <>
               <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
               <NavButton onClick={changeTheme}>
-                {useTheme().palette.mode.charAt(0).toUpperCase() +
-                  useTheme().palette.mode.slice(1)}{' '}
+                {theme.palette.mode.charAt(0).toUpperCase() +
+                  theme.palette.mode.slice(1)}{' '}
                 Mode
               </NavButton>
               <Divider orientation="vertical" flexItem />
@@ -261,8 +261,8 @@ const AppBar = () => {
                 </MenuItem>
                 <MenuItem onClick={signOut}>Sign Out</MenuItem>
                 <MenuItem onClick={changeTheme}>
-                  {useTheme().palette.mode.charAt(0).toUpperCase() +
-                    useTheme().palette.mode.slice(1)}{' '}
+                  {theme.palette.mode.charAt(0).toUpperCase() +
+                    theme.palette.mode.slice(1)}{' '}
                   Mode
                 </MenuItem>
               </Menu>
