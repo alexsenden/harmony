@@ -1,9 +1,7 @@
 name: harmony-api-fe-cd
 
 on:
-  push:
-    branches:
-      ["main"]
+  push
 
 jobs:
   deployment:
@@ -142,14 +140,14 @@ jobs:
           script_stop: true
           port: 22
           script: |
-              sudo docker image pull aprovozin/harmony-api-cd:main
-              sudo docker run --network=host --name backend -d -p 8082:8082 aprovozin/harmony-api-cd:main
+              sudo docker image pull aprovozin/harmony-api-cd:andrii-add-ssl-certificate
+              sudo docker run --network=host --name backend -d -p 8082:8082 aprovozin/harmony-api-cd:andrii-add-ssl-certificate
 
               # let container api start
               sleep 10s
 
-              sudo docker image pull aprovozin/harmony-fe-cd:main
-              sudo docker run --name frontend -d -p 8080:8080 aprovozin/harmony-fe-cd:main
+              sudo docker image pull aprovozin/harmony-fe-cd:andrii-add-ssl-certificate
+              sudo docker run --name frontend -d -p 8080:8080 aprovozin/harmony-fe-cd:andrii-add-ssl-certificate
 
               # let container fe start
               sleep 10s

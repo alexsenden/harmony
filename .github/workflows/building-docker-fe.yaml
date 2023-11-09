@@ -1,9 +1,7 @@
 name: bulding-docker-fe
 
 on:
-  push:
-    branches:
-      ["main"]
+  push
 
 jobs:
   build_docker_fe:
