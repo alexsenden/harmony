@@ -8,6 +8,7 @@ import {
   TextField,
   IconButton,
   InputAdornment,
+  Alert,
 } from '@mui/material'
 import TextBlock from '../../components/text-block/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
@@ -120,7 +121,6 @@ const LoginPage = () => {
               }}
               required
               error={loginError}
-              helperText={loginError ? 'Invalid username or password' : ''}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -144,6 +144,12 @@ const LoginPage = () => {
             >
               <TextBlock fontSize={20}> Log in </TextBlock>
             </Button>
+            {loginError && (
+              <Alert severity="error" sx={{ whiteSpace: 'pre-line', mt: 3 }}>
+                {'Invalid username or password'}
+              </Alert>
+            )}
+
             <Button
               href="/register"
               variant="outlined"

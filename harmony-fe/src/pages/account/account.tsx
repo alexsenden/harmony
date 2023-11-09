@@ -184,7 +184,7 @@ const Account = () => {
             Save Changes
           </Button>
           {hasError && (
-            <Alert severity="error" sx={{ whiteSpace: 'pre-line' }}>
+            <Alert severity="error" sx={{ whiteSpace: 'pre-line', mt: 3 }}>
               {error.response.data.message.split(';').join('\n')}
             </Alert>
           )}
