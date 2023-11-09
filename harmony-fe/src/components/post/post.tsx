@@ -83,7 +83,6 @@ const Post = ({ post, commentOpen = false }: PostProps) => {
     } else {
       url = url + 'artist/' + post.topicId.artistId
     }
-    console.log(url)
     return url
   }
 

@@ -57,7 +57,6 @@ export const followArtist = async (followInfo: Follow): Promise<Follow> => {
 }
 
 export const unFollowArtist = async (followInfo: Follow): Promise<Follow> => {
-  console.log(followInfo.followingId + ',' + followInfo.followerId)
   const followResult = await prisma.followArtist.delete({
     where: {
       followingId_followerId: {
@@ -94,7 +93,6 @@ export const followSong = async (followInfo: Follow): Promise<Follow> => {
 }
 
 export const unFollowSong = async (followInfo: Follow): Promise<Follow> => {
-  console.log(followInfo.followingId + ',' + followInfo.followerId)
   const followResult = await prisma.followSong.delete({
     where: {
       followingId_followerId: {
@@ -131,7 +129,6 @@ export const followAlbum = async (followInfo: Follow): Promise<Follow> => {
 }
 
 export const unFollowAlbum = async (followInfo: Follow): Promise<Follow> => {
-  console.log(followInfo.followingId + ',' + followInfo.followerId)
   const followResult = await prisma.followAlbum.delete({
     where: {
       followingId_followerId: {

@@ -43,7 +43,6 @@ const Account = () => {
     if (newData.bio === undefined || newData.bio.length === 0)
       newData.bio = user?.bio
     if (newData.picture === undefined) newData.picture = user?.picture
-    console.log(newData.firstName)
     setHasError(false)
     updateAccount()
   }
@@ -55,10 +54,6 @@ const Account = () => {
   }, [user, UserContext])
 
   useEffect(() => {
-    if (response) {
-      console.log('Response:', response)
-    }
-
     if (error) {
       console.error('Error:', error)
       setHasError(true)
