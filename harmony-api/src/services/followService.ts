@@ -140,19 +140,29 @@ export const getFollowCount = async (userId: string): Promise<number> => {
 }
 
 export const getArtistFollowCount = async (
-  artistId: string
+  artistId?: string
 ): Promise<number> => {
+  if (artistId === undefined) {
+    throw new HttpError(`Artist ID ${artistId} invalid`, 400)
+  }
+
   return await followRepo.getArtistFollowCount(artistId)
 }
 
 export const getSongFollowCount = async (songId?: string): Promise<number> => {
   if (songId === undefined) {
-    throw new HttpError('Song ID invalid', 400)
+    throw new HttpError(`Song ID ${songId} invalid`, 400)
   }
 
   return await followRepo.getSongFollowCount(songId)
 }
 
-export const getAlbumFollowCount = async (songId: string): Promise<number> => {
-  return await followRepo.getAlbumFollowCount(songId)
+export const getAlbumFollowCount = async (
+  albumId?: string
+): Promise<number> => {
+  if (albumId === undefined) {
+    throw new HttpError(`Album ID ${albumId} invalid`, 400)
+  }
+
+  return await followRepo.getAlbumFollowCount(albumId)
 }

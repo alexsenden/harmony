@@ -22,7 +22,9 @@ export const getArtistFollowCount = async (
   next: NextFunction
 ) => {
   try {
-    const artistID = req.headers.artistId as string
+    const artistID =
+      typeof req.params.artistId === 'string' ? req.params.artistId : undefined
+
     const followCount = await followService.getArtistFollowCount(artistID)
     res.json(followCount)
   } catch (error) {
@@ -38,7 +40,8 @@ export const getSongFollowCount = async (
   try {
     const songID =
       typeof req.params.songId === 'string' ? req.params.songId : undefined
-
+    const song = req.headers.songId
+    console.log(songID + ' ' + typeof songID + ', ' + song + ' ' + typeof song)
     const followCount = await followService.getSongFollowCount(songID)
     res.json(followCount)
   } catch (error) {
@@ -52,7 +55,9 @@ export const getAlbumFollowCount = async (
   next: NextFunction
 ) => {
   try {
-    const albumID = req.headers.albumId as string
+    const albumID =
+      typeof req.params.albumId === 'string' ? req.params.albumId : undefined
+
     const followCount = await followService.getAlbumFollowCount(albumID)
     res.json(followCount)
   } catch (error) {
