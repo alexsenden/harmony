@@ -93,11 +93,12 @@ export const getAllFollowingPosts = async (userId?: string) => {
     return []
   }
 
-  const userPosts = await getFollowingUserPosts(userId)
-  const artistPosts = await getFollowingArtistPosts(userId)
-  const songPosts = await getFollowingSongPosts(userId)
-  const albumPosts = await getFollowingAlbumPosts(userId)
-
+  const [userPosts, artistPosts, songPosts, albumPosts] = await Promise.all([
+    getFollowingUserPosts(userId),
+    getFollowingArtistPosts(userId),
+    await getFollowingSongPosts(userId),
+    await getFollowingAlbumPosts(userId),
+  ])
   return userPosts
     .concat(artistPosts)
     .concat(songPosts)
