@@ -40,8 +40,7 @@ export const getSongFollowCount = async (
   try {
     const songID =
       typeof req.params.songId === 'string' ? req.params.songId : undefined
-    const song = req.headers.songId
-    console.log(songID + ' ' + typeof songID + ', ' + song + ' ' + typeof song)
+
     const followCount = await followService.getSongFollowCount(songID)
     res.json(followCount)
   } catch (error) {

@@ -14,7 +14,7 @@ const HomePage = () => {
   const user = useContext(UserContext)
 
   const trendingFeedUrl = '/post/trending'
-  const followingFeedUrl = `/post/following/?userId=${user?.userId}`
+  const followingFeedUrl = '/post/following/all'
 
   const handleButtonClick = (mode: FeedMode) => {
     setFeedMode(mode)

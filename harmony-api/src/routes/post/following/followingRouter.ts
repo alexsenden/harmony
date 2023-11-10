@@ -4,9 +4,6 @@ import * as followingController from '../../../controllers/post/following/follow
 
 const router = express.Router()
 
-router.get('/', followingController.getAllFollowingFeed)
-router.get('/user', followingController.getFollowingUserFeed)
-router.get('/artist', followingController.getFollowingArtistsFeed)
-router.get('/album', followingController.getFollowingAlbumsFeed)
+router.get('/:feedType', followingController.getFollowingFeed)
 
 export default router

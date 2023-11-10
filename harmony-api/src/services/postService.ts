@@ -1,5 +1,6 @@
 import * as postRepo from '../repos/postRepo'
 import * as pollOptionRepo from '../repos/pollOptionRepo'
+import * as userRepo from '../repos/userRepo'
 import { Post, PostType } from '../models/post'
 import { validateTopicId } from './topicService'
 import { HttpError } from '../models/error/httpError'
@@ -56,48 +57,46 @@ export const getTrendingPosts = async (
   return postRepo.getTrendingPosts(requester)
 }
 
-export const getFollowingUserPosts = async (userId?: string) => {
-  if (!userId) {
-    return []
-  }
+export const getFollowingUserPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
+  const user = await userRepo.getUserFromCookie(userCookie)
 
-  return await postRepo.getFollowingUserPosts(userId)
+  return await postRepo.getFollowingUserPosts(user.userId)
 }
 
-export const getFollowingArtistPosts = async (userId?: string) => {
-  if (!userId) {
-    return []
-  }
+export const getFollowingArtistPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
+  const user = await userRepo.getUserFromCookie(userCookie)
 
-  return await postRepo.getFollowingArtistPosts(userId)
+  return await postRepo.getFollowingArtistPosts(user.userId)
 }
 
-export const getFollowingSongPosts = async (userId?: string) => {
-  if (!userId) {
-    return []
-  }
+export const getFollowingSongPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
+  const user = await userRepo.getUserFromCookie(userCookie)
 
-  return await postRepo.getFollowingSongPosts(userId)
+  return await postRepo.getFollowingSongPosts(user.userId)
 }
 
-export const getFollowingAlbumPosts = async (userId?: string) => {
-  if (!userId) {
-    return []
-  }
+export const getFollowingAlbumPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
+  const user = await userRepo.getUserFromCookie(userCookie)
 
-  return await postRepo.getFollowingAlbumPosts(userId)
+  return await postRepo.getFollowingAlbumPosts(user.userId)
 }
 
-export const getAllFollowingPosts = async (userId?: string) => {
-  if (!userId) {
-    return []
-  }
-
+export const getAllFollowingPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
   const [userPosts, artistPosts, songPosts, albumPosts] = await Promise.all([
-    getFollowingUserPosts(userId),
-    getFollowingArtistPosts(userId),
-    await getFollowingSongPosts(userId),
-    await getFollowingAlbumPosts(userId),
+    getFollowingUserPosts(userCookie),
+    getFollowingArtistPosts(userCookie),
+    getFollowingSongPosts(userCookie),
+    getFollowingAlbumPosts(userCookie),
   ])
   return userPosts
     .concat(artistPosts)
