@@ -25,6 +25,9 @@ export const getFollowingFeed = async (
       case 'artist':
         res.json(await postService.getFollowingArtistPosts(cookie))
         break
+      case 'song':
+        res.json(await postService.getFollowingSongPosts(cookie))
+        break
       default:
         throw new HttpError(`Feed type ${feedType} invalid`, 400)
     }
