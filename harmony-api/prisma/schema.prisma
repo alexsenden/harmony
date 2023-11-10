@@ -10,7 +10,7 @@ generator client {
 model User {
   userId    String       @id @default(uuid()) @map("user_id")
   username  String       @unique
-  password  String       
+  password  String
   bio       String       @default("Welcome to my profile!") @map("bio")
   createdAt DateTime     @default(now()) @map("created_at")
   active    Boolean      @default(true)
@@ -23,6 +23,7 @@ model User {
   follows   Follow[]     @relation("Following")
   followers Follow[]     @relation("Follower")
   tokens    UserCookie[]
+  pollVotes PollVote[]
 
   @@map("user")
 }
@@ -50,12 +51,23 @@ model Post {
 }
 
 model PollOption {
-  pollOptionId String @id @default(uuid()) @map("poll_option_id")
-  postId       String @map("post_id")
+  pollOptionId String     @id @default(uuid()) @map("poll_option_id")
+  postId       String     @map("post_id")
   option       String
-  poll         Post   @relation(fields: [postId], references: [postId])
+  poll         Post       @relation(fields: [postId], references: [postId])
+  PollVote     PollVote[]
 
   @@map("poll_option")
+}
+
+model PollVote {
+  pollOptionId String     @map("poll_option_id")
+  userId       String     @map("user_id")
+  pollOption   PollOption @relation(fields: [pollOptionId], references: [pollOptionId])
+  user         User       @relation(fields: [userId], references: [userId])
+
+  @@id([userId, pollOptionId])
+  @@map("poll_vote")
 }
 
 model Follow {
