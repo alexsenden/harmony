@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Button, useTheme } from '@mui/material'
+import { Button } from '@mui/material'
 
 const FollowFilterButton = styled(Button)(({ variant }) => ({
   ...(variant === 'contained' && {}),
