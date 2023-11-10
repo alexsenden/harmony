@@ -50,9 +50,8 @@ const SongPage = () => {
 
   //Retrieve number of followers for the user
   const [getFollowerInfo, receivedFollowerInfo] = useHttpRequest({
-    url: '/follow/followCount/song',
+    url: `/follow/followCount/${songData?.songId}`,
     method: HttpMethod.GET,
-    headers: { userId: songData?.songId },
   })
 
   //Sending follow data

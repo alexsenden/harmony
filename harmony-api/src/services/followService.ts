@@ -1,6 +1,7 @@
 import * as followRepo from '../repos/followRepo'
 import * as userRepo from '../repos/userRepo'
 import { Follow } from '../models/follow'
+import { HttpError } from '../models/error/httpError'
 
 export const followUser = async (
   userCookie: string,
@@ -144,7 +145,11 @@ export const getArtistFollowCount = async (
   return await followRepo.getArtistFollowCount(artistId)
 }
 
-export const getSongFollowCount = async (songId: string): Promise<number> => {
+export const getSongFollowCount = async (songId?: string): Promise<number> => {
+  if (songId === undefined) {
+    throw new HttpError('Song ID invalid', 400)
+  }
+
   return await followRepo.getSongFollowCount(songId)
 }
 
