@@ -9,7 +9,7 @@ import { Album } from '../../models/album'
 const AlbumPage = () => {
   const router = useRouter()
   const { albumId } = router.query
-  const [albumData, setArtist] = useState<Album>()
+  const [albumData, setAlbum] = useState<Album>()
   const [following, setFollowing] = useState(false)
   const [numFollowers, setNumFollowers] = useState(0)
   const user = useContext(UserContext)
@@ -28,7 +28,7 @@ const AlbumPage = () => {
 
   useEffect(() => {
     if (receivedData) {
-      setArtist(receivedData)
+      setAlbum(receivedData)
     }
   }, [receivedData, albumData])
 
