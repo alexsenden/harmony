@@ -4,7 +4,9 @@ import * as songRepo from '../repos/songRepo'
 import * as userRepo from '../repos/userRepo'
 import { Topic, TopicId } from '../models/topic'
 import { User } from '../models/user'
-import { Album, Artist, Song } from '@prisma/client'
+import { Album } from '../models/album'
+import { Song } from '../models/song'
+import { Artist } from '../models/artist'
 
 export const getTopicByPartialName = async (
   partialName?: string
