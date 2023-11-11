@@ -9,6 +9,7 @@ import {
   CircularProgress,
   InputAdornment,
   IconButton,
+  Alert,
 } from '@mui/material'
 
 import { HttpMethod } from '../../hooks/httpRequest'
@@ -198,7 +199,6 @@ const RegisterPage = () => {
               fullWidth
               required
               error={hasError}
-              helperText={hasError ? error.response.data.message : ''}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -212,6 +212,12 @@ const RegisterPage = () => {
                 ),
               }}
             />
+            {hasError && (
+              <Alert severity="error" sx={{ whiteSpace: 'pre-line', mt: 3 }}>
+                {error.response.data.message.split(';').join('\n')}
+              </Alert>
+            )}
+
             {!loading ? (
               <Button
                 sx={{

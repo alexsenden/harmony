@@ -1,5 +1,6 @@
 import * as postRepo from '../repos/postRepo'
 import * as pollOptionRepo from '../repos/pollOptionRepo'
+import * as userRepo from '../repos/userRepo'
 import { Post, PostType } from '../models/post'
 import { validateTopicId } from './topicService'
 import { HttpError } from '../models/error/httpError'
@@ -56,12 +57,62 @@ export const getTrendingPosts = async (
   return postRepo.getTrendingPosts(requester)
 }
 
-export const getFollowingPosts = async (userId?: string) => {
-  if (!userId) {
-    return []
-  }
+export const getFollowingUserPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
+  const user = await userRepo.getUserFromCookie(userCookie)
 
-  return await postRepo.getFollowingPosts(userId)
+  return await postRepo.getFollowingUserPosts(user.userId)
+}
+
+export const getFollowingArtistPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
+  const user = await userRepo.getUserFromCookie(userCookie)
+
+  return await postRepo.getFollowingArtistPosts(user.userId)
+}
+
+export const getFollowingSongPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
+  const user = await userRepo.getUserFromCookie(userCookie)
+
+  return await postRepo.getFollowingSongPosts(user.userId)
+}
+
+export const getFollowingAlbumPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
+  const user = await userRepo.getUserFromCookie(userCookie)
+
+  return await postRepo.getFollowingAlbumPosts(user.userId)
+}
+
+export const getAllFollowingPosts = async (
+  userCookie: string
+): Promise<Array<Post>> => {
+  const [userPosts, artistPosts, songPosts, albumPosts] = await Promise.all([
+    getFollowingUserPosts(userCookie),
+    getFollowingArtistPosts(userCookie),
+    getFollowingSongPosts(userCookie),
+    getFollowingAlbumPosts(userCookie),
+  ])
+  return userPosts
+    .concat(artistPosts)
+    .concat(songPosts)
+    .concat(albumPosts)
+    .sort(sortPostsByDate)
+    .reverse()
+}
+
+const sortPostsByDate = function (postA: Post, postB: Post) {
+  if (postA.createdAt.getTime() > postB.createdAt.getTime()) {
+    return 1
+  } else if (postA.createdAt.getTime() < postB.createdAt.getTime()) {
+    return -1
+  }
+  return 0
 }
 
 export const validatePost = (postData?: Post): Post => {
