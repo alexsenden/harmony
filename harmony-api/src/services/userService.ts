@@ -68,16 +68,16 @@ const validateUserRegistrationBasic = (userData: User) => {
   const errorMessages = []
 
   if (!userData?.username) {
-    errorMessages.push('username field is required to create a new user')
+    errorMessages.push('Username is required to create a new user')
   }
   if (!userData?.password) {
-    errorMessages.push('password field is required to create a new user')
+    errorMessages.push('Password is required to create a new user')
   }
   if (!userData?.firstName) {
-    errorMessages.push('firstName field is required to create a new user')
+    errorMessages.push('First Name is required to create a new user')
   }
   if (!userData?.lastName) {
-    errorMessages.push('lastName field is required to create a new user')
+    errorMessages.push('Last Name is required to create a new user')
   }
 
   if (errorMessages.length > 0) {
@@ -91,19 +91,23 @@ const validateUserRegistrationAdvanced = (userData: User) => {
   const usernameRegex = /^[a-zA-Z0-9]+$/g
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&-+=()!? "]).{8,128}$/g
-  const nameRegex = /^[a-zA-Z-]+$/g
+  const nameRegex = /^[a-zA-Z- ']+$/g
 
   if (!userData.username.match(usernameRegex)) {
-    errorMessages.push('Username does not match rules')
+    errorMessages.push(
+      'Username can only contain upper and lower case letter (a-z, A-Z) and numbers (0-9)'
+    )
   }
   if (!userData.password.match(passwordRegex)) {
-    errorMessages.push('Password does not match rules')
+    errorMessages.push(
+      "Password must contain be at least 8 characters long, have at least one upper and lower case letter (a-z, A-Z), a number (0-9), and a symbol (@, #, $, %, ^, &, -, +, =, (, ), !, ?, ' ' , \"), "
+    )
   }
   if (!userData.firstName.match(nameRegex)) {
-    errorMessages.push('First Name does not match rules')
+    errorMessages.push("First Name can only contain letters, spaces, -, or '")
   }
   if (!userData.lastName.match(nameRegex)) {
-    errorMessages.push('Last Name does not match rules')
+    errorMessages.push("Last Name can only contain letters, spaces, -, or '")
   }
 
   if (errorMessages.length > 0) {
@@ -129,13 +133,16 @@ export const setUserData = async (userData?: Account): Promise<Account> => {
 const validateUserUpdate = (userData: Account) => {
   const errorMessages = []
 
-  const nameRegex = /^[a-zA-Z-]+$/g
+  const nameRegex = /^[a-zA-Z- ']+$/g
 
   if (!userData.firstName.match(nameRegex)) {
-    errorMessages.push('First Name does not match rules')
+    errorMessages.push("First Name can only contain letters, spaces, -, or '")
   }
   if (!userData.lastName.match(nameRegex)) {
-    errorMessages.push('Last Name does not match rules')
+    errorMessages.push("Last Name can only contain letters, spaces, -, or '")
+  }
+  if (userData.bio.length > 1000) {
+    errorMessages.push('Bio must be fewer than than 1000 characters')
   }
 
   if (errorMessages.length > 0) {

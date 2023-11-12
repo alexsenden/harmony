@@ -4,6 +4,9 @@ import * as songRepo from '../repos/songRepo'
 import * as userRepo from '../repos/userRepo'
 import { Topic, TopicId } from '../models/topic'
 import { User } from '../models/user'
+import { Album } from '../models/album'
+import { Song } from '../models/song'
+import { Artist } from '../models/artist'
 
 export const getTopicByPartialName = async (
   partialName?: string
@@ -37,6 +40,21 @@ export const getTopicOrUserByPartialName = async (
     ...(await songs),
     ...(await users),
   ]
+}
+
+export const getArtistById = async (artistID?: number): Promise<Artist> => {
+  const artist = artistRepo.getArtistById(artistID)
+  return artist
+}
+
+export const getSongById = async (songID?: number): Promise<Song> => {
+  const song = songRepo.getSongById(songID)
+  return song
+}
+
+export const getAlbumById = async (albumID?: number): Promise<Album> => {
+  const album = albumRepo.getAlbumById(albumID)
+  return album
 }
 
 export const validateTopicId = (topicId?: TopicId): Array<string> => {

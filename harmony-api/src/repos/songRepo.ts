@@ -1,6 +1,8 @@
+import { Song } from '@prisma/client'
 import prisma from '../../prisma/prisma'
 
 import { Topic } from '../models/topic'
+import { HttpError } from '../models/error/httpError'
 
 type TPartialNameSong = {
   song_name: string
@@ -25,4 +27,24 @@ export const getSongTopicByPartialName = async (
       name: song.song_name,
     }
   })
+}
+
+export const getSongById = async (songID?: number): Promise<Song> => {
+  const songData = await prisma.song
+    .findUniqueOrThrow({
+      where: {
+        songId: songID,
+      },
+    })
+    .catch(() => {
+      throw new HttpError(`Song with id ${songID} not found`, 404)
+    })
+
+  return {
+    songId: songData.songId,
+    artistCreditId: songData.artistCreditId,
+    songName: songData.songName,
+    length: songData.length,
+    songDescription: songData.songDescription,
+  }
 }

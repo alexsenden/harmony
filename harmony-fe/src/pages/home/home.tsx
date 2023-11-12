@@ -4,22 +4,36 @@ import FilterPostButtons from '../../components/filter-post-buttons'
 import PostFeed from '../../components/post-feed/postFeed'
 import { UserContext } from '../../contexts/userContext'
 import Head from 'next/head'
+import FollowFilterPostButtons from '../../components/filter-post-buttons/followFilterPostButtons'
 
 export enum FeedMode {
   FOLLOWING = 'following',
   TRENDING = 'trending',
 }
 
+export enum FollowMode {
+  ALL = 'all',
+  USER = 'user',
+  SONG = 'song',
+  ARTIST = 'artist',
+  ALBUM = 'album',
+}
+
 const HomePage = () => {
   const user = useContext(UserContext)
 
-  const trendingFeedUrl = '/post/trending'
-  const followingFeedUrl = `/post/following?userId=${user?.userId}`
-
-  const handleButtonClick = (mode: FeedMode) => {
+  const handleFeedModeClick = (mode: FeedMode) => {
     setFeedMode(mode)
   }
   const [feedMode, setFeedMode] = useState<FeedMode>(FeedMode.TRENDING)
+
+  const handleFollowModeClick = (mode: FollowMode) => {
+    setFollowingMode(mode)
+  }
+  const [followingMode, setFollowingMode] = useState<FollowMode>(FollowMode.ALL)
+
+  const trendingFeedUrl = '/post/trending'
+  const followingFeedUrl = `/post/following/${followingMode}`
 
   const feedUrl =
     feedMode === FeedMode.TRENDING ? trendingFeedUrl : followingFeedUrl
@@ -37,8 +51,14 @@ const HomePage = () => {
       <Container maxWidth="xl">
         <FilterPostButtons
           activeButton={feedMode}
-          handleButtonClick={handleButtonClick}
+          handleButtonClick={handleFeedModeClick}
         />
+        {feedMode === 'following' && (
+          <FollowFilterPostButtons
+            activeButton={followingMode}
+            handleButtonClick={handleFollowModeClick}
+          />
+        )}
         <PostFeed url={feedUrl} noResultsText={noResultsText} />
       </Container>
     </>
