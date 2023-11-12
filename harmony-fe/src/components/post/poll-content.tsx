@@ -19,7 +19,7 @@ export const PollContent = ({ post, voted, voteAction }: PollContentProps) => {
     <>
       {post.pollOptions &&
         !voted &&
-        post.pollOptions.map((option) => (
+        post.pollOptions.map(option => (
           <PollAnswer
             pollOption={option}
             voteAction={castVote}
@@ -29,7 +29,7 @@ export const PollContent = ({ post, voted, voteAction }: PollContentProps) => {
 
       {post.pollOptions &&
         voted &&
-        post.pollOptions.map((option) => (
+        post.pollOptions.map(option => (
           <PollAnswerBar
             pollOption={option}
             totalVotes={numVotes}
