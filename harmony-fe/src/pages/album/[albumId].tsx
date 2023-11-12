@@ -120,9 +120,11 @@ const AlbumPage = () => {
                 justifyContent="flex-start"
                 mx={3}
               >
-                <FollowingButton variant="outlined" onClick={followAction}>
-                  {following ? 'Un-Follow' : 'Follow'}
-                </FollowingButton>
+                {user && (
+                  <FollowingButton variant="outlined" onClick={followAction}>
+                    {following ? 'Un-Follow' : 'Follow'}
+                  </FollowingButton>
+                )}
                 <TextBlock>{`${numFollowers} Follower${
                   numFollowers === 1 ? '' : 's'
                 }`}</TextBlock>
