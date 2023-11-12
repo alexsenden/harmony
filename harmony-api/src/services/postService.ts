@@ -51,6 +51,36 @@ export const getPostById = async (
   return postRepo.getPostById(postId, requester)
 }
 
+export const getPostsByArtistId = async (
+  artistId?: string,
+  requester?: User
+): Promise<Array<Post>> => {
+  if (!artistId) {
+    return []
+  }
+  return await postRepo.getPostsByArtistId(artistId, requester)
+}
+
+export const getPostsByAlbumId = async (
+  albumId?: string,
+  requester?: User
+): Promise<Array<Post>> => {
+  if (!albumId) {
+    return []
+  }
+  return await postRepo.getPostsByAlbumId(albumId, requester)
+}
+
+export const getPostsBySongId = async (
+  songId?: string,
+  requester?: User
+): Promise<Array<Post>> => {
+  if (!songId) {
+    return []
+  }
+  return await postRepo.getPostsBySongId(songId, requester)
+}
+
 export const getTrendingPosts = async (
   requester?: User
 ): Promise<Array<Post>> => {

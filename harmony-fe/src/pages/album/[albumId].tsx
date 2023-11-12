@@ -5,11 +5,14 @@ import FollowingButton from '../../components/following-button'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { UserContext } from '../../contexts/userContext'
 import { Album } from '../../models/album'
+import { Container, Paper, Grid, Box } from '@mui/material'
+import Head from 'next/head'
+import PostFeed from '../../components/post-feed'
 
 const AlbumPage = () => {
   const router = useRouter()
   const { albumId } = router.query
-  const [albumData, setAlbum] = useState<Album>()
+  const [albumData, setAlbumData] = useState<Album>()
   const [following, setFollowing] = useState(false)
   const [numFollowers, setNumFollowers] = useState(0)
   const user = useContext(UserContext)
@@ -28,7 +31,7 @@ const AlbumPage = () => {
 
   useEffect(() => {
     if (receivedData) {
-      setAlbum(receivedData)
+      setAlbumData(receivedData)
     }
   }, [receivedData, albumData])
 
@@ -85,12 +88,52 @@ const AlbumPage = () => {
 
   return (
     <>
-      <FollowingButton variant="outlined" onClick={followAction}>
-        {following ? 'Un-Follow' : 'Follow'}
-      </FollowingButton>
-      <TextBlock>{`${numFollowers} Follower${
-        numFollowers === 1 ? '' : 's'
-      }`}</TextBlock>
+      <Head>
+        <title>{`${albumData?.albumName}'s Feed`}</title>
+      </Head>
+      <Container maxWidth="xl" sx={{ mt: 2 }}>
+        <Paper
+          sx={{
+            p: 2,
+            margin: 'auto',
+            maxWidth: 'auto',
+            flexGrow: 1,
+          }}
+        >
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
+          >
+            <Grid item xs sx={{ ml: 2 }}>
+              <TextBlock gutterBottom variant="h4">
+                {`${albumData?.albumName}`}
+              </TextBlock>
+            </Grid>
+            <Grid item>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="flex-start"
+                mx={3}
+              >
+                <FollowingButton variant="outlined" onClick={followAction}>
+                  {following ? 'Un-Follow' : 'Follow'}
+                </FollowingButton>
+                <TextBlock>{`${numFollowers} Follower${
+                  numFollowers === 1 ? '' : 's'
+                }`}</TextBlock>
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+        <PostFeed
+          url={albumData?.albumId ? `/post/album/${albumData?.albumId}` : ''}
+        />
+      </Container>
     </>
   )
 }
