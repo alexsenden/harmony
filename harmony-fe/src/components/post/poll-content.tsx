@@ -23,7 +23,7 @@ export const PollContent = ({ post, voted, voteAction }: PollContentProps) => {
           <PollAnswer
             pollOption={option}
             voteAction={castVote}
-            key={`poll-answer=${index}`}
+            key={`poll-answer=${option.pollOptionId}`}
           />
         ))}
 
@@ -33,7 +33,7 @@ export const PollContent = ({ post, voted, voteAction }: PollContentProps) => {
           <PollAnswerBar
             pollOption={option}
             totalVotes={numVotes}
-            key={`poll-answer=${index}`}
+            key={`poll-answer=${option.pollOptionId}`}
           />
         ))}
     </>
