@@ -107,7 +107,20 @@ export const getPostsByArtistId = async (
     },
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: requester?.userId || '',
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
@@ -141,7 +154,20 @@ export const getPostsByAlbumId = async (
     },
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: requester?.userId || '',
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
@@ -175,7 +201,20 @@ export const getPostsBySongId = async (
     },
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: requester?.userId || '',
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
@@ -318,7 +357,20 @@ export const getFollowingArtistPosts = async (
     },
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: userId || '',
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
@@ -361,7 +413,20 @@ export const getFollowingSongPosts = async (
     },
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: userId || '',
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
@@ -404,7 +469,20 @@ export const getFollowingAlbumPosts = async (
     },
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: userId || '',
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
