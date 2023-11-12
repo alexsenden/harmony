@@ -14,8 +14,10 @@ export type Post = {
   topicName: string
   user?: User
   isLiked?: boolean
+  isVoted?: boolean
   numComments?: number
   numLikes?: number
+  numVotes?: number
   createdAt: Date
 }
 

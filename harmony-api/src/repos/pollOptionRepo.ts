@@ -1,6 +1,6 @@
 import prisma from '../../prisma/prisma'
-import {PollOption, PollOptionVote} from '../models/pollOption'
-import {HttpError} from "../models/error/httpError";
+import { PollOption, PollOptionVote } from '../models/pollOption'
+import { HttpError } from '../models/error/httpError'
 
 export interface ICreatePollOption {
   pollOptionData: PollOption
@@ -24,11 +24,13 @@ export const createPollOption = async ({
   }
 }
 
-export const voteOnPollOption = async (pollData: PollOptionVote): Promise<PollOptionVote> => {
+export const voteOnPollOption = async (
+  pollData: PollOptionVote
+): Promise<PollOptionVote> => {
   const pollPost = await prisma.pollOption.findFirst({
     where: {
-      pollOptionId: pollData.pollOptionId
-    }
+      pollOptionId: pollData.pollOptionId,
+    },
   })
   const postId = pollPost?.postId
 

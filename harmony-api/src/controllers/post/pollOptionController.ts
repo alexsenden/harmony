@@ -1,8 +1,8 @@
-import {NextFunction, Request, Response} from 'express'
+import { NextFunction, Request, Response } from 'express'
 import * as userService from '../../services/userService'
 import * as pollOptionService from '../../services/pollOptionService'
-import {HttpError} from '../../models/error/httpError'
-import {PollOptionVote} from '../../models/pollOption'
+import { HttpError } from '../../models/error/httpError'
+import { PollOptionVote } from '../../models/pollOption'
 
 export const voteOnOption = async (
   req: Request,

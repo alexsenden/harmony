@@ -25,7 +25,7 @@ router.post('/:postId/comment', commentController.postComment)
 router.get('/:postId/comment', commentController.getComments)
 
 // Poll option route
-router.post('/:postId/vote',pollOptionController.voteOnOption)
+router.post('/vote', pollOptionController.voteOnOption)
 
 // Individual post routes
 router.post('/', postController.createPost)

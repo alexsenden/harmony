@@ -11,6 +11,7 @@ import {
 } from '@prisma/client'
 import { Post, PostType } from '../models/post'
 import { User } from '../models/user'
+import { PollOptionVote } from '../models/pollOption'
 
 export const createPost = async (postData: Post): Promise<Post> => {
   const postResult = await prisma.post.create({
@@ -57,7 +58,20 @@ export const getPostByUserId = async (
     },
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: requester?.userId || '',
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
@@ -89,7 +103,20 @@ export const getTrendingPosts = async (
   const posts = await prisma.post.findMany({
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: requester?.userId || '',
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
@@ -132,7 +159,20 @@ export const getFollowingPosts = async (
     },
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: userId,
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
@@ -168,7 +208,20 @@ export const getPostById = async (
     },
     include: {
       user: true,
-      pollOptions: true,
+      pollOptions: {
+        include: {
+          pollVotes: {
+            where: {
+              userId: requester?.userId || '',
+            },
+          },
+          _count: {
+            select: {
+              pollVotes: true,
+            },
+          },
+        },
+      },
       song: true,
       album: true,
       artist: true,
@@ -194,12 +247,24 @@ interface PostWithRelations extends PrismaPost {
   artist: Artist | null
   album: Album | null
   user: PrismaUser
-  pollOptions: Array<PollOption>
+  pollOptions: Array<PollOptionWithRelations>
   likes: Array<Like>
   _count: {
     comments?: number
     likes?: number
   }
+}
+
+interface PollOptionWithRelations extends PollOption {
+  pollVotes: Array<PollOptionVote>
+  _count: {
+    pollVotes?: number
+  }
+}
+
+interface PollOptionWithVotes extends PollOption {
+  votes: number
+  votedOn: boolean
 }
 
 const mapPrismaPostToPost = (post: PostWithRelations): Post => {
@@ -214,14 +279,47 @@ const mapPrismaPostToPost = (post: PostWithRelations): Post => {
     },
     postType: PostType[post.postType],
     body: post.content || undefined,
-    pollOptions: post.pollOptions,
+    pollOptions: post.pollOptions.map(mapPrismaPollToPoll),
     rating: Number(post.rating) || undefined,
     topicName:
       post.song?.songName || post.album?.albumName || post.artist?.artistName,
     user: post.user,
     numComments: post._count.comments,
     numLikes: post._count.likes,
+    numVotes: sumPollVotes(post.pollOptions),
     isLiked: post.likes.length > 0,
+    isVoted: checkPollOptionsForVote(post.pollOptions),
     createdAt: post.createdAt,
   }
+}
+
+const mapPrismaPollToPoll = (
+  pollOption: PollOptionWithRelations
+): PollOptionWithVotes => {
+  return {
+    pollOptionId: pollOption.pollOptionId,
+    postId: pollOption.postId,
+    option: pollOption.option,
+    votes: pollOption._count.pollVotes || 0,
+    votedOn: pollOption.pollVotes.length > 0,
+  }
+}
+
+const checkPollOptionsForVote = (
+  pollOptions: Array<PollOptionWithRelations>
+): boolean => {
+  for (const pollOption of pollOptions) {
+    if (pollOption.pollVotes.length > 0) {
+      return true
+    }
+  }
+  return false
+}
+
+const sumPollVotes = (pollOptions: Array<PollOptionWithRelations>): number => {
+  let sum = 0
+  for (const pollOption of pollOptions) {
+    sum = sum + (pollOption._count.pollVotes || 0)
+  }
+  return sum
 }
