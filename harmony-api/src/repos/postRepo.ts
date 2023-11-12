@@ -256,15 +256,15 @@ interface PostWithRelations extends PrismaPost {
 }
 
 interface PollOptionWithRelations extends PollOption {
-  pollVotes: Array<PollOptionVote>
-  _count: {
+  pollVotes?: Array<PollOptionVote>
+  _count?: {
     pollVotes?: number
   }
 }
 
 interface PollOptionWithVotes extends PollOption {
-  votes: number
-  votedOn: boolean
+  votes?: number
+  votedOn?: boolean
 }
 
 const mapPrismaPostToPost = (post: PostWithRelations): Post => {
@@ -296,12 +296,14 @@ const mapPrismaPostToPost = (post: PostWithRelations): Post => {
 const mapPrismaPollToPoll = (
   pollOption: PollOptionWithRelations
 ): PollOptionWithVotes => {
+  pollOption._count = pollOption._count || {}
+  pollOption.pollVotes = pollOption.pollVotes || []
   return {
     pollOptionId: pollOption.pollOptionId,
     postId: pollOption.postId,
     option: pollOption.option,
-    votes: pollOption._count.pollVotes || 0,
-    votedOn: pollOption.pollVotes.length > 0,
+    votes: pollOption?._count.pollVotes || 0,
+    votedOn: pollOption?.pollVotes.length > 0,
   }
 }
 
@@ -309,6 +311,7 @@ const checkPollOptionsForVote = (
   pollOptions: Array<PollOptionWithRelations>
 ): boolean => {
   for (const pollOption of pollOptions) {
+    pollOption.pollVotes = pollOption.pollVotes || []
     if (pollOption.pollVotes.length > 0) {
       return true
     }
@@ -318,7 +321,9 @@ const checkPollOptionsForVote = (
 
 const sumPollVotes = (pollOptions: Array<PollOptionWithRelations>): number => {
   let sum = 0
+
   for (const pollOption of pollOptions) {
+    pollOption._count = pollOption._count || {}
     sum = sum + (pollOption._count.pollVotes || 0)
   }
   return sum
