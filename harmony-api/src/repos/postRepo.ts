@@ -97,6 +97,109 @@ export const getPostByUserId = async (
   })
 }
 
+export const getPostsByArtistId = async (
+  artistId: string,
+  requester?: User
+): Promise<Array<Post>> => {
+  const posts = await prisma.post.findMany({
+    where: {
+      artistId: Number(artistId),
+    },
+    include: {
+      user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
+      likes: {
+        where: {
+          userId: requester?.userId || '',
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+  return posts.map(post => {
+    return mapPrismaPostToPost(post)
+  })
+}
+export const getPostsByAlbumId = async (
+  albumId: string,
+  requester?: User
+): Promise<Array<Post>> => {
+  const posts = await prisma.post.findMany({
+    where: {
+      albumId: Number(albumId),
+    },
+    include: {
+      user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
+      likes: {
+        where: {
+          userId: requester?.userId || '',
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+  return posts.map(post => {
+    return mapPrismaPostToPost(post)
+  })
+}
+export const getPostsBySongId = async (
+  songId: string,
+  requester?: User
+): Promise<Array<Post>> => {
+  const posts = await prisma.post.findMany({
+    where: {
+      songId: Number(songId),
+    },
+    include: {
+      user: true,
+      pollOptions: true,
+      song: true,
+      album: true,
+      artist: true,
+      likes: {
+        where: {
+          userId: requester?.userId || '',
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+  return posts.map(post => {
+    return mapPrismaPostToPost(post)
+  })
+}
+
 export const getTrendingPosts = async (
   requester?: User
 ): Promise<Array<Post>> => {

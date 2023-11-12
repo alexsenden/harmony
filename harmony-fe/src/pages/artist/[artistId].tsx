@@ -5,11 +5,14 @@ import FollowingButton from '../../components/following-button'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { UserContext } from '../../contexts/userContext'
 import { Artist } from '../../models/artist'
+import Head from 'next/head'
+import { Container, Paper, Grid, Box } from '@mui/material'
+import PostFeed from '../../components/post-feed'
 
 const ArtistPage = () => {
   const router = useRouter()
   const { artistId } = router.query
-  const [artistData, setArtist] = useState<Artist>()
+  const [artistData, setArtistData] = useState<Artist>()
   const [following, setFollowing] = useState(false)
   const [numFollowers, setNumFollowers] = useState(0)
   const user = useContext(UserContext)
@@ -28,7 +31,7 @@ const ArtistPage = () => {
 
   useEffect(() => {
     if (receivedData) {
-      setArtist(receivedData)
+      setArtistData(receivedData)
     }
   }, [receivedData, artistData])
 
@@ -85,12 +88,54 @@ const ArtistPage = () => {
 
   return (
     <>
-      <FollowingButton variant="outlined" onClick={followAction}>
-        {following ? 'Un-Follow' : 'Follow'}
-      </FollowingButton>
-      <TextBlock>{`${numFollowers} Follower${
-        numFollowers === 1 ? '' : 's'
-      }`}</TextBlock>
+      <Head>
+        <title>{`${artistData?.artistName}'s Feed`}</title>
+      </Head>
+      <Container maxWidth="xl" sx={{ mt: 2 }}>
+        <Paper
+          sx={{
+            p: 2,
+            margin: 'auto',
+            maxWidth: 'auto',
+            flexGrow: 1,
+          }}
+        >
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
+          >
+            <Grid item xs sx={{ ml: 2 }}>
+              <TextBlock gutterBottom variant="h4">
+                {`${artistData?.artistName}`}
+              </TextBlock>
+            </Grid>
+            <Grid item>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="flex-start"
+                mx={3}
+              >
+                <FollowingButton variant="outlined" onClick={followAction}>
+                  {following ? 'Un-Follow' : 'Follow'}
+                </FollowingButton>
+                <TextBlock>{`${numFollowers} Follower${
+                  numFollowers === 1 ? '' : 's'
+                }`}</TextBlock>
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+        <PostFeed
+          url={
+            artistData?.artistId ? `/post/artist/${artistData?.artistId}` : ''
+          }
+        />
+      </Container>
     </>
   )
 }
