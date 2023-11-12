@@ -14,7 +14,10 @@ interface CommentFeedProps {
   noResultsText?: string
 }
 
-const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: CommentFeedProps) => {
+const CommentFeed = ({
+  url,
+  noResultsText = NO_POSTS_HERE,
+}: CommentFeedProps) => {
   const [getComments, comments, error, loading] = useHttpRequest({
     url: url,
     method: HttpMethod.GET,
@@ -54,4 +57,4 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: CommentFeedProps) => {
   )
 }
 
-export default PostFeed
+export default CommentFeed

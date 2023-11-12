@@ -78,5 +78,6 @@ jobs:
 
           cd ../harmony-api
 
-          npx prisma migrate dev
-          npm run test
+          # Commenting this part out, we need to discuss whether all of our tests are self-cleaning before running this on production
+          # npx prisma migrate dev
+          # npm run test

@@ -29,7 +29,7 @@ const AppBar = () => {
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
   const menuOpen = Boolean(anchorEl)
-
+  const theme = useTheme()
   const [sendHttpRequest] = useHttpRequest({
     url: '/user/signOut',
     method: HttpMethod.POST,
@@ -84,7 +84,7 @@ const AppBar = () => {
     <React.Fragment>
       <MuiAppBar
         position="sticky"
-        sx={{ backgroundColor: useTheme().palette.background.paper }}
+        sx={{ backgroundColor: theme.palette.background.paper }}
       >
         <Toolbar>
           <Button href="/home">
@@ -97,33 +97,25 @@ const AppBar = () => {
               src={'/images/harmonylogo.png'}
             />
           </Button>
-          {!mobile && (
+          {!mobile && <NavButton href="/home">Home</NavButton>}
+          {user && !mobile && (
             <>
-              <NavButton href="/home">Home</NavButton>
+              <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
               <NavButton
                 onClick={() => setSearchModalOpen(true)}
                 sx={{ px: 1 }}
               >
                 Search
               </NavButton>
-            </>
-          )}
-          {user && !mobile && (
-            <>
-              <NavButton href={`/profile/${user.username}`}>Profile</NavButton>
+
               <NavButton onClick={openPostModal}>New Post</NavButton>
-            </>
-          )}
+              <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
+              <NavButton onClick={changeTheme}>
+                {theme.palette.mode.charAt(0).toUpperCase() +
+                  theme.palette.mode.slice(1)}{' '}
+                Mode
+              </NavButton>
 
-          <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
-          <NavButton onClick={changeTheme}>
-            {useTheme().palette.mode.charAt(0).toUpperCase() +
-              useTheme().palette.mode.slice(1)}{' '}
-            Mode
-          </NavButton>
-
-          {user && !mobile && (
-            <>
               <Divider orientation="vertical" flexItem />
 
               <NavButton onClick={handleMenuClick}>
@@ -147,6 +139,89 @@ const AppBar = () => {
                 </MenuItem>
                 <MenuItem onClick={signOut}>Sign out</MenuItem>
               </Menu>
+            </>
+          )}
+          {!user && (
+            <>
+              <NavButton
+                onClick={() => setSearchModalOpen(true)}
+                sx={{ px: 1 }}
+              >
+                Search
+              </NavButton>
+            </>
+          )}
+          {user && mobile && (
+            <div>
+              <IconButton
+                aria-label="menu"
+                id="mobile-button"
+                aria-controls={menuOpen ? 'mobile-menu' : undefined}
+                aria-expanded={menuOpen ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleMobileDropDown}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="mobile-menu"
+                anchorEl={anchorEl}
+                MenuListProps={{
+                  'aria-labelledby': 'mobile-button',
+                }}
+                open={menuOpen}
+                onClose={handleMobileClose}
+              >
+                <MenuItem onClick={profileOpen}>Profile</MenuItem>
+                <MenuItem onClick={openPostModal}>New Post</MenuItem>
+                <Divider />
+                <MenuItem component={'a'} href={'/account'}>
+                  Account Settings
+                </MenuItem>
+                <MenuItem onClick={signOut}>Sign Out</MenuItem>
+                <MenuItem onClick={changeTheme}>
+                  {theme.palette.mode.charAt(0).toUpperCase() +
+                    theme.palette.mode.slice(1)}{' '}
+                  Mode
+                </MenuItem>
+              </Menu>
+            </div>
+          )}
+          {!user && mobile && (
+            <>
+              <IconButton
+                aria-label="menu"
+                id="mobile-button"
+                aria-controls={menuOpen ? 'mobile-menu' : undefined}
+                aria-expanded={menuOpen ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleMobileDropDown}
+              ></IconButton>
+              <NavButton onClick={changeTheme}>
+                {theme.palette.mode.charAt(0).toUpperCase() +
+                  theme.palette.mode.slice(1)}{' '}
+                Mode
+              </NavButton>
+              <Divider orientation="vertical" flexItem />
+
+              <NavButton href="/login" sx={{ px: 1 }}>
+                Login
+              </NavButton>
+            </>
+          )}
+          {!user && !mobile && (
+            <>
+              <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
+              <NavButton onClick={changeTheme}>
+                {theme.palette.mode.charAt(0).toUpperCase() +
+                  theme.palette.mode.slice(1)}{' '}
+                Mode
+              </NavButton>
+              <Divider orientation="vertical" flexItem />
+
+              <NavButton href="/login" sx={{ px: 1 }}>
+                Login
+              </NavButton>
             </>
           )}
           {user && mobile && (
@@ -186,22 +261,14 @@ const AppBar = () => {
                 </MenuItem>
                 <MenuItem onClick={signOut}>Sign Out</MenuItem>
                 <MenuItem onClick={changeTheme}>
-                  {useTheme().palette.mode.charAt(0).toUpperCase() +
-                    useTheme().palette.mode.slice(1)}{' '}
+                  {theme.palette.mode.charAt(0).toUpperCase() +
+                    theme.palette.mode.slice(1)}{' '}
                   Mode
                 </MenuItem>
               </Menu>
             </>
           )}
 
-          {!user && (
-            <>
-              <Divider orientation="vertical" flexItem />
-              <NavButton href="/login" sx={{ px: 1 }}>
-                Login
-              </NavButton>
-            </>
-          )}
           <Divider orientation="vertical" flexItem />
         </Toolbar>
       </MuiAppBar>

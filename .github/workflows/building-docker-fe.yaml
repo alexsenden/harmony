@@ -4,7 +4,7 @@ on:
   push:
     branches:
       ["main"]
-      
+
 jobs:
   build_docker_fe:
     name: Push Docker image to Docker Hub
@@ -23,7 +23,7 @@ jobs:
         run: |
           cd ./harmony-fe
           touch ./environment/.env.prod
-          echo "NEXT_PUBLIC_API_BASE_ENDPOINT=http://${{ secrets.azureHost1 }}:8081" >> ./environment/.env.prod
+          echo "NEXT_PUBLIC_API_BASE_ENDPOINT=https://harmonysocial.ca:8081" >> ./environment/.env.prod
 
       - name: Harmony FE - Extract metadata (tags, labels) for Docker
         id: meta

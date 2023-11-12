@@ -77,6 +77,18 @@ const Post = ({ post, commentOpen = false }: PostProps) => {
 
   const topicContext = getTopicContext(post.topicId)
 
+  const getTopicUrl = function () {
+    let url = '/'
+    if (post.topicId.albumId !== undefined) {
+      url = url + 'album/' + post.topicId.albumId
+    } else if (post.topicId.songId !== undefined) {
+      url = url + 'song/' + post.topicId.songId
+    } else {
+      url = url + 'artist/' + post.topicId.artistId
+    }
+    return url
+  }
+
   return (
     <>
       <Card variant="outlined" sx={{ mb: 1 }}>
@@ -93,9 +105,9 @@ const Post = ({ post, commentOpen = false }: PostProps) => {
                 <TextBlock>{moment(post.createdAt).fromNow()}</TextBlock>
               </Box>
 
-              <TextBlock>
+              <Link href={getTopicUrl()} underline="none">
                 {post.topicName} {topicContext}
-              </TextBlock>
+              </Link>
               <Divider sx={{ my: 1 }} />
               {postContent}
             </CardContent>
