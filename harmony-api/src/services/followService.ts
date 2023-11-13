@@ -19,6 +19,7 @@ export const unFollowUser = async (
   followingId: string
 ): Promise<Follow> => {
   const followerUser = await userRepo.getUserFromCookie(userCookie)
+
   return await followRepo.unFollowUser({
     followerId: followerUser.userId,
     followingId: followingId,

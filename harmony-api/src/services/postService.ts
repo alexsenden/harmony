@@ -93,32 +93,44 @@ export const getTrendingPosts = async (
 export const getFollowingUserPosts = async (
   userCookie: string
 ): Promise<Array<Post>> => {
-  const user = await userRepo.getUserFromCookie(userCookie)
+  if (userCookie === undefined) {
+    return []
+  }
 
+  const user = await userRepo.getUserFromCookie(userCookie)
   return await postRepo.getFollowingUserPosts(user.userId)
 }
 
 export const getFollowingArtistPosts = async (
   userCookie: string
 ): Promise<Array<Post>> => {
-  const user = await userRepo.getUserFromCookie(userCookie)
+  if (userCookie === undefined) {
+    return []
+  }
 
+  const user = await userRepo.getUserFromCookie(userCookie)
   return await postRepo.getFollowingArtistPosts(user.userId)
 }
 
 export const getFollowingSongPosts = async (
   userCookie: string
 ): Promise<Array<Post>> => {
-  const user = await userRepo.getUserFromCookie(userCookie)
+  if (userCookie === undefined) {
+    return []
+  }
 
+  const user = await userRepo.getUserFromCookie(userCookie)
   return await postRepo.getFollowingSongPosts(user.userId)
 }
 
 export const getFollowingAlbumPosts = async (
   userCookie: string
 ): Promise<Array<Post>> => {
-  const user = await userRepo.getUserFromCookie(userCookie)
+  if (userCookie === undefined) {
+    return []
+  }
 
+  const user = await userRepo.getUserFromCookie(userCookie)
   return await postRepo.getFollowingAlbumPosts(user.userId)
 }
 

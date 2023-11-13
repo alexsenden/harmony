@@ -77,6 +77,7 @@ export const PollOptionsForm = ({
         flexDirection="row"
         alignItems="center"
         width={1}
+        maxWidth={'100vw'}
         sx={{ mx: 3, mt: 3 }}
       >
         <Button
