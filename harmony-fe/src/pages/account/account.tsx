@@ -117,9 +117,9 @@ const Account = () => {
                   ? `/images/profilepic/${newData?.picture}.png`
                   : `/images/profilepic/${user?.picture}.png`
               }
-              sx={{ mr: 2 }}
+              sx={{ height: '100px', width: '100px', mr: 2 }}
             />
-            {user?.username}
+            <TextBlock variant="h6"> {user?.username}</TextBlock>
           </Button>
           <Menu
             id="basic-menu"
