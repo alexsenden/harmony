@@ -5,18 +5,12 @@ import {
   Toolbar,
   Button,
   Divider,
-  Menu,
-  MenuItem,
-  Avatar,
   IconButton,
   Dialog,
   DialogTitle,
   useTheme,
   List,
-  ListItem,
   ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Drawer,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -24,19 +18,14 @@ import MenuIcon from '@mui/icons-material/Menu'
 import PostModal from '../post-modal'
 import { UserContext } from '../../contexts/userContext'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
-import NavButton from './navButton.styled'
 import SearchBar from '../search-bar'
-import InboxIcon from '@mui/icons-material/MoveToInbox'
-import MailIcon from '@mui/icons-material/Mail'
+import TextBlock from '../text-block'
 
 const MobileAppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)
   const [searchModalOpen, setSearchModalOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [anchorEl1, setAnchorEl1] = useState<null | HTMLElement>(null)
 
   const user = useContext(UserContext)
-  const menuOpen = Boolean(anchorEl)
   const theme = useTheme()
   const [sendHttpRequest] = useHttpRequest({
     url: '/user/signOut',
@@ -100,8 +89,6 @@ const MobileAppBar = () => {
               src={'/images/harmonylogo.png'}
             />
           </Button>
-          {/* {user()} */}
-          {/* {!user && ( )} */}
           <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
           <IconButton onClick={toggleDrawer(true)} sx={{ size: 'large' }}>
             <MenuIcon />
@@ -120,38 +107,46 @@ const MobileAppBar = () => {
               {user && (
                 <List>
                   <ListItemButton href={`/profile/${user.username}`}>
-                    Profile
+                    <TextBlock variant="h5">Profile</TextBlock>
                   </ListItemButton>
                   <ListItemButton onClick={() => setSearchModalOpen(true)}>
-                    Search
+                    <TextBlock variant="h5">Search</TextBlock>
                   </ListItemButton>
                   <ListItemButton onClick={openPostModal}>
-                    New Post
+                    <TextBlock variant="h5">New Post</TextBlock>
                   </ListItemButton>
                   <Divider />
                   <ListItemButton onClick={changeTheme}>
-                    {theme.palette.mode.charAt(0).toUpperCase() +
-                      theme.palette.mode.slice(1)}{' '}
-                    Mode
+                    <TextBlock variant="h5">
+                      {theme.palette.mode.charAt(0).toUpperCase() +
+                        theme.palette.mode.slice(1)}{' '}
+                      Mode
+                    </TextBlock>
                   </ListItemButton>
                   <ListItemButton href={'/account'}>
-                    Account Settings
+                    <TextBlock variant="h5">Account Settings</TextBlock>
                   </ListItemButton>
-                  <ListItemButton onClick={signOut}>Logout</ListItemButton>
+                  <ListItemButton onClick={signOut}>
+                    <TextBlock variant="h5">Logout</TextBlock>
+                  </ListItemButton>
                 </List>
               )}
               {!user && (
                 <List>
                   <ListItemButton onClick={() => setSearchModalOpen(true)}>
-                    Search
+                    <TextBlock variant="h5">Search</TextBlock>
                   </ListItemButton>
                   <Divider />
                   <ListItemButton onClick={changeTheme}>
-                    {theme.palette.mode.charAt(0).toUpperCase() +
-                      theme.palette.mode.slice(1)}{' '}
-                    Mode
+                    <TextBlock variant="h5">
+                      {theme.palette.mode.charAt(0).toUpperCase() +
+                        theme.palette.mode.slice(1)}{' '}
+                      Mode
+                    </TextBlock>
                   </ListItemButton>
-                  <ListItemButton href="/login">Login</ListItemButton>
+                  <ListItemButton href="/login">
+                    <TextBlock variant="h5">Login</TextBlock>
+                  </ListItemButton>
                 </List>
               )}
             </Box>
