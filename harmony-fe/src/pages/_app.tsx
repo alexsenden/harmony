@@ -1,11 +1,10 @@
+import '../styles/global.css'
+
 import type { ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from '@emotion/react'
 import { CssBaseline, createTheme } from '@mui/material'
-
-import '../styles/global.css'
-
 import UserContextProvider from '../contexts/userContext'
 import MobileContextProvider from '../contexts/mobileContext'
 import HarmonyAppBar from '../components/app-bar'
@@ -91,7 +90,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       return () => window.removeEventListener('storage', changeTheme)
     }, [])
   }
-
   return getLayout(
     <>
       <Favicon />

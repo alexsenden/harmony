@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { Button, Dialog, DialogTitle } from '@mui/material'
+import { Button, Dialog, DialogTitle, IconButton, Stack } from '@mui/material'
 
 import TabLayout, { TabItem } from '../tab-layout'
 import { Post, PostField, PostType } from '../../models/post'
@@ -9,7 +9,8 @@ import { PollPostForm } from './poll-post-form'
 import { DEFAULT_RATING, ReviewPostForm } from './review-post-form'
 import { PollOption } from '../../models/pollOption'
 import { UserContext } from '../../contexts/userContext'
-
+import CloseIcon from '@mui/icons-material/Close'
+import { MobileContext } from '../../contexts/mobileContext'
 interface PostModalProps {
   open: boolean
   onClose: () => void
@@ -17,6 +18,7 @@ interface PostModalProps {
 
 export const PostModal = ({ open, onClose }: PostModalProps) => {
   const user = useContext(UserContext)
+  const mobile = useContext(MobileContext)
 
   useEffect(() => {
     setPostData({
@@ -116,8 +118,16 @@ export const PostModal = ({ open, onClose }: PostModalProps) => {
   }, [createPostError])
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>New Post</DialogTitle>
+    <Dialog open={open} onClose={onClose} fullScreen={mobile}>
+      <Stack
+        direction="row"
+        sx={{ display: 'flex', justifyContent: 'space-between' }}
+      >
+        <DialogTitle>New Post</DialogTitle>
+        <IconButton onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </Stack>
       <TabLayout
         tabs={tabs}
         variant="fullWidth"

@@ -1,18 +1,15 @@
 import { Box } from '@mui/material'
+import { useContext } from 'react'
+import { MobileContext } from '../../contexts/mobileContext'
 
 interface IPostFormContainerProps {
   children?: React.ReactNode
 }
 
 const PostFormContainer = ({ children }: IPostFormContainerProps) => {
+  const mobile = useContext(MobileContext)
   return (
-    <Box
-      width={500}
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      mx={3}
-    >
+    <Box width={mobile ? undefined : 500} alignItems="center" mx={3}>
       {children}
     </Box>
   )

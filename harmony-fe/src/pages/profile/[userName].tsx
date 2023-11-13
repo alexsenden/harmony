@@ -20,6 +20,7 @@ import { UserContext } from '../../contexts/userContext'
 import FollowingButton from '../../components/following-button'
 import Head from 'next/head'
 import CommentFeed from '../../components/comment-feed/comment-feed'
+import { MobileContext } from '../../contexts/mobileContext'
 
 const Profile = () => {
   const router = useRouter()
@@ -30,6 +31,7 @@ const Profile = () => {
   const [isLoading, setLoading] = useState(true)
 
   const user = useContext(UserContext)
+  const mobile = useContext(MobileContext)
 
   //Retrieve user data
   const [getUserData, receivedData, error] = useHttpRequest({
@@ -107,15 +109,6 @@ const Profile = () => {
   }
 
   const tabs = [
-    // {
-    //   label: 'All Content',
-    //   tab: (
-    //     <PostFeed
-    //       url={userData?.userId ? `/post/?userId=${userData?.userId}` : ''}
-    //       noResultsText="No Content Available"
-    //     />
-    //   ),
-    // },
     {
       label: 'Posts',
       tab: (
@@ -147,8 +140,39 @@ const Profile = () => {
             margin: 'auto',
             maxWidth: 'auto',
             flexGrow: 1,
+            mb: 1,
           }}
         >
+          {/* Mobile avatar view */}
+          {mobile && (
+            <Stack alignItems="center">
+              <Avatar
+                src={`/images/profilepic/${userData?.picture}.png`}
+                sx={{ height: '175px', width: '175px' }}
+              ></Avatar>
+              <TextBlock gutterBottom variant="h4">
+                {`${userData?.firstName} ${userData?.lastName}`}
+              </TextBlock>
+              <TextBlock gutterBottom variant="h5">
+                {userName}
+              </TextBlock>
+              {user && user?.username !== userName && (
+                <FollowingButton variant="outlined" onClick={followAction}>
+                  {following ? 'Un-Follow' : 'Follow'}
+                </FollowingButton>
+              )}
+              {user && user?.username === userName && (
+                <IconButton href="/account">
+                  <SettingsIcon fontSize="inherit" />
+                </IconButton>
+              )}
+              <br />
+              <TextBlock>{`${numFollowers} Follower${
+                numFollowers === 1 ? '' : 's'
+              }`}</TextBlock>
+            </Stack>
+          )}
+
           <Grid
             container
             spacing={2}
@@ -156,48 +180,60 @@ const Profile = () => {
             justifyContent="flex-end"
             alignItems="center"
           >
-            <Grid item>
-              <Avatar
-                src={`/images/profilepic/${userData?.picture}.png`}
-                sx={{ height: '175px', width: '175px', ml: 3 }}
-              ></Avatar>
-            </Grid>
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" spacing={2}>
-                <Grid item xs sx={{ ml: 2 }}>
-                  <TextBlock gutterBottom variant="h4">
-                    {`${userData?.firstName} ${userData?.lastName}`}
-                  </TextBlock>
-                  <TextBlock gutterBottom variant="h5">
-                    {userName}
-                  </TextBlock>
+            {/* Desktop avatar view */}
+            {!mobile && (
+              <>
+                <Grid item>
+                  <Avatar
+                    src={`/images/profilepic/${userData?.picture}.png`}
+                    sx={{
+                      height: '175px',
+                      width: '175px',
+                      ml: !mobile ? 3 : 0,
+                    }}
+                  ></Avatar>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  mx={3}
-                >
-                  {user && user?.username !== userName && (
-                    <FollowingButton variant="outlined" onClick={followAction}>
-                      {following ? 'Un-Follow' : 'Follow'}
-                    </FollowingButton>
-                  )}
-                  {user && user?.username === userName && (
-                    <IconButton href="/account">
-                      <SettingsIcon fontSize="inherit" />
-                    </IconButton>
-                  )}
-                  <br />
-                  <TextBlock>{`${numFollowers} Follower${
-                    numFollowers === 1 ? '' : 's'
-                  }`}</TextBlock>
-                </Box>
-              </Grid>
-            </Grid>
+                <Grid item xs={12} sm container>
+                  <Grid item xs container direction="column" spacing={2}>
+                    <Grid item xs sx={{ ml: 2 }}>
+                      <TextBlock gutterBottom variant="h4">
+                        {`${userData?.firstName} ${userData?.lastName}`}
+                      </TextBlock>
+                      <TextBlock gutterBottom variant="h5">
+                        {userName}
+                      </TextBlock>
+                    </Grid>
+                  </Grid>
+                  <Grid item>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      justifyContent="flex-start"
+                      mx={3}
+                    >
+                      {user && user?.username !== userName && (
+                        <FollowingButton
+                          variant="outlined"
+                          onClick={followAction}
+                        >
+                          {following ? 'Un-Follow' : 'Follow'}
+                        </FollowingButton>
+                      )}
+                      {user && user?.username === userName && (
+                        <IconButton href="/account">
+                          <SettingsIcon fontSize="inherit" />
+                        </IconButton>
+                      )}
+                      <br />
+                      <TextBlock>{`${numFollowers} Follower${
+                        numFollowers === 1 ? '' : 's'
+                      }`}</TextBlock>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </Grid>
         </Paper>
         <Paper
@@ -209,22 +245,38 @@ const Profile = () => {
           }}
         >
           <Grid container spacing={2} direction="row" justifyContent="flex-end">
-            <Grid item xs={8} container direction="column">
-              <Grid item xs zeroMinWidth>
-                <h1>Content</h1>
-              </Grid>
-            </Grid>
-            <Grid item xs={4} zeroMinWidth>
-              <h1>Info</h1>
-            </Grid>
-            <Grid item xs={8} container direction="column">
-              <Grid item xs zeroMinWidth>
-                <TabLayout tabs={tabs} variant="fullWidth" />
-              </Grid>
-            </Grid>
-            <Grid item xs={4} zeroMinWidth>
-              <TextBlock>{userData?.bio}</TextBlock>
-            </Grid>
+            {/* Desktop View */}
+            {!mobile && (
+              <>
+                <Grid item xs={8} container direction="column">
+                  <Grid item xs zeroMinWidth>
+                    <TextBlock variant="h4">Content</TextBlock>
+                  </Grid>
+                </Grid>
+                <Grid item xs={4} zeroMinWidth>
+                  <TextBlock variant="h4">Info</TextBlock>
+                </Grid>
+                <Grid item xs={8} container direction="column">
+                  <TabLayout tabs={tabs} variant="fullWidth" />
+                </Grid>
+                <Grid item xs={4} zeroMinWidth>
+                  <TextBlock>{userData?.bio}</TextBlock>
+                </Grid>
+              </>
+            )}
+            {/* Mobile view */}
+            {mobile && (
+              <>
+                <Grid item xs={12} zeroMinWidth>
+                  <TextBlock variant="h4">Info</TextBlock>
+                  <TextBlock>{userData?.bio}</TextBlock>
+                </Grid>
+                <Grid item xs={12} container direction="column">
+                  <TextBlock variant="h4">Content</TextBlock>
+                  <TabLayout tabs={tabs} variant="fullWidth" />
+                </Grid>
+              </>
+            )}
           </Grid>
         </Paper>
       </Container>
