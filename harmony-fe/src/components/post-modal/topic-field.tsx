@@ -52,6 +52,7 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
       getOptionLabel={option => getSearchableLabel(option as Searchable)}
       isOptionEqualToValue={(option, value) => option?.name === value?.name}
       fullWidth
+      sx={{ justifyContent: 'center' }}
       autoHighlight
       renderInput={params => (
         <TextField
@@ -60,7 +61,6 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
           variant="outlined"
           helperText="Artist, Album, or Song"
           multiline
-          fullWidth
           error={error}
           sx={{ mt: 3 }}
         />

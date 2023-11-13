@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Box } from '@mui/material'
+import { Container } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
@@ -29,13 +29,13 @@ const PostDetail = () => {
   }, [postResponse])
 
   return (
-    <Box sx={{ m: 5 }}>
+    <Container maxWidth="xl">
       {post ? (
         <PostComponent post={post} commentOpen={true}></PostComponent>
       ) : (
         <TextBlock>This post is unavailable.</TextBlock>
       )}
-    </Box>
+    </Container>
   )
 }
 

@@ -131,9 +131,13 @@ const Account = () => {
             }}
           >
             <ImageList
-              sx={{ width: 500, height: 450 }}
+              sx={{
+                width: 500,
+                //height: 450,
+                maxWidth: '80vw',
+                maxHeight: '80vw',
+              }}
               cols={3}
-              rowHeight={164}
             >
               {itemData.map(item => (
                 <ImageListItem key={item.img}>

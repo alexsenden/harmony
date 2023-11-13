@@ -6,8 +6,17 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { UserContext } from '../../contexts/userContext'
 import { Artist } from '../../models/artist'
 import Head from 'next/head'
-import { Container, Paper, Grid, Box, Avatar } from '@mui/material'
+import {
+  Container,
+  Paper,
+  Grid,
+  Box,
+  Avatar,
+  Stack,
+  CircularProgress,
+} from '@mui/material'
 import PostFeed from '../../components/post-feed'
+import { MobileContext } from '../../contexts/mobileContext'
 
 const ArtistPage = () => {
   const router = useRouter()
@@ -15,7 +24,10 @@ const ArtistPage = () => {
   const [artistData, setArtistData] = useState<Artist>()
   const [following, setFollowing] = useState(false)
   const [numFollowers, setNumFollowers] = useState(0)
+  const [isLoading, setLoading] = useState(true)
+
   const user = useContext(UserContext)
+  const mobile = useContext(MobileContext)
 
   //Retrieve artist data
   const [getArtistData, receivedData, error] = useHttpRequest({
@@ -27,11 +39,15 @@ const ArtistPage = () => {
     if (artistId) {
       getArtistData()
     }
+    if (error) {
+      router.replace('/error')
+    }
   }, [artistId, error])
 
   useEffect(() => {
     if (receivedData) {
       setArtistData(receivedData)
+      setLoading(false)
     }
   }, [receivedData, artistData])
 
@@ -86,7 +102,7 @@ const ArtistPage = () => {
     }
   }, [receivedFollowerInfo, artistData])
 
-  return (
+  return !isLoading ? (
     <>
       <Head>
         <title>{`${artistData?.artistName}'s Feed`}</title>
@@ -100,6 +116,29 @@ const ArtistPage = () => {
             flexGrow: 1,
           }}
         >
+          {/* Mobile avatar view */}
+          {mobile && (
+            <Stack alignItems="center">
+              <Avatar
+                src={'/images/topicpic/artist.png'}
+                sx={{ height: '175px', width: '175px' }}
+              ></Avatar>
+              <TextBlock gutterBottom variant="h4">
+                {`${artistData?.artistName}`}
+              </TextBlock>
+              <TextBlock gutterBottom variant="h5">
+                (Artist)
+              </TextBlock>
+              {user && (
+                <FollowingButton variant="outlined" onClick={followAction}>
+                  {following ? 'Un-Follow' : 'Follow'}
+                </FollowingButton>
+              )}
+              <TextBlock>{`${numFollowers} Follower${
+                numFollowers === 1 ? '' : 's'
+              }`}</TextBlock>
+            </Stack>
+          )}
           <Grid
             container
             spacing={2}
@@ -107,39 +146,50 @@ const ArtistPage = () => {
             justifyContent="flex-end"
             alignItems="center"
           >
-            <Grid item>
-              <Avatar
-                alt="Album picture"
-                src="/images/topicpic/artist.png"
-                sx={{ height: '175px', width: '175px', ml: 3 }}
-              ></Avatar>
-            </Grid>
-            <Grid item xs sx={{ ml: 2 }}>
-              <TextBlock gutterBottom variant="h4">
-                {`${artistData?.artistName}`}
-              </TextBlock>
-              <TextBlock gutterBottom variant="h5">
-                (Artist)
-              </TextBlock>
-            </Grid>
-            <Grid item>
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="flex-start"
-                mx={3}
-              >
-                {user && (
-                  <FollowingButton variant="outlined" onClick={followAction}>
-                    {following ? 'Un-Follow' : 'Follow'}
-                  </FollowingButton>
-                )}
-                <TextBlock>{`${numFollowers} Follower${
-                  numFollowers === 1 ? '' : 's'
-                }`}</TextBlock>
-              </Box>
-            </Grid>
+            {!mobile && (
+              <>
+                <Grid item>
+                  {/* Desktop avatar view */}
+                  <Avatar
+                    src={'/images/topicpic/artist.png'}
+                    sx={{
+                      height: '175px',
+                      width: '175px',
+                      ml: !mobile ? 3 : 0,
+                    }}
+                  ></Avatar>
+                </Grid>
+                <Grid item xs sx={{ ml: 2 }}>
+                  <TextBlock gutterBottom variant="h4">
+                    {`${artistData?.artistName}`}
+                  </TextBlock>
+                  <TextBlock gutterBottom variant="h5">
+                    (Artist)
+                  </TextBlock>
+                </Grid>
+                <Grid item>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="flex-start"
+                    mx={3}
+                  >
+                    {user && (
+                      <FollowingButton
+                        variant="outlined"
+                        onClick={followAction}
+                      >
+                        {following ? 'Un-Follow' : 'Follow'}
+                      </FollowingButton>
+                    )}
+                    <TextBlock>{`${numFollowers} Follower${
+                      numFollowers === 1 ? '' : 's'
+                    }`}</TextBlock>
+                  </Box>
+                </Grid>
+              </>
+            )}
           </Grid>
         </Paper>
         <PostFeed
@@ -149,6 +199,13 @@ const ArtistPage = () => {
         />
       </Container>
     </>
+  ) : (
+    <Stack sx={{ display: 'flex' }}>
+      <CircularProgress
+        size="4rem"
+        style={{ marginTop: 20, alignSelf: 'center' }}
+      />
+    </Stack>
   )
 }
 

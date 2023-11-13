@@ -95,13 +95,12 @@ const RegisterPage = () => {
             p: 2,
             margin: 'auto',
             my: mobile ? 2 : 7,
-            width: mobile ? 10 / 12 : 5 / 12,
+            width: mobile ? 11 / 12 : 5 / 12,
             flexGrow: 1,
           }}
         >
           <Grid
             container
-            spacing={2}
             direction="column"
             justifyContent="flex-end"
             alignItems="center"
@@ -110,7 +109,7 @@ const RegisterPage = () => {
               component="img"
               sx={{
                 maxWidth: 'auto',
-                width: mobile ? 11 / 12 : 5 / 12,
+                width: mobile ? 6 / 12 : 5 / 12,
                 xs: 6,
               }}
               alt="Harmony Logo"
