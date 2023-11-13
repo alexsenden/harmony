@@ -64,7 +64,6 @@ export const followSong = async (
   followerId: string
 ): Promise<Follow> => {
   const followingUser = await userRepo.getUserFromCookie(userCookie)
-  console.log(followingUser)
   return await followRepo.followSong({
     followerId: followerId,
     followingId: followingUser.userId,
