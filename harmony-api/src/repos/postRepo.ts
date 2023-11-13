@@ -59,17 +59,9 @@ export const getPostByUserId = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: requester?.userId || '',
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(requester?.userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -108,17 +100,9 @@ export const getPostsByArtistId = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: requester?.userId || '',
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(requester?.userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -155,17 +139,9 @@ export const getPostsByAlbumId = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: requester?.userId || '',
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(requester?.userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -202,17 +178,9 @@ export const getPostsBySongId = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: requester?.userId || '',
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(requester?.userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -246,17 +214,9 @@ export const getTrendingPosts = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: requester?.userId || '',
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(requester?.userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -302,17 +262,9 @@ export const getFollowingUserPosts = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: userId,
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -358,17 +310,9 @@ export const getFollowingArtistPosts = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: userId || '',
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -414,17 +358,9 @@ export const getFollowingSongPosts = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: userId || '',
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -470,17 +406,9 @@ export const getFollowingAlbumPosts = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: userId || '',
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -519,17 +447,9 @@ export const getPostById = async (
     include: {
       user: true,
       pollOptions: {
-        include: {
-          pollVotes: {
-            where: {
-              userId: requester?.userId || '',
-            },
-          },
-          _count: {
-            select: {
-              pollVotes: true,
-            },
-          },
+        ...getPollOptionParams(requester?.userId),
+        orderBy: {
+          entryNumber: 'asc',
         },
       },
       song: true,
@@ -550,6 +470,23 @@ export const getPostById = async (
   })
 
   return mapPrismaPostToPost(post)
+}
+
+const getPollOptionParams = (userId: string | undefined) => {
+  return {
+    include: {
+      pollVotes: {
+        where: {
+          userId: userId || '',
+        },
+      },
+      _count: {
+        select: {
+          pollVotes: true,
+        },
+      },
+    },
+  }
 }
 
 interface PostWithRelations extends PrismaPost {
@@ -612,6 +549,7 @@ const mapPrismaPollToPoll = (
     pollOptionId: pollOption.pollOptionId,
     postId: pollOption.postId,
     option: pollOption.option,
+    entryNumber: pollOption.entryNumber,
     votes: pollOption?._count.pollVotes || 0,
     votedOn: pollOption?.pollVotes.length > 0,
   }

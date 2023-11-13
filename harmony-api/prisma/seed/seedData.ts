@@ -238,6 +238,7 @@ const main = async () => {
       create: {
         postId: '7ef9a0d9-2afd-4f33-af90-7710a8fdf689',
         option: 'Flashing Lights',
+        entryNumber: 1,
         pollOptionId: '84b8b917-6da1-4c0c-bf68-66e1c0dd66f2',
       },
     })
@@ -250,6 +251,7 @@ const main = async () => {
       create: {
         postId: '7ef9a0d9-2afd-4f33-af90-7710a8fdf689',
         option: 'I Wonder',
+        entryNumber: 2,
         pollOptionId: 'd547423c-6b56-4aaa-98f6-58867a3f27e5',
       },
     })
@@ -262,6 +264,7 @@ const main = async () => {
       create: {
         postId: '7ef9a0d9-2afd-4f33-af90-7710a8fdf689',
         option: 'Stronger',
+        entryNumber: 3,
         pollOptionId: '69897f2c-720b-4fcd-bad4-748a9e4555fb',
       },
     })
@@ -274,6 +277,7 @@ const main = async () => {
       create: {
         postId: '7ef9a0d9-2afd-4f33-af90-7710a8fdf689',
         option: 'Good Life',
+        entryNumber: 4,
         pollOptionId: 'a0e3041a-8322-4818-b080-639ed7e970d9',
       },
     })

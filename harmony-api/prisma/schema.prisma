@@ -8,22 +8,22 @@ generator client {
 }
 
 model User {
-  userId    String       @id @default(uuid()) @map("user_id")
-  username  String       @unique
-  password  String
-  bio       String       @default("Welcome to my profile!") @map("bio")
-  createdAt DateTime     @default(now()) @map("created_at")
-  active    Boolean      @default(true)
-  firstName String       @map("first_name")
-  lastName  String       @map("last_name")
-  picture   Int          @default(0)
-  posts     Post[]
-  likes     Like[]
-  comments  Comment[]
-  follows   Follow[]     @relation("Following")
-  followsArtist FollowArtist[]  @relation("Following")
-  followsSong   FollowSong[]    @relation("Following")
-  followsAlbum  FollowAlbum[]   @relation("Following")
+  userId        String         @id @default(uuid()) @map("user_id")
+  username      String         @unique
+  password      String
+  bio           String         @default("Welcome to my profile!") @map("bio")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  active        Boolean        @default(true)
+  firstName     String         @map("first_name")
+  lastName      String         @map("last_name")
+  picture       Int            @default(0)
+  posts         Post[]
+  likes         Like[]
+  comments      Comment[]
+  follows       Follow[]       @relation("Following")
+  followsArtist FollowArtist[] @relation("Following")
+  followsSong   FollowSong[]   @relation("Following")
+  followsAlbum  FollowAlbum[]  @relation("Following")
 
   followers Follow[]     @relation("Follower")
   tokens    UserCookie[]
@@ -56,6 +56,7 @@ model Post {
 
 model PollOption {
   pollOptionId String     @id @default(uuid()) @map("poll_option_id")
+  entryNumber  Int        @map("entry_number")
   postId       String     @map("post_id")
   option       String
   poll         Post       @relation(fields: [postId], references: [postId])
@@ -87,10 +88,10 @@ model Follow {
 
 model FollowArtist {
   followingId String   @map("following_id")
-  followerId  Int   @map("follower_id")
+  followerId  Int      @map("follower_id")
   createdAt   DateTime @default(now()) @map("created_at")
   following   User     @relation("Following", fields: [followingId], references: [userId])
-  follower    Artist     @relation("Follower", fields: [followerId], references: [artistId])
+  follower    Artist   @relation("Follower", fields: [followerId], references: [artistId])
 
   @@id([followingId, followerId])
   @@map("follow_artist")
@@ -112,7 +113,7 @@ model FollowAlbum {
   followerId  Int      @map("follower_id")
   createdAt   DateTime @default(now()) @map("created_at")
   following   User     @relation("Following", fields: [followingId], references: [userId])
-  follower    Album     @relation("Follower", fields: [followerId], references: [albumId])
+  follower    Album    @relation("Follower", fields: [followerId], references: [albumId])
 
   @@id([followingId, followerId])
   @@map("follow_album")
@@ -148,7 +149,7 @@ model Artist {
   artistDescription    String?                @map("comment")
   posts                Post[]
   Alias                Alias[]
-  followers FollowArtist[]     @relation("Follower")
+  followers            FollowArtist[]         @relation("Follower")
   ArtistCreditRelation ArtistCreditRelation[]
 
   @@map("artist")
@@ -184,15 +185,15 @@ model ArtistCredit {
 }
 
 model Album {
-  albumId          Int          @id @map("album_id")
-  albumName        String       @map("album_name")
-  albumDescription String?      @map("comment")
-  releaseGroupType String?      @map("release_group_type")
-  artistCreditId   Int          @map("artist_credit_id")
-  artistCredit     ArtistCredit @relation(fields: [artistCreditId], references: [artistCreditId])
+  albumId          Int           @id @map("album_id")
+  albumName        String        @map("album_name")
+  albumDescription String?       @map("comment")
+  releaseGroupType String?       @map("release_group_type")
+  artistCreditId   Int           @map("artist_credit_id")
+  artistCredit     ArtistCredit  @relation(fields: [artistCreditId], references: [artistCreditId])
   tracks           Track[]
   posts            Post[]
-  followers FollowAlbum[]     @relation("Follower")
+  followers        FollowAlbum[] @relation("Follower")
 
   @@map("album")
 }
@@ -206,7 +207,7 @@ model Song {
   artistCredit    ArtistCredit @relation(fields: [artistCreditId], references: [artistCreditId])
   posts           Post[]
   tracks          Track[]
-  followers FollowSong[]     @relation("Follower")
+  followers       FollowSong[] @relation("Follower")
 
   @@map("song")
 }

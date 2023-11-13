@@ -5,22 +5,26 @@ import { HttpError } from '../models/error/httpError'
 export interface ICreatePollOption {
   pollOptionData: PollOption
   postId: string
+  entryNumber: number
 }
 
 export const createPollOption = async ({
   pollOptionData,
   postId,
+  entryNumber,
 }: ICreatePollOption): Promise<PollOption> => {
   const pollOptionResult = await prisma.pollOption.create({
     data: {
       option: pollOptionData.option,
       postId: postId,
+      entryNumber: entryNumber,
     },
   })
 
   return {
     pollOptionId: pollOptionResult.pollOptionId,
     option: pollOptionResult.option,
+    entryNumber: entryNumber,
   }
 }
 
