@@ -5,7 +5,7 @@ import FollowingButton from '../../components/following-button'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { UserContext } from '../../contexts/userContext'
 import { Album } from '../../models/album'
-import { Container, Paper, Grid, Box } from '@mui/material'
+import { Container, Paper, Grid, Box, Avatar } from '@mui/material'
 import Head from 'next/head'
 import PostFeed from '../../components/post-feed'
 
@@ -107,9 +107,19 @@ const AlbumPage = () => {
             justifyContent="flex-end"
             alignItems="center"
           >
+            <Grid item>
+              <Avatar
+                alt="Album picture"
+                src="/images/topicpic/album.png"
+                sx={{ height: '175px', width: '175px', ml: 3 }}
+              ></Avatar>
+            </Grid>
             <Grid item xs sx={{ ml: 2 }}>
               <TextBlock gutterBottom variant="h4">
                 {`${albumData?.albumName}`}
+              </TextBlock>
+              <TextBlock gutterBottom variant="h5">
+                (Album)
               </TextBlock>
             </Grid>
             <Grid item>

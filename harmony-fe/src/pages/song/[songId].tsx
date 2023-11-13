@@ -6,7 +6,7 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { UserContext } from '../../contexts/userContext'
 import { Song } from '../../models/song'
 import Head from 'next/head'
-import { Container, Paper, Grid, Box } from '@mui/material'
+import { Container, Paper, Grid, Box, Avatar } from '@mui/material'
 import PostFeed from '../../components/post-feed'
 
 const SongPage = () => {
@@ -107,9 +107,19 @@ const SongPage = () => {
             justifyContent="flex-end"
             alignItems="center"
           >
+            <Grid item>
+              <Avatar
+                alt="Song picture"
+                src="/images/topicpic/song.png"
+                sx={{ height: '175px', width: '175px', ml: 3 }}
+              ></Avatar>
+            </Grid>
             <Grid item xs sx={{ ml: 2 }}>
               <TextBlock gutterBottom variant="h4">
                 {`${songData?.songName}`}
+              </TextBlock>
+              <TextBlock gutterBottom variant="h5">
+                (Song)
               </TextBlock>
             </Grid>
             <Grid item>
