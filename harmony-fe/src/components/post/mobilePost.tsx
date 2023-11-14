@@ -32,6 +32,7 @@ const MobilePost = ({ post, commentOpen = false }: PostProps) => {
   const [numComments, setNumComments] = useState(post.numComments || 0)
   const [numLikes, setNumLikes] = useState(post.numLikes || 0)
   const [isLiked, setIsLiked] = useState(post.isLiked || false)
+  const [isVoted, setIsVoted] = useState(post.isVoted || false)
   const [likeModalOpen, setLikeModalOpen] = useState(false)
   const [commentSectionOpen, setCommentSectionOpen] = useState(commentOpen)
 
@@ -63,7 +64,9 @@ const MobilePost = ({ post, commentOpen = false }: PostProps) => {
       break
     case PostType.POLL:
       avatarIcon = <Poll sx={iconSx} fontSize="large" />
-      postContent = <PollContent post={post} />
+      postContent = (
+        <PollContent post={post} voted={isVoted} voteAction={setIsVoted} />
+      )
       break
     case PostType.DISCUSSION:
     default:
