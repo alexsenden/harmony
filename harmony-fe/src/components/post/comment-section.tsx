@@ -31,7 +31,6 @@ const CommentSection = ({
     setComments(prevComments => {
       if (prevComments) {
         return [
-          ...prevComments,
           {
             user: {
               username: user?.username || '',
@@ -44,6 +43,7 @@ const CommentSection = ({
             createdAt: new Date(Date.now()),
             content: comment,
           },
+          ...prevComments,
         ]
       }
       return undefined

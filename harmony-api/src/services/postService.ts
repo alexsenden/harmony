@@ -14,11 +14,14 @@ export const createPost = async (postData?: Post): Promise<Post> => {
   if (postData?.postType === PostType.POLL) {
     const pollOptionResult: Array<Promise<PollOption>> = []
 
-    for (const pollOption of postData.pollOptions || []) {
+    for (const [index, pollOption] of Object.entries(
+      postData.pollOptions || []
+    )) {
       pollOptionResult.push(
         pollOptionRepo.createPollOption({
           pollOptionData: pollOption,
           postId: postResult.postId,
+          entryNumber: parseInt(index),
         })
       )
     }
