@@ -120,7 +120,7 @@ const AlbumPage = () => {
           {mobile && (
             <Stack alignItems="center">
               <Avatar
-                src={'/images/profilepic/album.png'}
+                src={'/images/topicpic/album.png'}
                 sx={{ height: '175px', width: '175px', ml: !mobile ? 3 : 0 }}
               ></Avatar>
               <TextBlock gutterBottom variant="h4">

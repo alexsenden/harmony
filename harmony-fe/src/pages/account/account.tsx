@@ -84,6 +84,42 @@ const Account = () => {
       img: '/images/profilepic/2.png',
       value: 2,
     },
+    {
+      img: '/images/profilepic/3.png',
+      value: 3,
+    },
+    {
+      img: '/images/profilepic/4.png',
+      value: 4,
+    },
+    {
+      img: '/images/profilepic/5.png',
+      value: 5,
+    },
+    {
+      img: '/images/profilepic/6.png',
+      value: 6,
+    },
+    {
+      img: '/images/profilepic/7.png',
+      value: 7,
+    },
+    {
+      img: '/images/profilepic/8.png',
+      value: 8,
+    },
+    {
+      img: '/images/profilepic/9.png',
+      value: 9,
+    },
+    {
+      img: '/images/profilepic/10.png',
+      value: 10,
+    },
+    {
+      img: '/images/profilepic/11.png',
+      value: 11,
+    },
   ]
 
   const handlePicture = (picNum: number): void => {
