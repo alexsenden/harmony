@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { Express } from 'express'
-import { FakeApp } from '../testUtils/testData'
-import prisma from '../../prisma/prisma'
+import { FakeApp } from '../../testUtils/testData'
+import prisma from '../../../prisma/prisma'
 
 let app: Express
 beforeEach(() => {

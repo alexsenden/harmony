@@ -66,3 +66,8 @@ export const FAKE_COMMENT = {
   content: 'Test comment content!',
   commentId: 'fake-comment-id',
 }
+
+export const FAKE_COMMENT_WITH_USER = {
+  ...FAKE_COMMENT,
+  user: FAKE_USER_1,
+}
