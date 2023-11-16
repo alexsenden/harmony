@@ -11,7 +11,6 @@ export type CommentWithUser = {
   userId: string
   postId: string
   createdAt: Date
-  postTitle: string
   content?: string
   user: {
     username: string

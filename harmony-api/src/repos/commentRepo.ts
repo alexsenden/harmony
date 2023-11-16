@@ -35,11 +35,6 @@ export const getComments = async (
           picture: true,
         },
       },
-      post: {
-        select: {
-          title: true,
-        },
-      },
     },
   })
   return comments.map(comment => {
@@ -47,8 +42,6 @@ export const getComments = async (
       commentId: comment.commentId,
       userId: comment.userId,
       postId: comment.postId,
-      postTitle: comment.post.title,
-
       createdAt: comment.createdAt,
       content: comment.content || '',
       user: comment.user,
@@ -73,11 +66,6 @@ export const getCommentsByUserID = async (
           picture: true,
         },
       },
-      post: {
-        select: {
-          title: true,
-        },
-      },
     },
   })
   return comments.map(comment => {
@@ -85,7 +73,6 @@ export const getCommentsByUserID = async (
       commentId: comment.commentId,
       userId: comment.userId,
       postId: comment.postId,
-      postTitle: comment.post.title,
       createdAt: comment.createdAt,
       content: comment.content || '',
       user: comment.user,

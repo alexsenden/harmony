@@ -1,13 +1,17 @@
 import request from 'supertest'
 import { Express } from 'express'
-import { FAKE_POST, FakeApp } from '../testUtils/testData'
-import prisma from '../../prisma/prisma'
-import { PostType as PrismaPostType } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
+
+import prisma from '../../../prisma/prisma'
+
+import { FAKE_COMMENT, FAKE_POST, FakeApp } from '../../testUtils/testData'
+import { PostType as PrismaPostType } from '@prisma/client'
+import { SESSION_AS_COOKIE, authMock } from '../../testUtils/authUtils'
 
 let app: Express
 beforeEach(() => {
   app = FakeApp()
+  authMock()
 })
 
 describe('POST /post', () => {
@@ -39,6 +43,39 @@ describe('POST /post', () => {
       topicId: FAKE_POST.topicId,
       userId: FAKE_POST.userId,
       createdAt: FAKE_POST.createdAt.toISOString(),
+    })
+  })
+})
+
+describe('GET /post/:postId/comment', () => {
+  it('responds with code 200 and an array of comments', async () => {
+    jest.spyOn(prisma.comment, 'findMany').mockResolvedValueOnce([FAKE_COMMENT])
+
+    const res = await request(app).get(`/post/${FAKE_POST.postId}/comment`)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toEqual([
+      {
+        ...FAKE_COMMENT,
+        createdAt: FAKE_COMMENT.createdAt.toISOString(),
+      },
+    ])
+  })
+})
+
+describe('POST /post/:postId/comment', () => {
+  it('responds with code 200 and the new comment', async () => {
+    jest.spyOn(prisma.comment, 'create').mockResolvedValueOnce(FAKE_COMMENT)
+
+    const res = await request(app)
+      .post(`/post/${FAKE_POST.postId}/comment`)
+      .set('Cookie', SESSION_AS_COOKIE)
+      .send(FAKE_COMMENT)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toEqual({
+      ...FAKE_COMMENT,
+      createdAt: FAKE_COMMENT.createdAt.toISOString(),
     })
   })
 })
