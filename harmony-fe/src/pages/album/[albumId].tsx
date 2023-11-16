@@ -158,7 +158,7 @@ const AlbumPage = () => {
               <>
                 <Grid item>
                   <Avatar
-                    src={'/images/profilepic/album.png'}
+                    src={'/images/topicpic/album.png'}
                     sx={{
                       height: '175px',
                       width: '175px',

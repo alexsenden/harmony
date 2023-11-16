@@ -154,7 +154,7 @@ const Account = () => {
           <TextBlock variant="h4" sx={{ mb: '2rem' }}>
             Account Settings
           </TextBlock>
-          <TextBlock variant="h5">Profile Picture</TextBlock>
+          <TextBlock variant="h5">Change Your Profile Picture</TextBlock>
           <Button onClick={handleMenuClick}>
             <Avatar
               src={
@@ -196,9 +196,9 @@ const Account = () => {
             </ImageList>
           </Menu>
 
-          <Divider sx={{ m: '2rem' }} />
-          <TextBlock variant="h5">Name</TextBlock>
-          <FormControl sx={{ mt: 1 }}>
+          <Divider sx={{ m: '1rem' }} />
+          <TextBlock variant="h5">Change Your Name</TextBlock>
+          <FormControl sx={{ mt: 1, mr: 1 }}>
             <InputLabel shrink htmlFor="component-helper">
               First Name
             </InputLabel>
@@ -224,8 +224,8 @@ const Account = () => {
               notched
             />
           </FormControl>
-          <Divider sx={{ m: '2rem' }} />
-          <TextBlock variant="h5">Bio</TextBlock>
+          <Divider sx={{ m: '1rem' }} />
+          <TextBlock variant="h5">Change Your Bio</TextBlock>
           <Box>
             <FormControl sx={{ mt: 1 }} fullWidth>
               <InputLabel shrink htmlFor="component-helper">
@@ -238,10 +238,12 @@ const Account = () => {
                 aria-describedby="component-helper-text"
                 label="Bio"
                 notched
+                multiline
+                minRows={3}
               />
             </FormControl>
           </Box>
-          <Divider sx={{ m: '2rem' }} />
+          <Divider sx={{ m: '1rem' }} />
           <Button onClick={handleSave} variant="contained">
             Save Changes
           </Button>
