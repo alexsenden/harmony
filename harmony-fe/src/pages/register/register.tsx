@@ -9,6 +9,7 @@ import {
   CircularProgress,
   InputAdornment,
   IconButton,
+  Alert,
 } from '@mui/material'
 
 import { HttpMethod } from '../../hooks/httpRequest'
@@ -94,13 +95,12 @@ const RegisterPage = () => {
             p: 2,
             margin: 'auto',
             my: mobile ? 2 : 7,
-            width: mobile ? 10 / 12 : 5 / 12,
+            width: mobile ? 11 / 12 : 5 / 12,
             flexGrow: 1,
           }}
         >
           <Grid
             container
-            spacing={2}
             direction="column"
             justifyContent="flex-end"
             alignItems="center"
@@ -109,7 +109,7 @@ const RegisterPage = () => {
               component="img"
               sx={{
                 maxWidth: 'auto',
-                width: mobile ? 11 / 12 : 5 / 12,
+                width: mobile ? 6 / 12 : 5 / 12,
                 xs: 6,
               }}
               alt="Harmony Logo"
@@ -198,7 +198,6 @@ const RegisterPage = () => {
               fullWidth
               required
               error={hasError}
-              helperText={hasError ? error.response.data.message : ''}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -212,6 +211,12 @@ const RegisterPage = () => {
                 ),
               }}
             />
+            {hasError && (
+              <Alert severity="error" sx={{ whiteSpace: 'pre-line', mt: 3 }}>
+                {error.response.data.message.split(';').join('\n')}
+              </Alert>
+            )}
+
             {!loading ? (
               <Button
                 sx={{

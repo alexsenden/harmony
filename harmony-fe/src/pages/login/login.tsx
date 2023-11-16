@@ -8,6 +8,7 @@ import {
   TextField,
   IconButton,
   InputAdornment,
+  Alert,
 } from '@mui/material'
 import TextBlock from '../../components/text-block/index'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
@@ -73,7 +74,7 @@ const LoginPage = () => {
             p: 2,
             margin: 'auto',
             my: mobile ? 2 : 7,
-            width: mobile ? 10 / 12 : 5 / 12,
+            width: mobile ? 11 / 12 : 5 / 12,
             flexGrow: 1,
           }}
         >
@@ -87,7 +88,7 @@ const LoginPage = () => {
               component="img"
               sx={{
                 maxWidth: 'auto',
-                width: mobile ? 11 / 12 : 5 / 12,
+                width: mobile ? 6 / 12 : 5 / 12,
                 xs: 6,
               }}
               alt="Harmony Logo"
@@ -120,7 +121,6 @@ const LoginPage = () => {
               }}
               required
               error={loginError}
-              helperText={loginError ? 'Invalid username or password' : ''}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -144,6 +144,12 @@ const LoginPage = () => {
             >
               <TextBlock fontSize={20}> Log in </TextBlock>
             </Button>
+            {loginError && (
+              <Alert severity="error" sx={{ whiteSpace: 'pre-line', mt: 3 }}>
+                {'Invalid username or password'}
+              </Alert>
+            )}
+
             <Button
               href="/register"
               variant="outlined"

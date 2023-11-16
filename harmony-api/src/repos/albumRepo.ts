@@ -1,6 +1,8 @@
+import { Album } from '@prisma/client'
 import prisma from '../../prisma/prisma'
 
 import { Topic } from '../models/topic'
+import { HttpError } from '../models/error/httpError'
 
 type TPartialNameAlbum = {
   album_name: string
@@ -25,4 +27,24 @@ export const getAlbumTopicByPartialName = async (
       name: album.album_name,
     }
   })
+}
+
+export const getAlbumById = async (albumID?: number): Promise<Album> => {
+  const albumData = await prisma.album
+    .findUniqueOrThrow({
+      where: {
+        albumId: albumID,
+      },
+    })
+    .catch(() => {
+      throw new HttpError(`Album with id ${albumID} not found`, 404)
+    })
+
+  return {
+    albumId: albumData.albumId,
+    albumName: albumData.albumName,
+    albumDescription: albumData.albumDescription,
+    releaseGroupType: albumData.releaseGroupType,
+    artistCreditId: albumData.artistCreditId,
+  }
 }

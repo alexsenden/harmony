@@ -32,6 +32,7 @@ export const FAKE_TOPIC_ID: TopicId = {
 export const FAKE_POLL_OPTION: PollOption = {
   pollOptionId: 'fake-poll-option-id',
   option: 'This is a fake poll option.',
+  entryNumber: 1,
 }
 
 export const FAKE_POST: Post = {

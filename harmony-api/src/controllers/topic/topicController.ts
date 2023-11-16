@@ -35,3 +35,50 @@ export const getTopicOrUserByPartialName = async (
     next(error)
   }
 }
+
+export const getArtistById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const artistID =
+    typeof req.params.artistID === 'string' ? req.params.artistID : -1
+
+  try {
+    const numId: number = +artistID
+    res.json(await topicService.getArtistById(numId))
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getSongById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const songID = typeof req.params.songID === 'string' ? req.params.songID : -1
+
+  try {
+    const numId: number = +songID
+    res.json(await topicService.getSongById(numId))
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getAlbumById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const albumID =
+    typeof req.params.albumID === 'string' ? req.params.albumID : -1
+
+  try {
+    const numId: number = +albumID
+    res.json(await topicService.getAlbumById(numId))
+  } catch (error) {
+    next(error)
+  }
+}
