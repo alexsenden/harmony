@@ -8,11 +8,13 @@ import {
   Button,
   Container,
   Divider,
+  FormControl,
   ImageList,
   ImageListItem,
+  InputLabel,
   Menu,
+  OutlinedInput,
   Paper,
-  TextField,
 } from '@mui/material'
 import TextBlock from '../../components/text-block'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
@@ -196,34 +198,48 @@ const Account = () => {
 
           <Divider sx={{ m: '2rem' }} />
           <TextBlock variant="h5">Name</TextBlock>
-          <TextField
-            onChange={event => (newData.firstName = event.target.value)}
-            label={user?.firstName}
-            placeholder="First Name"
-            variant="outlined"
-            required
-            margin="dense"
-          />
-          <TextField
-            onChange={event => (newData.lastName = event.target.value)}
-            label={user?.lastName}
-            placeholder="Last Name"
-            variant="outlined"
-            required
-            margin="dense"
-          />
-
+          <FormControl sx={{ mt: 1 }}>
+            <InputLabel shrink htmlFor="component-helper">
+              First Name
+            </InputLabel>
+            <OutlinedInput
+              onChange={event => (newData.firstName = event.target.value)}
+              id="component-helper"
+              placeholder={user?.firstName}
+              aria-describedby="component-helper-text"
+              label="First Name"
+              notched
+            />
+          </FormControl>
+          <FormControl sx={{ mt: 1 }}>
+            <InputLabel shrink htmlFor="component-helper">
+              Last Name
+            </InputLabel>
+            <OutlinedInput
+              onChange={event => (newData.lastName = event.target.value)}
+              id="component-helper"
+              placeholder={user?.lastName}
+              aria-describedby="component-helper-text"
+              label="Last Name"
+              notched
+            />
+          </FormControl>
           <Divider sx={{ m: '2rem' }} />
           <TextBlock variant="h5">Bio</TextBlock>
           <Box>
-            <TextField
-              onChange={event => (newData.bio = event.target.value)}
-              placeholder={user?.bio}
-              variant="outlined"
-              required
-              fullWidth
-              margin="dense"
-            />
+            <FormControl sx={{ mt: 1 }} fullWidth>
+              <InputLabel shrink htmlFor="component-helper">
+                Bio
+              </InputLabel>
+              <OutlinedInput
+                onChange={event => (newData.bio = event.target.value)}
+                id="component-helper"
+                placeholder={user?.bio}
+                aria-describedby="component-helper-text"
+                label="Bio"
+                notched
+              />
+            </FormControl>
           </Box>
           <Divider sx={{ m: '2rem' }} />
           <Button onClick={handleSave} variant="contained">
