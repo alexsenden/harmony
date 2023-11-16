@@ -39,7 +39,7 @@ describe('GET /post/song/:songId', () => {
     ])
 
     const res = await request(app)
-      .get(`/post/user/${FAKE_SONG.songId}`)
+      .get(`/post/song/${FAKE_SONG.songId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)

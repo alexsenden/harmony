@@ -5,7 +5,6 @@ import prisma from '../../../../prisma/prisma'
 
 import { SESSION_AS_COOKIE, authMock } from '../../../testUtils/authUtils'
 import {
-  FAKE_ARTIST,
   FAKE_POST,
   FakeApp,
   PrismaPostResponse,
@@ -19,7 +18,7 @@ beforeEach(() => {
   authMock()
 })
 
-describe('GET /post/artist/:artistId', () => {
+describe('GET /post/trending', () => {
   it('responds with code 200 and an array of comments', async () => {
     jest.spyOn(prisma.post, 'findMany').mockResolvedValueOnce([
       {
@@ -39,7 +38,7 @@ describe('GET /post/artist/:artistId', () => {
     ])
 
     const res = await request(app)
-      .get(`/post/artist/${FAKE_ARTIST.artistId}`)
+      .get('/post/trending')
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)

@@ -39,7 +39,7 @@ describe('GET /post/album/:albumId', () => {
     ])
 
     const res = await request(app)
-      .get(`/post/user/${FAKE_ALBUM.albumId}`)
+      .get(`/post/album/${FAKE_ALBUM.albumId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
