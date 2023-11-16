@@ -78,7 +78,7 @@ export const PollOptionsForm = ({
         alignItems="center"
         width={1}
         maxWidth={'100vw'}
-        sx={{ mx: 3, mt: 3 }}
+        sx={{ mt: 3 }}
       >
         <Button
           variant="outlined"
