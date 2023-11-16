@@ -18,7 +18,7 @@ export const postLike = async (
 
     const likeData = {
       userId: user.userId,
-      postId: req.body.postId,
+      postId: req.params.postId,
     }
 
     res.json(await likeService.createLike(likeData))
@@ -53,7 +53,7 @@ export const removeLike = async (
 
     const likeData = {
       userId: user.userId,
-      postId: req.body.postId,
+      postId: req.params.postId,
     }
 
     res.json(await likeService.deleteLike(likeData))

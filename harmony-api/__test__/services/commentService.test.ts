@@ -4,7 +4,7 @@ import { FAKE_COMMENT } from '../testUtils/testData'
 import * as commentService from '../../src/services/commentService'
 
 describe('createComment', () => {
-  it('returns an error message if userId is undefined', async () => {
+  it('throws an error if userId is undefined', async () => {
     expect(async () => {
       await commentService.createComment({
         ...FAKE_COMMENT,
@@ -13,7 +13,7 @@ describe('createComment', () => {
     }).rejects.toThrow(HttpError)
   })
 
-  it('returns an error message if postId is undefined', async () => {
+  it('throws an error if postId is undefined', async () => {
     expect(async () => {
       await commentService.createComment({
         ...FAKE_COMMENT,

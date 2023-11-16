@@ -18,13 +18,11 @@ const LikeButton = ({ isLiked, post, handleLike }: LikeButtonProps) => {
   const [postLikeRequest] = useHttpRequest({
     url: `/post/${post.postId}/like`,
     method: HttpMethod.POST,
-    body: { postId: post.postId },
   })
 
   const [removeLikeRequest] = useHttpRequest({
     url: `/post/${post.postId}/like`,
     method: HttpMethod.DELETE,
-    body: { postId: post.postId },
   })
 
   const toggleLike = () => {

@@ -4,7 +4,13 @@ import { Decimal } from '@prisma/client/runtime/library'
 
 import prisma from '../../../prisma/prisma'
 
-import { FAKE_COMMENT, FAKE_POST, FakeApp } from '../../testUtils/testData'
+import {
+  FAKE_COMMENT,
+  FAKE_LIKE,
+  FAKE_LIKE_WITH_USER,
+  FAKE_POST,
+  FakeApp,
+} from '../../testUtils/testData'
 import { PostType as PrismaPostType } from '@prisma/client'
 import { SESSION_AS_COOKIE, authMock } from '../../testUtils/authUtils'
 
@@ -77,5 +83,53 @@ describe('POST /post/:postId/comment', () => {
       ...FAKE_COMMENT,
       createdAt: FAKE_COMMENT.createdAt.toISOString(),
     })
+  })
+})
+
+describe('POST /post/:postId/like', () => {
+  it('responds with code 200 and the new like', async () => {
+    jest.spyOn(prisma.like, 'create').mockResolvedValueOnce(FAKE_LIKE)
+
+    const res = await request(app)
+      .post(`/post/${FAKE_POST.postId}/like`)
+      .set('Cookie', SESSION_AS_COOKIE)
+      .send(FAKE_LIKE)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toEqual(FAKE_LIKE)
+  })
+})
+
+describe('GET /post/:postId/like', () => {
+  it('responds with code 200 and an array of likes', async () => {
+    jest
+      .spyOn(prisma.like, 'findMany')
+      .mockResolvedValueOnce([FAKE_LIKE_WITH_USER])
+
+    const res = await request(app).get(`/post/${FAKE_POST.postId}/like`)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toEqual([
+      {
+        ...FAKE_LIKE_WITH_USER,
+        user: {
+          ...FAKE_LIKE_WITH_USER.user,
+          createdAt: FAKE_LIKE_WITH_USER.user.createdAt.toISOString(),
+        },
+      },
+    ])
+  })
+})
+
+describe('DELETE /post/:postId/like', () => {
+  it('responds with code 200 and an array of likes', async () => {
+    jest.spyOn(prisma.like, 'delete').mockResolvedValueOnce(FAKE_LIKE)
+
+    const res = await request(app)
+      .delete(`/post/${FAKE_POST.postId}/like`)
+      .set('Cookie', SESSION_AS_COOKIE)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toEqual(FAKE_LIKE)
   })
 })

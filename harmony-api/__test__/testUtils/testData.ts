@@ -71,3 +71,14 @@ export const FAKE_COMMENT_WITH_USER = {
   ...FAKE_COMMENT,
   user: FAKE_USER_1,
 }
+
+export const FAKE_LIKE = {
+  userId: FAKE_USER_1.userId,
+  postId: FAKE_POST.postId,
+}
+
+export const FAKE_LIKE_WITH_USER = {
+  userId: FAKE_USER_1.userId,
+  postId: FAKE_POST.postId,
+  user: FAKE_USER_1,
+}
