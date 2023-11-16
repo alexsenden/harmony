@@ -8,7 +8,6 @@ const Error404 = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        //flexDirection="column"
         height="70vh"
       >
         <TextBlock variant="h3">404 - Page Not Found</TextBlock>
