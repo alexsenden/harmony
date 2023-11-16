@@ -2,9 +2,24 @@ import { PostType } from '../../src/models/post'
 import { TopicId } from '../../src/models/topic'
 import { User } from '../../src/models/user'
 import { createExpressApp } from '../../src/app'
+import { PostType as PrismaPostType } from '@prisma/client'
+import { Decimal } from '@prisma/client/runtime/library'
 
 export const FakeApp = () => {
   return createExpressApp()
+}
+
+export type PrismaPostResponse = {
+  postId: string
+  userId: string
+  title: string
+  postType: PrismaPostType
+  content: string | null
+  rating: Decimal | null
+  songId: number | null
+  albumId: number | null
+  artistId: number | null
+  createdAt: Date
 }
 
 export const FAKE_TOPIC_ID: TopicId = {
@@ -86,4 +101,28 @@ export const FAKE_LIKE_WITH_USER = {
 export const FAKE_POLL_OPTION_VOTE = {
   userId: FAKE_USER_1.userId,
   pollOptionId: FAKE_POLL_OPTION.pollOptionId,
+}
+
+export const FAKE_ALBUM = {
+  albumId: 1000,
+  albumName: 'fake album',
+  albumDescription: 'fake album description',
+  releaseGroupType: 'Album',
+  artistCreditId: 1500,
+}
+
+export const FAKE_ARTIST = {
+  artistId: 2000,
+  artistName: 'fake album',
+  beginYear: 1900,
+  endYear: 2023,
+  artistDescription: 'fake artist description',
+}
+
+export const FAKE_SONG = {
+  songId: 3000,
+  songName: 'fake song',
+  artistCreditId: 1500,
+  length: 300,
+  songDescription: 'fake song description',
 }

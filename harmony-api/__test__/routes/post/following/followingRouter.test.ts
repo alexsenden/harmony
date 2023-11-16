@@ -4,7 +4,11 @@ import request from 'supertest'
 import prisma from '../../../../prisma/prisma'
 
 import { SESSION_AS_COOKIE, authMock } from '../../../testUtils/authUtils'
-import { FAKE_POST, FakeApp } from '../../../testUtils/testData'
+import {
+  FAKE_POST,
+  FakeApp,
+  PrismaPostResponse,
+} from '../../../testUtils/testData'
 import { Decimal } from '@prisma/client/runtime/library'
 import { PostType as PrismaPostType } from '@prisma/client'
 
@@ -13,19 +17,6 @@ beforeEach(() => {
   app = FakeApp()
   authMock()
 })
-
-type PrismaPostResponse = {
-  postId: string
-  userId: string
-  title: string
-  postType: PrismaPostType
-  content: string | null
-  rating: Decimal | null
-  songId: number | null
-  albumId: number | null
-  artistId: number | null
-  createdAt: Date
-}
 
 describe('GET /post/following/all', () => {
   it('responds with code 200 and an array of comments', async () => {
