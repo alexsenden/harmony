@@ -8,6 +8,8 @@ import {
   FAKE_COMMENT,
   FAKE_LIKE,
   FAKE_LIKE_WITH_USER,
+  FAKE_POLL_OPTION,
+  FAKE_POLL_OPTION_VOTE,
   FAKE_POST,
   FakeApp,
 } from '../../testUtils/testData'
@@ -21,7 +23,7 @@ beforeEach(() => {
 })
 
 describe('POST /post', () => {
-  it('responds to /post code 200 and the new post', async () => {
+  it('responds with code 200 and the new post', async () => {
     jest.spyOn(prisma.post, 'create').mockResolvedValueOnce({
       userId: FAKE_POST.userId,
       postType: PrismaPostType[FAKE_POST.postType],
@@ -34,6 +36,9 @@ describe('POST /post', () => {
       postId: FAKE_POST.postId,
       createdAt: FAKE_POST.createdAt,
     })
+    jest
+      .spyOn(prisma.pollOption, 'create')
+      .mockResolvedValueOnce(FAKE_POLL_OPTION)
 
     const res = await request(app).post('/post').send(FAKE_POST)
 
@@ -49,6 +54,13 @@ describe('POST /post', () => {
       topicId: FAKE_POST.topicId,
       userId: FAKE_POST.userId,
       createdAt: FAKE_POST.createdAt.toISOString(),
+      pollOptions: [
+        {
+          entryNumber: FAKE_POLL_OPTION.entryNumber,
+          option: FAKE_POLL_OPTION.option,
+          pollOptionId: FAKE_POLL_OPTION.pollOptionId,
+        },
+      ],
     })
   })
 })
@@ -131,5 +143,25 @@ describe('DELETE /post/:postId/like', () => {
 
     expect(res.statusCode).toBe(200)
     expect(res.body).toEqual(FAKE_LIKE)
+  })
+})
+
+describe('POST /post/vote', () => {
+  it('responds with code 200 and the poll option vote', async () => {
+    jest
+      .spyOn(prisma.pollOption, 'findFirst')
+      .mockResolvedValueOnce(FAKE_POLL_OPTION)
+    jest.spyOn(prisma.pollVote, 'count').mockResolvedValueOnce(0)
+    jest
+      .spyOn(prisma.pollVote, 'create')
+      .mockResolvedValueOnce(FAKE_POLL_OPTION_VOTE)
+
+    const res = await request(app)
+      .post('/post/vote')
+      .set('Cookie', SESSION_AS_COOKIE)
+      .send(FAKE_POLL_OPTION_VOTE)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toEqual(FAKE_POLL_OPTION_VOTE)
   })
 })

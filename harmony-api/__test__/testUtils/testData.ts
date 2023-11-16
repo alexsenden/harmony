@@ -1,5 +1,4 @@
-import { PollOption } from '../../src/models/pollOption'
-import { Post, PostType } from '../../src/models/post'
+import { PostType } from '../../src/models/post'
 import { TopicId } from '../../src/models/topic'
 import { User } from '../../src/models/user'
 import { createExpressApp } from '../../src/app'
@@ -12,17 +11,18 @@ export const FAKE_TOPIC_ID: TopicId = {
   artistId: 1000,
 }
 
-export const FAKE_POLL_OPTION: PollOption = {
+export const FAKE_POLL_OPTION = {
   pollOptionId: 'fake-poll-option-id',
   option: 'This is a fake poll option.',
-  entryNumber: 1,
+  entryNumber: 0,
+  postId: 'fake-post-id',
 }
 
-export const FAKE_POST: Post = {
+export const FAKE_POST = {
   userId: 'fake-user-id',
   postId: 'fake-post-id',
   topicId: FAKE_TOPIC_ID,
-  postType: PostType.DISCUSSION,
+  postType: PostType.POLL,
   title: 'Fake Post Title!',
   body: 'Fake Post Body!',
   numComments: 0,
@@ -81,4 +81,9 @@ export const FAKE_LIKE_WITH_USER = {
   userId: FAKE_USER_1.userId,
   postId: FAKE_POST.postId,
   user: FAKE_USER_1,
+}
+
+export const FAKE_POLL_OPTION_VOTE = {
+  userId: FAKE_USER_1.userId,
+  pollOptionId: FAKE_POLL_OPTION.pollOptionId,
 }

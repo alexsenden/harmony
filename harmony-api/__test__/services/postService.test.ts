@@ -1,28 +1,27 @@
 import { HttpError } from '../../src/models/error/httpError'
-import { Post } from '../../src/models/post'
-import {
-  validateBody,
-  validatePollOptions,
-  validatePost,
-  validateRating,
-  validateTitle,
-  validateUserId,
-} from '../../src/services/postService'
+import { Post, PostType } from '../../src/models/post'
+import * as postService from '../../src/services/postService'
 import { FAKE_POST } from '../testUtils/testData'
 
 describe('validatePost', () => {
-  it('returns an error message if postType is undefined', async () => {
+  it('throws an error if post is undefined', async () => {
     expect(() => {
-      validatePost({
+      postService.validatePost(undefined)
+    }).toThrow(HttpError)
+  })
+
+  it('throws an error if postType is undefined', async () => {
+    expect(() => {
+      postService.validatePost({
         ...FAKE_POST,
         postType: undefined,
       } as unknown as Post)
     }).toThrow(HttpError)
   })
 
-  it('returns an error message if some fields are missing', async () => {
+  it('throws an error if some fields are missing', async () => {
     expect(() => {
-      validatePost({
+      postService.validatePost({
         ...FAKE_POST,
         title: undefined,
         body: undefined,
@@ -30,73 +29,223 @@ describe('validatePost', () => {
     }).toThrow(HttpError)
   })
 
-  it('returns an an empty array if truthy', async () => {
-    const result = validateUserId({ userId: 'test-user-id' } as Post)
-    expect(result).toStrictEqual([])
+  it('validates and returns discussion posts', async () => {
+    const result = postService.validatePost({
+      ...FAKE_POST,
+      postType: PostType.DISCUSSION,
+    })
+
+    expect(result).toStrictEqual({
+      ...FAKE_POST,
+      postType: PostType.DISCUSSION,
+    })
+  })
+
+  it('validates and returns poll posts', async () => {
+    const result = postService.validatePost({
+      ...FAKE_POST,
+      postType: PostType.POLL,
+    })
+
+    expect(result).toStrictEqual({
+      ...FAKE_POST,
+      postType: PostType.POLL,
+    })
+  })
+
+  it('validates and returns review posts', async () => {
+    const result = postService.validatePost({
+      ...FAKE_POST,
+      postType: PostType.REVIEW,
+    })
+
+    expect(result).toStrictEqual({
+      ...FAKE_POST,
+      postType: PostType.REVIEW,
+    })
   })
 })
 
 describe('validateUserId', () => {
   it('returns an error message if falsy', async () => {
-    const result = validateUserId({ ...FAKE_POST, userId: '' })
+    const result = postService.validateUserId({ ...FAKE_POST, userId: '' })
     expect(result.length).toBeGreaterThan(0)
   })
 
   it('returns an an empty array if truthy', async () => {
-    const result = validateUserId(FAKE_POST)
+    const result = postService.validateUserId(FAKE_POST)
     expect(result).toStrictEqual([])
   })
 })
 
 describe('validateTitle', () => {
   it('returns an error message if falsy', async () => {
-    const result = validateTitle({ ...FAKE_POST, title: '' })
+    const result = postService.validateTitle({ ...FAKE_POST, title: '' })
+    expect(result.length).toBeGreaterThan(0)
+  })
+
+  it('returns an error message if greater than 150 characters', async () => {
+    const result = postService.validateTitle({
+      ...FAKE_POST,
+      title: 'a'.repeat(151),
+    })
     expect(result.length).toBeGreaterThan(0)
   })
 
   it('returns an an empty array if truthy', async () => {
-    const result = validateTitle(FAKE_POST)
+    const result = postService.validateTitle(FAKE_POST)
     expect(result).toStrictEqual([])
   })
 })
 
 describe('validateBody', () => {
   it('returns an error message if falsy', async () => {
-    const result = validateBody({ ...FAKE_POST, body: '' })
+    const result = postService.validateBody({ ...FAKE_POST, body: '' })
+    expect(result.length).toBeGreaterThan(0)
+  })
+
+  it('returns an error message if greater than 2000 characters', async () => {
+    const result = postService.validateBody({
+      ...FAKE_POST,
+      body: 'a'.repeat(2001),
+    })
     expect(result.length).toBeGreaterThan(0)
   })
 
   it('returns an an empty array if truthy', async () => {
-    const result = validateBody(FAKE_POST)
+    const result = postService.validateBody(FAKE_POST)
     expect(result).toStrictEqual([])
   })
 })
 
 describe('validateRating', () => {
   it('returns an error message if not present', async () => {
-    const result = validateRating({ ...FAKE_POST, rating: undefined })
+    const result = postService.validateRating({
+      ...FAKE_POST,
+      rating: undefined,
+    })
+    expect(result.length).toBeGreaterThan(0)
+  })
+
+  it('returns an error message rating > 5', async () => {
+    const result = postService.validateRating({
+      ...FAKE_POST,
+      rating: 10,
+    })
+    expect(result.length).toBeGreaterThan(0)
+  })
+
+  it('returns an error message rating < 0', async () => {
+    const result = postService.validateRating({
+      ...FAKE_POST,
+      rating: -10,
+    })
     expect(result.length).toBeGreaterThan(0)
   })
 
   it('returns an an empty array if a number', async () => {
-    const result = validateRating(FAKE_POST)
+    const result = postService.validateRating(FAKE_POST)
     expect(result).toStrictEqual([])
   })
 
   it('returns an an empty array if 0', async () => {
-    const result = validateRating({ ...FAKE_POST, rating: 0 })
+    const result = postService.validateRating({ ...FAKE_POST, rating: 0 })
     expect(result).toStrictEqual([])
   })
 })
 
 describe('validatePollOptions', () => {
   it('returns an error message if falsy', async () => {
-    const result = validatePollOptions({ ...FAKE_POST, pollOptions: undefined })
+    const result = postService.validatePollOptions({
+      ...FAKE_POST,
+      pollOptions: undefined,
+    })
+    expect(result.length).toBeGreaterThan(0)
+  })
+
+  it('returns an error message if option field is empty', async () => {
+    const fakePost = {
+      ...FAKE_POST,
+      pollOptions: [{ ...FAKE_POST.pollOptions[0] }],
+    }
+    fakePost.pollOptions[0].option = ''
+
+    const result = postService.validatePollOptions(fakePost)
+    expect(result.length).toBeGreaterThan(0)
+  })
+
+  it('returns an error message if option field is greater than 100 characters', async () => {
+    const fakePost = {
+      ...FAKE_POST,
+      pollOptions: [{ ...FAKE_POST.pollOptions[0] }],
+    }
+    fakePost.pollOptions[0].option = 'a'.repeat(101)
+
+    const result = postService.validatePollOptions(fakePost)
     expect(result.length).toBeGreaterThan(0)
   })
 
   it('returns an an empty array if truthy', async () => {
-    const result = validatePollOptions(FAKE_POST)
+    const result = postService.validatePollOptions(FAKE_POST)
     expect(result).toStrictEqual([])
+  })
+})
+
+describe('getPostByUserId', () => {
+  it('returns an an empty array if userId is undefined', async () => {
+    const result = await postService.getPostByUserId(undefined)
+    expect(result).toStrictEqual([])
+  })
+})
+
+describe('getPostById', () => {
+  it('returns an an empty array if postId is undefined', async () => {
+    expect(async () => {
+      await postService.getPostById(undefined)
+    }).rejects.toThrow(HttpError)
+  })
+})
+
+describe('getPostsByArtistId', () => {
+  it('returns an an empty array if artistId is undefined', async () => {
+    const result = await postService.getPostsByArtistId(undefined)
+    expect(result).toStrictEqual([])
+  })
+})
+
+describe('getPostsByAlbumId', () => {
+  it('returns an an empty array if albumId is undefined', async () => {
+    const result = await postService.getPostsByAlbumId(undefined)
+    expect(result).toStrictEqual([])
+  })
+})
+
+describe('getPostsBySongId', () => {
+  it('returns an an empty array if songId is undefined', async () => {
+    const result = await postService.getPostsBySongId(undefined)
+    expect(result).toStrictEqual([])
+  })
+})
+
+describe('sortPostsByDate', () => {
+  it('returns 0 if times are equal', async () => {
+    const result = postService.sortPostsByDate(FAKE_POST, FAKE_POST)
+    expect(result).toBe(0)
+  })
+
+  it('returns 1 if the first post is newer', async () => {
+    const result = postService.sortPostsByDate(FAKE_POST, {
+      ...FAKE_POST,
+      createdAt: new Date(FAKE_POST.createdAt.valueOf() - 1),
+    })
+    expect(result).toBe(1)
+  })
+
+  it('returns -1 if the first post is newer', async () => {
+    const result = postService.sortPostsByDate(FAKE_POST, {
+      ...FAKE_POST,
+      createdAt: new Date(FAKE_POST.createdAt.valueOf() + 1),
+    })
+    expect(result).toBe(-1)
   })
 })

@@ -1,6 +1,5 @@
 import * as postRepo from '../repos/postRepo'
 import * as pollOptionRepo from '../repos/pollOptionRepo'
-import * as userRepo from '../repos/userRepo'
 import { Post, PostType } from '../models/post'
 import { validateTopicId } from './topicService'
 import { HttpError } from '../models/error/httpError'
@@ -91,57 +90,37 @@ export const getTrendingPosts = async (
 }
 
 export const getFollowingUserPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
-  if (userCookie === undefined) {
-    return []
-  }
-
-  const user = await userRepo.getUserFromCookie(userCookie)
-  return await postRepo.getFollowingUserPosts(user.userId)
+  return await postRepo.getFollowingUserPosts(requester.userId)
 }
 
 export const getFollowingArtistPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
-  if (userCookie === undefined) {
-    return []
-  }
-
-  const user = await userRepo.getUserFromCookie(userCookie)
-  return await postRepo.getFollowingArtistPosts(user.userId)
+  return await postRepo.getFollowingArtistPosts(requester.userId)
 }
 
 export const getFollowingSongPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
-  if (userCookie === undefined) {
-    return []
-  }
-
-  const user = await userRepo.getUserFromCookie(userCookie)
-  return await postRepo.getFollowingSongPosts(user.userId)
+  return await postRepo.getFollowingSongPosts(requester.userId)
 }
 
 export const getFollowingAlbumPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
-  if (userCookie === undefined) {
-    return []
-  }
-
-  const user = await userRepo.getUserFromCookie(userCookie)
-  return await postRepo.getFollowingAlbumPosts(user.userId)
+  return await postRepo.getFollowingAlbumPosts(requester.userId)
 }
 
 export const getAllFollowingPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
   const [userPosts, artistPosts, songPosts, albumPosts] = await Promise.all([
-    getFollowingUserPosts(userCookie),
-    getFollowingArtistPosts(userCookie),
-    getFollowingSongPosts(userCookie),
-    getFollowingAlbumPosts(userCookie),
+    getFollowingUserPosts(requester),
+    getFollowingArtistPosts(requester),
+    getFollowingSongPosts(requester),
+    getFollowingAlbumPosts(requester),
   ])
   return userPosts
     .concat(artistPosts)
@@ -151,7 +130,7 @@ export const getAllFollowingPosts = async (
     .reverse()
 }
 
-const sortPostsByDate = function (postA: Post, postB: Post) {
+export const sortPostsByDate = (postA: Post, postB: Post) => {
   if (postA.createdAt.getTime() > postB.createdAt.getTime()) {
     return 1
   } else if (postA.createdAt.getTime() < postB.createdAt.getTime()) {
