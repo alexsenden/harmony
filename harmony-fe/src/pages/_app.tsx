@@ -46,6 +46,9 @@ export const darkTheme = createTheme({
     secondary: {
       main: '#0064AC',
     },
+    error: {
+      main: '#ff0000',
+    },
     background: {
       //default: '#efefef',
     },
