@@ -29,6 +29,7 @@ const Account = () => {
     lastName: user?.lastName,
   })
 
+  //Submit account info
   const [updateAccount, response, error, loading] = useHttpRequest({
     url: '/user/updateAccount',
     method: HttpMethod.POST,
@@ -36,6 +37,7 @@ const Account = () => {
   })
 
   const handleSave = () => {
+    //If any entry data is undefined or length 0, then set to current data
     if (newData.firstName === undefined || newData.firstName.length === 0)
       newData.firstName = user?.firstName
     if (newData.lastName === undefined || newData.lastName.length === 0)
@@ -47,12 +49,14 @@ const Account = () => {
     updateAccount()
   }
 
+  //Set default data to current user data
   useEffect(() => {
     newData.userId = user?.userId
     newData.bio = user?.bio
     newData.picture = user?.picture
   }, [user, UserContext])
 
+  //Check for response, if response then refresh, if error then inform user
   useEffect(() => {
     if (error) {
       console.error('Error:', error)
@@ -64,6 +68,7 @@ const Account = () => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const openMenu = Boolean(anchorEl)
+
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -71,6 +76,7 @@ const Account = () => {
     setAnchorEl(null)
   }
 
+  //Profile pictures for image grid
   const itemData = [
     {
       img: '/images/profilepic/0.png',
@@ -122,6 +128,7 @@ const Account = () => {
     },
   ]
 
+  //Set profile picture
   const handlePicture = (picNum: number): void => {
     newData.picture = picNum
     handleMenuClose()
@@ -169,7 +176,6 @@ const Account = () => {
             <ImageList
               sx={{
                 width: 500,
-                //height: 450,
                 maxWidth: '80vw',
                 maxHeight: '80vw',
               }}

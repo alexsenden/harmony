@@ -35,6 +35,7 @@ const ArtistPage = () => {
     method: HttpMethod.GET,
   })
 
+  //Check if artist id exists
   useEffect(() => {
     if (artistId) {
       getArtistData()
@@ -44,21 +45,13 @@ const ArtistPage = () => {
     }
   }, [artistId, error])
 
+  //Set not loading once data is retrieved
   useEffect(() => {
     if (receivedData) {
       setArtistData(receivedData)
       setLoading(false)
     }
   }, [receivedData, artistData])
-
-  useEffect(() => {
-    if (artistData) {
-      getFollowerInfo()
-      if (user) {
-        getFollowData()
-      }
-    }
-  }, [artistData])
 
   //Retrieve follow data
   const [getFollowData, receivedFollowData] = useHttpRequest({
@@ -81,11 +74,30 @@ const ArtistPage = () => {
     body: { followAction: !following },
   })
 
+  //If data is found, fetch the following info
+  //If the user is logged in, check if they're following this topic
+  useEffect(() => {
+    if (artistData) {
+      getFollowerInfo()
+      if (user) {
+        getFollowData()
+      }
+    }
+  }, [artistData])
+
+  //Set the following status according to the user info
   useEffect(() => {
     if (receivedFollowData) {
       setFollowing(receivedFollowData)
     }
   }, [receivedFollowData, artistData])
+
+  //Set the following count
+  useEffect(() => {
+    if (receivedFollowerInfo) {
+      setNumFollowers(receivedFollowerInfo)
+    }
+  }, [receivedFollowerInfo, artistData])
 
   const followAction = () => {
     setFollowActionData()
@@ -96,11 +108,6 @@ const ArtistPage = () => {
     }
     setFollowing(!following)
   }
-  useEffect(() => {
-    if (receivedFollowerInfo) {
-      setNumFollowers(receivedFollowerInfo)
-    }
-  }, [receivedFollowerInfo, artistData])
 
   return !isLoading ? (
     <>
@@ -116,7 +123,7 @@ const ArtistPage = () => {
             flexGrow: 1,
           }}
         >
-          {/* Mobile avatar view */}
+          {/* Mobile Information view */}
           {mobile && (
             <Stack alignItems="center">
               <Avatar
@@ -149,7 +156,7 @@ const ArtistPage = () => {
             {!mobile && (
               <>
                 <Grid item>
-                  {/* Desktop avatar view */}
+                  {/* Desktop Information view */}
                   <Avatar
                     src={'/images/topicpic/artist.png'}
                     sx={{
