@@ -126,3 +126,8 @@ export const FAKE_SONG = {
   length: 300,
   songDescription: 'fake song description',
 }
+
+export const FAKE_FOLLOW = {
+  followerId: 'fake-follower-id',
+  followingId: 'fake-following-id',
+}

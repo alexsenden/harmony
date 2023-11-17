@@ -1,91 +1,82 @@
 import * as followRepo from '../repos/followRepo'
-import * as userRepo from '../repos/userRepo'
 import { Follow } from '../models/follow'
 import { HttpError } from '../models/error/httpError'
+import { User } from '../models/user'
 
 export const followUser = async (
-  userCookie: string,
+  followerUser: User,
   followingId: string
 ): Promise<Follow> => {
-  const followerUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.followUser({
+  return followRepo.followUser({
     followerId: followerUser.userId,
     followingId: followingId,
   })
 }
 
 export const unFollowUser = async (
-  userCookie: string,
+  followerUser: User,
   followingId: string
 ): Promise<Follow> => {
-  const followerUser = await userRepo.getUserFromCookie(userCookie)
-
-  return await followRepo.unFollowUser({
+  return followRepo.unFollowUser({
     followerId: followerUser.userId,
     followingId: followingId,
   })
 }
 
 export const unFollowArtist = async (
-  userCookie: string,
+  followingUser: User,
   followerId: string
 ): Promise<Follow> => {
-  const followingUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.unFollowArtist({
+  return followRepo.unFollowArtist({
     followerId: followerId,
     followingId: followingUser.userId,
   })
 }
 
 export const followArtist = async (
-  userCookie: string,
+  followingUser: User,
   followerId: string
 ): Promise<Follow> => {
-  const followingUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.followArtist({
+  return followRepo.followArtist({
     followerId: followerId,
     followingId: followingUser.userId,
   })
 }
 
 export const unFollowSong = async (
-  userCookie: string,
+  followingUser: User,
   followerId: string
 ): Promise<Follow> => {
-  const followingUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.unFollowSong({
+  return followRepo.unFollowSong({
     followerId: followerId,
     followingId: followingUser.userId,
   })
 }
 
 export const followSong = async (
-  userCookie: string,
+  followingUser: User,
   followerId: string
 ): Promise<Follow> => {
-  const followingUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.followSong({
+  return followRepo.followSong({
     followerId: followerId,
     followingId: followingUser.userId,
   })
 }
 
 export const unFollowAlbum = async (
-  userCookie: string,
+  followingUser: User,
   followerId: string
 ): Promise<Follow> => {
-  const followingUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.unFollowAlbum({
+  return followRepo.unFollowAlbum({
     followerId: followerId,
     followingId: followingUser.userId,
   })
 }
 
 export const followAlbum = async (
-  userCookie: string,
+  followingUser: User,
   followerId: string
 ): Promise<Follow> => {
-  const followingUser = await userRepo.getUserFromCookie(userCookie)
   return await followRepo.followAlbum({
     followerId: followerId,
     followingId: followingUser.userId,
@@ -93,66 +84,62 @@ export const followAlbum = async (
 }
 
 export const getFollow = async (
-  userCookie: string,
+  followerUser: User,
   followingId: string
 ): Promise<boolean> => {
-  const followerUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.getFollow({
+  return followRepo.getFollow({
     followerId: followerUser.userId,
     followingId: followingId,
   })
 }
 
 export const getArtistFollow = async (
-  userCookie: string,
+  followerUser: User,
   followerId: string
 ): Promise<boolean> => {
-  const followerUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.getArtistFollow({
+  return followRepo.getArtistFollow({
     followerId: followerId,
     followingId: followerUser.userId,
   })
 }
 
 export const getSongFollow = async (
-  userCookie: string,
+  followerUser: User,
   followerId: string
 ): Promise<boolean> => {
-  const followerUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.getSongFollow({
+  return followRepo.getSongFollow({
     followerId: followerId,
     followingId: followerUser.userId,
   })
 }
 
 export const getAlbumFollow = async (
-  userCookie: string,
+  followerUser: User,
   followerId: string
 ): Promise<boolean> => {
-  const followerUser = await userRepo.getUserFromCookie(userCookie)
-  return await followRepo.getAlbumFollow({
+  return followRepo.getAlbumFollow({
     followerId: followerId,
     followingId: followerUser.userId,
   })
 }
 
 export const getFollowCount = async (userId: string): Promise<number> => {
-  return await followRepo.getFollowCount(userId)
+  return followRepo.getFollowCount(userId)
 }
 
 export const getArtistFollowCount = async (
   artistId?: string
 ): Promise<number> => {
-  if (artistId === undefined) {
-    throw new HttpError(`Artist ID ${artistId} invalid`, 400)
+  if (!artistId) {
+    throw new HttpError(`artistId ${artistId} must be defined`, 400)
   }
 
   return await followRepo.getArtistFollowCount(artistId)
 }
 
 export const getSongFollowCount = async (songId?: string): Promise<number> => {
-  if (songId === undefined) {
-    throw new HttpError(`Song ID ${songId} invalid`, 400)
+  if (!songId) {
+    throw new HttpError(`songId ${songId} must be defined`, 400)
   }
 
   return await followRepo.getSongFollowCount(songId)
@@ -161,8 +148,8 @@ export const getSongFollowCount = async (songId?: string): Promise<number> => {
 export const getAlbumFollowCount = async (
   albumId?: string
 ): Promise<number> => {
-  if (albumId === undefined) {
-    throw new HttpError(`Album ID ${albumId} invalid`, 400)
+  if (!albumId) {
+    throw new HttpError(`albumId ${albumId} must be defined`, 400)
   }
 
   return await followRepo.getAlbumFollowCount(albumId)
