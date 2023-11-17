@@ -124,7 +124,7 @@ const MobileAppBar = () => {
                     </TextBlock>
                   </ListItemButton>
                   <ListItemButton href={'/account'}>
-                    <TextBlock variant="h5">Account Settings</TextBlock>
+                    <TextBlock variant="h5">Account</TextBlock>
                   </ListItemButton>
                   <ListItemButton onClick={signOut}>
                     <TextBlock variant="h5">Logout</TextBlock>

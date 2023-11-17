@@ -8,11 +8,13 @@ import {
   Button,
   Container,
   Divider,
+  FormControl,
   ImageList,
   ImageListItem,
+  InputLabel,
   Menu,
+  OutlinedInput,
   Paper,
-  TextField,
 } from '@mui/material'
 import TextBlock from '../../components/text-block'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
@@ -29,6 +31,7 @@ const Account = () => {
     lastName: user?.lastName,
   })
 
+  //Submit account info
   const [updateAccount, response, error, loading] = useHttpRequest({
     url: '/user/updateAccount',
     method: HttpMethod.POST,
@@ -36,6 +39,7 @@ const Account = () => {
   })
 
   const handleSave = () => {
+    //If any entry data is undefined or length 0, then set to current data
     if (newData.firstName === undefined || newData.firstName.length === 0)
       newData.firstName = user?.firstName
     if (newData.lastName === undefined || newData.lastName.length === 0)
@@ -47,12 +51,14 @@ const Account = () => {
     updateAccount()
   }
 
+  //Set default data to current user data
   useEffect(() => {
     newData.userId = user?.userId
     newData.bio = user?.bio
     newData.picture = user?.picture
   }, [user, UserContext])
 
+  //Check for response, if response then refresh, if error then inform user
   useEffect(() => {
     if (error) {
       console.error('Error:', error)
@@ -64,6 +70,7 @@ const Account = () => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const openMenu = Boolean(anchorEl)
+
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -71,6 +78,7 @@ const Account = () => {
     setAnchorEl(null)
   }
 
+  //Profile pictures for image grid
   const itemData = [
     {
       img: '/images/profilepic/0.png',
@@ -84,8 +92,45 @@ const Account = () => {
       img: '/images/profilepic/2.png',
       value: 2,
     },
+    {
+      img: '/images/profilepic/3.png',
+      value: 3,
+    },
+    {
+      img: '/images/profilepic/4.png',
+      value: 4,
+    },
+    {
+      img: '/images/profilepic/5.png',
+      value: 5,
+    },
+    {
+      img: '/images/profilepic/6.png',
+      value: 6,
+    },
+    {
+      img: '/images/profilepic/7.png',
+      value: 7,
+    },
+    {
+      img: '/images/profilepic/8.png',
+      value: 8,
+    },
+    {
+      img: '/images/profilepic/9.png',
+      value: 9,
+    },
+    {
+      img: '/images/profilepic/10.png',
+      value: 10,
+    },
+    {
+      img: '/images/profilepic/11.png',
+      value: 11,
+    },
   ]
 
+  //Set profile picture
   const handlePicture = (picNum: number): void => {
     newData.picture = picNum
     handleMenuClose()
@@ -109,7 +154,7 @@ const Account = () => {
           <TextBlock variant="h4" sx={{ mb: '2rem' }}>
             Account Settings
           </TextBlock>
-          <TextBlock variant="h5">Profile Picture</TextBlock>
+          <TextBlock variant="h5">Change Your Profile Picture</TextBlock>
           <Button onClick={handleMenuClick}>
             <Avatar
               src={
@@ -133,7 +178,6 @@ const Account = () => {
             <ImageList
               sx={{
                 width: 500,
-                //height: 450,
                 maxWidth: '80vw',
                 maxHeight: '80vw',
               }}
@@ -152,38 +196,54 @@ const Account = () => {
             </ImageList>
           </Menu>
 
-          <Divider sx={{ m: '2rem' }} />
-          <TextBlock variant="h5">Name</TextBlock>
-          <TextField
-            onChange={event => (newData.firstName = event.target.value)}
-            label={user?.firstName}
-            placeholder="First Name"
-            variant="outlined"
-            required
-            margin="dense"
-          />
-          <TextField
-            onChange={event => (newData.lastName = event.target.value)}
-            label={user?.lastName}
-            placeholder="Last Name"
-            variant="outlined"
-            required
-            margin="dense"
-          />
-
-          <Divider sx={{ m: '2rem' }} />
-          <TextBlock variant="h5">Bio</TextBlock>
-          <Box>
-            <TextField
-              onChange={event => (newData.bio = event.target.value)}
-              placeholder={user?.bio}
-              variant="outlined"
-              required
-              fullWidth
-              margin="dense"
+          <Divider sx={{ m: '1rem' }} />
+          <TextBlock variant="h5">Change Your Name</TextBlock>
+          <FormControl sx={{ mt: 1, mr: 1 }}>
+            <InputLabel shrink htmlFor="component-helper">
+              First Name
+            </InputLabel>
+            <OutlinedInput
+              onChange={event => (newData.firstName = event.target.value)}
+              id="component-helper"
+              placeholder={user?.firstName}
+              aria-describedby="component-helper-text"
+              label="First Name"
+              notched
             />
+          </FormControl>
+          <FormControl sx={{ mt: 1 }}>
+            <InputLabel shrink htmlFor="component-helper">
+              Last Name
+            </InputLabel>
+            <OutlinedInput
+              onChange={event => (newData.lastName = event.target.value)}
+              id="component-helper"
+              placeholder={user?.lastName}
+              aria-describedby="component-helper-text"
+              label="Last Name"
+              notched
+            />
+          </FormControl>
+          <Divider sx={{ m: '1rem' }} />
+          <TextBlock variant="h5">Change Your Bio</TextBlock>
+          <Box>
+            <FormControl sx={{ mt: 1 }} fullWidth>
+              <InputLabel shrink htmlFor="component-helper">
+                Bio
+              </InputLabel>
+              <OutlinedInput
+                onChange={event => (newData.bio = event.target.value)}
+                id="component-helper"
+                placeholder={user?.bio}
+                aria-describedby="component-helper-text"
+                label="Bio"
+                notched
+                multiline
+                minRows={3}
+              />
+            </FormControl>
           </Box>
-          <Divider sx={{ m: '2rem' }} />
+          <Divider sx={{ m: '1rem' }} />
           <Button onClick={handleSave} variant="contained">
             Save Changes
           </Button>

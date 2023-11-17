@@ -29,12 +29,13 @@ const SongPage = () => {
   const user = useContext(UserContext)
   const mobile = useContext(MobileContext)
 
-  //Retrieve artist data
+  //Retrieve song data
   const [getSongData, receivedData, error] = useHttpRequest({
     url: `/topic/song/${songId}`,
     method: HttpMethod.GET,
   })
 
+  //Check if song id exists
   useEffect(() => {
     if (songId) {
       getSongData()
@@ -44,21 +45,13 @@ const SongPage = () => {
     }
   }, [songId, error])
 
+  //Set not loading once data is retrieved
   useEffect(() => {
     if (receivedData) {
       setSongData(receivedData)
       setLoading(false)
     }
   }, [receivedData, songData])
-
-  useEffect(() => {
-    if (songData) {
-      getFollowerInfo()
-      if (user) {
-        getFollowData()
-      }
-    }
-  }, [songData])
 
   //Retrieve follow data
   const [getFollowData, receivedFollowData] = useHttpRequest({
@@ -81,11 +74,30 @@ const SongPage = () => {
     body: { followAction: !following },
   })
 
+  //If data is found, fetch the following info
+  //If the user is logged in, check if they're following this topic
+  useEffect(() => {
+    if (songData) {
+      getFollowerInfo()
+      if (user) {
+        getFollowData()
+      }
+    }
+  }, [songData])
+
+  //Set the following status according to the user info
   useEffect(() => {
     if (receivedFollowData) {
       setFollowing(receivedFollowData)
     }
   }, [receivedFollowData, songData])
+
+  //Set the following count
+  useEffect(() => {
+    if (receivedFollowerInfo) {
+      setNumFollowers(receivedFollowerInfo)
+    }
+  }, [receivedFollowerInfo, songData])
 
   const followAction = () => {
     setFollowActionData()
@@ -96,11 +108,6 @@ const SongPage = () => {
     }
     setFollowing(!following)
   }
-  useEffect(() => {
-    if (receivedFollowerInfo) {
-      setNumFollowers(receivedFollowerInfo)
-    }
-  }, [receivedFollowerInfo, songData])
 
   return !isLoading ? (
     <>
@@ -116,7 +123,7 @@ const SongPage = () => {
             flexGrow: 1,
           }}
         >
-          {/* Mobile avatar view */}
+          {/* Mobile Information view */}
           {mobile && (
             <Stack alignItems="center">
               <Avatar
@@ -146,7 +153,7 @@ const SongPage = () => {
             justifyContent="flex-end"
             alignItems="center"
           >
-            {/* Desktop avatar view */}
+            {/* Desktop Information view */}
             {!mobile && (
               <>
                 <Grid item>

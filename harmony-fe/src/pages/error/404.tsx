@@ -4,8 +4,13 @@ import TextBlock from '../../components/text-block'
 const Error404 = () => {
   return (
     <>
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <TextBlock>404 - Page Not Found</TextBlock>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
+        <TextBlock variant="h3">404 - Page Not Found</TextBlock>
       </Box>
     </>
   )
