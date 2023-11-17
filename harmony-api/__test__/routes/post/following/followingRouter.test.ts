@@ -76,6 +76,19 @@ describe('GET /post/following/all', () => {
     expect(res.statusCode).toBe(401)
     expect(res.body).toEqual({ message: 'Unauthorized' })
   })
+
+  it('calls error handler middleware when unauthorized', async () => {
+    jest.spyOn(userService, 'getUserFromCookie').mockImplementation(() => {
+      throw new Error('error')
+    })
+
+    const res = await request(app)
+      .get('/post/following/all')
+      .set('Cookie', SESSION_AS_COOKIE)
+
+    expect(res.statusCode).toBe(500)
+    expect(res.body).toEqual({ message: 'error' })
+  })
 })
 
 describe('GET /post/following/user', () => {

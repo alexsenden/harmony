@@ -10,11 +10,11 @@ export const createPost = async (postData?: Post): Promise<Post> => {
   const validatedPost = validatePost(postData)
   const postResult = await postRepo.createPost(validatedPost)
 
-  if (postData?.postType === PostType.POLL) {
+  if (validatedPost.postType === PostType.POLL) {
     const pollOptionResult: Array<Promise<PollOption>> = []
 
     for (const [index, pollOption] of Object.entries(
-      postData.pollOptions || []
+      validatedPost.pollOptions as Array<PollOption>
     )) {
       pollOptionResult.push(
         pollOptionRepo.createPollOption({
@@ -144,11 +144,11 @@ export const validatePost = (postData?: Post): Post => {
     throw new HttpError('Post data is required to create new post', 400)
   }
 
-  let errorMessages = validateTopicId(postData?.topicId)
+  let errorMessages = validateTopicId(postData.topicId)
   errorMessages = errorMessages.concat(validateUserId(postData))
   errorMessages = errorMessages.concat(validateTitle(postData))
 
-  switch (postData?.postType) {
+  switch (postData.postType) {
     case PostType.DISCUSSION:
       errorMessages = errorMessages.concat(validateBody(postData))
       break
@@ -160,7 +160,7 @@ export const validatePost = (postData?: Post): Post => {
       errorMessages = errorMessages.concat(validateRating(postData))
       break
     default:
-      errorMessages.push(`Unsupported postType: ${postData?.postType}`)
+      errorMessages.push(`Unsupported postType: ${postData.postType}`)
   }
 
   if (errorMessages.length > 0) {
@@ -170,16 +170,16 @@ export const validatePost = (postData?: Post): Post => {
   return postData
 }
 
-export const validateUserId = (postData?: Post): Array<string> => {
-  if (!postData?.userId) {
+export const validateUserId = (postData: Post): Array<string> => {
+  if (!postData.userId) {
     return ['userId field is required to create a new post']
   }
 
   return []
 }
 
-export const validateTitle = (postData?: Post): Array<string> => {
-  if (!postData?.title) {
+export const validateTitle = (postData: Post): Array<string> => {
+  if (!postData.title) {
     return ['title field is required to create a new post']
   }
   if (postData.title.length > 150) {

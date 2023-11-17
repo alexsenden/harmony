@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from 'express'
 
 import * as likeController from '../../../src/controllers/post/likeController'
 import * as userService from '../../../src/services/userService'
-import * as likeService from '../../../src/services/commentService'
+import * as likeService from '../../../src/services/likeService'
 
 let req: Request, res: Response, next: NextFunction
 beforeEach(() => {
-  req = { cookies: {} } as Request
+  req = { cookies: {}, params: {} } as Request
 
   res = {
     json: jest.fn(),
@@ -28,7 +28,7 @@ describe('postLike', () => {
 
 describe('getLikes', () => {
   it('Calls the next function immediately when an error is thrown', async () => {
-    jest.spyOn(likeService, 'getComments').mockImplementation(() => {
+    jest.spyOn(likeService, 'getLikes').mockImplementation(() => {
       throw new Error()
     })
 

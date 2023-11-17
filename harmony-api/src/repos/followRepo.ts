@@ -234,7 +234,6 @@ export const getArtistFollowCount = async (
 }
 
 export const getSongFollowCount = async (songId: string): Promise<number> => {
-  console.log('Repo: ' + songId)
   const aggregation = await prisma.followSong.aggregate({
     _count: {
       followerId: true,

@@ -39,7 +39,7 @@ describe('POST /post', () => {
     })
     jest
       .spyOn(prisma.pollOption, 'create')
-      .mockResolvedValueOnce(FAKE_POLL_OPTION)
+      .mockResolvedValueOnce({ ...FAKE_POLL_OPTION })
 
     const res = await request(app).post('/post').send(FAKE_POST)
 
@@ -151,7 +151,7 @@ describe('POST /post/vote', () => {
   it('responds with code 200 and the poll option vote', async () => {
     jest
       .spyOn(prisma.pollOption, 'findFirst')
-      .mockResolvedValueOnce(FAKE_POLL_OPTION)
+      .mockResolvedValueOnce({ ...FAKE_POLL_OPTION })
     jest.spyOn(prisma.pollVote, 'count').mockResolvedValueOnce(0)
     jest
       .spyOn(prisma.pollVote, 'create')
@@ -192,6 +192,45 @@ describe('GET /post/:postId', () => {
     const res = await request(app)
       .get(`/post/${FAKE_POST.postId}`)
       .set('Cookie', SESSION_AS_COOKIE)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toEqual({
+      ...FAKE_POST,
+      createdAt: FAKE_POST.createdAt.toISOString(),
+      isLiked: false,
+      isVoted: true,
+      numVotes: 0,
+      pollOptions: [
+        {
+          votedOn: true,
+          votes: 0,
+        },
+      ],
+    })
+  })
+
+  it('responds with code 200 and the post with no requester', async () => {
+    jest.spyOn(prisma.post, 'findUniqueOrThrow').mockResolvedValueOnce({
+      ...FAKE_POST,
+      content: FAKE_POST.body,
+      artistId: FAKE_POST.topicId.artistId || null,
+      albumId: FAKE_POST.topicId.albumId || null,
+      songId: FAKE_POST.topicId.songId || null,
+      rating: new Decimal(FAKE_POST.rating || 0),
+      postType: PrismaPostType[FAKE_POST.postType],
+      _count: {
+        comments: 0,
+        likes: 0,
+      },
+      likes: [],
+      pollOptions: [
+        {
+          pollVotes: [FAKE_POLL_OPTION_VOTE],
+        },
+      ],
+    } as unknown as PrismaPostResponse)
+
+    const res = await request(app).get(`/post/${FAKE_POST.postId}`)
 
     expect(res.statusCode).toBe(200)
     expect(res.body).toEqual({
