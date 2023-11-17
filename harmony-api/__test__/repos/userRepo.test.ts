@@ -5,6 +5,18 @@ import { HttpError } from '../../src/models/error/httpError'
 
 describe('getUserByName', () => {
   it('throws an HttpError if prisma throws an error', async () => {
+    jest.spyOn(prisma.user, 'create').mockImplementation(() => {
+      throw new Error()
+    })
+
+    expect(async () => {
+      await userRepo.register(FAKE_USER_1)
+    }).rejects.toThrow(HttpError)
+  })
+})
+
+describe('getUserByName', () => {
+  it('throws an HttpError if prisma throws an error', async () => {
     jest.spyOn(prisma.user, 'findUniqueOrThrow').mockImplementation(() => {
       throw new Error()
     })
