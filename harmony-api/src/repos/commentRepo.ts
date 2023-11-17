@@ -48,7 +48,6 @@ export const getComments = async (
       userId: comment.userId,
       postId: comment.postId,
       postTitle: comment.post.title,
-
       createdAt: comment.createdAt,
       content: comment.content || '',
       user: comment.user,

@@ -299,6 +299,20 @@ const main = async () => {
       },
     })
   )
+
+  console.log(
+    await prisma.comment.upsert({
+      where: { commentId: '0b08c78b-44ee-4465-b4a0-421c207c3e52' },
+      update: {},
+      create: {
+        commentId: '0b08c78b-44ee-4465-b4a0-421c207c3e52',
+        postId: 'a706c75a-a076-43d2-b9d2-50d259a063da',
+        userId: 'b12c47f8-036c-4bfd-8658-230e8fa4d7cb',
+        content:
+          "Wow, I loved this song in Happy Gilmore too! Did you know he's the only guy to ever take his stake off and try to stab somebody?",
+      },
+    })
+  )
 }
 
 main()
