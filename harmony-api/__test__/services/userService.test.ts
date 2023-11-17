@@ -30,7 +30,7 @@ describe('login', () => {
     })
 
     expect(async () => {
-      await userService.login(undefined)
+      await userService.login(FAKE_USER_1)
     }).rejects.toThrow(HttpError)
   })
 })

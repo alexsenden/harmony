@@ -47,15 +47,16 @@ export const FAKE_POST = {
   createdAt: new Date(),
 }
 
-export const FAKE_USER_1: User = {
+export const FAKE_USER_1 = {
   userId: 'fake-user-id-1',
-  username: 'fake-user-1',
+  username: 'fakeUser1',
   password: 'Fake-password-1$',
   active: true,
   createdAt: new Date(),
-  firstName: 'fake-firstname-1',
-  lastName: 'fake-lastname-1',
+  firstName: 'fake-firstname',
+  lastName: 'fake-lastname',
   picture: 0,
+  bio: 'fake bio',
 }
 
 export const FAKE_USER_2: User = {
