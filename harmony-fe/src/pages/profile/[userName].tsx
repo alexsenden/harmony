@@ -39,6 +39,7 @@ const Profile = () => {
     method: HttpMethod.GET,
   })
 
+  //Check if user id exists
   useEffect(() => {
     if (userName) {
       getUserData()
@@ -48,6 +49,7 @@ const Profile = () => {
     }
   }, [userName, error])
 
+  //Set not loading once data is retrieved
   useEffect(() => {
     if (receivedData) {
       setUser(receivedData)
@@ -69,6 +71,16 @@ const Profile = () => {
     headers: { userId: userData?.userId },
   })
 
+  //Sending follow data
+  const [setFollowActionData] = useHttpRequest({
+    url: '/follow',
+    method: HttpMethod.POST,
+    headers: { followingId: userData?.userId },
+    body: { followAction: !following },
+  })
+
+  //If data is found, fetch the following info
+  //If the user is logged in, check if they're following this topic
   useEffect(() => {
     if (userData) {
       getFollowerInfo()
@@ -78,25 +90,19 @@ const Profile = () => {
     }
   }, [userData])
 
+  //Set the following status according to the user info
   useEffect(() => {
     if (receivedFollowData) {
       setFollowing(receivedFollowData)
     }
   }, [receivedFollowData, userData])
 
+  //Set the following count
   useEffect(() => {
     if (receivedFollowerInfo) {
       setNumFollowers(receivedFollowerInfo)
     }
   }, [receivedFollowerInfo, userData])
-
-  //Sending follow data
-  const [setFollowActionData] = useHttpRequest({
-    url: '/follow',
-    method: HttpMethod.POST,
-    headers: { followingId: userData?.userId },
-    body: { followAction: !following },
-  })
 
   const followAction = () => {
     setFollowActionData()

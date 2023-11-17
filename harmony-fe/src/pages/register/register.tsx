@@ -18,11 +18,17 @@ import TextBlock from '../../components/text-block'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Head from 'next/head'
 import { MobileContext } from '../../contexts/mobileContext'
+import { UserContext } from '../../contexts/userContext'
 
 const RegisterPage = () => {
   const [hasError, setHasError] = useState(false)
+  const [firstNameError, setFirstNameError] = useState(false)
+  const [lastNameError, setLastNameError] = useState(false)
+  const [usernameError, setUsernameError] = useState(false)
+  const [passwordError, setPasswordError] = useState(false)
   const [hideSignUp, setHideSignUp] = useState(false)
   const mobile = useContext(MobileContext)
+  const user = useContext(UserContext)
 
   const [newUser, setNewUser] = useState({
     firstName: '',
@@ -41,6 +47,10 @@ const RegisterPage = () => {
 
   const handleUserRegister = () => {
     setHasError(false)
+    setFirstNameError(false)
+    setLastNameError(false)
+    setUsernameError(false)
+    setPasswordError(false)
     sendHttpRequest()
   }
 
@@ -60,6 +70,13 @@ const RegisterPage = () => {
 
     if (error) {
       console.error('Error:', error)
+
+      //Some simple regex that will set the error states to true if that type of error is mentioned
+      setFirstNameError(/\bFirst Name\b/.test(error.response.data.message))
+      setLastNameError(/\bLast Name\b/.test(error.response.data.message))
+      setUsernameError(/\bUsername\b/.test(error.response.data.message))
+      setPasswordError(/\bPassword\b/.test(error.response.data.message))
+
       setHasError(true)
     } else if (response && !loading) {
       setHideSignUp(true)
@@ -67,6 +84,12 @@ const RegisterPage = () => {
       window.location.href = '../home'
     }
   }, [response, error])
+
+  useEffect(() => {
+    if (user) {
+      window.location.href = '../home'
+    }
+  }, [user])
 
   const showPasswordButtonClick = () => setShowPassword(show => !show)
 
@@ -136,7 +159,7 @@ const RegisterPage = () => {
               variant="outlined"
               fullWidth
               required
-              error={hasError}
+              error={firstNameError}
             />
             <TextField
               sx={{
@@ -156,7 +179,7 @@ const RegisterPage = () => {
               variant="outlined"
               fullWidth
               required
-              error={hasError}
+              error={lastNameError}
             />
             <TextField
               sx={{
@@ -176,7 +199,7 @@ const RegisterPage = () => {
               variant="outlined"
               fullWidth
               required
-              error={hasError}
+              error={usernameError}
             />
             <TextField
               sx={{
@@ -197,7 +220,7 @@ const RegisterPage = () => {
               variant="outlined"
               fullWidth
               required
-              error={hasError}
+              error={passwordError}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
