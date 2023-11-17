@@ -15,6 +15,7 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Head from 'next/head'
 import { MobileContext } from '../../contexts/mobileContext'
+import { UserContext } from '../../contexts/userContext'
 
 const LoginPage = () => {
   const [loginData] = useState({
@@ -24,12 +25,19 @@ const LoginPage = () => {
   const [loginError, setLoginError] = useState(false) // Initialize error state
   const [showPassword, setShowPassword] = useState(false)
   const mobile = useContext(MobileContext)
+  const user = useContext(UserContext)
   const [userLogin, userLoginResponse, userLoginError, userLoginLoading] =
     useHttpRequest({
       url: '/user/login',
       method: HttpMethod.POST,
       body: loginData,
     })
+
+  useEffect(() => {
+    if (user) {
+      window.location.href = '../home'
+    }
+  }, [user])
 
   useEffect(() => {
     if (!userLoginLoading) {
