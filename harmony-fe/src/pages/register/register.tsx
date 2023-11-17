@@ -18,11 +18,13 @@ import TextBlock from '../../components/text-block'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Head from 'next/head'
 import { MobileContext } from '../../contexts/mobileContext'
+import { UserContext } from '../../contexts/userContext'
 
 const RegisterPage = () => {
   const [hasError, setHasError] = useState(false)
   const [hideSignUp, setHideSignUp] = useState(false)
   const mobile = useContext(MobileContext)
+  const user = useContext(UserContext)
 
   const [newUser, setNewUser] = useState({
     firstName: '',
@@ -67,6 +69,12 @@ const RegisterPage = () => {
       window.location.href = '../home'
     }
   }, [response, error])
+
+  useEffect(() => {
+    if (user) {
+      window.location.href = '../home'
+    }
+  }, [user])
 
   const showPasswordButtonClick = () => setShowPassword(show => !show)
 
