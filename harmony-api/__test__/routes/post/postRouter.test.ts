@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import request from 'supertest'
 import { Express } from 'express'
 import { Decimal } from '@prisma/client/runtime/library'
@@ -68,7 +69,9 @@ describe('POST /post', () => {
 
 describe('GET /post/:postId/comment', () => {
   it('responds with code 200 and an array of comments', async () => {
-    jest.spyOn(prisma.comment, 'findMany').mockResolvedValueOnce([FAKE_COMMENT])
+    jest
+      .spyOn(prisma.comment, 'findMany') // @ts-ignore
+      .mockResolvedValueOnce([{ ...FAKE_COMMENT, post: FAKE_POST }])
 
     const res = await request(app).get(`/post/${FAKE_POST.postId}/comment`)
 
@@ -77,6 +80,7 @@ describe('GET /post/:postId/comment', () => {
       {
         ...FAKE_COMMENT,
         createdAt: FAKE_COMMENT.createdAt.toISOString(),
+        postTitle: FAKE_POST.title,
       },
     ])
   })

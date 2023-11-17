@@ -68,6 +68,7 @@ describe('GET /post/following/all', () => {
     jest
       .spyOn(userService, 'getUserFromCookie')
       .mockResolvedValueOnce(undefined)
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
     const res = await request(app)
       .get('/post/following/all')
@@ -81,6 +82,7 @@ describe('GET /post/following/all', () => {
     jest.spyOn(userService, 'getUserFromCookie').mockImplementation(() => {
       throw new Error('error')
     })
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
     const res = await request(app)
       .get('/post/following/all')

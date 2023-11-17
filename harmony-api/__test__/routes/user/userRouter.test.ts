@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import request from 'supertest'
 import { Express } from 'express'
 
@@ -5,6 +6,7 @@ import prisma from '../../../prisma/prisma'
 
 import {
   FAKE_COMMENT_WITH_USER,
+  FAKE_POST,
   FAKE_USER_1,
   FAKE_USER_1_COOKIE,
   FakeApp,
@@ -20,8 +22,8 @@ beforeEach(() => {
 describe('GET /user/:userId/comment', () => {
   it('responds with code 200 and an array of comments', async () => {
     jest
-      .spyOn(prisma.comment, 'findMany')
-      .mockResolvedValueOnce([FAKE_COMMENT_WITH_USER])
+      .spyOn(prisma.comment, 'findMany') // @ts-ignore
+      .mockResolvedValueOnce([{ ...FAKE_COMMENT_WITH_USER, post: FAKE_POST }])
 
     const res = await request(app).get(`/user/${FAKE_USER_1.userId}/comment`)
 
@@ -34,6 +36,7 @@ describe('GET /user/:userId/comment', () => {
           ...FAKE_COMMENT_WITH_USER.user,
           createdAt: FAKE_COMMENT_WITH_USER.user.createdAt.toISOString(),
         },
+        postTitle: FAKE_POST.title,
       },
     ])
   })
