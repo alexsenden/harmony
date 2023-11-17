@@ -11,6 +11,7 @@ import {
 } from '../../../testUtils/testData'
 import { Decimal } from '@prisma/client/runtime/library'
 import { PostType as PrismaPostType } from '@prisma/client'
+import * as userService from '../../../../src/services/userService'
 
 let app: Express
 beforeEach(() => {
@@ -61,6 +62,19 @@ describe('GET /post/following/all', () => {
         ],
       },
     ])
+  })
+
+  it('calls error handler middleware when unauthorized', async () => {
+    jest
+      .spyOn(userService, 'getUserFromCookie')
+      .mockResolvedValueOnce(undefined)
+
+    const res = await request(app)
+      .get('/post/following/all')
+      .set('Cookie', SESSION_AS_COOKIE)
+
+    expect(res.statusCode).toBe(401)
+    expect(res.body).toEqual({ message: 'Unauthorized' })
   })
 })
 

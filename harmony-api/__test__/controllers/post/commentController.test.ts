@@ -6,7 +6,7 @@ import * as commentService from '../../../src/services/commentService'
 
 let req: Request, res: Response, next: NextFunction
 beforeEach(() => {
-  req = { cookies: {} } as Request
+  req = { cookies: {}, params: {} } as Request
 
   res = {
     json: jest.fn(),

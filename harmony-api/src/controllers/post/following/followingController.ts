@@ -12,12 +12,14 @@ export const getFollowingFeed = async (
   const feedType =
     typeof req.params.feedType === 'string' ? req.params.feedType : undefined
 
-  const requester = await userService.getUserFromCookie(req.cookies.userCookie)
-  if (!requester) {
-    throw new HttpError('Unauthorized', 401)
-  }
-
   try {
+    const requester = await userService.getUserFromCookie(
+      req.cookies.userCookie
+    )
+    if (!requester) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     switch (feedType) {
       case 'all':
         res.json(await postService.getAllFollowingPosts(requester))
