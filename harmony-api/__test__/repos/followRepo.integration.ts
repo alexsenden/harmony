@@ -184,18 +184,6 @@ describe('Integration tests for followRepo functions', () => {
     const followCount = await getAlbumFollowCount(testFollow.followingId)
     expect(followCount).toBeGreaterThanOrEqual(0)
   })
-  /*
-  it('should throw HttpError when following a user already being followed', async () => {
-    const followInfo = {
-      followingId: '2',
-      followerId: '3',
-    };
-
-    await followUser(followInfo);
-
-    await expect(followUser(followInfo)).rejects.toThrow(HttpError);
-  });
-  */
 
   it('should unfollow a user', async () => {
     const initialFollow = await prisma.follow.findFirst({

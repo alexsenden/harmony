@@ -74,7 +74,6 @@ describe('Integration tests for UserRepo functions', () => {
 
     expect(comparisonSrc).toEqual(comparisonRes)
 
-    // user exists so it should fail
     await expect(register(userData)).rejects.toThrow(HttpError)
   })
 
