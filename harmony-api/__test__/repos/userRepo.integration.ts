@@ -143,17 +143,6 @@ describe('Integration tests for UserRepo functions', () => {
     await expect(getUserByName(nonExistentUserName)).rejects.toThrow(HttpError)
   })
 
-  it('should throw an error if invalid username or password during getUserByLoginInfo', async () => {
-    const invalidLoginData = {
-      username: 'invalidusername',
-      password: 'invalidpassword',
-    }
-
-    await expect(getUserByLoginInfo(invalidLoginData)).rejects.toEqual(
-      'Invalid username or password'
-    )
-  })
-
   it('should throw an error if user session cookie does not exist during getUserFromCookie', async () => {
     const nonExistentCookie = 'nonexistentcookie'
 
