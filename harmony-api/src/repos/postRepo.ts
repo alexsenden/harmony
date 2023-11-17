@@ -514,7 +514,7 @@ interface PollOptionWithVotes extends PollOption {
   votedOn?: boolean
 }
 
-const mapPrismaPostToPost = (post: PostWithRelations): Post => {
+export const mapPrismaPostToPost = (post: PostWithRelations): Post => {
   return {
     postId: post.postId,
     userId: post.userId,
@@ -550,8 +550,8 @@ const mapPrismaPollToPoll = (
     postId: pollOption.postId,
     option: pollOption.option,
     entryNumber: pollOption.entryNumber,
-    votes: pollOption?._count.pollVotes || 0,
-    votedOn: pollOption?.pollVotes.length > 0,
+    votes: pollOption._count.pollVotes || 0,
+    votedOn: pollOption.pollVotes.length > 0,
   }
 }
 
@@ -559,15 +559,16 @@ const checkPollOptionsForVote = (
   pollOptions: Array<PollOptionWithRelations>
 ): boolean => {
   for (const pollOption of pollOptions) {
-    pollOption.pollVotes = pollOption.pollVotes || []
-    if (pollOption.pollVotes.length > 0) {
+    if (pollOption.pollVotes && pollOption.pollVotes.length > 0) {
       return true
     }
   }
   return false
 }
 
-const sumPollVotes = (pollOptions: Array<PollOptionWithRelations>): number => {
+export const sumPollVotes = (
+  pollOptions: Array<PollOptionWithRelations>
+): number => {
   let sum = 0
 
   for (const pollOption of pollOptions) {

@@ -63,7 +63,7 @@ export const getUserByCookie = async (
 ) => {
   try {
     const cookie = req.cookies.userCookie
-    if (cookie === undefined) {
+    if (!cookie) {
       res.json(null)
     } else {
       const userData = await userService.getUserFromCookie(cookie)

@@ -25,17 +25,17 @@ export const register = async (user: User): Promise<User> => {
 }
 
 export const getUserByName = async (userName?: string): Promise<User> => {
-  const userData = await prisma.user
-    .findUniqueOrThrow({
+  try {
+    const userData = await prisma.user.findUniqueOrThrow({
       where: {
         username: userName,
       },
     })
-    .catch(() => {
-      throw new HttpError(`User with name ${userName} not found`, 404)
-    })
 
-  return mapPrismaUserToUser(userData)
+    return mapPrismaUserToUser(userData)
+  } catch {
+    throw new HttpError(`User with name ${userName} not found`, 404)
+  }
 }
 
 export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
@@ -51,15 +51,15 @@ export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
   })
   console.log('TESTMINE', userData)
   if (userData === null) {
-    return Promise.reject('Invalid username or password')
+    throw new HttpError('Invalid username or password', 400)
   }
 
   return mapPrismaUserToUser(userData)
 }
 
 export const getUserFromCookie = async (cookie: string): Promise<User> => {
-  const userData = await prisma.user
-    .findFirstOrThrow({
+  try {
+    const userData = await prisma.user.findFirstOrThrow({
       where: {
         tokens: {
           some: {
@@ -68,11 +68,11 @@ export const getUserFromCookie = async (cookie: string): Promise<User> => {
         },
       },
     })
-    .catch(() => {
-      throw new HttpError(`User session cookie '${cookie}' does not exist`, 400)
-    })
 
-  return mapPrismaUserToUser(userData)
+    return mapPrismaUserToUser(userData)
+  } catch {
+    throw new HttpError(`User session cookie '${cookie}' does not exist`, 400)
+  }
 }
 
 export const getUserByPartialUsername = async (

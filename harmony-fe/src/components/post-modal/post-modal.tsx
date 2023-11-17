@@ -118,7 +118,12 @@ export const PostModal = ({ open, onClose }: PostModalProps) => {
   }, [createPostError])
 
   return (
-    <Dialog open={open} onClose={onClose} fullScreen={mobile}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullScreen={mobile}
+      disableRestoreFocus
+    >
       <Stack
         direction="row"
         sx={{ display: 'flex', justifyContent: 'space-between' }}

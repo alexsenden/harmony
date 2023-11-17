@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 
 import * as followService from '../../services/followService'
+import * as userService from '../../services/userService'
+import { HttpError } from '../../models/error/httpError'
 
 export const toggleUserFollow = async (
   req: Request,
@@ -8,13 +10,18 @@ export const toggleUserFollow = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.cookies.userCookie
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     const followingId = req.headers.followingid as string
     const followAction = req.body.followAction as boolean
+
     if (followAction) {
-      res.json(await followService.followUser(cookie, followingId))
+      res.json(await followService.followUser(user, followingId))
     } else {
-      res.json(await followService.unFollowUser(cookie, followingId))
+      res.json(await followService.unFollowUser(user, followingId))
     }
   } catch (error) {
     next(error)
@@ -27,13 +34,18 @@ export const toggleArtistFollow = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.cookies.userCookie
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     const followingId = req.headers.followingid as string
     const followAction = req.body.followAction as boolean
+
     if (followAction) {
-      res.json(await followService.followArtist(cookie, followingId))
+      res.json(await followService.followArtist(user, followingId))
     } else {
-      res.json(await followService.unFollowArtist(cookie, followingId))
+      res.json(await followService.unFollowArtist(user, followingId))
     }
   } catch (error) {
     next(error)
@@ -46,13 +58,18 @@ export const toggleSongFollow = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.cookies.userCookie
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     const followingId = req.headers.followingid as string
     const followAction = req.body.followAction as boolean
+
     if (followAction) {
-      res.json(await followService.followSong(cookie, followingId))
+      res.json(await followService.followSong(user, followingId))
     } else {
-      res.json(await followService.unFollowSong(cookie, followingId))
+      res.json(await followService.unFollowSong(user, followingId))
     }
   } catch (error) {
     next(error)
@@ -65,13 +82,18 @@ export const toggleAlbumFollow = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.cookies.userCookie
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     const followingId = req.headers.followingid as string
     const followAction = req.body.followAction as boolean
+
     if (followAction) {
-      res.json(await followService.followAlbum(cookie, followingId))
+      res.json(await followService.followAlbum(user, followingId))
     } else {
-      res.json(await followService.unFollowAlbum(cookie, followingId))
+      res.json(await followService.unFollowAlbum(user, followingId))
     }
   } catch (error) {
     next(error)
@@ -84,9 +106,14 @@ export const getFollow = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.cookies.userCookie
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     const followingId = req.headers.followingid as string
-    res.json(await followService.getFollow(cookie, followingId))
+
+    res.json(await followService.getFollow(user, followingId))
   } catch (error) {
     next(error)
   }
@@ -98,9 +125,14 @@ export const getArtistFollow = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.cookies.userCookie
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     const followingId = req.headers.followingid as string
-    res.json(await followService.getArtistFollow(cookie, followingId))
+
+    res.json(await followService.getArtistFollow(user, followingId))
   } catch (error) {
     next(error)
   }
@@ -112,9 +144,14 @@ export const getSongFollow = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.cookies.userCookie
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     const followingId = req.headers.followingid as string
-    res.json(await followService.getSongFollow(cookie, followingId))
+
+    res.json(await followService.getSongFollow(user, followingId))
   } catch (error) {
     next(error)
   }
@@ -126,9 +163,14 @@ export const getAlbumFollow = async (
   next: NextFunction
 ) => {
   try {
-    const cookie = req.cookies.userCookie
+    const user = await userService.getUserFromCookie(req.cookies.userCookie)
+    if (!user) {
+      throw new HttpError('Unauthorized', 401)
+    }
+
     const followingId = req.headers.followingid as string
-    res.json(await followService.getAlbumFollow(cookie, followingId))
+
+    res.json(await followService.getAlbumFollow(user, followingId))
   } catch (error) {
     next(error)
   }

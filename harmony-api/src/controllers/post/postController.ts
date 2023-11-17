@@ -26,8 +26,11 @@ export const getPostById = async (
 ) => {
   const postId =
     typeof req.params.postId === 'string' ? req.params.postId : undefined
-  const requester = await userService.getUserFromCookie(req.cookies.userCookie)
+
   try {
+    const requester = await userService.getUserFromCookie(
+      req.cookies.userCookie
+    )
     res.json(await postService.getPostById(postId, requester))
   } catch (error) {
     next(error)
