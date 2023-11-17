@@ -45,24 +45,36 @@ describe('Integration tests for likeRepo functions', () => {
       userId: testUser.userId,
       postId: testPost.postId,
     };
-
-    await createLike(testLike);
   });
 
   afterAll(async () => {
     try {
       await deleteLike(testLike);
-    } catch (e) { }
+    } catch (e) { 
+      console.error('Error deleting like:', e);
+    }
 
     try {
       await prisma.post.deleteMany({
         where: {
-          userId: testUser.userId,
+          postId: '1',
         },
       });
     }
     catch (e) {
+      console.error('Error deleting post:', e);
+    }
 
+    
+    try {
+      await prisma.post.deleteMany({
+        where: {
+          userId: testPost.userId,
+        },
+      });
+    }
+    catch (e) {
+      console.error('Error deleting post:', e);
     }
 
     try {
@@ -71,9 +83,10 @@ describe('Integration tests for likeRepo functions', () => {
           userId: testUser.userId,
         },
       });
+      
     }
     catch (e) {
-
+      console.error('Error deleting user:', e);
     }
   });
 

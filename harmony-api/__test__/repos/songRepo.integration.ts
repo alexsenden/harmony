@@ -1,4 +1,4 @@
-/*
+
 import prisma from '../../prisma/prisma';
 import { getSongTopicByPartialName, getSongById } from '../../src/repos/songRepo'; 
 
@@ -50,4 +50,3 @@ describe('Integration tests for songRepo functions', () => {
     expect(song.songId).toBe(testSongId);
   });
 });
-*/

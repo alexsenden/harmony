@@ -1,4 +1,4 @@
-/*import prisma from '../../prisma/prisma'
+import prisma from '../../prisma/prisma'
 import { User } from '../../src/models/user';
 import { assignUserCookie, removeUserCookie } from '../../src/repos/userCookieRepo'
 
@@ -74,4 +74,3 @@ describe('Integration tests for userCookieRepo functions', () => {
         expect(deletedCookie).toBeNull();
       });
 });
-*/

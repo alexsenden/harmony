@@ -1,4 +1,4 @@
-/*
+
 import prisma from '../../prisma/prisma';
 import { HttpError } from '../../src/models/error/httpError';
 import { getSongTopicByPartialName, getSongById } from '../../src/repos/songRepo'; // Adjust the path accordingly
@@ -135,4 +135,3 @@ describe('Integration tests for songRepo functions', () => {
 
 });
 
-*/

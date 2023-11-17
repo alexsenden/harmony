@@ -6,6 +6,7 @@ import { createPost } from '../../src/repos/postRepo';
 import { User } from '../../src/models/user';
 import { Post, PostType } from '../../src/models/post';
 
+
 describe('Integration tests for pollOptionRepo functions', () => {
   let testPollOption: PollOption;
   let testUser: User;

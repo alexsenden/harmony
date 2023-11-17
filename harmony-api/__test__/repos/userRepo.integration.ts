@@ -1,4 +1,4 @@
-/*import { register, getUserByName, getUserByLoginInfo, setUserData, getUserByPartialUsername, getUserFromCookie } from '../../src/repos/userRepo'
+import { register, getUserByName, getUserByLoginInfo, setUserData, getUserByPartialUsername, getUserFromCookie } from '../../src/repos/userRepo'
 import { HttpError } from '../../src/models/error/httpError'
 import prisma from '../../prisma/prisma'
 import { User } from '../../src/models/user';
@@ -156,4 +156,3 @@ describe('Integration tests for UserRepo functions', () => {
   });
 
 })
-*/
