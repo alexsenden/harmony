@@ -41,6 +41,7 @@ const CommentSection = ({
             postId: post.postId,
             createdAt: new Date(Date.now()),
             content: comment,
+            postTitle: post.title,
           },
           ...prevComments,
         ]
