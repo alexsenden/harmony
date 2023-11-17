@@ -30,21 +30,21 @@ export const getAlbumTopicByPartialName = async (
 }
 
 export const getAlbumById = async (albumID?: number): Promise<Album> => {
-  const albumData = await prisma.album
-    .findUniqueOrThrow({
+  try {
+    const albumData = await prisma.album.findUniqueOrThrow({
       where: {
         albumId: albumID,
       },
     })
-    .catch(() => {
-      throw new HttpError(`Album with id ${albumID} not found`, 404)
-    })
 
-  return {
-    albumId: albumData.albumId,
-    albumName: albumData.albumName,
-    albumDescription: albumData.albumDescription,
-    releaseGroupType: albumData.releaseGroupType,
-    artistCreditId: albumData.artistCreditId,
+    return {
+      albumId: albumData.albumId,
+      albumName: albumData.albumName,
+      albumDescription: albumData.albumDescription,
+      releaseGroupType: albumData.releaseGroupType,
+      artistCreditId: albumData.artistCreditId,
+    }
+  } catch {
+    throw new HttpError(`Album with id ${albumID} not found`, 404)
   }
 }

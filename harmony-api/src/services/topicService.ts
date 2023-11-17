@@ -43,18 +43,15 @@ export const getTopicOrUserByPartialName = async (
 }
 
 export const getArtistById = async (artistID?: number): Promise<Artist> => {
-  const artist = artistRepo.getArtistById(artistID)
-  return artist
+  return artistRepo.getArtistById(artistID)
 }
 
 export const getSongById = async (songID?: number): Promise<Song> => {
-  const song = songRepo.getSongById(songID)
-  return song
+  return songRepo.getSongById(songID)
 }
 
 export const getAlbumById = async (albumID?: number): Promise<Album> => {
-  const album = albumRepo.getAlbumById(albumID)
-  return album
+  return albumRepo.getAlbumById(albumID)
 }
 
 export const validateTopicId = (topicId?: TopicId): Array<string> => {

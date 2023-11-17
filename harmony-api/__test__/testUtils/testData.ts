@@ -115,7 +115,7 @@ export const FAKE_ARTIST = {
   artistId: 2000,
   artistName: 'fake album',
   beginYear: 1900,
-  endYear: 2023,
+  end: 2023,
   artistDescription: 'fake artist description',
 }
 
