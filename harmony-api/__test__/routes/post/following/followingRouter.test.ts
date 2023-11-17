@@ -21,7 +21,7 @@ beforeEach(() => {
 
 describe('GET /post/following/all', () => {
   it('responds with code 200 and an array of comments', async () => {
-    jest.spyOn(prisma.post, 'findMany').mockResolvedValueOnce([
+    jest.spyOn(prisma.post, 'findMany').mockResolvedValue([
       {
         ...FAKE_POST,
         content: FAKE_POST.body,
@@ -42,26 +42,26 @@ describe('GET /post/following/all', () => {
       .get('/post/following/all')
       .set('Cookie', SESSION_AS_COOKIE)
 
+    const expected = {
+      ...FAKE_POST,
+      createdAt: FAKE_POST.createdAt.toISOString(),
+      isLiked: false,
+      isVoted: false,
+      numVotes: 0,
+      pollOptions: [
+        {
+          entryNumber: 0,
+          option: 'This is a fake poll option.',
+          pollOptionId: 'fake-poll-option-id',
+          postId: 'fake-post-id',
+          votedOn: false,
+          votes: 0,
+        },
+      ],
+    }
+
     expect(res.statusCode).toBe(200)
-    expect(res.body).toEqual([
-      {
-        ...FAKE_POST,
-        createdAt: FAKE_POST.createdAt.toISOString(),
-        isLiked: false,
-        isVoted: false,
-        numVotes: 0,
-        pollOptions: [
-          {
-            entryNumber: 0,
-            option: 'This is a fake poll option.',
-            pollOptionId: 'fake-poll-option-id',
-            postId: 'fake-post-id',
-            votedOn: false,
-            votes: 0,
-          },
-        ],
-      },
-    ])
+    expect(res.body).toEqual([expected, expected, expected, expected])
   })
 
   it('calls error handler middleware when unauthorized', async () => {
