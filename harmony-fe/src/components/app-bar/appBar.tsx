@@ -176,6 +176,7 @@ const AppBar = () => {
             onClose={() => setSearchModalOpen(false)}
             fullWidth
             maxWidth="md"
+            disableRestoreFocus
           >
             <DialogTitle>
               Search for artists, albums, songs, or users
