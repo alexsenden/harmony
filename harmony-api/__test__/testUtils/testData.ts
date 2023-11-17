@@ -50,7 +50,7 @@ export const FAKE_POST = {
 export const FAKE_USER_1: User = {
   userId: 'fake-user-id-1',
   username: 'fake-user-1',
-  password: 'fake-password-1',
+  password: 'Fake-password-1$',
   active: true,
   createdAt: new Date(),
   firstName: 'fake-firstname-1',
@@ -130,4 +130,12 @@ export const FAKE_SONG = {
 export const FAKE_FOLLOW = {
   followerId: 'fake-follower-id',
   followingId: 'fake-following-id',
+}
+
+export const FAKE_ACCOUNT = {
+  userId: FAKE_USER_1.userId,
+  firstName: FAKE_USER_1.firstName,
+  lastName: FAKE_USER_1.lastName,
+  picture: 0,
+  bio: 'fake bio',
 }
