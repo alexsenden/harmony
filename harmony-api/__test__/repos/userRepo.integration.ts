@@ -1,12 +1,18 @@
-import { register } from '../../src/repos/userRepo'
+import {
+  register,
+  getUserByName,
+  getUserByLoginInfo,
+  setUserData,
+  getUserByPartialUsername,
+  getUserFromCookie,
+} from '../../src/repos/userRepo'
 import { HttpError } from '../../src/models/error/httpError'
 import prisma from '../../prisma/prisma'
+import { User } from '../../src/models/user'
 
-/*
-  This test interacts with locally deployable DB, and part of the integration testing
-*/
+describe('Integration tests for UserRepo functions', () => {
+  let result: User
 
-describe('register function with Singleton', () => {
   const userToDelete = {
     where: {
       username: 'testuser',
@@ -29,14 +35,29 @@ describe('register function with Singleton', () => {
     picture: 0,
   }
 
+  beforeEach(async () => {
+    result = await register(userData)
+  })
+
+  afterEach(async () => {
+    try {
+      const deleted = await prisma.user.delete(userToDelete)
+      console.log('DELETED ', deleted)
+    } catch (e) {
+      console.log(e)
+    }
+  })
+
   afterAll(async () => {
-    const deleted = await prisma.user.delete(userToDelete)
-    console.log('DELETED ', deleted)
+    try {
+      const deleted = await prisma.user.delete(userToDelete)
+      console.log('DELETED ', deleted)
+    } catch (e) {
+      console.log(e)
+    }
   })
 
   it('should create a new user', async () => {
-    const result = await register(userData)
-
     const comparisonSrc = {
       username: userData.username,
       password: '',
@@ -52,9 +73,81 @@ describe('register function with Singleton', () => {
     }
 
     expect(comparisonSrc).toEqual(comparisonRes)
+
+    await expect(register(userData)).rejects.toThrow(HttpError)
   })
 
-  it('should throw an error if username already exists', async () => {
-    await expect(register(userData)).rejects.toThrow(HttpError)
+  it('should get a user by username', async () => {
+    const result = await getUserByName(userData.username)
+
+    expect(result).toHaveProperty('username', userData.username)
+  })
+
+  it('should get a user by login info', async () => {
+    const loginData = {
+      username: userData.username,
+      password: userData.password,
+    }
+
+    const result = await getUserByLoginInfo(loginData)
+
+    expect(result).toHaveProperty('username', userData.username)
+  })
+
+  it('should set user data', async () => {
+    const existingUser = await getUserByName(userData.username)
+    expect(existingUser).toBeDefined()
+
+    const updatedUserData = {
+      bio: 'Updated bio',
+      picture: 1,
+      firstName: 'Updated John',
+      lastName: 'Updated Doe',
+    }
+
+    const updatedUser = await setUserData({
+      userId: existingUser.userId,
+      ...updatedUserData,
+    })
+
+    expect(updatedUser).toBeDefined()
+    expect(updatedUser.bio).toEqual(updatedUserData.bio)
+    expect(updatedUser.picture).toEqual(updatedUserData.picture)
+    expect(updatedUser.firstName).toEqual(updatedUserData.firstName)
+    expect(updatedUser.lastName).toEqual(updatedUserData.lastName)
+  })
+
+  it('should get a user by partial username', async () => {
+    const partialName = 'test'
+    const result = await getUserByPartialUsername(partialName)
+
+    expect(result).toHaveLength(1)
+    expect(result[0]).toHaveProperty('username', userData.username)
+  })
+
+  it('should throw an error if user is not found during setUserData', async () => {
+    const nonExistentUserData = {
+      userId: 'nonexistentid',
+      bio: 'Updated bio',
+      picture: 1,
+      firstName: 'Updated John',
+      lastName: 'Updated Doe',
+    }
+
+    await expect(setUserData(nonExistentUserData)).rejects.toThrow(Error)
+  })
+
+  it('should throw an error if user is not found during getUserByName', async () => {
+    const nonExistentUserName = 'nonexistentuser'
+
+    await expect(getUserByName(nonExistentUserName)).rejects.toThrow(HttpError)
+  })
+
+  it('should throw an error if user session cookie does not exist during getUserFromCookie', async () => {
+    const nonExistentCookie = 'nonexistentcookie'
+
+    await expect(getUserFromCookie(nonExistentCookie)).rejects.toThrow(
+      `User session cookie '${nonExistentCookie}' does not exist`
+    )
   })
 })
