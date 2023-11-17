@@ -8,8 +8,7 @@ import { Login } from '../models/login'
 import { Account } from '../models/account'
 
 export const getUserByUsername = async (userName?: string): Promise<User> => {
-  const user = userRepo.getUserByName(userName)
-  return user
+  return userRepo.getUserByName(userName)
 }
 
 export const register = async (userData?: User): Promise<User> => {
@@ -59,24 +58,24 @@ export const getUserFromCookie = async (
   }
 }
 
-const validateUserRegistration = (userData: User) => {
+export const validateUserRegistration = (userData: User) => {
   validateUserRegistrationBasic(userData)
   validateUserRegistrationAdvanced(userData)
 }
 
-const validateUserRegistrationBasic = (userData: User) => {
+export const validateUserRegistrationBasic = (userData: User) => {
   const errorMessages = []
 
-  if (!userData?.username) {
+  if (!userData.username) {
     errorMessages.push('Username is required to create a new user')
   }
-  if (!userData?.password) {
+  if (!userData.password) {
     errorMessages.push('Password is required to create a new user')
   }
-  if (!userData?.firstName) {
+  if (!userData.firstName) {
     errorMessages.push('First Name is required to create a new user')
   }
-  if (!userData?.lastName) {
+  if (!userData.lastName) {
     errorMessages.push('Last Name is required to create a new user')
   }
 
@@ -85,7 +84,7 @@ const validateUserRegistrationBasic = (userData: User) => {
   }
 }
 
-const validateUserRegistrationAdvanced = (userData: User) => {
+export const validateUserRegistrationAdvanced = (userData: User) => {
   const errorMessages = []
 
   const usernameRegex = /^[a-zA-Z0-9]+$/g
@@ -115,22 +114,22 @@ const validateUserRegistrationAdvanced = (userData: User) => {
   }
 }
 
-const hashPassword = (password: string) => {
+export const hashPassword = (password: string) => {
   const hash = crypto.createHash('sha256')
   hash.update(password)
   return hash.digest('hex')
 }
 
 export const setUserData = async (userData?: Account): Promise<Account> => {
-  if (userData === undefined) {
+  if (!userData) {
     throw new HttpError('User not found', 404)
   }
 
   validateUserUpdate(userData)
-  return await userRepo.setUserData(userData)
+  return userRepo.setUserData(userData)
 }
 
-const validateUserUpdate = (userData: Account) => {
+export const validateUserUpdate = (userData: Account) => {
   const errorMessages = []
 
   const nameRegex = /^[a-zA-Z- ']+$/g

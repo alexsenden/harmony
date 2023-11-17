@@ -1,6 +1,5 @@
 import * as postRepo from '../repos/postRepo'
 import * as pollOptionRepo from '../repos/pollOptionRepo'
-import * as userRepo from '../repos/userRepo'
 import { Post, PostType } from '../models/post'
 import { validateTopicId } from './topicService'
 import { HttpError } from '../models/error/httpError'
@@ -11,11 +10,11 @@ export const createPost = async (postData?: Post): Promise<Post> => {
   const validatedPost = validatePost(postData)
   const postResult = await postRepo.createPost(validatedPost)
 
-  if (postData?.postType === PostType.POLL) {
+  if (validatedPost.postType === PostType.POLL) {
     const pollOptionResult: Array<Promise<PollOption>> = []
 
     for (const [index, pollOption] of Object.entries(
-      postData.pollOptions || []
+      validatedPost.pollOptions as Array<PollOption>
     )) {
       pollOptionResult.push(
         pollOptionRepo.createPollOption({
@@ -91,57 +90,37 @@ export const getTrendingPosts = async (
 }
 
 export const getFollowingUserPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
-  if (userCookie === undefined) {
-    return []
-  }
-
-  const user = await userRepo.getUserFromCookie(userCookie)
-  return await postRepo.getFollowingUserPosts(user.userId)
+  return await postRepo.getFollowingUserPosts(requester.userId)
 }
 
 export const getFollowingArtistPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
-  if (userCookie === undefined) {
-    return []
-  }
-
-  const user = await userRepo.getUserFromCookie(userCookie)
-  return await postRepo.getFollowingArtistPosts(user.userId)
+  return await postRepo.getFollowingArtistPosts(requester.userId)
 }
 
 export const getFollowingSongPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
-  if (userCookie === undefined) {
-    return []
-  }
-
-  const user = await userRepo.getUserFromCookie(userCookie)
-  return await postRepo.getFollowingSongPosts(user.userId)
+  return await postRepo.getFollowingSongPosts(requester.userId)
 }
 
 export const getFollowingAlbumPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
-  if (userCookie === undefined) {
-    return []
-  }
-
-  const user = await userRepo.getUserFromCookie(userCookie)
-  return await postRepo.getFollowingAlbumPosts(user.userId)
+  return await postRepo.getFollowingAlbumPosts(requester.userId)
 }
 
 export const getAllFollowingPosts = async (
-  userCookie: string
+  requester: User
 ): Promise<Array<Post>> => {
   const [userPosts, artistPosts, songPosts, albumPosts] = await Promise.all([
-    getFollowingUserPosts(userCookie),
-    getFollowingArtistPosts(userCookie),
-    getFollowingSongPosts(userCookie),
-    getFollowingAlbumPosts(userCookie),
+    getFollowingUserPosts(requester),
+    getFollowingArtistPosts(requester),
+    getFollowingSongPosts(requester),
+    getFollowingAlbumPosts(requester),
   ])
   return userPosts
     .concat(artistPosts)
@@ -151,7 +130,7 @@ export const getAllFollowingPosts = async (
     .reverse()
 }
 
-const sortPostsByDate = function (postA: Post, postB: Post) {
+export const sortPostsByDate = (postA: Post, postB: Post) => {
   if (postA.createdAt.getTime() > postB.createdAt.getTime()) {
     return 1
   } else if (postA.createdAt.getTime() < postB.createdAt.getTime()) {
@@ -165,11 +144,11 @@ export const validatePost = (postData?: Post): Post => {
     throw new HttpError('Post data is required to create new post', 400)
   }
 
-  let errorMessages = validateTopicId(postData?.topicId)
+  let errorMessages = validateTopicId(postData.topicId)
   errorMessages = errorMessages.concat(validateUserId(postData))
   errorMessages = errorMessages.concat(validateTitle(postData))
 
-  switch (postData?.postType) {
+  switch (postData.postType) {
     case PostType.DISCUSSION:
       errorMessages = errorMessages.concat(validateBody(postData))
       break
@@ -181,7 +160,7 @@ export const validatePost = (postData?: Post): Post => {
       errorMessages = errorMessages.concat(validateRating(postData))
       break
     default:
-      errorMessages.push(`Unsupported postType: ${postData?.postType}`)
+      errorMessages.push(`Unsupported postType: ${postData.postType}`)
   }
 
   if (errorMessages.length > 0) {
@@ -191,16 +170,16 @@ export const validatePost = (postData?: Post): Post => {
   return postData
 }
 
-export const validateUserId = (postData?: Post): Array<string> => {
-  if (!postData?.userId) {
+export const validateUserId = (postData: Post): Array<string> => {
+  if (!postData.userId) {
     return ['userId field is required to create a new post']
   }
 
   return []
 }
 
-export const validateTitle = (postData?: Post): Array<string> => {
-  if (!postData?.title) {
+export const validateTitle = (postData: Post): Array<string> => {
+  if (!postData.title) {
     return ['title field is required to create a new post']
   }
   if (postData.title.length > 150) {

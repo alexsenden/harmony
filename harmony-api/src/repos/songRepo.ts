@@ -30,21 +30,21 @@ export const getSongTopicByPartialName = async (
 }
 
 export const getSongById = async (songID?: number): Promise<Song> => {
-  const songData = await prisma.song
-    .findUniqueOrThrow({
+  try {
+    const songData = await prisma.song.findUniqueOrThrow({
       where: {
         songId: songID,
       },
     })
-    .catch(() => {
-      throw new HttpError(`Song with id ${songID} not found`, 404)
-    })
 
-  return {
-    songId: songData.songId,
-    artistCreditId: songData.artistCreditId,
-    songName: songData.songName,
-    length: songData.length,
-    songDescription: songData.songDescription,
+    return {
+      songId: songData.songId,
+      artistCreditId: songData.artistCreditId,
+      songName: songData.songName,
+      length: songData.length,
+      songDescription: songData.songDescription,
+    }
+  } catch {
+    throw new HttpError(`Song with id ${songID} not found`, 404)
   }
 }

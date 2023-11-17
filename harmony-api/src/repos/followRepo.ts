@@ -21,20 +21,22 @@ export const followUser = async (followInfo: Follow): Promise<Follow> => {
 }
 
 export const unFollowUser = async (followInfo: Follow): Promise<Follow> => {
-  const followResult = await prisma.follow.delete({
-    where: {
-      followingId_followerId: {
-        followingId: followInfo.followingId,
-        followerId: followInfo.followerId,
+  try {
+    const followResult = await prisma.follow.delete({
+      where: {
+        followingId_followerId: {
+          followingId: followInfo.followingId,
+          followerId: followInfo.followerId,
+        },
       },
-    },
-  })
-  if (followResult === null) {
+    })
+
+    return {
+      followingId: followResult.followingId,
+      followerId: followResult.followerId,
+    }
+  } catch {
     throw new HttpError('Not following user', 400)
-  }
-  return {
-    followingId: followResult.followingId,
-    followerId: followResult.followerId,
   }
 }
 
@@ -57,20 +59,21 @@ export const followArtist = async (followInfo: Follow): Promise<Follow> => {
 }
 
 export const unFollowArtist = async (followInfo: Follow): Promise<Follow> => {
-  const followResult = await prisma.followArtist.delete({
-    where: {
-      followingId_followerId: {
-        followingId: followInfo.followingId,
-        followerId: parseInt(followInfo.followerId),
+  try {
+    const followResult = await prisma.followArtist.delete({
+      where: {
+        followingId_followerId: {
+          followingId: followInfo.followingId,
+          followerId: parseInt(followInfo.followerId),
+        },
       },
-    },
-  })
-  if (followResult === null) {
+    })
+    return {
+      followingId: followResult.followingId,
+      followerId: followResult.followerId.toString(),
+    }
+  } catch {
     throw new HttpError('Not following artist', 400)
-  }
-  return {
-    followingId: followResult.followingId,
-    followerId: followResult.followerId.toString(),
   }
 }
 
@@ -93,20 +96,21 @@ export const followSong = async (followInfo: Follow): Promise<Follow> => {
 }
 
 export const unFollowSong = async (followInfo: Follow): Promise<Follow> => {
-  const followResult = await prisma.followSong.delete({
-    where: {
-      followingId_followerId: {
-        followingId: followInfo.followingId,
-        followerId: parseInt(followInfo.followerId),
+  try {
+    const followResult = await prisma.followSong.delete({
+      where: {
+        followingId_followerId: {
+          followingId: followInfo.followingId,
+          followerId: parseInt(followInfo.followerId),
+        },
       },
-    },
-  })
-  if (followResult === null) {
+    })
+    return {
+      followingId: followResult.followingId,
+      followerId: followResult.followerId.toString(),
+    }
+  } catch {
     throw new HttpError('Not following song', 400)
-  }
-  return {
-    followingId: followResult.followingId,
-    followerId: followResult.followerId.toString(),
   }
 }
 
@@ -129,20 +133,21 @@ export const followAlbum = async (followInfo: Follow): Promise<Follow> => {
 }
 
 export const unFollowAlbum = async (followInfo: Follow): Promise<Follow> => {
-  const followResult = await prisma.followAlbum.delete({
-    where: {
-      followingId_followerId: {
-        followingId: followInfo.followingId,
-        followerId: parseInt(followInfo.followerId),
+  try {
+    const followResult = await prisma.followAlbum.delete({
+      where: {
+        followingId_followerId: {
+          followingId: followInfo.followingId,
+          followerId: parseInt(followInfo.followerId),
+        },
       },
-    },
-  })
-  if (followResult === null) {
+    })
+    return {
+      followingId: followResult.followingId,
+      followerId: followResult.followerId.toString(),
+    }
+  } catch {
     throw new HttpError('Not following album', 400)
-  }
-  return {
-    followingId: followResult.followingId,
-    followerId: followResult.followerId.toString(),
   }
 }
 
@@ -229,7 +234,6 @@ export const getArtistFollowCount = async (
 }
 
 export const getSongFollowCount = async (songId: string): Promise<number> => {
-  console.log('Repo: ' + songId)
   const aggregation = await prisma.followSong.aggregate({
     _count: {
       followerId: true,

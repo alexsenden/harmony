@@ -7,11 +7,10 @@ export type Comment = {
 }
 
 export type CommentWithUser = {
-  commentId: string
+  commentId?: string
   userId: string
   postId: string
-  createdAt: Date
-  postTitle: string
+  createdAt?: Date
   content?: string
   user: {
     username: string

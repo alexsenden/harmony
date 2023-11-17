@@ -1,7 +1,19 @@
-import { register } from '../../../src/controllers/user/userController'
 import { Request, Response, NextFunction } from 'express'
 
 import * as userService from '../../../src/services/userService'
+import * as userController from '../../../src/controllers/user/userController'
+import { FAKE_USER_1_COOKIE } from '../../testUtils/testData'
+
+let req: Request, res: Response, next: NextFunction
+beforeEach(() => {
+  req = { cookies: {}, params: {} } as Request
+
+  res = {
+    json: jest.fn(),
+  } as unknown as Response
+
+  next = jest.fn() as unknown as NextFunction
+})
 
 describe('Register Controller', () => {
   /*
@@ -40,7 +52,7 @@ describe('Register Controller', () => {
     jest.spyOn(userService, 'register').mockResolvedValue(mockUser)
     jest.spyOn(userService, 'assignUserCookie').mockResolvedValue(mockCookie)
 
-    await register(req, res, next)
+    await userController.register(req, res, next)
     expect(res.cookie).toHaveBeenCalledTimes(1)
     expect(res.json).toHaveBeenCalledTimes(1)
     expect(res.json).toHaveBeenCalledWith({
@@ -73,9 +85,82 @@ describe('Register Controller', () => {
 
     jest.spyOn(userService, 'register').mockRejectedValue(mockUserFaulty)
 
-    await register(req, res, next)
+    await userController.register(req, res, next)
 
     expect(res.json).not.toHaveBeenCalled()
     expect(next).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('updateAccount', () => {
+  it('Calls the next function when an error is thrown', async () => {
+    jest.spyOn(userService, 'setUserData').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    await userController.updateAccount(req, res, next)
+
+    expect(next).toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
+  })
+})
+
+describe('login', () => {
+  it('Calls the next function when an error is thrown', async () => {
+    jest.spyOn(userService, 'login').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    await userController.login(req, res, next)
+
+    expect(next).toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
+  })
+})
+
+describe('getUserByCookie', () => {
+  it('Calls the next function when an error is thrown', async () => {
+    jest.spyOn(userService, 'getUserFromCookie').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    req.cookies.userCookie = FAKE_USER_1_COOKIE.cookie
+
+    await userController.getUserByCookie(req, res, next)
+
+    expect(next).toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
+  })
+
+  it('Returns null when the cookie is undefined', async () => {
+    await userController.getUserByCookie(req, res, next)
+
+    expect(res.json).toHaveBeenCalledWith(null)
+    expect(res.json).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('getUserByUsername', () => {
+  it('Calls the next function when an error is thrown', async () => {
+    jest.spyOn(userService, 'getUserByUsername').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    await userController.getUserByUsername(req, res, next)
+
+    expect(next).toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
+  })
+})
+
+describe('signOut', () => {
+  it('Calls the next function when an error is thrown', async () => {
+    jest.spyOn(userService, 'removeUserCookie').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    await userController.signOut(req, res, next)
+
+    expect(next).toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
   })
 })

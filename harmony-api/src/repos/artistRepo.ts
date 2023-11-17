@@ -30,21 +30,21 @@ export const getArtistTopicByPartialName = async (
 }
 
 export const getArtistById = async (artistID?: number): Promise<Artist> => {
-  const artistData = await prisma.artist
-    .findUniqueOrThrow({
+  try {
+    const artistData = await prisma.artist.findUniqueOrThrow({
       where: {
         artistId: artistID,
       },
     })
-    .catch(() => {
-      throw new HttpError(`Artist with id ${artistID} not found`, 404)
-    })
 
-  return {
-    artistId: artistData.artistId,
-    artistName: artistData.artistName,
-    beginYear: artistData.beginYear,
-    end: artistData.end,
-    artistDescription: artistData.artistDescription,
+    return {
+      artistId: artistData.artistId,
+      artistName: artistData.artistName,
+      beginYear: artistData.beginYear,
+      end: artistData.end,
+      artistDescription: artistData.artistDescription,
+    }
+  } catch {
+    throw new HttpError(`Artist with id ${artistID} not found`, 404)
   }
 }
