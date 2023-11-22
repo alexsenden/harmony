@@ -30,7 +30,7 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
     return <PostComponent post={post} key={`post-${index}`} />
   })
 
-  return error ? (
+  return error && error.response.status !== 401 ? (
     <TextBlock align="center" sx={{ mt: 2 }}>
       {SERVER_ERROR}
     </TextBlock>
