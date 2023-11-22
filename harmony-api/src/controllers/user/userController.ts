@@ -105,3 +105,21 @@ export const signOut = async (
     next(error)
   }
 }
+
+export const getTempUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userData = userService.getTempUserData()
+    const newUser = await userService.register(userData)
+    const userCookie = await userService.assignUserCookie(newUser)
+    res.cookie('userCookie', userCookie)
+    res.json({
+      userData: newUser,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
