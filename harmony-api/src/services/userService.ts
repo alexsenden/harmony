@@ -191,5 +191,7 @@ export const generateRandomFirstName = (): string => {
 }
 
 export const generateRandomLastName = (): string => {
-  return tempUserRepo.lastNames[Math.floor(Math.random() * tempUserRepo.lastNames.length)]
+  return tempUserRepo.lastNames[
+    Math.floor(Math.random() * tempUserRepo.lastNames.length)
+  ]
 }
