@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Component, useState } from 'react'
 import {
   Card,
   CardActions,
@@ -22,13 +22,15 @@ import CommentSection from './comment-section'
 import LikeButton from './like-button'
 import LikeModal from './like-modal'
 import moment from 'moment'
+import { JsxFragment } from 'typescript'
 
 interface PostProps {
   post: Post
   commentOpen?: boolean
+  expanded?: boolean
 }
 
-const Post = ({ post, commentOpen = false }: PostProps) => {
+const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
   const [numComments, setNumComments] = useState(post.numComments || 0)
   const [numLikes, setNumLikes] = useState(post.numLikes || 0)
   const [isLiked, setIsLiked] = useState(post.isLiked || false)
@@ -89,12 +91,18 @@ const Post = ({ post, commentOpen = false }: PostProps) => {
     return url
   }
 
+  const [expand, setExpand] = useState(expanded)
+
+  const changeExpand = function () {
+    setExpand(!expand)
+  }
+
   return (
     <>
       <Card variant="outlined" sx={{ mb: 1 }}>
         <Stack direction="row">
           <CardContent>{avatarIcon}</CardContent>
-          <Box sx={{ width: '100%' }}>
+          <Box sx={{ width: '90%' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Link href={`/posts/${post.postId}`} underline="none">
@@ -109,7 +117,21 @@ const Post = ({ post, commentOpen = false }: PostProps) => {
                 {post.topicName} {topicContext}
               </Link>
               <Divider sx={{ my: 1 }} />
-              {postContent}
+              <TextBlock
+                style={{
+                  wordWrap: 'break-word',
+                  ...(!expand && {
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: '3',
+                    WebkitBoxOrient: 'vertical',
+                  }),
+                }}
+              >
+                {postContent}
+              </TextBlock>
+              <Link onClick={changeExpand}>read more</Link>
             </CardContent>
 
             <CardActions>

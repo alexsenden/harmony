@@ -31,7 +31,11 @@ const PostDetail = () => {
   return (
     <Container maxWidth="xl">
       {post ? (
-        <PostComponent post={post} commentOpen={true}></PostComponent>
+        <PostComponent
+          post={post}
+          commentOpen={true}
+          expanded={true}
+        ></PostComponent>
       ) : (
         <TextBlock>This post is unavailable.</TextBlock>
       )}

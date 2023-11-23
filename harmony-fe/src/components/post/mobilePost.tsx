@@ -26,9 +26,14 @@ import moment from 'moment'
 interface PostProps {
   post: Post
   commentOpen?: boolean
+  expanded?: boolean
 }
 
-const MobilePost = ({ post, commentOpen = false }: PostProps) => {
+const MobilePost = ({
+  post,
+  commentOpen = false,
+  expanded = false,
+}: PostProps) => {
   const [numComments, setNumComments] = useState(post.numComments || 0)
   const [numLikes, setNumLikes] = useState(post.numLikes || 0)
   const [isLiked, setIsLiked] = useState(post.isLiked || false)
@@ -123,7 +128,20 @@ const MobilePost = ({ post, commentOpen = false }: PostProps) => {
                 {post.topicName} {topicContext}
               </Link>
               <Divider sx={{ my: 1 }} />
-              {postContent}
+              <TextBlock
+                style={{
+                  wordWrap: 'break-word',
+                  ...(!expanded && {
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: '2',
+                    WebkitBoxOrient: 'vertical',
+                  }),
+                }}
+              >
+                {postContent}
+              </TextBlock>
             </CardContent>
 
             <CardActions>

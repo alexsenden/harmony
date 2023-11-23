@@ -8,14 +8,19 @@ import { Post } from '../../models/post'
 interface PostProps {
   post: Post
   commentOpen?: boolean
+  expanded?: boolean
 }
 
-const PostCard = ({ post, commentOpen = false }: PostProps) => {
+const PostCard = ({
+  post,
+  commentOpen = false,
+  expanded = false,
+}: PostProps) => {
   const mobile = useContext(MobileContext)
   if (mobile) {
-    return MobilePost({ post, commentOpen })
+    return MobilePost({ post, commentOpen, expanded })
   } else {
-    return DesktopPost({ post, commentOpen })
+    return DesktopPost({ post, commentOpen, expanded })
   }
 }
 
