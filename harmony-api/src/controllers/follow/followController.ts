@@ -15,7 +15,7 @@ export const toggleUserFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingid as string
+    const followingId = req.body.followingId as string
     const followAction = req.body.followAction as boolean
 
     if (followAction) {
@@ -39,7 +39,7 @@ export const toggleArtistFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingid as string
+    const followingId = req.body.followingId as string
     const followAction = req.body.followAction as boolean
 
     if (followAction) {
@@ -63,7 +63,7 @@ export const toggleSongFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingid as string
+    const followingId = req.body.followingId as string
     const followAction = req.body.followAction as boolean
 
     if (followAction) {
@@ -87,7 +87,7 @@ export const toggleAlbumFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingid as string
+    const followingId = req.body.followingId as string
     const followAction = req.body.followAction as boolean
 
     if (followAction) {
@@ -111,7 +111,7 @@ export const getFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingid as string
+    const followingId = req.body.followingId as string
 
     res.json(await followService.getFollow(user, followingId))
   } catch (error) {
@@ -130,7 +130,7 @@ export const getArtistFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingid as string
+    const followingId = req.body.followingId as string
 
     res.json(await followService.getArtistFollow(user, followingId))
   } catch (error) {
@@ -149,7 +149,7 @@ export const getSongFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingid as string
+    const followingId = req.body.followingId as string
 
     res.json(await followService.getSongFollow(user, followingId))
   } catch (error) {
@@ -168,7 +168,7 @@ export const getAlbumFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingid as string
+    const followingId = req.body.followingId as string
 
     res.json(await followService.getAlbumFollow(user, followingId))
   } catch (error) {
