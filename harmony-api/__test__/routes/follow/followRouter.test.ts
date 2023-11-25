@@ -1,6 +1,13 @@
 import request from 'supertest'
 import { Express } from 'express'
-import { FAKE_ALBUM, FAKE_ARTIST, FAKE_FOLLOW, FAKE_SONG, FAKE_USER_1, FakeApp } from '../../testUtils/testData'
+import {
+  FAKE_ALBUM,
+  FAKE_ARTIST,
+  FAKE_FOLLOW,
+  FAKE_SONG,
+  FAKE_USER_1,
+  FakeApp,
+} from '../../testUtils/testData'
 import prisma from '../../../prisma/prisma'
 import { Follow, FollowAlbum, FollowArtist, FollowSong } from '@prisma/client'
 import { SESSION_AS_COOKIE, authMock } from '../../testUtils/authUtils'
