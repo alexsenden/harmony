@@ -6,6 +6,7 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { Post } from '../../models/post'
 import PostComponent from '../../components/post'
 import TextBlock from '../../components/text-block'
+import Head from 'next/head'
 
 const PostDetail = () => {
   const router = useRouter()
@@ -29,17 +30,22 @@ const PostDetail = () => {
   }, [postResponse])
 
   return (
-    <Container maxWidth="xl">
-      {post ? (
-        <PostComponent
-          post={post}
-          commentOpen={true}
-          expanded={true}
-        ></PostComponent>
-      ) : (
-        <TextBlock>This post is unavailable.</TextBlock>
-      )}
-    </Container>
+    <>
+      <Head>
+        <title>{post?.title}</title>
+      </Head>
+      <Container maxWidth="xl">
+        {post ? (
+          <PostComponent
+            post={post}
+            commentOpen={true}
+            expanded={true}
+          ></PostComponent>
+        ) : (
+          <TextBlock>This post is unavailable.</TextBlock>
+        )}
+      </Container>
+    </>
   )
 }
 
