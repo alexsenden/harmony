@@ -59,16 +59,14 @@ const Profile = () => {
 
   //Retrieve follow data
   const [getFollowData, receivedFollowData] = useHttpRequest({
-    url: '/follow',
+    url: `/follow/user/${userData?.userId}`,
     method: HttpMethod.GET,
-    body: { followingId: userData?.userId },
   })
 
   //Retrieve number of followers for the user
   const [getFollowerInfo, receivedFollowerInfo] = useHttpRequest({
-    url: '/follow/followCount',
+    url: `/follow/followCount/${userData?.userId}`,
     method: HttpMethod.GET,
-    body: { userId: userData?.userId },
   })
 
   //Sending follow data

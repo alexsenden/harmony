@@ -111,7 +111,7 @@ export const getFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingId as string
+    const followingId = req.params.userId as string
 
     res.json(await followService.getFollow(user, followingId))
   } catch (error) {
@@ -130,7 +130,7 @@ export const getArtistFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingId as string
+    const followingId = req.params.artistId as string
 
     res.json(await followService.getArtistFollow(user, followingId))
   } catch (error) {
@@ -149,7 +149,7 @@ export const getSongFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingId as string
+    const followingId = req.params.songId as string
 
     res.json(await followService.getSongFollow(user, followingId))
   } catch (error) {
@@ -168,7 +168,7 @@ export const getAlbumFollow = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    const followingId = req.body.followingId as string
+    const followingId = req.params.albumId as string
 
     res.json(await followService.getAlbumFollow(user, followingId))
   } catch (error) {

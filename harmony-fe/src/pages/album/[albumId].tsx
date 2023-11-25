@@ -55,9 +55,8 @@ const AlbumPage = () => {
 
   //Retrieve follow data
   const [getFollowData, receivedFollowData] = useHttpRequest({
-    url: '/follow/album',
+    url: `/follow/album/${albumData?.albumId}`,
     method: HttpMethod.GET,
-    body: { followingId: albumData?.albumId },
   })
 
   //Retrieve number of followers for the user
