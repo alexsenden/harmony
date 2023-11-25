@@ -1,4 +1,4 @@
-import { Component, useState } from 'react'
+import { useState } from 'react'
 import {
   Card,
   CardActions,
@@ -11,7 +11,6 @@ import {
   Avatar,
 } from '@mui/material'
 import { Forum, Poll, RateReview, CommentOutlined } from '@mui/icons-material'
-
 import TextBlock from '../text-block'
 import { Post, PostType } from '../../models/post'
 import { getTopicContext } from '../../utils/additionalContext'
@@ -22,7 +21,6 @@ import CommentSection from './comment-section'
 import LikeButton from './like-button'
 import LikeModal from './like-modal'
 import moment from 'moment'
-import { JsxFragment } from 'typescript'
 
 interface PostProps {
   post: Post
@@ -33,10 +31,32 @@ interface PostProps {
 const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
   const [numComments, setNumComments] = useState(post.numComments || 0)
   const [numLikes, setNumLikes] = useState(post.numLikes || 0)
+
   const [isLiked, setIsLiked] = useState(post.isLiked || false)
   const [isVoted, setIsVoted] = useState(post.isVoted || false)
+
   const [likeModalOpen, setLikeModalOpen] = useState(false)
   const [commentSectionOpen, setCommentSectionOpen] = useState(commentOpen)
+
+  const [expand, setExpand] = useState(expanded)
+  const [canBeExpanded, setCanBeExpanded] = useState(false)
+
+  //Flips if the post is expanded or not, also sets that the post can be expanded
+  const changeExpand = function () {
+    setExpand(!expand)
+    setCanBeExpanded(true)
+  }
+
+  //Checks if the post is overflowing
+  const overflowing = function (text: HTMLElement | null) {
+    if (text === null) {
+      return false
+    } else if (canBeExpanded) {
+      return canBeExpanded
+    }
+
+    return text.scrollHeight > text.offsetHeight
+  }
 
   const handleLike = () => {
     if (isLiked) {
@@ -91,12 +111,6 @@ const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
     return url
   }
 
-  const [expand, setExpand] = useState(expanded)
-
-  const changeExpand = function () {
-    setExpand(!expand)
-  }
-
   return (
     <>
       <Card variant="outlined" sx={{ mb: 1 }}>
@@ -118,6 +132,7 @@ const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
               </Link>
               <Divider sx={{ my: 1 }} />
               <TextBlock
+                id={post.postId.toString()}
                 style={{
                   wordWrap: 'break-word',
                   ...(!expand && {
@@ -131,7 +146,11 @@ const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
               >
                 {postContent}
               </TextBlock>
-              <Link onClick={changeExpand}>read more</Link>
+              {overflowing(document.getElementById(post.postId.toString())) && (
+                <Link onClick={changeExpand}>
+                  {expand ? 'Show Less' : 'Read More'}
+                </Link>
+              )}
             </CardContent>
 
             <CardActions>
