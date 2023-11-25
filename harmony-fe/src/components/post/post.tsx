@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Card,
   CardActions,
@@ -44,19 +44,22 @@ const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
   //Flips if the post is expanded or not, also sets that the post can be expanded
   const changeExpand = function () {
     setExpand(!expand)
-    setCanBeExpanded(true)
   }
 
   //Checks if the post is overflowing
   const overflowing = function (text: HTMLElement | null) {
     if (text === null) {
       return false
-    } else if (canBeExpanded) {
-      return canBeExpanded
+    } else if (text.scrollHeight > text.offsetHeight) {
+      setCanBeExpanded(true)
+      return true
     }
-
-    return text.scrollHeight > text.offsetHeight
+    return false
   }
+
+  useEffect(() => {
+    overflowing(document.getElementById(post.postId))
+  }, [])
 
   const handleLike = () => {
     if (isLiked) {
@@ -116,7 +119,7 @@ const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
       <Card variant="outlined" sx={{ mb: 1 }}>
         <Stack direction="row">
           <CardContent>{avatarIcon}</CardContent>
-          <Box sx={{ width: '90%' }}>
+          <Box sx={{ width: '90%', whiteSpace: 'pre-wrap' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Link href={`/posts/${post.postId}`} underline="none">
@@ -146,7 +149,7 @@ const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
               >
                 {postContent}
               </TextBlock>
-              {overflowing(document.getElementById(post.postId.toString())) && (
+              {canBeExpanded && (
                 <Link onClick={changeExpand}>
                   {expand ? 'Show Less' : 'Read More'}
                 </Link>
