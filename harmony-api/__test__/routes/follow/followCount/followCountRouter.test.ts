@@ -5,6 +5,7 @@ import {
   FAKE_ALBUM,
   FAKE_ARTIST,
   FAKE_SONG,
+  FAKE_USER_1,
   FakeApp,
 } from '../../../testUtils/testData'
 import prisma from '../../../../prisma/prisma'
@@ -16,7 +17,7 @@ beforeEach(() => {
   authMock()
 })
 
-describe('GET /follow/followCount', () => {
+describe('GET /follow/followCount/:userId', () => {
   it('responds with code 200 and the number of followers', async () => {
     // @ts-ignore
     jest.spyOn(prisma.follow, 'aggregate').mockResolvedValueOnce({
@@ -24,7 +25,7 @@ describe('GET /follow/followCount', () => {
     })
 
     const res = await request(app)
-      .get('/follow/followCount')
+      .get(`/follow/followCount/${FAKE_USER_1.userId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)

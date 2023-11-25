@@ -24,7 +24,7 @@ describe('Follow Count Controller', () => {
     const mockedFollowers = 3
 
     const req = {
-      body: {
+      params: {
         userid: FAKE_USER_1.userId,
       },
     } as unknown as Request
