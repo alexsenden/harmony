@@ -30,12 +30,14 @@ Run the docker container using the command `docker run -p 5432:5432 harmony-db`
 # Running The Dataset Seed Script
 
 1. Install Postgresql (https://www.postgresql.org/download/windows/)
-2. Download `db_seed.sql` from [here](https://umanitoba-my.sharepoint.com/:u:/g/personal/sendena_myumanitoba_ca/EZDa65g1TIZAmEbQKyWGwh4BIsxXC1iv8Qp6rZ8HeU4avg?e=v3vkHQ)
-3. Open the `psql` terminal
-4. Log in to the database using the corresponding credentials
-5. Enter the command `SET CLIENT_ENCODING TO 'utf8';`
-6. Run the `db_seed.sql` script in the psql terminal. The command is: `\i <path_to_script>`.
+1. Extract `db_seed.sql` from the `db_seed.zip` file in this directory
+1. Open the `psql` terminal
+1. Log in to the database using the corresponding credentials
+1. Enter the command `SET CLIENT_ENCODING TO 'utf8';`
+1. Run the `db_seed.sql` script (found in this directory) in the psql terminal. The command is: `\i <path_to_script>`.
 
 The script will take a few minutes to execute.
 
-Note: If you are on windows, make sure the path to the file uses `/`, not `\`, otherwise you will get a `Permission Denied` error.
+#### Note: If you are on windows, make sure the path to the file uses `/`, not `\`, otherwise you will get a `Permission Denied` error.
+
+#### Note 2: The DB seed will conflict with the testing seed data. Make sure you clear the database before running this seed script.
