@@ -1,6 +1,13 @@
 import request from 'supertest'
 import { Express } from 'express'
-import { FAKE_FOLLOW, FakeApp } from '../../testUtils/testData'
+import {
+  FAKE_ALBUM,
+  FAKE_ARTIST,
+  FAKE_FOLLOW,
+  FAKE_SONG,
+  FAKE_USER_1,
+  FakeApp,
+} from '../../testUtils/testData'
 import prisma from '../../../prisma/prisma'
 import { Follow, FollowAlbum, FollowArtist, FollowSong } from '@prisma/client'
 import { SESSION_AS_COOKIE, authMock } from '../../testUtils/authUtils'
@@ -11,14 +18,14 @@ beforeEach(() => {
   authMock()
 })
 
-describe('GET /follow', () => {
+describe('GET /follow/user/:userId', () => {
   it('responds with code 200 and true if the user is following', async () => {
     jest
       .spyOn(prisma.follow, 'findFirst')
       .mockResolvedValueOnce(FAKE_FOLLOW as unknown as Follow)
 
     const res = await request(app)
-      .get('/follow')
+      .get(`/follow/user/${FAKE_USER_1.userId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -29,7 +36,7 @@ describe('GET /follow', () => {
     jest.spyOn(prisma.follow, 'findFirst').mockResolvedValueOnce(null)
 
     const res = await request(app)
-      .get('/follow')
+      .get(`/follow/user/${FAKE_USER_1.userId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -37,14 +44,14 @@ describe('GET /follow', () => {
   })
 })
 
-describe('GET /follow/artist', () => {
+describe('GET /follow/artist/:artistId', () => {
   it('responds with code 200 and true if the user is following', async () => {
     jest
       .spyOn(prisma.followArtist, 'findFirst')
       .mockResolvedValueOnce(FAKE_FOLLOW as unknown as FollowArtist)
 
     const res = await request(app)
-      .get('/follow/artist')
+      .get(`/follow/artist/${FAKE_ARTIST.artistId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -55,7 +62,7 @@ describe('GET /follow/artist', () => {
     jest.spyOn(prisma.followArtist, 'findFirst').mockResolvedValueOnce(null)
 
     const res = await request(app)
-      .get('/follow/artist')
+      .get(`/follow/artist/${FAKE_ARTIST.artistId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -63,14 +70,14 @@ describe('GET /follow/artist', () => {
   })
 })
 
-describe('GET /follow/album', () => {
+describe('GET /follow/album/:albumId', () => {
   it('responds with code 200 and true if the user is following', async () => {
     jest
       .spyOn(prisma.followAlbum, 'findFirst')
       .mockResolvedValueOnce(FAKE_FOLLOW as unknown as FollowAlbum)
 
     const res = await request(app)
-      .get('/follow/album')
+      .get(`/follow/album/${FAKE_ALBUM.albumId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -81,7 +88,7 @@ describe('GET /follow/album', () => {
     jest.spyOn(prisma.followAlbum, 'findFirst').mockResolvedValueOnce(null)
 
     const res = await request(app)
-      .get('/follow/album')
+      .get(`/follow/album/${FAKE_ALBUM.albumId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -89,14 +96,14 @@ describe('GET /follow/album', () => {
   })
 })
 
-describe('GET /follow/song', () => {
+describe('GET /follow/song/:songId', () => {
   it('responds with code 200 and true if the user is following', async () => {
     jest
       .spyOn(prisma.followSong, 'findFirst')
       .mockResolvedValueOnce(FAKE_FOLLOW as unknown as FollowSong)
 
     const res = await request(app)
-      .get('/follow/song')
+      .get(`/follow/song/${FAKE_SONG.songId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -107,7 +114,7 @@ describe('GET /follow/song', () => {
     jest.spyOn(prisma.followSong, 'findFirst').mockResolvedValueOnce(null)
 
     const res = await request(app)
-      .get('/follow/song')
+      .get(`/follow/song/${FAKE_SONG.songId}`)
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
