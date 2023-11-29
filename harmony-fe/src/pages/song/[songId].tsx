@@ -55,9 +55,8 @@ const SongPage = () => {
 
   //Retrieve follow data
   const [getFollowData, receivedFollowData] = useHttpRequest({
-    url: '/follow/song',
+    url: `/follow/song/${songData?.songId}`,
     method: HttpMethod.GET,
-    headers: { followingId: songData?.songId },
   })
 
   //Retrieve number of followers for the user
@@ -70,8 +69,7 @@ const SongPage = () => {
   const [setFollowActionData] = useHttpRequest({
     url: '/follow/song',
     method: HttpMethod.POST,
-    headers: { followingId: songData?.songId },
-    body: { followAction: !following },
+    body: { followAction: !following, followingId: songData?.songId },
   })
 
   //If data is found, fetch the following info
