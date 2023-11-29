@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import { MobileContext } from '../../contexts/mobileContext'
-import MobilePost from './mobilePost'
-import DesktopPost from './post'
-import PostProps from './mobilePost'
+import MobilePost from './mobile-post'
+import DesktopPost from './desktop-post'
+//import PostProps from './mobile-post'
 import { Post } from '../../models/post'
 
 interface PostProps {
