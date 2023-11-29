@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Card,
   CardActions,
@@ -11,7 +11,6 @@ import {
   Avatar,
 } from '@mui/material'
 import { Forum, Poll, RateReview, CommentOutlined } from '@mui/icons-material'
-
 import TextBlock from '../text-block'
 import { Post, PostType } from '../../models/post'
 import { getTopicContext } from '../../utils/additionalContext'
@@ -26,15 +25,41 @@ import moment from 'moment'
 interface PostProps {
   post: Post
   commentOpen?: boolean
+  expanded?: boolean
 }
 
-const Post = ({ post, commentOpen = false }: PostProps) => {
+const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
   const [numComments, setNumComments] = useState(post.numComments || 0)
   const [numLikes, setNumLikes] = useState(post.numLikes || 0)
+
   const [isLiked, setIsLiked] = useState(post.isLiked || false)
   const [isVoted, setIsVoted] = useState(post.isVoted || false)
+
   const [likeModalOpen, setLikeModalOpen] = useState(false)
   const [commentSectionOpen, setCommentSectionOpen] = useState(commentOpen)
+
+  const [expand, setExpand] = useState(expanded)
+  const [canBeExpanded, setCanBeExpanded] = useState(false)
+
+  //Flips if the post is expanded or not, also sets that the post can be expanded
+  const changeExpand = function () {
+    setExpand(!expand)
+  }
+
+  //Checks if the post is overflowing
+  const overflowing = function (text: HTMLElement | null) {
+    if (text === null) {
+      return false
+    } else if (text.scrollHeight > text.offsetHeight) {
+      setCanBeExpanded(true)
+      return true
+    }
+    return false
+  }
+
+  useEffect(() => {
+    overflowing(document.getElementById(post.postId))
+  }, [])
 
   const handleLike = () => {
     if (isLiked) {
@@ -94,7 +119,7 @@ const Post = ({ post, commentOpen = false }: PostProps) => {
       <Card variant="outlined" sx={{ mb: 1 }}>
         <Stack direction="row">
           <CardContent>{avatarIcon}</CardContent>
-          <Box sx={{ width: '100%' }}>
+          <Box sx={{ width: '90%', whiteSpace: 'pre-wrap' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Link href={`/posts/${post.postId}`} underline="none">
@@ -109,7 +134,26 @@ const Post = ({ post, commentOpen = false }: PostProps) => {
                 {post.topicName} {topicContext}
               </Link>
               <Divider sx={{ my: 1 }} />
-              {postContent}
+              <TextBlock
+                id={post.postId.toString()}
+                style={{
+                  wordWrap: 'break-word',
+                  ...(!expand && {
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: '3',
+                    WebkitBoxOrient: 'vertical',
+                  }),
+                }}
+              >
+                {postContent}
+              </TextBlock>
+              {canBeExpanded && (
+                <Link onClick={changeExpand}>
+                  {expand ? 'Show Less' : 'Read More'}
+                </Link>
+              )}
             </CardContent>
 
             <CardActions>
