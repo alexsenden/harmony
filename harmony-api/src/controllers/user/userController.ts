@@ -118,12 +118,13 @@ export const getTempUser = async (
     let newUser, userCookie
     do {
       try {
-        tries++
         const userData = userService.getTempUserData()
         newUser = await userService.register(userData)
         userCookie = await userService.assignUserCookie(newUser)
         successTemp = true
-      } catch (error) {}
+      } finally {
+        tries++
+      }
     } while (tries < MAX_TEMP_TRIES && !successTemp)
 
     if (!successTemp) {
