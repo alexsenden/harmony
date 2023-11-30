@@ -127,10 +127,6 @@ export const getTempUser = async (
       }
     } while (tries < MAX_TEMP_TRIES && !successTemp)
 
-    if (!successTemp) {
-      // We dont have a temp user, give an error back
-      throw new Error()
-    }
     res.cookie('userCookie', userCookie)
     res.json({
       userData: newUser,

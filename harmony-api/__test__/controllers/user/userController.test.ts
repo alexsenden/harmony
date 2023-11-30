@@ -185,7 +185,7 @@ describe('tempUser', () => {
   })
 
   it('Fails to create a temporary new user', async () => {
-    jest.spyOn(userService, 'register').mockImplementationOnce(() => {
+    jest.spyOn(userService, 'register').mockImplementation(() => {
       throw new Error()
     })
 
