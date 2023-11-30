@@ -27,8 +27,10 @@ const LikeModal = ({ likeModalOpen, onClose, post }: LikeModalProps) => {
   })
 
   useEffect(() => {
-    getLikes()
-  }, [likeModalOpen])
+    if (!likes && likeModalOpen) {
+      getLikes()
+    }
+  }, [likeModalOpen, likes])
 
   useEffect(() => {
     setLikes(likesResponse)

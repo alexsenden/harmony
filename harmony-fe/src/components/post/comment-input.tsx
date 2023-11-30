@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material'
 
-import Post from './post'
+import Post from './desktop-post'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { UserContext } from '../../contexts/userContext'
 
