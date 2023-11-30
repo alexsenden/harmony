@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import * as userService from '../../../src/services/userService'
 import * as userController from '../../../src/controllers/user/userController'
-import { FAKE_USER_1_COOKIE } from '../../testUtils/testData'
+import { FAKE_USER_1, FAKE_USER_1_COOKIE } from '../../testUtils/testData'
 
 let req: Request, res: Response, next: NextFunction
 beforeEach(() => {
@@ -159,6 +159,43 @@ describe('signOut', () => {
     })
 
     await userController.signOut(req, res, next)
+
+    expect(next).toHaveBeenCalled()
+    expect(res.json).not.toHaveBeenCalled()
+  })
+})
+
+describe('tempUser', () => {
+  it('Creates a temporary new user', async () => {
+    jest.spyOn(userService, 'register').mockResolvedValue(FAKE_USER_1)
+    jest
+      .spyOn(userService, 'assignUserCookie')
+      .mockResolvedValue(FAKE_USER_1_COOKIE.cookie)
+
+    const res = {
+      cookie: jest.fn(),
+      json: jest.fn(),
+    } as unknown as Response
+    const next = jest.fn() as unknown as NextFunction
+
+    await userController.getTempUser(req, res, next)
+
+    expect(res.json).toHaveBeenCalledTimes(1)
+    expect(next).not.toHaveBeenCalled()
+  })
+
+  it('Fails to create a temporary new user', async () => {
+    jest.spyOn(userService, 'register').mockImplementation(() => {
+      throw new Error()
+    })
+
+    const res = {
+      cookie: jest.fn(),
+      json: jest.fn(),
+    } as unknown as Response
+    const next = jest.fn() as unknown as NextFunction
+
+    await userController.getTempUser(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.json).not.toHaveBeenCalled()
