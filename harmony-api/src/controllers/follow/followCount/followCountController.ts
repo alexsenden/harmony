@@ -8,7 +8,7 @@ export const getFollowCount = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.headers.userid as string
+    const userId = req.params.userId as string
     const followCount = await followService.getFollowCount(userId)
     res.json(followCount)
   } catch (error) {
