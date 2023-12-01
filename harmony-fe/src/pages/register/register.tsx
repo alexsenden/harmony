@@ -54,6 +54,12 @@ const RegisterPage = () => {
     sendHttpRequest()
   }
 
+  const checkEnterPressed = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleUserRegister()
+    }
+  }
+
   const onChangeUserData = (
     firstName: string,
     lastName: string,
@@ -154,6 +160,7 @@ const RegisterPage = () => {
                   newUser.password
                 )
               }
+              onKeyDown={checkEnterPressed}
               label="First Name"
               placeholder="Enter First Name"
               variant="outlined"
@@ -174,6 +181,7 @@ const RegisterPage = () => {
                   newUser.password
                 )
               }
+              onKeyDown={checkEnterPressed}
               label="Last Name"
               placeholder="Enter Last Name"
               variant="outlined"
@@ -194,6 +202,7 @@ const RegisterPage = () => {
                   newUser.password
                 )
               }
+              onKeyDown={checkEnterPressed}
               label="Username"
               placeholder="Enter username"
               variant="outlined"
@@ -214,6 +223,7 @@ const RegisterPage = () => {
                   password.target.value
                 )
               }
+              onKeyDown={checkEnterPressed}
               label="Password"
               placeholder="Enter password"
               type={showPassword ? 'text' : 'password'}

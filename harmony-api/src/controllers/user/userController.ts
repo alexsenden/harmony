@@ -105,3 +105,33 @@ export const signOut = async (
     next(error)
   }
 }
+
+const MAX_TEMP_TRIES = 20
+export const getTempUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    let tries = 0
+    let successTemp = false
+    let newUser, userCookie
+    do {
+      try {
+        const userData = userService.getTempUserData()
+        newUser = await userService.register(userData)
+        userCookie = await userService.assignUserCookie(newUser)
+        successTemp = true
+      } finally {
+        tries++
+      }
+    } while (tries < MAX_TEMP_TRIES && !successTemp)
+
+    res.cookie('userCookie', userCookie)
+    res.json({
+      userData: newUser,
+    })
+  } catch (error) {
+    next(error)
+  }
+}

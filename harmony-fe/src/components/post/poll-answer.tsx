@@ -1,4 +1,5 @@
 import { Box, Button } from '@mui/material'
+import { RadioButtonUnchecked } from '@mui/icons-material/'
 import { PollOption } from '../../models/pollOption'
 import TextBlock from '../text-block'
 import { UserContext } from '../../contexts/userContext'
@@ -34,13 +35,12 @@ export const PollAnswer = ({ pollOption, voteAction }: PollAnswerProps) => {
       sx={{ mt: 2, ml: 3 }}
     >
       <Button
-        variant="outlined"
         size="small"
         disabled={!isUser}
         sx={{ minWidth: 0, mr: 2 }}
         onClick={voteOption}
       >
-        x
+        <RadioButtonUnchecked fontSize="small" />
       </Button>
       <TextBlock>{pollOption.option}</TextBlock>
     </Box>

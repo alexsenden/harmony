@@ -2,6 +2,7 @@ import crypto from 'crypto'
 
 import * as userRepo from '../repos/userRepo'
 import * as userCookieRepo from '../repos/userCookieRepo'
+import * as tempUserRepo from '../repos/tempUserStubRepo'
 import { User } from '../models/user'
 import { HttpError } from '../models/error/httpError'
 import { Login } from '../models/login'
@@ -147,4 +148,50 @@ export const validateUserUpdate = (userData: Account) => {
   if (errorMessages.length > 0) {
     throw new HttpError(errorMessages.join('; '), 400)
   }
+}
+
+export const getTempUserData = (): User => {
+  return {
+    username: generateRandomUsername(),
+    password: generateRandomPassword(),
+    firstName: generateRandomFirstName(),
+    lastName: generateRandomLastName(),
+  } as User
+}
+
+export const generateRandomUsername = (): string => {
+  const adjective =
+    tempUserRepo.adjectives[
+      Math.floor(Math.random() * tempUserRepo.adjectives.length)
+    ]
+  const noun =
+    tempUserRepo.nouns[Math.floor(Math.random() * tempUserRepo.nouns.length)]
+
+  return adjective + noun
+}
+
+export const generateRandomPassword = (): string => {
+  const lowerLetters = 'abcdefghijklmnopqrstuvwxyz'
+  const upperLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const digits = '0123456789'
+  const specials = '@#$%^&-+=()!?'
+  const length = 16 //Arbitrary value. Just 2x the min requirment
+
+  const allChars = lowerLetters + upperLetters + digits + specials + length
+  const randomCombination = (chars: string): string =>
+    chars[Math.floor(Math.random() * chars.length)]
+
+  return Array.from({ length }, () => randomCombination(allChars)).join('')
+}
+
+export const generateRandomFirstName = (): string => {
+  return tempUserRepo.firstNames[
+    Math.floor(Math.random() * tempUserRepo.firstNames.length)
+  ]
+}
+
+export const generateRandomLastName = (): string => {
+  return tempUserRepo.lastNames[
+    Math.floor(Math.random() * tempUserRepo.lastNames.length)
+  ]
 }

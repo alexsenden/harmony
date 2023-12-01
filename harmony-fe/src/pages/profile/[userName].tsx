@@ -59,24 +59,21 @@ const Profile = () => {
 
   //Retrieve follow data
   const [getFollowData, receivedFollowData] = useHttpRequest({
-    url: '/follow',
+    url: `/follow/user/${userData?.userId}`,
     method: HttpMethod.GET,
-    headers: { followingId: userData?.userId },
   })
 
   //Retrieve number of followers for the user
   const [getFollowerInfo, receivedFollowerInfo] = useHttpRequest({
-    url: '/follow/followCount',
+    url: `/follow/followCount/${userData?.userId}`,
     method: HttpMethod.GET,
-    headers: { userId: userData?.userId },
   })
 
   //Sending follow data
   const [setFollowActionData] = useHttpRequest({
     url: '/follow',
     method: HttpMethod.POST,
-    headers: { followingId: userData?.userId },
-    body: { followAction: !following },
+    body: { followAction: !following, followingId: userData?.userId },
   })
 
   //If data is found, fetch the following info
@@ -266,7 +263,9 @@ const Profile = () => {
                   <TabLayout tabs={tabs} variant="fullWidth" />
                 </Grid>
                 <Grid item xs={4} zeroMinWidth>
-                  <TextBlock>{userData?.bio}</TextBlock>
+                  <TextBlock sx={{ whiteSpace: 'pre-wrap' }}>
+                    {userData?.bio}
+                  </TextBlock>
                 </Grid>
               </>
             )}
@@ -275,7 +274,9 @@ const Profile = () => {
               <>
                 <Grid item xs={12} zeroMinWidth>
                   <TextBlock variant="h4">Info</TextBlock>
-                  <TextBlock>{userData?.bio}</TextBlock>
+                  <TextBlock sx={{ whiteSpace: 'pre-wrap' }}>
+                    {userData?.bio}
+                  </TextBlock>
                 </Grid>
                 <Grid item xs={12} container direction="column">
                   <TextBlock variant="h4">Content</TextBlock>
