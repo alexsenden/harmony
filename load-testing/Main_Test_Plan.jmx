@@ -50,7 +50,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">20</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">60</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -856,7 +856,7 @@ log.info(&quot;Cookies reset for thread &quot; + ctx.getThreadNum());</stringPro
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">20</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">60</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -4512,7 +4512,7 @@ log.info(&quot;Cookies reset for thread &quot; + ctx.getThreadNum());</stringPro
             </elementProp>
             <stringProp name="HTTPSampler.port">8081</stringProp>
             <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
-            <stringProp name="HTTPSampler.path">/post/a5d35cd4-9961-4c2a-b932-c5c39493b586</stringProp>
+            <stringProp name="HTTPSampler.path">/post/d0408deb-9c7f-4d7a-ab4b-e6094542ed82</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -10275,7 +10275,7 @@ if (m.find()) {
             </elementProp>
             <stringProp name="HTTPSampler.port">8081</stringProp>
             <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
-            <stringProp name="HTTPSampler.path">/topic/artist/3</stringProp>
+            <stringProp name="HTTPSampler.path">/topic/artist/3567</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
