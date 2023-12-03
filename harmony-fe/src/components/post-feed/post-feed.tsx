@@ -93,7 +93,7 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
           style={{ marginTop: 20, alignSelf: 'center' }}
         />
       )}
-      {error && error.response.status !== 401 && (
+      {error && error.response?.status !== 401 && (
         <TextBlock align="center">{SERVER_ERROR}</TextBlock>
       )}
     </Box>

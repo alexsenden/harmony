@@ -5,6 +5,7 @@ import { validateTopicId } from './topicService'
 import { HttpError } from '../models/error/httpError'
 import { PollOption } from '../models/pollOption'
 import { User } from '../models/user'
+import { FollowFeedFilter } from '../models/followFeedFilter'
 
 export const createPost = async (postData?: Post): Promise<Post> => {
   const validatedPost = validatePost(postData)
@@ -90,54 +91,22 @@ export const getTrendingPosts = async (
   return postRepo.getTrendingPosts(offset, requester)
 }
 
-export const getFollowingUserPosts = async (
+export const getFollowingPosts = async (
+  filter: string | undefined,
+  offset: number,
   requester: User
 ): Promise<Array<Post>> => {
-  return await postRepo.getFollowingUserPosts(requester.userId)
+  const validatedFilter = validateFollowFeedFilter(filter)
+  return postRepo.getFollowingPosts(validatedFilter, offset, requester)
 }
 
-export const getFollowingArtistPosts = async (
-  requester: User
-): Promise<Array<Post>> => {
-  return await postRepo.getFollowingArtistPosts(requester.userId)
-}
-
-export const getFollowingSongPosts = async (
-  requester: User
-): Promise<Array<Post>> => {
-  return await postRepo.getFollowingSongPosts(requester.userId)
-}
-
-export const getFollowingAlbumPosts = async (
-  requester: User
-): Promise<Array<Post>> => {
-  return await postRepo.getFollowingAlbumPosts(requester.userId)
-}
-
-export const getAllFollowingPosts = async (
-  requester: User
-): Promise<Array<Post>> => {
-  const [userPosts, artistPosts, songPosts, albumPosts] = await Promise.all([
-    getFollowingUserPosts(requester),
-    getFollowingArtistPosts(requester),
-    getFollowingSongPosts(requester),
-    getFollowingAlbumPosts(requester),
-  ])
-  return userPosts
-    .concat(artistPosts)
-    .concat(songPosts)
-    .concat(albumPosts)
-    .sort(sortPostsByDate)
-    .reverse()
-}
-
-export const sortPostsByDate = (postA: Post, postB: Post) => {
-  if (postA.createdAt.getTime() > postB.createdAt.getTime()) {
-    return 1
-  } else if (postA.createdAt.getTime() < postB.createdAt.getTime()) {
-    return -1
+export const validateFollowFeedFilter = (
+  filter: string | undefined
+): FollowFeedFilter => {
+  if (!filter || !Object.keys(FollowFeedFilter).includes(filter)) {
+    throw new HttpError(`Unknown following feed filter type: ${filter}`, 400)
   }
-  return 0
+  return FollowFeedFilter[filter as keyof typeof FollowFeedFilter]
 }
 
 export const validatePost = (postData?: Post): Post => {

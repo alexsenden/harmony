@@ -12,11 +12,11 @@ export enum FeedMode {
 }
 
 export enum FollowMode {
-  ALL = 'all',
-  USER = 'user',
-  SONG = 'song',
-  ARTIST = 'artist',
-  ALBUM = 'album',
+  ALL = 'ALL',
+  USER = 'USER',
+  SONG = 'SONG',
+  ARTIST = 'ARTIST',
+  ALBUM = 'ALBUM',
 }
 
 const HomePage = () => {

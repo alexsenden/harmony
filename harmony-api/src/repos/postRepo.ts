@@ -12,6 +12,7 @@ import {
 import { Post, PostType } from '../models/post'
 import { User } from '../models/user'
 import { PollOptionVote } from '../models/pollOption'
+import { FollowFeedFilter } from '../models/followFeedFilter'
 
 const FEED_PAGE_SIZE = 5
 
@@ -249,121 +250,106 @@ export const getTrendingPosts = async (
   })
 }
 
-export const getFollowingUserPosts = async (
-  userId: string
-): Promise<Array<Post>> => {
-  const posts = await prisma.post.findMany({
-    where: {
-      user: {
-        follows: {
-          some: {
-            followerId: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: userId,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
-
-  return posts.map(post => {
-    return mapPrismaPostToPost(post)
-  })
+interface IFollowFeedFilterFlags {
+  album?: boolean
+  artist?: boolean
+  song?: boolean
+  user?: boolean
 }
 
-export const getFollowingArtistPosts = async (
-  userId: string
-): Promise<Array<Post>> => {
-  const posts = await prisma.post.findMany({
-    where: {
-      artist: {
-        followers: {
-          some: {
-            followingId: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: userId,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
-
-  return posts.map(post => {
-    return mapPrismaPostToPost(post)
-  })
+const getFollowFeedFilterFlagsFromEnum = (
+  filter: FollowFeedFilter
+): IFollowFeedFilterFlags => {
+  switch (filter) {
+    case FollowFeedFilter.ALBUM:
+      return { album: true }
+    case FollowFeedFilter.ARTIST:
+      return { artist: true }
+    case FollowFeedFilter.SONG:
+      return { song: true }
+    case FollowFeedFilter.USER:
+      return { user: true }
+    case FollowFeedFilter.ALL:
+      return { album: true, artist: true, song: true, user: true }
+  }
 }
 
-export const getFollowingSongPosts = async (
-  userId: string
-): Promise<Array<Post>> => {
+export const getFollowingPosts = async (
+  filter: FollowFeedFilter,
+  offset: number,
+  requester: User
+) => {
+  const filterFlags = getFollowFeedFilterFlagsFromEnum(filter)
+
   const posts = await prisma.post.findMany({
     where: {
-      song: {
-        followers: {
-          some: {
-            followingId: {
-              equals: userId,
-            },
-          },
+      OR: [
+        {
+          ...(filterFlags.album
+            ? {
+                album: {
+                  followers: {
+                    some: {
+                      followingId: {
+                        equals: requester.userId,
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
         },
-      },
+        {
+          ...(filterFlags.artist
+            ? {
+                artist: {
+                  followers: {
+                    some: {
+                      followingId: {
+                        equals: requester.userId,
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
+        },
+        {
+          ...(filterFlags.song
+            ? {
+                song: {
+                  followers: {
+                    some: {
+                      followingId: {
+                        equals: requester.userId,
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
+        },
+        {
+          ...(filterFlags.user
+            ? {
+                user: {
+                  follows: {
+                    some: {
+                      followerId: {
+                        equals: requester.userId,
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
+        },
+      ],
     },
     include: {
       user: true,
       pollOptions: {
-        ...getPollOptionParams(userId),
+        ...getPollOptionParams(requester.userId),
         orderBy: {
           entryNumber: 'asc',
         },
@@ -373,7 +359,7 @@ export const getFollowingSongPosts = async (
       artist: true,
       likes: {
         where: {
-          userId: userId,
+          userId: requester.userId,
         },
       },
       _count: {
@@ -386,54 +372,8 @@ export const getFollowingSongPosts = async (
     orderBy: {
       createdAt: 'desc',
     },
-  })
-
-  return posts.map(post => {
-    return mapPrismaPostToPost(post)
-  })
-}
-
-export const getFollowingAlbumPosts = async (
-  userId: string
-): Promise<Array<Post>> => {
-  const posts = await prisma.post.findMany({
-    where: {
-      album: {
-        followers: {
-          some: {
-            followingId: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: userId,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    skip: offset,
+    take: FEED_PAGE_SIZE,
   })
 
   return posts.map(post => {

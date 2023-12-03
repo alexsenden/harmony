@@ -226,26 +226,3 @@ describe('getPostsBySongId', () => {
     expect(result).toStrictEqual([])
   })
 })
-
-describe('sortPostsByDate', () => {
-  it('returns 0 if times are equal', async () => {
-    const result = postService.sortPostsByDate(FAKE_POST, FAKE_POST)
-    expect(result).toBe(0)
-  })
-
-  it('returns 1 if the first post is newer', async () => {
-    const result = postService.sortPostsByDate(FAKE_POST, {
-      ...FAKE_POST,
-      createdAt: new Date(FAKE_POST.createdAt.valueOf() - 1),
-    })
-    expect(result).toBe(1)
-  })
-
-  it('returns -1 if the first post is newer', async () => {
-    const result = postService.sortPostsByDate(FAKE_POST, {
-      ...FAKE_POST,
-      createdAt: new Date(FAKE_POST.createdAt.valueOf() + 1),
-    })
-    expect(result).toBe(-1)
-  })
-})

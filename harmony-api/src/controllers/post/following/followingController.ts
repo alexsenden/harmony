@@ -9,10 +9,14 @@ export const getFollowingFeed = async (
   res: Response,
   next: NextFunction
 ) => {
-  const feedType =
-    typeof req.params.feedType === 'string' ? req.params.feedType : undefined
-
   try {
+    const filter =
+      typeof req.params.feedType === 'string' ? req.params.feedType : undefined
+    const offset =
+      typeof req.query.offset === 'string' && !isNaN(parseInt(req.query.offset))
+        ? parseInt(req.query.offset)
+        : 0
+
     const requester = await userService.getUserFromCookie(
       req.cookies.userCookie
     )
@@ -20,25 +24,7 @@ export const getFollowingFeed = async (
       throw new HttpError('Unauthorized', 401)
     }
 
-    switch (feedType) {
-      case 'all':
-        res.json(await postService.getAllFollowingPosts(requester))
-        break
-      case 'user':
-        res.json(await postService.getFollowingUserPosts(requester))
-        break
-      case 'album':
-        res.json(await postService.getFollowingAlbumPosts(requester))
-        break
-      case 'artist':
-        res.json(await postService.getFollowingArtistPosts(requester))
-        break
-      case 'song':
-        res.json(await postService.getFollowingSongPosts(requester))
-        break
-      default:
-        throw new HttpError(`Feed type ${feedType} invalid`, 400)
-    }
+    res.json(await postService.getFollowingPosts(filter, offset, requester))
   } catch (error) {
     next(error)
   }
