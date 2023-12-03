@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { SendRounded } from '@mui/icons-material'
 import {
   CardContent,
@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material'
 
-import Post from './post'
+import Post from './desktop-post'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { UserContext } from '../../contexts/userContext'
 
@@ -46,6 +46,12 @@ export const CommentInput = ({
     setCommentInput(event.target.value)
   }
 
+  const checkEnterPressed = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleCommentSubmission()
+    }
+  }
+
   const placeholder = user ? 'Add a comment..' : 'Log in to post comments!'
 
   return (
@@ -57,6 +63,7 @@ export const CommentInput = ({
           value={commentInput}
           disabled={!user}
           onChange={handleCommentInputChange}
+          onKeyDown={checkEnterPressed}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

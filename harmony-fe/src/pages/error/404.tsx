@@ -1,9 +1,14 @@
 import { Box } from '@mui/material'
 import TextBlock from '../../components/text-block'
+import Head from 'next/head'
 
 const Error404 = () => {
   return (
     <>
+      <Head>
+        <title>{'404 - Page Not Found'}</title>
+      </Head>
+
       <Box
         display="flex"
         justifyContent="center"

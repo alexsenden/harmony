@@ -263,7 +263,9 @@ const Profile = () => {
                   <TabLayout tabs={tabs} variant="fullWidth" />
                 </Grid>
                 <Grid item xs={4} zeroMinWidth>
-                  <TextBlock>{userData?.bio}</TextBlock>
+                  <TextBlock sx={{ whiteSpace: 'pre-wrap' }}>
+                    {userData?.bio}
+                  </TextBlock>
                 </Grid>
               </>
             )}
@@ -272,7 +274,9 @@ const Profile = () => {
               <>
                 <Grid item xs={12} zeroMinWidth>
                   <TextBlock variant="h4">Info</TextBlock>
-                  <TextBlock>{userData?.bio}</TextBlock>
+                  <TextBlock sx={{ whiteSpace: 'pre-wrap' }}>
+                    {userData?.bio}
+                  </TextBlock>
                 </Grid>
                 <Grid item xs={12} container direction="column">
                   <TextBlock variant="h4">Content</TextBlock>

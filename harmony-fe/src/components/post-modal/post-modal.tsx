@@ -11,6 +11,7 @@ import { PollOption } from '../../models/pollOption'
 import { UserContext } from '../../contexts/userContext'
 import CloseIcon from '@mui/icons-material/Close'
 import { MobileContext } from '../../contexts/mobileContext'
+import router from 'next/router'
 interface PostModalProps {
   open: boolean
   onClose: () => void
@@ -74,6 +75,12 @@ export const PostModal = ({ open, onClose }: PostModalProps) => {
       onClose()
     }
   }, [createPostLoading])
+
+  useEffect(() => {
+    if (createPostResponse) {
+      router.reload()
+    }
+  }, [createPostResponse])
 
   useEffect(() => {
     const errors: Partial<Post> = {}

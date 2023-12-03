@@ -33,6 +33,12 @@ const LoginPage = () => {
       body: loginData,
     })
 
+  const checkEnterPressed = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      userLogin()
+    }
+  }
+
   useEffect(() => {
     if (user) {
       window.location.href = '../home'
@@ -107,6 +113,7 @@ const LoginPage = () => {
             </TextBlock>
             <TextField
               onChange={event => (loginData.username = event.target.value)}
+              onKeyDown={checkEnterPressed}
               label="Username"
               variant="outlined"
               placeholder="Enter username"
@@ -119,6 +126,7 @@ const LoginPage = () => {
             />
             <TextField
               onChange={event => (loginData.password = event.target.value)}
+              onKeyDown={checkEnterPressed}
               label="Password"
               type={showPassword ? 'text' : 'password'}
               variant="outlined"
