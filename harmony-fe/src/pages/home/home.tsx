@@ -59,7 +59,7 @@ const HomePage = () => {
             handleButtonClick={handleFollowModeClick}
           />
         )}
-        <PostFeed url={feedUrl} noResultsText={noResultsText} />
+        <PostFeed key={feedUrl} url={feedUrl} noResultsText={noResultsText} />
       </Container>
     </>
   )
