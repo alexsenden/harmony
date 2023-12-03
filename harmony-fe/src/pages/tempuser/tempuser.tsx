@@ -14,7 +14,9 @@ const TempUserPage = () => {
   }, [])
 
   useEffect(() => {
-    window.location.href = '../home'
+    if (response) {
+      window.location.href = '../home'
+    }
   }, [response])
 }
 
