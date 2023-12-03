@@ -29,12 +29,12 @@ const useHttpRequest = ({
 }: HttpRequestInput): [() => void, any, any, boolean] => {
   const [response, setResponse] = useState(undefined)
   const [error, setError] = useState(undefined)
-  const [loading, setloading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const sendHttpRequest = async () => {
     setResponse(undefined)
     setError(undefined)
-    setloading(true)
+    setLoading(true)
 
     const requestHeaders = { accept: '*/*', ...headers }
 
@@ -52,7 +52,7 @@ const useHttpRequest = ({
           setError(err)
         })
         .finally(() => {
-          setloading(false)
+          setLoading(false)
         })
     )
   }

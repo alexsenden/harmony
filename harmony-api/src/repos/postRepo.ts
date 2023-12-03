@@ -15,7 +15,7 @@ import { User } from '../models/user'
 import { PollOptionVote } from '../models/pollOption'
 import { FollowFeedFilter } from '../models/followFeedFilter'
 
-const FEED_PAGE_SIZE = 5
+const FEED_PAGE_SIZE = 20
 
 export const createPost = async (postData: Post): Promise<Post> => {
   const postResult = await prisma.post.create({

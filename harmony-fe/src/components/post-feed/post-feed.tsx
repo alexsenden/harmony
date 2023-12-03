@@ -25,6 +25,7 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
   })
 
   const getPostsIfAvailable = () => {
+    console.log(loading)
     if (postsAvailable && !loading) {
       getPosts()
     }
@@ -86,15 +87,17 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
       {posts.map(post => {
         return <PostComponent key={post.postId} post={post} />
       })}
-      {!posts.length && <TextBlock align="center">{noResultsText}</TextBlock>}
       {loading && (
         <CircularProgress
           size="4rem"
           style={{ marginTop: 20, alignSelf: 'center' }}
         />
       )}
-      {error && error.response?.status !== 401 && (
+      {error && error.response?.status !== 401 ? (
         <TextBlock align="center">{SERVER_ERROR}</TextBlock>
+      ) : (
+        !posts.length &&
+        !loading && <TextBlock align="center">{noResultsText}</TextBlock>
       )}
     </Box>
   )
