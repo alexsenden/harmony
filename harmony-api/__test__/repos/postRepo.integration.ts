@@ -83,7 +83,7 @@ describe('Integration tests for songRepo functions', () => {
   })
 
   it('should get trending posts', async () => {
-    const posts = await getTrendingPosts()
+    const posts = await getTrendingPosts(0)
     expect(posts).toBeDefined()
     expect(posts.length).toBeGreaterThan(0)
   })

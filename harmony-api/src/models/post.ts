@@ -15,7 +15,7 @@ export type Post = {
   rating?: number
   pollOptions?: Array<PollOption>
   topicName?: string
-  user?: User
+  user?: Partial<User>
   isLiked?: boolean
   isVoted?: boolean
   createdAt: Date

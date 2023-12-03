@@ -74,7 +74,7 @@ const MobilePost = ({ post, commentOpen = false }: PostProps) => {
       postContent = <DiscussionContent post={post} />
       break
   }
-  console.log(post.topicId.albumId)
+
   const topicContext = getTopicContext(post.topicId)
 
   const getTopicUrl = function () {

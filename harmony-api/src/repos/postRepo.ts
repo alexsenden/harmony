@@ -13,6 +13,8 @@ import { Post, PostType } from '../models/post'
 import { User } from '../models/user'
 import { PollOptionVote } from '../models/pollOption'
 
+const FEED_PAGE_SIZE = 5
+
 export const createPost = async (postData: Post): Promise<Post> => {
   const postResult = await prisma.post.create({
     data: {
@@ -208,6 +210,7 @@ export const getPostsBySongId = async (
 }
 
 export const getTrendingPosts = async (
+  offset: number,
   requester?: User
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
@@ -237,6 +240,8 @@ export const getTrendingPosts = async (
     orderBy: {
       createdAt: 'desc',
     },
+    skip: offset,
+    take: FEED_PAGE_SIZE,
   })
 
   return posts.map(post => {
@@ -530,7 +535,11 @@ export const mapPrismaPostToPost = (post: PostWithRelations): Post => {
     rating: Number(post.rating) || undefined,
     topicName:
       post.song?.songName || post.album?.albumName || post.artist?.artistName,
-    user: post.user,
+    user: {
+      username: post.user.username,
+      userId: post.user.userId,
+      picture: post.user.picture,
+    },
     numComments: post._count.comments,
     numLikes: post._count.likes,
     numVotes: sumPollVotes(post.pollOptions),

@@ -84,9 +84,10 @@ export const getPostsBySongId = async (
 }
 
 export const getTrendingPosts = async (
+  offset: number,
   requester?: User
 ): Promise<Array<Post>> => {
-  return postRepo.getTrendingPosts(requester)
+  return postRepo.getTrendingPosts(offset, requester)
 }
 
 export const getFollowingUserPosts = async (

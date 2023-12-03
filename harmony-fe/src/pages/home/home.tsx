@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 import { useContext, useState } from 'react'
 import FilterPostButtons from '../../components/filter-post-buttons'
-import PostFeed from '../../components/post-feed/postFeed'
+import PostFeed from '../../components/post-feed/post-feed'
 import { UserContext } from '../../contexts/userContext'
 import Head from 'next/head'
 import FollowFilterPostButtons from '../../components/filter-post-buttons/followFilterPostButtons'
