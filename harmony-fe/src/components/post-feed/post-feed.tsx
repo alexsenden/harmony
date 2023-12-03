@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, CircularProgress, Stack } from '@mui/material'
+import { Box, CircularProgress } from '@mui/material'
 
 import TextBlock from '../text-block'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
@@ -68,7 +68,7 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
         .sort(sortByCreatedAt)
 
       // Add posts to feed
-      setNumPostsFetched(prevState => prevState + postsResponse.length)
+      setNumPostsFetched(prevState => prevState + newPosts.length)
       setPosts([...posts, ...newPosts])
     }
   }, [postsResponse])
@@ -81,40 +81,22 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
     }
   }, [handleScroll])
 
-  return error && error.response.status !== 401 ? (
-    <TextBlock align="center" sx={{ mt: 2 }}>
-      {SERVER_ERROR}
-    </TextBlock>
-  ) : !loading ? (
-    posts.length > 0 ? (
-      <Box
-        onScroll={handleScroll}
-        width={1}
-        display="flex"
-        flexDirection="column"
-        mt={2}
-      >
-        {posts.map(post => {
-          console.log(post.postId)
-          return (
-            <div key={post.postId}>
-              <PostComponent post={post} />
-            </div>
-          )
-        })}
-      </Box>
-    ) : (
-      <TextBlock align="center" sx={{ mt: 2 }}>
-        {noResultsText}
-      </TextBlock>
-    )
-  ) : (
-    <Stack sx={{ display: 'flex' }}>
-      <CircularProgress
-        size="4rem"
-        style={{ marginTop: 20, alignSelf: 'center' }}
-      />
-    </Stack>
+  return (
+    <Box width={1} display="flex" flexDirection="column" mt={2}>
+      {posts.map(post => {
+        return <PostComponent key={post.postId} post={post} />
+      })}
+      {!posts.length && <TextBlock align="center">{noResultsText}</TextBlock>}
+      {loading && (
+        <CircularProgress
+          size="4rem"
+          style={{ marginTop: 20, alignSelf: 'center' }}
+        />
+      )}
+      {error && error.response.status !== 401 && (
+        <TextBlock align="center">{SERVER_ERROR}</TextBlock>
+      )}
+    </Box>
   )
 }
 
