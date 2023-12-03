@@ -48,7 +48,7 @@ const LikeModal = ({
   useEffect(() => {
     if (user && likes) {
       let userIndex = -1
-      for (let [index, like] of likes.entries()) {
+      for (const [index, like] of likes.entries()) {
         if (like.userId === user.userId) {
           userIndex = index
           break
