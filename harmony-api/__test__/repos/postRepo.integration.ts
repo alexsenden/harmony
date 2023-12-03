@@ -84,30 +84,6 @@ describe('Integration tests for songRepo functions', () => {
     expect(posts.length).toBeGreaterThan(0)
   })
 
-  // it('should get posts by following users', async () => {
-  //   const posts = await getFollowingUserPosts(testUser.userId)
-  //   expect(posts).toBeDefined()
-  //   expect(posts.length).toBe(0)
-  // })
-
-  // it('should get posts by following artists', async () => {
-  //   const posts = await getFollowingArtistPosts(testUser.userId)
-  //   expect(posts).toBeDefined()
-  //   expect(posts.length).toBe(0)
-  // })
-
-  // it('should get posts by following songs', async () => {
-  //   const posts = await getFollowingSongPosts(testUser.userId)
-  //   expect(posts).toBeDefined()
-  //   expect(posts.length).toBe(0)
-  // })
-
-  // it('should get posts by following albums', async () => {
-  //   const posts = await getFollowingAlbumPosts(testUser.userId)
-  //   expect(posts).toBeDefined()
-  //   expect(posts.length).toBe(0)
-  // })
-
   afterAll(async () => {
     try {
       await prisma.post.deleteMany({

@@ -24,7 +24,7 @@ describe('createPost', () => {
     const result = await postRepo.createPost(FAKE_POST)
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { pollOptions, ...expected } = FAKE_POST
+    const { pollOptions, user, ...expected } = FAKE_POST
     expect(result).toStrictEqual({
       ...expected,
       body: '',

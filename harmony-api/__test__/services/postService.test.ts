@@ -226,3 +226,17 @@ describe('getPostsBySongId', () => {
     expect(result).toStrictEqual([])
   })
 })
+
+describe('validateFollowFeedFilter', () => {
+  it('throws an error if filter type is unknown', async () => {
+    expect(() => {
+      postService.validateFollowFeedFilter('fake-filter')
+    }).toThrow(HttpError)
+  })
+
+  it('throws an error if filter type is undefined', async () => {
+    expect(() => {
+      postService.validateFollowFeedFilter(undefined)
+    }).toThrow(HttpError)
+  })
+})

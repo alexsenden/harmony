@@ -19,8 +19,8 @@ beforeEach(() => {
   authMock()
 })
 
-describe('GET /post/following/all', () => {
-  it('responds with code 200 and an array of comments', async () => {
+describe('GET /post/following/ALL', () => {
+  it('responds with code 200 and an array of posts', async () => {
     jest.spyOn(prisma.post, 'findMany').mockResolvedValue([
       {
         ...FAKE_POST,
@@ -39,7 +39,7 @@ describe('GET /post/following/all', () => {
     ])
 
     const res = await request(app)
-      .get('/post/following/all')
+      .get('/post/following/ALL')
       .set('Cookie', SESSION_AS_COOKIE)
 
     const expected = {
@@ -58,10 +58,15 @@ describe('GET /post/following/all', () => {
           votes: 0,
         },
       ],
+      user: {
+        userId: FAKE_POST.user.userId,
+        username: FAKE_POST.user.username,
+        picture: FAKE_POST.user.picture,
+      },
     }
 
     expect(res.statusCode).toBe(200)
-    expect(res.body).toEqual([expected, expected, expected, expected])
+    expect(res.body).toEqual([expected])
   })
 
   it('calls error handler middleware when unauthorized', async () => {
@@ -71,7 +76,7 @@ describe('GET /post/following/all', () => {
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
     const res = await request(app)
-      .get('/post/following/all')
+      .get('/post/following/ALL')
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(401)
@@ -85,7 +90,7 @@ describe('GET /post/following/all', () => {
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
 
     const res = await request(app)
-      .get('/post/following/all')
+      .get('/post/following/ALL')
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(500)
@@ -113,7 +118,7 @@ describe('GET /post/following/user', () => {
     ])
 
     const res = await request(app)
-      .get('/post/following/user')
+      .get('/post/following/USER')
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -134,6 +139,11 @@ describe('GET /post/following/user', () => {
             votes: 0,
           },
         ],
+        user: {
+          userId: FAKE_POST.user.userId,
+          username: FAKE_POST.user.username,
+          picture: FAKE_POST.user.picture,
+        },
       },
     ])
   })
@@ -159,7 +169,7 @@ describe('GET /post/following/album', () => {
     ])
 
     const res = await request(app)
-      .get('/post/following/album')
+      .get('/post/following/ALBUM')
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -180,6 +190,11 @@ describe('GET /post/following/album', () => {
             votes: 0,
           },
         ],
+        user: {
+          userId: FAKE_POST.user.userId,
+          username: FAKE_POST.user.username,
+          picture: FAKE_POST.user.picture,
+        },
       },
     ])
   })
@@ -205,7 +220,7 @@ describe('GET /post/following/artist', () => {
     ])
 
     const res = await request(app)
-      .get('/post/following/artist')
+      .get('/post/following/ARTIST')
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -226,6 +241,11 @@ describe('GET /post/following/artist', () => {
             votes: 0,
           },
         ],
+        user: {
+          userId: FAKE_POST.user.userId,
+          username: FAKE_POST.user.username,
+          picture: FAKE_POST.user.picture,
+        },
       },
     ])
   })
@@ -251,7 +271,7 @@ describe('GET /post/following/song', () => {
     ])
 
     const res = await request(app)
-      .get('/post/following/song')
+      .get('/post/following/SONG')
       .set('Cookie', SESSION_AS_COOKIE)
 
     expect(res.statusCode).toBe(200)
@@ -272,6 +292,11 @@ describe('GET /post/following/song', () => {
             votes: 0,
           },
         ],
+        user: {
+          userId: FAKE_POST.user.userId,
+          username: FAKE_POST.user.username,
+          picture: FAKE_POST.user.picture,
+        },
       },
     ])
   })
