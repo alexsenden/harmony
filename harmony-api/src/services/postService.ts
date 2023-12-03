@@ -32,17 +32,6 @@ export const createPost = async (postData?: Post): Promise<Post> => {
   return postResult
 }
 
-export const getPostByUserId = async (
-  userId?: string,
-  requester?: User
-): Promise<Array<Post>> => {
-  if (!userId) {
-    return []
-  }
-
-  return await postRepo.getPostByUserId(userId, requester)
-}
-
 export const getPostById = async (
   postId?: string,
   requester?: User
@@ -54,34 +43,48 @@ export const getPostById = async (
   return postRepo.getPostById(postId, requester)
 }
 
+export const getPostsByUserId = async (
+  offset: number,
+  userId?: string,
+  requester?: User
+): Promise<Array<Post>> => {
+  if (!userId) {
+    return []
+  }
+  return await postRepo.getPostsByUserId(offset, userId, requester)
+}
+
 export const getPostsByArtistId = async (
-  artistId?: string,
+  offset: number,
+  artistId?: number,
   requester?: User
 ): Promise<Array<Post>> => {
   if (!artistId) {
     return []
   }
-  return await postRepo.getPostsByArtistId(artistId, requester)
+  return await postRepo.getPostsByArtistId(offset, artistId, requester)
 }
 
 export const getPostsByAlbumId = async (
-  albumId?: string,
+  offset: number,
+  albumId?: number,
   requester?: User
 ): Promise<Array<Post>> => {
   if (!albumId) {
     return []
   }
-  return await postRepo.getPostsByAlbumId(albumId, requester)
+  return await postRepo.getPostsByAlbumId(offset, albumId, requester)
 }
 
 export const getPostsBySongId = async (
-  songId?: string,
+  offset: number,
+  songId?: number,
   requester?: User
 ): Promise<Array<Post>> => {
   if (!songId) {
     return []
   }
-  return await postRepo.getPostsBySongId(songId, requester)
+  return await postRepo.getPostsBySongId(offset, songId, requester)
 }
 
 export const getTrendingPosts = async (

@@ -193,7 +193,7 @@ describe('validatePollOptions', () => {
 
 describe('getPostByUserId', () => {
   it('returns an an empty array if userId is undefined', async () => {
-    const result = await postService.getPostByUserId(undefined)
+    const result = await postService.getPostsByUserId(0, undefined)
     expect(result).toStrictEqual([])
   })
 })
@@ -208,21 +208,21 @@ describe('getPostById', () => {
 
 describe('getPostsByArtistId', () => {
   it('returns an an empty array if artistId is undefined', async () => {
-    const result = await postService.getPostsByArtistId(undefined)
+    const result = await postService.getPostsByArtistId(0, undefined)
     expect(result).toStrictEqual([])
   })
 })
 
 describe('getPostsByAlbumId', () => {
   it('returns an an empty array if albumId is undefined', async () => {
-    const result = await postService.getPostsByAlbumId(undefined)
+    const result = await postService.getPostsByAlbumId(0, undefined)
     expect(result).toStrictEqual([])
   })
 })
 
 describe('getPostsBySongId', () => {
   it('returns an an empty array if songId is undefined', async () => {
-    const result = await postService.getPostsBySongId(undefined)
+    const result = await postService.getPostsBySongId(0, undefined)
     expect(result).toStrictEqual([])
   })
 })

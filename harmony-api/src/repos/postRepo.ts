@@ -8,6 +8,7 @@ import {
   User as PrismaUser,
   PollOption,
   Like,
+  Prisma,
 } from '@prisma/client'
 import { Post, PostType } from '../models/post'
 import { User } from '../models/user'
@@ -48,7 +49,8 @@ export const createPost = async (postData: Post): Promise<Post> => {
   }
 }
 
-export const getPostByUserId = async (
+export const getPostsByUserId = async (
+  offset: number,
   userID: string,
   requester?: User
 ): Promise<Array<Post>> => {
@@ -59,32 +61,8 @@ export const getPostByUserId = async (
         mode: 'insensitive',
       },
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
 
   return posts.map(post => {
@@ -93,117 +71,50 @@ export const getPostByUserId = async (
 }
 
 export const getPostsByArtistId = async (
-  artistId: string,
+  offset: number,
+  artistId: number,
   requester?: User
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     where: {
-      artistId: Number(artistId),
+      artistId: artistId,
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
   return posts.map(post => {
     return mapPrismaPostToPost(post)
   })
 }
+
 export const getPostsByAlbumId = async (
-  albumId: string,
+  offset: number,
+  albumId: number,
   requester?: User
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     where: {
-      albumId: Number(albumId),
+      albumId: albumId,
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
+
   return posts.map(post => {
     return mapPrismaPostToPost(post)
   })
 }
 export const getPostsBySongId = async (
-  songId: string,
+  offset: number,
+  songId: number,
   requester?: User
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     where: {
       songId: Number(songId),
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
   return posts.map(post => {
     return mapPrismaPostToPost(post)
@@ -215,34 +126,8 @@ export const getTrendingPosts = async (
   requester?: User
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-    skip: offset,
-    take: FEED_PAGE_SIZE,
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
 
   return posts.map(post => {
@@ -346,34 +231,8 @@ export const getFollowingPosts = async (
         },
       ],
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester.userId,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-    skip: offset,
-    take: FEED_PAGE_SIZE,
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
 
   return posts.map(post => {
@@ -389,12 +248,20 @@ export const getPostById = async (
     where: {
       postId: postId,
     },
+    ...getPostIncludeParams(requester),
+  })
+
+  return mapPrismaPostToPost(post)
+}
+
+const getPostIncludeParams = (requester?: User) => {
+  return {
     include: {
       user: true,
       pollOptions: {
         ...getPollOptionParams(requester?.userId),
         orderBy: {
-          entryNumber: 'asc',
+          entryNumber: Prisma.SortOrder.asc,
         },
       },
       song: true,
@@ -412,9 +279,17 @@ export const getPostById = async (
         },
       },
     },
-  })
+  }
+}
 
-  return mapPrismaPostToPost(post)
+const getFeedSortParams = (offset: number) => {
+  return {
+    orderBy: {
+      createdAt: Prisma.SortOrder.desc,
+    },
+    skip: offset,
+    take: FEED_PAGE_SIZE,
+  }
 }
 
 const getPollOptionParams = (userId: string | undefined) => {
