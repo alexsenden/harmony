@@ -63,7 +63,7 @@ const MobilePost = ({
 
   useEffect(() => {
     overflowing(document.getElementById(post.postId))
-  }, [])
+  }, [overflowing])
 
   const handleLike = () => {
     if (isLiked) {

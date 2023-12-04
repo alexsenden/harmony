@@ -59,7 +59,7 @@ const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
 
   useEffect(() => {
     overflowing(document.getElementById(post.postId))
-  }, [])
+  }, [overflowing])
 
   const handleLike = () => {
     if (isLiked) {

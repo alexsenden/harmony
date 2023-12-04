@@ -12,7 +12,7 @@ interface IApiAutocompleteProps
 
 const ApiAutocomplete = ({
   url,
-  debounceTimeMillis = 1000,
+  debounceTimeMillis = 500,
   ...props
 }: IApiAutocompleteProps) => {
   const router = useRouter()

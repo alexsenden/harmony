@@ -39,7 +39,7 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       getTopicsByPartialName()
-    }, 1000)
+    }, 500)
 
     return () => clearTimeout(debounceTimer)
   }, [topicInput])
