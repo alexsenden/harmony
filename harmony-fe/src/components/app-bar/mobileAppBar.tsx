@@ -92,15 +92,17 @@ const MobileAppBar = () => {
             />
           </Button>
 
-          <Fab
-            color="primary"
-            size="medium"
-            variant="extended"
-            onClick={openPostModal}
-          >
-            <AddIcon />
-            New Post
-          </Fab>
+          {user && (
+            <Fab
+              color="primary"
+              size="medium"
+              variant="extended"
+              onClick={openPostModal}
+            >
+              <AddIcon />
+              New Post
+            </Fab>
+          )}
 
           <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
           <IconButton onClick={toggleDrawer(true)} sx={{ size: 'large' }}>
