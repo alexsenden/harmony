@@ -8,10 +8,14 @@ import {
   User as PrismaUser,
   PollOption,
   Like,
+  Prisma,
 } from '@prisma/client'
 import { Post, PostType } from '../models/post'
 import { User } from '../models/user'
 import { PollOptionVote } from '../models/pollOption'
+import { FollowFeedFilter } from '../models/followFeedFilter'
+
+const FEED_PAGE_SIZE = 20
 
 export const createPost = async (postData: Post): Promise<Post> => {
   const postResult = await prisma.post.create({
@@ -45,7 +49,8 @@ export const createPost = async (postData: Post): Promise<Post> => {
   }
 }
 
-export const getPostByUserId = async (
+export const getPostsByUserId = async (
+  offset: number,
   userID: string,
   requester?: User
 ): Promise<Array<Post>> => {
@@ -56,32 +61,8 @@ export const getPostByUserId = async (
         mode: 'insensitive',
       },
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
 
   return posts.map(post => {
@@ -90,117 +71,50 @@ export const getPostByUserId = async (
 }
 
 export const getPostsByArtistId = async (
-  artistId: string,
+  offset: number,
+  artistId: number,
   requester?: User
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     where: {
-      artistId: Number(artistId),
+      artistId: artistId,
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
   return posts.map(post => {
     return mapPrismaPostToPost(post)
   })
 }
+
 export const getPostsByAlbumId = async (
-  albumId: string,
+  offset: number,
+  albumId: number,
   requester?: User
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     where: {
-      albumId: Number(albumId),
+      albumId: albumId,
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
+
   return posts.map(post => {
     return mapPrismaPostToPost(post)
   })
 }
 export const getPostsBySongId = async (
-  songId: string,
+  offset: number,
+  songId: number,
   requester?: User
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
     where: {
       songId: Number(songId),
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
   return posts.map(post => {
     return mapPrismaPostToPost(post)
@@ -208,35 +122,12 @@ export const getPostsBySongId = async (
 }
 
 export const getTrendingPosts = async (
+  offset: number,
   requester?: User
 ): Promise<Array<Post>> => {
   const posts = await prisma.post.findMany({
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(requester?.userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: requester?.userId || '',
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
 
   return posts.map(post => {
@@ -244,191 +135,104 @@ export const getTrendingPosts = async (
   })
 }
 
-export const getFollowingUserPosts = async (
-  userId: string
-): Promise<Array<Post>> => {
-  const posts = await prisma.post.findMany({
-    where: {
-      user: {
-        follows: {
-          some: {
-            followerId: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: userId,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
-
-  return posts.map(post => {
-    return mapPrismaPostToPost(post)
-  })
+interface IFollowFeedFilterFlags {
+  album?: boolean
+  artist?: boolean
+  song?: boolean
+  user?: boolean
 }
 
-export const getFollowingArtistPosts = async (
-  userId: string
-): Promise<Array<Post>> => {
-  const posts = await prisma.post.findMany({
-    where: {
-      artist: {
-        followers: {
-          some: {
-            followingId: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: userId,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
-
-  return posts.map(post => {
-    return mapPrismaPostToPost(post)
-  })
+const getFollowFeedFilterFlagsFromEnum = (
+  filter: FollowFeedFilter
+): IFollowFeedFilterFlags => {
+  switch (filter) {
+    case FollowFeedFilter.ALBUM:
+      return { album: true }
+    case FollowFeedFilter.ARTIST:
+      return { artist: true }
+    case FollowFeedFilter.SONG:
+      return { song: true }
+    case FollowFeedFilter.USER:
+      return { user: true }
+    case FollowFeedFilter.ALL:
+      return { album: true, artist: true, song: true, user: true }
+  }
 }
 
-export const getFollowingSongPosts = async (
-  userId: string
-): Promise<Array<Post>> => {
+export const getFollowingPosts = async (
+  filter: FollowFeedFilter,
+  offset: number,
+  requester: User
+) => {
+  const filterFlags = getFollowFeedFilterFlagsFromEnum(filter)
+
   const posts = await prisma.post.findMany({
     where: {
-      song: {
-        followers: {
-          some: {
-            followingId: {
-              equals: userId,
-            },
-          },
+      OR: [
+        {
+          ...(filterFlags.album
+            ? {
+                album: {
+                  followers: {
+                    some: {
+                      followingId: {
+                        equals: requester.userId,
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
         },
-      },
+        {
+          ...(filterFlags.artist
+            ? {
+                artist: {
+                  followers: {
+                    some: {
+                      followingId: {
+                        equals: requester.userId,
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
+        },
+        {
+          ...(filterFlags.song
+            ? {
+                song: {
+                  followers: {
+                    some: {
+                      followingId: {
+                        equals: requester.userId,
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
+        },
+        {
+          ...(filterFlags.user
+            ? {
+                user: {
+                  follows: {
+                    some: {
+                      followerId: {
+                        equals: requester.userId,
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
+        },
+      ],
     },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: userId,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
-
-  return posts.map(post => {
-    return mapPrismaPostToPost(post)
-  })
-}
-
-export const getFollowingAlbumPosts = async (
-  userId: string
-): Promise<Array<Post>> => {
-  const posts = await prisma.post.findMany({
-    where: {
-      album: {
-        followers: {
-          some: {
-            followingId: {
-              equals: userId,
-            },
-          },
-        },
-      },
-    },
-    include: {
-      user: true,
-      pollOptions: {
-        ...getPollOptionParams(userId),
-        orderBy: {
-          entryNumber: 'asc',
-        },
-      },
-      song: true,
-      album: true,
-      artist: true,
-      likes: {
-        where: {
-          userId: userId,
-        },
-      },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    ...getPostIncludeParams(requester),
+    ...getFeedSortParams(offset),
   })
 
   return posts.map(post => {
@@ -444,12 +248,20 @@ export const getPostById = async (
     where: {
       postId: postId,
     },
+    ...getPostIncludeParams(requester),
+  })
+
+  return mapPrismaPostToPost(post)
+}
+
+const getPostIncludeParams = (requester?: User) => {
+  return {
     include: {
       user: true,
       pollOptions: {
         ...getPollOptionParams(requester?.userId),
         orderBy: {
-          entryNumber: 'asc',
+          entryNumber: Prisma.SortOrder.asc,
         },
       },
       song: true,
@@ -467,9 +279,17 @@ export const getPostById = async (
         },
       },
     },
-  })
+  }
+}
 
-  return mapPrismaPostToPost(post)
+const getFeedSortParams = (offset: number) => {
+  return {
+    orderBy: {
+      createdAt: Prisma.SortOrder.desc,
+    },
+    skip: offset,
+    take: FEED_PAGE_SIZE,
+  }
 }
 
 const getPollOptionParams = (userId: string | undefined) => {
@@ -530,7 +350,11 @@ export const mapPrismaPostToPost = (post: PostWithRelations): Post => {
     rating: Number(post.rating) || undefined,
     topicName:
       post.song?.songName || post.album?.albumName || post.artist?.artistName,
-    user: post.user,
+    user: {
+      username: post.user.username,
+      userId: post.user.userId,
+      picture: post.user.picture,
+    },
     numComments: post._count.comments,
     numLikes: post._count.likes,
     numVotes: sumPollVotes(post.pollOptions),

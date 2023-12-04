@@ -23,7 +23,7 @@ const FilterPostButtons = ({
         variant={activeButton === FeedMode.TRENDING ? 'contained' : 'outlined'}
         onClick={() => handleButtonClick(FeedMode.TRENDING)}
       >
-        Trending
+        New
       </FeedButton>
       <FeedButton
         variant={activeButton === FeedMode.FOLLOWING ? 'contained' : 'outlined'}

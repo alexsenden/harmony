@@ -1,3 +1,3 @@
-import PostFeed from './postFeed'
+import PostFeed from './post-feed'
 
 export default PostFeed

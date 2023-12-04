@@ -193,7 +193,7 @@ describe('validatePollOptions', () => {
 
 describe('getPostByUserId', () => {
   it('returns an an empty array if userId is undefined', async () => {
-    const result = await postService.getPostByUserId(undefined)
+    const result = await postService.getPostsByUserId(0, undefined)
     expect(result).toStrictEqual([])
   })
 })
@@ -208,44 +208,35 @@ describe('getPostById', () => {
 
 describe('getPostsByArtistId', () => {
   it('returns an an empty array if artistId is undefined', async () => {
-    const result = await postService.getPostsByArtistId(undefined)
+    const result = await postService.getPostsByArtistId(0, undefined)
     expect(result).toStrictEqual([])
   })
 })
 
 describe('getPostsByAlbumId', () => {
   it('returns an an empty array if albumId is undefined', async () => {
-    const result = await postService.getPostsByAlbumId(undefined)
+    const result = await postService.getPostsByAlbumId(0, undefined)
     expect(result).toStrictEqual([])
   })
 })
 
 describe('getPostsBySongId', () => {
   it('returns an an empty array if songId is undefined', async () => {
-    const result = await postService.getPostsBySongId(undefined)
+    const result = await postService.getPostsBySongId(0, undefined)
     expect(result).toStrictEqual([])
   })
 })
 
-describe('sortPostsByDate', () => {
-  it('returns 0 if times are equal', async () => {
-    const result = postService.sortPostsByDate(FAKE_POST, FAKE_POST)
-    expect(result).toBe(0)
+describe('validateFollowFeedFilter', () => {
+  it('throws an error if filter type is unknown', async () => {
+    expect(() => {
+      postService.validateFollowFeedFilter('fake-filter')
+    }).toThrow(HttpError)
   })
 
-  it('returns 1 if the first post is newer', async () => {
-    const result = postService.sortPostsByDate(FAKE_POST, {
-      ...FAKE_POST,
-      createdAt: new Date(FAKE_POST.createdAt.valueOf() - 1),
-    })
-    expect(result).toBe(1)
-  })
-
-  it('returns -1 if the first post is newer', async () => {
-    const result = postService.sortPostsByDate(FAKE_POST, {
-      ...FAKE_POST,
-      createdAt: new Date(FAKE_POST.createdAt.valueOf() + 1),
-    })
-    expect(result).toBe(-1)
+  it('throws an error if filter type is undefined', async () => {
+    expect(() => {
+      postService.validateFollowFeedFilter(undefined)
+    }).toThrow(HttpError)
   })
 })

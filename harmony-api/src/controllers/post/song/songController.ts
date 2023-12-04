@@ -8,13 +8,22 @@ export const getPostsBySongId = async (
   res: Response,
   next: NextFunction
 ) => {
-  const songId =
-    typeof req.params.songId === 'string' ? req.params.songId : undefined
   try {
+    const offset =
+      typeof req.query.offset === 'string' && !isNaN(parseInt(req.query.offset))
+        ? parseInt(req.query.offset)
+        : 0
+    const songId =
+      typeof req.params.songId === 'string' &&
+      !isNaN(parseInt(req.params.songId))
+        ? parseInt(req.params.songId)
+        : undefined
+
     const requester = await userService.getUserFromCookie(
       req.cookies.userCookie
     )
-    res.json(await postService.getPostsBySongId(songId, requester))
+
+    res.json(await postService.getPostsBySongId(offset, songId, requester))
   } catch (error) {
     next(error)
   }

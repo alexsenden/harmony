@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import SettingsIcon from '@mui/icons-material/Settings'
 import TabLayout from '../../components/tab-layout'
-import PostFeed from '../../components/post-feed/postFeed'
+import PostFeed from '../../components/post-feed/post-feed'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { User } from '../../models/user'
 import TextBlock from '../../components/text-block'
