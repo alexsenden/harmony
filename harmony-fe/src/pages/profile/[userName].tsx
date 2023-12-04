@@ -225,7 +225,7 @@ const Profile = () => {
                       )}
                       {user && user?.username === userName && (
                         <IconButton href="/account">
-                          <SettingsIcon fontSize="inherit" />
+                          <SettingsIcon sx={{ fontSize: '48px' }} />
                         </IconButton>
                       )}
                       <br />
