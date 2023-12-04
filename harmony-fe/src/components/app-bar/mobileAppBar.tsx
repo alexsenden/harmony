@@ -12,6 +12,7 @@ import {
   List,
   ListItemButton,
   Drawer,
+  Fab,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 
@@ -20,7 +21,7 @@ import { UserContext } from '../../contexts/userContext'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import SearchBar from '../search-bar'
 import TextBlock from '../text-block'
-
+import AddIcon from '@mui/icons-material/Add'
 const MobileAppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)
   const [searchModalOpen, setSearchModalOpen] = useState(false)
@@ -48,7 +49,8 @@ const MobileAppBar = () => {
   }
 
   const changeTheme = function () {
-    if (localStorage.getItem('theme') === 'dark') {
+    const theme = localStorage.getItem('theme')
+    if (theme !== 'light') {
       localStorage.setItem('theme', 'light')
     } else {
       localStorage.setItem('theme', 'dark')
@@ -89,6 +91,17 @@ const MobileAppBar = () => {
               src={'/images/harmonylogo.png'}
             />
           </Button>
+
+          <Fab
+            color="primary"
+            size="medium"
+            variant="extended"
+            onClick={openPostModal}
+          >
+            <AddIcon />
+            New Post
+          </Fab>
+
           <Divider orientation="vertical" flexItem sx={{ flexGrow: 1 }} />
           <IconButton onClick={toggleDrawer(true)} sx={{ size: 'large' }}>
             <MenuIcon />
@@ -106,22 +119,19 @@ const MobileAppBar = () => {
             >
               {user && (
                 <List>
-                  <ListItemButton href={`/profile/${user.username}`}>
-                    <TextBlock variant="h5">Profile</TextBlock>
-                  </ListItemButton>
                   <ListItemButton onClick={() => setSearchModalOpen(true)}>
                     <TextBlock variant="h5">Search</TextBlock>
                   </ListItemButton>
-                  <ListItemButton onClick={openPostModal}>
-                    <TextBlock variant="h5">New Post</TextBlock>
-                  </ListItemButton>
-                  <Divider />
                   <ListItemButton onClick={changeTheme}>
                     <TextBlock variant="h5">
                       {theme.palette.mode.charAt(0).toUpperCase() +
                         theme.palette.mode.slice(1)}{' '}
                       Mode
                     </TextBlock>
+                  </ListItemButton>
+                  <Divider />
+                  <ListItemButton href={`/profile/${user.username}`}>
+                    <TextBlock variant="h5">Profile</TextBlock>
                   </ListItemButton>
                   <ListItemButton href={'/account'}>
                     <TextBlock variant="h5">Account</TextBlock>

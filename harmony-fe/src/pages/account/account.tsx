@@ -142,7 +142,7 @@ const Account = () => {
         <title>{`${user?.username}'s account settings`}</title>
       </Head>
 
-      <Container maxWidth="xl" sx={{ mt: 2 }}>
+      <Container maxWidth="lg" sx={{ mt: 2 }}>
         <Paper
           sx={{
             p: 2,
@@ -154,7 +154,7 @@ const Account = () => {
           <TextBlock variant="h4" sx={{ mb: '2rem' }}>
             Account Settings
           </TextBlock>
-          <TextBlock variant="h5">Change Your Profile Picture</TextBlock>
+          <TextBlock variant="h6">Change Your Profile Picture</TextBlock>
           <Button onClick={handleMenuClick}>
             <Avatar
               src={
@@ -164,7 +164,7 @@ const Account = () => {
               }
               sx={{ height: '100px', width: '100px', mr: 2 }}
             />
-            <TextBlock variant="h6"> {user?.username}</TextBlock>
+            <TextBlock variant="body1"> {user?.username}</TextBlock>
           </Button>
           <Menu
             id="basic-menu"
@@ -181,7 +181,7 @@ const Account = () => {
                 maxWidth: '80vw',
                 maxHeight: '80vw',
               }}
-              cols={3}
+              cols={4}
             >
               {itemData.map(item => (
                 <ImageListItem key={item.img}>
@@ -197,7 +197,7 @@ const Account = () => {
           </Menu>
 
           <Divider sx={{ m: '1rem' }} />
-          <TextBlock variant="h5">Change Your Name</TextBlock>
+          <TextBlock variant="h6">Change Your Name</TextBlock>
           <FormControl sx={{ mt: 1, mr: 1 }}>
             <InputLabel shrink htmlFor="component-helper">
               First Name
@@ -225,7 +225,7 @@ const Account = () => {
             />
           </FormControl>
           <Divider sx={{ m: '1rem' }} />
-          <TextBlock variant="h5">Change Your Bio</TextBlock>
+          <TextBlock variant="h6">Change Your Bio</TextBlock>
           <Box>
             <FormControl sx={{ mt: 1 }} fullWidth>
               <InputLabel shrink htmlFor="component-helper">

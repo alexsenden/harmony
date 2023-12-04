@@ -112,7 +112,7 @@ const AlbumPage = () => {
       <Head>
         <title>{`${albumData?.albumName}'s Feed`}</title>
       </Head>
-      <Container maxWidth="xl" sx={{ mt: 2 }}>
+      <Container maxWidth="lg" sx={{ mt: 2 }}>
         <Paper
           sx={{
             p: 2,

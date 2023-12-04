@@ -48,7 +48,7 @@ const HomePage = () => {
       <Head>
         <title>Harmony - a place to discuss music</title>
       </Head>
-      <Container maxWidth="xl">
+      <Container maxWidth="lg" sx={{ mb: 12 }}>
         <FilterPostButtons
           activeButton={feedMode}
           handleButtonClick={handleFeedModeClick}

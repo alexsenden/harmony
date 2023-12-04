@@ -136,7 +136,7 @@ const Profile = () => {
         <title>{`${userData?.username}'s Profile`}</title>
       </Head>
 
-      <Container maxWidth="xl" sx={{ mt: 2 }}>
+      <Container maxWidth="lg" sx={{ mt: 2 }}>
         <Paper
           sx={{
             p: 2,
@@ -225,7 +225,7 @@ const Profile = () => {
                       )}
                       {user && user?.username === userName && (
                         <IconButton href="/account">
-                          <SettingsIcon fontSize="inherit" />
+                          <SettingsIcon sx={{ fontSize: '48px' }} />
                         </IconButton>
                       )}
                       <br />
