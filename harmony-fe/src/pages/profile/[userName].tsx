@@ -136,7 +136,7 @@ const Profile = () => {
         <title>{`${userData?.username}'s Profile`}</title>
       </Head>
 
-      <Container maxWidth="xl" sx={{ mt: 2 }}>
+      <Container maxWidth="lg" sx={{ mt: 2 }}>
         <Paper
           sx={{
             p: 2,

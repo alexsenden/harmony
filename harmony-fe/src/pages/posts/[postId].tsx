@@ -34,7 +34,7 @@ const PostDetail = () => {
       <Head>
         <title>{post?.title}</title>
       </Head>
-      <Container maxWidth="xl">
+      <Container maxWidth="lg" sx={{ mt: 2 }}>
         {post ? (
           <PostComponent
             post={post}
