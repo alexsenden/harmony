@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
   AppBar as MuiAppBar,
   Box,
@@ -11,6 +11,7 @@ import {
   Dialog,
   DialogTitle,
   useTheme,
+  FormControlLabel,
 } from '@mui/material'
 import PostModal from '../post-modal'
 import { UserContext } from '../../contexts/userContext'
@@ -18,11 +19,16 @@ import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import NavButton from './navButton.styled'
 import SearchBar from '../search-bar'
 import { MobileContext } from '../../contexts/mobileContext'
-
+import Brightness5Icon from '@mui/icons-material/Brightness5'
+import LightDarkSwitch from './lightDarkSwitch.styled'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import TextBlock from '../text-block'
 const AppBar = () => {
   const [postModalOpen, setPostModalOpen] = useState(false)
   const [searchModalOpen, setSearchModalOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [currentTheme, setCurrentTheme] = useState('light')
+
   const user = useContext(UserContext)
   const theme = useTheme()
   const mobile = useContext(MobileContext)
@@ -57,14 +63,30 @@ const AppBar = () => {
   }
 
   const changeTheme = function () {
-    if (localStorage.getItem('theme') === 'dark') {
+    const theme = localStorage.getItem('theme')
+    if (theme !== 'light') {
       localStorage.setItem('theme', 'light')
+      setCurrentTheme('light')
     } else {
       localStorage.setItem('theme', 'dark')
+      setCurrentTheme('dark')
     }
 
     window.dispatchEvent(new Event('storage'))
   }
+
+  useEffect(() => {
+    const changeTheme = function () {
+      const getTheme = localStorage.getItem('theme')
+
+      if (getTheme) {
+        setCurrentTheme(getTheme)
+      }
+    }
+    changeTheme()
+    window.addEventListener('storage', changeTheme)
+    return () => window.removeEventListener('storage', changeTheme)
+  }, [])
 
   return (
     <React.Fragment>
@@ -107,11 +129,27 @@ const AppBar = () => {
                     sx={{ flexGrow: 1 }}
                   />
 
-                  <NavButton onClick={changeTheme}>
-                    {theme.palette.mode.charAt(0).toUpperCase() +
-                      theme.palette.mode.slice(1)}{' '}
-                    Mode
-                  </NavButton>
+                  <FormControlLabel
+                    control={
+                      <LightDarkSwitch
+                        checked={currentTheme === 'dark'}
+                        onClick={changeTheme}
+                        icon={<Brightness5Icon />}
+                        checkedIcon={<DarkModeIcon />}
+                      />
+                    }
+                    label={
+                      <TextBlock
+                        color={theme.palette.primary.main}
+                        fontWeight={'bold'}
+                      >
+                        {theme.palette.mode.charAt(0).toUpperCase() +
+                          theme.palette.mode.slice(1) +
+                          ' Mode'}
+                      </TextBlock>
+                    }
+                    labelPlacement="top"
+                  />
 
                   <Divider orientation="vertical" flexItem />
 
@@ -154,11 +192,28 @@ const AppBar = () => {
                     sx={{ flexGrow: 1 }}
                   />
 
-                  <NavButton onClick={changeTheme}>
-                    {theme.palette.mode.charAt(0).toUpperCase() +
-                      theme.palette.mode.slice(1)}{' '}
-                    Mode
-                  </NavButton>
+                  <FormControlLabel
+                    control={
+                      <LightDarkSwitch
+                        checked={currentTheme === 'dark'}
+                        onClick={changeTheme}
+                        icon={<Brightness5Icon />}
+                        checkedIcon={<DarkModeIcon />}
+                      />
+                    }
+                    label={
+                      <TextBlock
+                        color={theme.palette.primary.main}
+                        fontWeight={'bold'}
+                      >
+                        {theme.palette.mode.charAt(0).toUpperCase() +
+                          theme.palette.mode.slice(1) +
+                          ' Mode'}
+                      </TextBlock>
+                    }
+                    labelPlacement="top"
+                  />
+
                   <Divider orientation="vertical" flexItem />
 
                   <NavButton href="/login" sx={{ px: 1 }}>
