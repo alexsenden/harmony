@@ -208,6 +208,7 @@ const Post = ({ post, commentOpen = false, expanded = false }: PostProps) => {
       </Card>
       <LikeModal
         likeModalOpen={likeModalOpen}
+        userLiked={isLiked}
         onClose={closeLikeModal}
         post={post}
       ></LikeModal>

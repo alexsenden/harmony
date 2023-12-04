@@ -229,6 +229,7 @@ const MobilePost = ({
       </Card>
       <LikeModal
         likeModalOpen={likeModalOpen}
+        userLiked={isLiked}
         onClose={closeLikeModal}
         post={post}
       ></LikeModal>

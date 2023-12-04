@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
   Avatar,
   Button,
@@ -12,14 +12,23 @@ import { Post } from '../../models/post'
 import useHttpRequest, { HttpMethod } from '../../hooks/httpRequest'
 import { LikeWithUser } from '../../models/like'
 import TextBlock from '../text-block'
+import { UserContext } from '../../contexts/userContext'
 
 interface LikeModalProps {
   likeModalOpen: boolean
+  userLiked: boolean
   onClose: () => void
   post: Post
 }
-const LikeModal = ({ likeModalOpen, onClose, post }: LikeModalProps) => {
+
+const LikeModal = ({
+  likeModalOpen,
+  userLiked,
+  onClose,
+  post,
+}: LikeModalProps) => {
   const [likes, setLikes] = useState<LikeWithUser[] | undefined>(undefined)
+  const user = useContext(UserContext)
 
   const [getLikes, likesResponse, likesLoading] = useHttpRequest({
     url: `post/${post.postId}/like`,
@@ -35,6 +44,22 @@ const LikeModal = ({ likeModalOpen, onClose, post }: LikeModalProps) => {
   useEffect(() => {
     setLikes(likesResponse)
   }, [likesResponse])
+
+  useEffect(() => {
+    if (user && likes) {
+      const containsUser = likes.some(like => like.userId === user.userId)
+      if (!containsUser && userLiked) {
+        const fakeLike = {
+          userId: user.userId,
+          postId: '',
+          user: { username: user.username, picture: user.picture },
+        } as LikeWithUser
+        setLikes([fakeLike, ...likes])
+      } else if (containsUser && !userLiked) {
+        setLikes(likes.filter(like => like.userId !== user.userId))
+      }
+    }
+  }, [userLiked, likes, user])
 
   return (
     <Dialog
