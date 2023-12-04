@@ -49,7 +49,6 @@ export const getUserByLoginInfo = async (loginData: Login): Promise<User> => {
       },
     },
   })
-  console.log('TESTMINE', userData)
   if (userData === null) {
     throw new HttpError('Invalid username or password', 400)
   }

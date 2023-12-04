@@ -3,15 +3,11 @@ import { User } from '../../src/models/user'
 import { Post, PostType } from '../../src/models/post'
 import {
   createPost,
-  getPostByUserId,
+  getPostsByUserId,
   getPostsByArtistId,
   getPostsByAlbumId,
-  getFollowingUserPosts,
   getPostsBySongId,
   getTrendingPosts,
-  getFollowingArtistPosts,
-  getFollowingAlbumPosts,
-  getFollowingSongPosts,
 } from '../../src/repos/postRepo'
 
 describe('Integration tests for songRepo functions', () => {
@@ -56,60 +52,36 @@ describe('Integration tests for songRepo functions', () => {
   })
 
   it('should get posts by user ID', async () => {
-    const posts = await getPostByUserId(testUser.userId)
+    const posts = await getPostsByUserId(0, testUser.userId)
     expect(posts).toBeDefined()
     expect(posts.length).toBeGreaterThan(0)
   })
 
   it('should get posts by artist ID', async () => {
-    const artistId = '1'
-    const posts = await getPostsByArtistId(artistId)
+    const artistId = 1
+    const posts = await getPostsByArtistId(0, artistId)
     expect(posts).toBeDefined()
     expect(posts.length).toBeGreaterThan(0)
   })
 
   it('should get posts by album ID', async () => {
-    const albumId = '5'
-    const posts = await getPostsByAlbumId(albumId)
+    const albumId = 5
+    const posts = await getPostsByAlbumId(0, albumId)
     expect(posts).toBeDefined()
     expect(posts.length).toBeGreaterThan(0)
   })
 
   it('should get posts by song ID', async () => {
-    const songId = '11'
-    const posts = await getPostsBySongId(songId)
+    const songId = 11
+    const posts = await getPostsBySongId(0, songId)
     expect(posts).toBeDefined()
     expect(posts.length).toBeGreaterThan(0)
   })
 
   it('should get trending posts', async () => {
-    const posts = await getTrendingPosts()
+    const posts = await getTrendingPosts(0)
     expect(posts).toBeDefined()
     expect(posts.length).toBeGreaterThan(0)
-  })
-
-  it('should get posts by following users', async () => {
-    const posts = await getFollowingUserPosts(testUser.userId)
-    expect(posts).toBeDefined()
-    expect(posts.length).toBe(0)
-  })
-
-  it('should get posts by following artists', async () => {
-    const posts = await getFollowingArtistPosts(testUser.userId)
-    expect(posts).toBeDefined()
-    expect(posts.length).toBe(0)
-  })
-
-  it('should get posts by following songs', async () => {
-    const posts = await getFollowingSongPosts(testUser.userId)
-    expect(posts).toBeDefined()
-    expect(posts.length).toBe(0)
-  })
-
-  it('should get posts by following albums', async () => {
-    const posts = await getFollowingAlbumPosts(testUser.userId)
-    expect(posts).toBeDefined()
-    expect(posts.length).toBe(0)
   })
 
   afterAll(async () => {

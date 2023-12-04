@@ -33,20 +33,6 @@ export const FAKE_POLL_OPTION = {
   postId: 'fake-post-id',
 }
 
-export const FAKE_POST = {
-  userId: 'fake-user-id',
-  postId: 'fake-post-id',
-  topicId: FAKE_TOPIC_ID,
-  postType: PostType.POLL,
-  title: 'Fake Post Title!',
-  body: 'Fake Post Body!',
-  numComments: 0,
-  numLikes: 0,
-  rating: 3,
-  pollOptions: [FAKE_POLL_OPTION],
-  createdAt: new Date(),
-}
-
 export const FAKE_USER_1 = {
   userId: 'fake-user-id-1',
   username: 'fakeUser1',
@@ -57,6 +43,21 @@ export const FAKE_USER_1 = {
   lastName: 'fake-lastname',
   picture: 0,
   bio: 'fake bio',
+}
+
+export const FAKE_POST = {
+  userId: FAKE_USER_1.userId,
+  postId: 'fake-post-id',
+  topicId: FAKE_TOPIC_ID,
+  postType: PostType.POLL,
+  title: 'Fake Post Title!',
+  body: 'Fake Post Body!',
+  numComments: 0,
+  numLikes: 0,
+  rating: 3,
+  pollOptions: [FAKE_POLL_OPTION],
+  createdAt: new Date(),
+  user: FAKE_USER_1,
 }
 
 export const FAKE_USER_2: User = {

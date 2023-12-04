@@ -59,6 +59,11 @@ describe('GET /post/trending', () => {
             votes: 0,
           },
         ],
+        user: {
+          userId: FAKE_POST.user.userId,
+          username: FAKE_POST.user.username,
+          picture: FAKE_POST.user.picture,
+        },
       },
     ])
   })
@@ -101,6 +106,11 @@ describe('GET /post/trending', () => {
             votes: 0,
           },
         ],
+        user: {
+          userId: FAKE_POST.user.userId,
+          username: FAKE_POST.user.username,
+          picture: FAKE_POST.user.picture,
+        },
       },
     ])
   })

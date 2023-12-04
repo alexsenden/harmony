@@ -9,10 +9,15 @@ export const getTrendingFeed = async (
   next: NextFunction
 ) => {
   try {
+    const offset =
+      typeof req.query.offset === 'string' && !isNaN(parseInt(req.query.offset))
+        ? parseInt(req.query.offset)
+        : 0
     const requester = await userService.getUserFromCookie(
       req.cookies.userCookie
     )
-    res.json(await postService.getTrendingPosts(requester))
+
+    res.json(await postService.getTrendingPosts(offset, requester))
   } catch (error) {
     next(error)
   }

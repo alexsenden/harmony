@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
 import { useContext, useState } from 'react'
 import FilterPostButtons from '../../components/filter-post-buttons'
-import PostFeed from '../../components/post-feed/postFeed'
+import PostFeed from '../../components/post-feed/post-feed'
 import { UserContext } from '../../contexts/userContext'
 import Head from 'next/head'
 import FollowFilterPostButtons from '../../components/filter-post-buttons/followFilterPostButtons'
@@ -12,11 +12,11 @@ export enum FeedMode {
 }
 
 export enum FollowMode {
-  ALL = 'all',
-  USER = 'user',
-  SONG = 'song',
-  ARTIST = 'artist',
-  ALBUM = 'album',
+  ALL = 'ALL',
+  USER = 'USER',
+  SONG = 'SONG',
+  ARTIST = 'ARTIST',
+  ALBUM = 'ALBUM',
 }
 
 const HomePage = () => {
@@ -59,7 +59,7 @@ const HomePage = () => {
             handleButtonClick={handleFollowModeClick}
           />
         )}
-        <PostFeed url={feedUrl} noResultsText={noResultsText} />
+        <PostFeed key={feedUrl} url={feedUrl} noResultsText={noResultsText} />
       </Container>
     </>
   )
