@@ -111,9 +111,6 @@ const AppBar = () => {
               {/* Logged-in appbar */}
               {user && (
                 <>
-                  <NavButton href={`/profile/${user.username}`}>
-                    Profile
-                  </NavButton>
                   <NavButton
                     onClick={() => setSearchModalOpen(true)}
                     sx={{ px: 1 }}
@@ -169,6 +166,12 @@ const AppBar = () => {
                       'aria-labelledby': 'basic-button',
                     }}
                   >
+                    <MenuItem
+                      component={'a'}
+                      href={`/profile/${user.username}`}
+                    >
+                      Profile
+                    </MenuItem>
                     <MenuItem component={'a'} href={'/account'}>
                       Account Settings
                     </MenuItem>
