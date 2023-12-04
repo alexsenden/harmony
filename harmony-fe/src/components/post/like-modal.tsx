@@ -47,25 +47,19 @@ const LikeModal = ({
 
   useEffect(() => {
     if (user && likes) {
-      let userIndex = -1
-      for (const [index, like] of likes.entries()) {
-        if (like.userId === user.userId) {
-          userIndex = index
-          break
-        }
-      }
-      if (userIndex < 0 && userLiked) {
+      const containsUser = likes.some(like => like.userId === user.userId)
+      if (!containsUser && userLiked) {
         const fakeLike = {
           userId: user.userId,
           postId: '',
           user: { username: user.username, picture: user.picture },
         } as LikeWithUser
-        likes.unshift(fakeLike)
-      } else if (userIndex >= 0 && !userLiked) {
-        likes.splice(userIndex, 1)
+        setLikes([fakeLike, ...likes])
+      } else if (containsUser && !userLiked) {
+        setLikes(likes.filter(like => like.userId !== user.userId))
       }
     }
-  }, [userLiked])
+  }, [userLiked, likes, user])
 
   return (
     <Dialog
