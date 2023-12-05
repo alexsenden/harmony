@@ -30,7 +30,7 @@ jobs:
           echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT_CI }}" >> ./environment/.env.prod
           echo "POSTGRES_DB_NAME=${{ secrets.POSTGRES_DB_NAME_CI }}" >> ./environment/.env.prod
           echo "DB_HOST=${{ secrets.azureHost2 }}" >> ./environment/.env.prod
-          echo "POSTGRES_URL=postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}" >> ./environment/.env.prod
+          echo "POSTGRES_URL=postgresql://${{ secrets.POSTGRES_USER_CI }}:${{ secrets.POSTGRES_PASSWORD_CI }}@${{ secrets.azureHost2 }}:${{ secrets.POSTGRES_PORT_CI }}/${{ secrets.POSTGRES_DB_NAME_CI }}?connection_limit=10" >> ./environment/.env.prod
 
       - name: Harmony API - Extract metadata (tags, labels) for Docker
         id: meta
