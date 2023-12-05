@@ -25,7 +25,6 @@ const PostFeed = ({ url, noResultsText = NO_POSTS_HERE }: PostFeedProps) => {
   })
 
   const getPostsIfAvailable = () => {
-    console.log(loading)
     if (postsAvailable && !loading) {
       getPosts()
     }
