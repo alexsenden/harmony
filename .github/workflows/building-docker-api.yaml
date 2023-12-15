@@ -2,8 +2,7 @@ name: bulding-docker-api
 
 on:
   push:
-    branches:
-      ["main"]
+    branches: ["main"]
 
 jobs:
   build_docker_api:
@@ -48,7 +47,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: ENV=prod
 
-    build_docker_api_local:
+  build_docker_api_local:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
