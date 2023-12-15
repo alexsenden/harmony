@@ -15,7 +15,7 @@
     "connectprisma": "npx prisma generate && npx prisma migrate deploy || exit 0",
     "seed": "npx prisma db seed",
     "seed-ci": "ts-node ./prisma/seed/seed-ci.ts",
-    "start": "npm run connectprisma && node build/src/index.js",
+    "start": "npm run connectprisma && npm run seed && node build/src/index.js",
     "buildAndStart": "npm run connectprisma && tsc && npm run seed && node build/src/index.js",
     "dev": "nodemon -L -w src -e ts --exec \"npm run buildAndStart\"",
     "all-tests": "jest --testRegex=__test__ --testPathIgnorePatterns=testUtils --runInBand --collect-coverage --collectCoverageFrom=src/**",
