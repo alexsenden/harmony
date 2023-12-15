@@ -10,12 +10,12 @@ services:
     ports:
       - 5432:5432
   harmony-api: 
-    image: aprovozin/harmony-api-cd-local:latest
+    image: aprovozin/harmony-api-cd-local
     container_name: harmony-api
     ports:
       - 8081:8081
   harmony-fe: 
-    image: aprovozin/harmony-fe-cd-local:latest
+    image: aprovozin/harmony-fe-cd-local
     container_name: harmony-fe
     ports:
       - 8080:8080
