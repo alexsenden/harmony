@@ -67,7 +67,7 @@ jobs:
           cd ../harmony-api
 
           npm run connectprisma
-          npm run seed
+          npm run seed-ci
           npm run integration-tests
 
   lint:
