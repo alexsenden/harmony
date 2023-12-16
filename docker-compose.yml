@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: harmony-db
+    environment:
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+  harmony-api: 
+    image: aprovozin/harmony-api-cd-local:main
+    container_name: harmony-api
+    ports:
+      - 8081:8081
+  harmony-fe: 
+    image: aprovozin/harmony-fe-cd-local:main
+    container_name: harmony-fe
+    ports:
+      - 8080:8080

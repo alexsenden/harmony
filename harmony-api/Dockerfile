@@ -19,6 +19,12 @@ RUN if [ "$ENV" = "prod" ] ; then \
   cp ./environment/.env.prod ./2 ; \
   fi
 
+# Install Postgres Client
+RUN apk --no-cache add postgresql14-client
+
+# Make Seed Script Executable
+RUN chmod 555 prisma/seed/seed.sh
+
 # Compile App
 RUN npx prisma generate --schema ./prisma/schema.prisma
 RUN npx tsc

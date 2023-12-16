@@ -6,4 +6,3 @@
 /harmony-api/coverage
 /harmony-fe/coverage
 /.idea
-*/environment/.env.prod
