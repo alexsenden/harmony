@@ -63,6 +63,10 @@ export const TopicField = ({ error, onChange }: ITopicFieldProps) => {
           multiline
           error={error}
           sx={{ mt: 3 }}
+          InputProps={{
+            ...params.InputProps,
+            placeholder: 'Search for an artist, song, or album...',
+          }}
         />
       )}
       renderOption={(props, option) => (
