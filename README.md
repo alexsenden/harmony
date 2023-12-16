@@ -1,12 +1,22 @@
 # Harmony
 
-### Team Members:
+### Team Members
 
-- Alex Senden
-- Andrii Provozin
-- Chris Baran
-- Edden Wong
-- Ikram Khan Shipon
+- Alex Senden (alexsenden)
+- Andrii Provozin (Developik)
+- Chris Baran (Dankgen)
+- Edden Wong (EddenWong)
+- Ikram Khan Shipon (moiikram)
+
+### Live Production Server
+
+https://harmonysocial.ca
+
+### Running Locally
+
+In the project root directory, run `docker-compose up -d`
+
+Please note that the backend takes a minute to start for the first time since it must seed the database.
 
 ### Code Style
 
@@ -18,9 +28,13 @@ The styling integrates with the project's linter (ESLint) and code formatter (Pr
 
 Developers should install the ESLint and Prettier editor extensions, and enable "Format on save" when developing for Harmony.
 
+### Project Release
+
+[Project Release Document](documentation/Harmony%20-%20Project%20Release.pdf)
+
 ### Project Proposal
 
-[Project Proposal.pdf](documentation/Project%20Proposal.pdf)
+[Project Proposal Document](documentation/Project%20Proposal.pdf)
 
 ### Project Documentation
 
